@@ -16,9 +16,6 @@ export default class BottomMenu {
         this.containerUI = this.scene.add.container(0, 0).setDepth(1000);
         this.containerUI.setScrollFactor(0);
 
-        // =========================
-        // Container do menu inferior
-        // =========================
         this.bottomMenu = this.scene.add.container(
             width - menuHeight - 150,
             height - menuHeight - 20
