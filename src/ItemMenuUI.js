@@ -29,70 +29,7 @@ export default class ItemMenuUI {
             if (!objs.length) this.hide();
         });
 
-        scene.input.on('pointerdown', (pointer) => {
-            if (pointer.button === 1) {
-                this.scene.middleButtonDown = true;
-            }
-        });
-
-        scene.input.on('pointerup', (pointer) => {
-            if (pointer.button === 1) {
-                this.scene.middleButtonDown = false;
-                this.scene.freeClick = true;
-            }
-        });
-
-        scene.input.on('pointerup', (pointer, objs, event) => {
-
-            if (this.scene.freeClick) {
-                this.scene.freeClick = false;
-                return;
-            }
-
-            if (this.scene.middleButtonDown) return;
-
-            if (this.itemMenu.visible) return;
-
-            const sprite = this.scene.selectedSprite;
-            if (!sprite || !sprite.isMoving) return;
-
-            const { w, h } = this.gridUtils.getSpriteFootprint(sprite);
-
-            const iso = this.gridUtils.screenToIso(sprite.x, sprite.y);
-            const startX = Math.round(iso.x - (w / 2 - 0.5));
-            const startY = Math.round(iso.y - (h / 2 - 0.5));
-            const endX = startX + w - 1;
-            const endY = startY + h - 1;
-
-            const ocupado = this.gridUtils.checkOccupiedGrid(startX, startY, endX, endY, sprite);
-            if (ocupado) {
-                console.log("❌ Tile ocupado — revertendo sprite.");
-                return;
-            }
-
-            console.log(pointer);
-            const snapped = this.gridUtils.isoToScreen(startX + (w / 2 - 0.5), startY + (h / 2 - 0.5));
-            sprite.x = snapped.x;
-            sprite.y = snapped.y;
-            this.scene.clearOccupied(sprite);
-            this.scene.markOccupied(sprite, startX, startY, w, h);
-
-            sprite.lastFreePos = { startX, startY };
-
-            sprite.clearTint();
-            sprite.isMoving = false;
-            this.scene.selectedSprite = null;
-            sprite.setDepth(1000);
-
-            for (let other of this.scene.sprites) {
-                other.setInteractive({ useHandCursor: true });
-            }
-
-            this.scene.drawFootprints();
-            console.log("moveu")
-        });
     }
-
 
     createButton(text, x, y) {
         const btn = this.scene.add.text(x, y, text, {
@@ -125,19 +62,24 @@ export default class ItemMenuUI {
 
     onMoveClick(pointer, localX, localY, event) {
         this.hide();
-        console.log(pointer.x);
         event.stopPropagation();
+
+        // this.scene.ignoreNextPointerUp = true;
+        // this.scene.uiBlocker.setVisible(true);
+        // this.scene.time.delayedCall(50, () => {
+        //     this.scene.ignoreNextPointerUp = false;
+        // });
+
+
         const sprite = this.scene.selectedSprite;
         if (!sprite) return;
-
+        sprite.originalPosition = { x: sprite.x, y: sprite.y };
         sprite.isMoving = true;
         sprite.setDepth(2000);
 
         for (let other of this.scene.sprites) {
             if (other !== sprite) other.disableInteractive();
         }
-
-        console.log("vai mover");
 
     }
 
@@ -189,13 +131,13 @@ export default class ItemMenuUI {
         sprite.x = snapped.x;
         sprite.y = snapped.y;
 
-        this.scene.clearOccupied(sprite);
-        this.scene.markOccupied(sprite, startX, startY, w, h);
+        this.gridUtils.clearOccupied(sprite);
+        this.gridUtils.markOccupied(sprite, startX, startY, w, h);
 
         sprite.lastFreePos = { startX, startY };
         sprite.clearTint();
         sprite.setDepth(1000);
 
-        this.scene.drawFootprints();
+        this.gridUtils.drawFootprints();
     }
 }

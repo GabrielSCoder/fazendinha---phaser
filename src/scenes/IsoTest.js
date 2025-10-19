@@ -51,7 +51,7 @@ export class IsoTest extends Phaser.Scene {
 
         this.matrixGraphics = this.add.graphics();
         this.matrixOffsetX = this.offsetX + 300
-        this.drawMatrix();
+        this.gridUtils.drawMatrix();
 
         this.gridGraphics = this.add.graphics();
         this.gridGraphics.lineStyle(1, 0x00ff00, 0.3);
@@ -78,8 +78,8 @@ export class IsoTest extends Phaser.Scene {
         this.sprites = [];
         this.spriteInitialPositions = new Map();
         this.middleButtonDown = false;
-        this.freeClick = false;
-
+        this.freeClick = false; //Um clique a mais. Parece não necessário quando o input.on esta no mesmo arquivo que essa cena.
+        this.ignoreNextPointerUp = false;
 
         this.topUI = new TopUI(this);
         this.shopMenu = new ShopMenu(this);
@@ -106,9 +106,112 @@ export class IsoTest extends Phaser.Scene {
             this.shopMenu.container
         ]);
 
+        this.uiBlocker = this.add.rectangle(0, 0, this.scale.width, this.scale.height, 0x000000, 0)
+            .setOrigin(0)
+            .setScrollFactor(0)     // não se move com a câmera
+            .setDepth(9999)        // acima de tudo
+            .setInteractive()      // captura todos os cliques
+            .setVisible(false);
 
-        this.drawFootprints();
+        this.gridUtils.drawFootprints();
         this.input.setDraggable(this.sprites);
+
+        this.input.on('pointerup', (pointer, objs, event) => {
+            if (this.shopMenu.isOpen() && this.selectedSprite && this.selectedSprite.isMoving) {
+                const sprite = this.selectedSprite;
+
+                let willDestroy = !sprite.originalPosition;
+
+                if (!willDestroy) {
+                    sprite.x = sprite.originalPosition.x;
+                    sprite.y = sprite.originalPosition.y;
+                    sprite.clearTint();
+                } else {
+
+                    sprite.destroy();
+
+                    this.sprites = this.sprites.filter(s => s && s !== sprite && !s.destroyed);
+                }
+
+                this.selectedSprite = null;
+
+                if (!willDestroy) sprite.isMoving = false;
+
+                this.sprites.forEach(s => {
+                    if (s && !s.destroyed) {
+                        s.setInteractive({ useHandCursor: true });
+                    }
+                });
+
+                this.gridUtils.drawFootprints();
+            }
+        });
+
+
+        this.input.on('pointerup', (pointer, objs, event) => {
+
+            // if (this.scene.ignoreNextPointerUp) return;
+
+            if (this.freeClick) {
+                this.freeClick = false;
+                return;
+            }
+
+            if (this.middleButtonDown) return;
+
+            if (this.itemMenuUI.itemMenu.visible) return;
+
+            const sprite = this.selectedSprite;
+            if (!sprite || !sprite.isMoving) return;
+
+            const { w, h } = this.gridUtils.getSpriteFootprint(sprite);
+
+            const iso = this.gridUtils.screenToIso(sprite.x, sprite.y);
+            const startX = Math.round(iso.x - (w / 2 - 0.5));
+            const startY = Math.round(iso.y - (h / 2 - 0.5));
+            const endX = startX + w - 1;
+            const endY = startY + h - 1;
+
+            const ocupado = this.gridUtils.checkOccupiedGrid(startX, startY, endX, endY, sprite);
+            if (ocupado) {
+                console.log("❌ Tile ocupado — revertendo sprite.");
+                return;
+            }
+
+            const snapped = this.gridUtils.isoToScreen(startX + (w / 2 - 0.5), startY + (h / 2 - 0.5));
+            sprite.x = snapped.x;
+            sprite.y = snapped.y;
+            this.gridUtils.clearOccupied(sprite);
+            this.gridUtils.markOccupied(sprite, startX, startY, w, h);
+
+            sprite.lastFreePos = { startX, startY };
+
+            sprite.clearTint();
+            sprite.isMoving = false;
+            this.selectedSprite = null;
+            sprite.setDepth(1000);
+            for (let other of this.sprites) {
+                other.setInteractive({ useHandCursor: true });
+            }
+
+            this.uiBlocker.setVisible(false);
+            this.gridUtils.drawFootprints();
+            console.log("moveu")
+        });
+
+        this.input.on('pointerdown', (pointer) => {
+            if (pointer.button === 1) {
+                this.middleButtonDown = true;
+            }
+        });
+
+        this.input.on('pointerup', (pointer) => {
+            if (pointer.button === 1) {
+                this.middleButtonDown = false;
+                // this.freeClick = true;
+            }
+        });
+
 
         this.events.on('itemPurchased', (itemData) => {
             if (!itemData || !itemData.img) return;
@@ -132,7 +235,7 @@ export class IsoTest extends Phaser.Scene {
             sprite.lastFreePos = { startX, startY };
 
             // Remove qualquer ocupação prévia (caso de bug visual)
-            this.clearOccupied(sprite);
+            this.gridUtils.clearOccupied(sprite);
 
             // Checa colisão imediatamente
             const ocupado = this.gridUtils.checkOccupiedGrid(startX, startY, startX + w - 1, startY + h - 1, sprite);
@@ -151,10 +254,13 @@ export class IsoTest extends Phaser.Scene {
             console.log("🛒 Novo item comprado, pronto pra posicionar.");
         });
 
-
+        // this.uiBlocker.on('pointerup', () => {
+        //     if (!this.selectedSprite) {
+        //         this.uiBlocker.setVisible(false)
+        //     }
+        // });
     }
 
-    // Salva última posição livre válida durante o movimento
     update() {
 
         if (this.selectedSprite && this.selectedSprite.isMoving) {
@@ -181,62 +287,8 @@ export class IsoTest extends Phaser.Scene {
             const occupied = this.gridUtils.checkOccupiedGrid(startX, startY, startX + w - 1, startY + h - 1, sprite);
             sprite.setTint(occupied ? 0xff8888 : 0x88ff88);
 
-            this.drawFootprints();
+            this.gridUtils.drawFootprints();
         }
-    }
-
-    drawMatrix() {
-        this.matrixGraphics.clear();
-
-        for (let y = 0; y < this.gridHeight; y++) {
-            for (let x = 0; x < this.gridWidth; x++) {
-                const occupied = this.gridMap[x][y] ? true : false;
-                const color = occupied ? 0xe74c3c : 0x2ecc71;
-                this.matrixGraphics.fillStyle(color, 1);
-                this.matrixGraphics.fillRect(
-                    this.matrixOffsetX + x * 10,
-                    this.offsetY + y * 10,
-                    10, 10
-                );
-            }
-        }
-
-        this.matrixGraphics.lineStyle(1, 0xffffff, 0.5);
-        this.matrixGraphics.strokeRect(
-            this.matrixOffsetX,
-            this.offsetY,
-            this.gridWidth * 10,
-            this.gridHeight * 10
-        );
-
-        if (!this.matrixLabel) {
-            this.matrixLabel = this.add.text(
-                this.matrixOffsetX,
-                this.offsetY - 20,
-                'Matriz de ocupação',
-                { fontSize: '14px', color: '#ffffff' }
-            );
-        }
-    }
-
-    markOccupied(sprite, startX, startY, w, h) {
-        for (let x = startX; x < startX + w; x++) {
-            for (let y = startY; y < startY + h; y++) {
-                this.gridMap[x][y] = sprite;
-            }
-        }
-        this.drawMatrix();
-    }
-
-    clearOccupied(sprite) {
-        for (let x = 0; x < this.gridWidth; x++) {
-            for (let y = 0; y < this.gridHeight; y++) {
-                if (this.gridMap[x][y] === sprite) {
-                    this.gridMap[x][y] = null;
-                }
-            }
-        }
-        this.drawMatrix();
     }
 
     addGameSprite(key, x, y, scale = 0.5) {
@@ -251,6 +303,8 @@ export class IsoTest extends Phaser.Scene {
         this.sprites.push(sprite);
 
         this.input.setDraggable(sprite);
+
+        // this.uiBlocker.setVisible(true);
 
         // evento para abrir o menu contextual (mesma lógica que usava)
         sprite.on('pointerup', (pointer) => {
@@ -279,37 +333,6 @@ export class IsoTest extends Phaser.Scene {
 
         return sprite;
     }
-
-
-    drawFootprints() {
-        this.footprintGraphics.clear();
-        for (let sprite of this.sprites) {
-            const { w, h } = this.gridUtils.getSpriteFootprint(sprite);
-            const iso = this.gridUtils.screenToIso(sprite.x, sprite.y, this.gridSize, this.offsetX, this.offsetY);
-            const startX = Math.round(iso.x - (w / 2 - 0.5));
-            const startY = Math.round(iso.y - (h / 2 - 0.5));
-
-            for (let i = 0; i < w; i++) {
-                for (let j = 0; j < h; j++) {
-                    const p1 = this.gridUtils.isoToScreen(startX + i, startY + j, this.gridSize, this.offsetX, this.offsetY);
-                    const p2 = this.gridUtils.isoToScreen(startX + i + 1, startY + j, this.gridSize, this.offsetX, this.offsetY);
-                    const p3 = this.gridUtils.isoToScreen(startX + i + 1, startY + j + 1, this.gridSize, this.offsetX, this.offsetY);
-                    const p4 = this.gridUtils.isoToScreen(startX + i, startY + j + 1, this.gridSize, this.offsetX, this.offsetY);
-
-                    this.footprintGraphics.fillStyle(0xff0000, 0.25);
-                    this.footprintGraphics.beginPath();
-                    this.footprintGraphics.moveTo(p1.x, p1.y);
-                    this.footprintGraphics.lineTo(p2.x, p2.y);
-                    this.footprintGraphics.lineTo(p3.x, p3.y);
-                    this.footprintGraphics.lineTo(p4.x, p4.y);
-                    this.footprintGraphics.closePath();
-                    this.footprintGraphics.fillPath();
-                }
-            }
-        }
-    }
-
-
 
 }
 
@@ -533,3 +556,86 @@ export class IsoTest extends Phaser.Scene {
 //     btn.on('pointerout', () => btn.setStyle({ backgroundColor: '#222' }));
 //     return btn;
 // }
+
+ // drawFootprints() {
+    //     this.footprintGraphics.clear();
+    //     for (let sprite of this.sprites) {
+    //         const { w, h } = this.gridUtils.getSpriteFootprint(sprite);
+    //         const iso = this.gridUtils.screenToIso(sprite.x, sprite.y, this.gridSize, this.offsetX, this.offsetY);
+    //         const startX = Math.round(iso.x - (w / 2 - 0.5));
+    //         const startY = Math.round(iso.y - (h / 2 - 0.5));
+
+    //         for (let i = 0; i < w; i++) {
+    //             for (let j = 0; j < h; j++) {
+    //                 const p1 = this.gridUtils.isoToScreen(startX + i, startY + j, this.gridSize, this.offsetX, this.offsetY);
+    //                 const p2 = this.gridUtils.isoToScreen(startX + i + 1, startY + j, this.gridSize, this.offsetX, this.offsetY);
+    //                 const p3 = this.gridUtils.isoToScreen(startX + i + 1, startY + j + 1, this.gridSize, this.offsetX, this.offsetY);
+    //                 const p4 = this.gridUtils.isoToScreen(startX + i, startY + j + 1, this.gridSize, this.offsetX, this.offsetY);
+
+    //                 this.footprintGraphics.fillStyle(0xff0000, 0.25);
+    //                 this.footprintGraphics.beginPath();
+    //                 this.footprintGraphics.moveTo(p1.x, p1.y);
+    //                 this.footprintGraphics.lineTo(p2.x, p2.y);
+    //                 this.footprintGraphics.lineTo(p3.x, p3.y);
+    //                 this.footprintGraphics.lineTo(p4.x, p4.y);
+    //                 this.footprintGraphics.closePath();
+    //                 this.footprintGraphics.fillPath();
+    //             }
+    //         }
+    //     }
+    // }
+
+    
+    // drawMatrix() {
+    //     this.matrixGraphics.clear();
+
+    //     for (let y = 0; y < this.gridHeight; y++) {
+    //         for (let x = 0; x < this.gridWidth; x++) {
+    //             const occupied = this.gridMap[x][y] ? true : false;
+    //             const color = occupied ? 0xe74c3c : 0x2ecc71;
+    //             this.matrixGraphics.fillStyle(color, 1);
+    //             this.matrixGraphics.fillRect(
+    //                 this.matrixOffsetX + x * 10,
+    //                 this.offsetY + y * 10,
+    //                 10, 10
+    //             );
+    //         }
+    //     }
+
+    //     this.matrixGraphics.lineStyle(1, 0xffffff, 0.5);
+    //     this.matrixGraphics.strokeRect(
+    //         this.matrixOffsetX,
+    //         this.offsetY,
+    //         this.gridWidth * 10,
+    //         this.gridHeight * 10
+    //     );
+
+    //     if (!this.matrixLabel) {
+    //         this.matrixLabel = this.add.text(
+    //             this.matrixOffsetX,
+    //             this.offsetY - 20,
+    //             'Matriz de ocupação',
+    //             { fontSize: '14px', color: '#ffffff' }
+    //         );
+    //     }
+    // }
+
+    // markOccupied(sprite, startX, startY, w, h) {
+    //     for (let x = startX; x < startX + w; x++) {
+    //         for (let y = startY; y < startY + h; y++) {
+    //             this.gridMap[x][y] = sprite;
+    //         }
+    //     }
+    //     this.drawMatrix();
+    // }
+
+    // clearOccupied(sprite) {
+    //     for (let x = 0; x < this.gridWidth; x++) {
+    //         for (let y = 0; y < this.gridHeight; y++) {
+    //             if (this.gridMap[x][y] === sprite) {
+    //                 this.gridMap[x][y] = null;
+    //             }
+    //         }
+    //     }
+    //     this.drawMatrix();
+    // }

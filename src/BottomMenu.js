@@ -83,4 +83,5 @@ export default class BottomMenu {
             cam.setZoom(newZoom);
         });
     }
+
 }
