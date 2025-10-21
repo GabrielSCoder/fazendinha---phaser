@@ -208,17 +208,23 @@ export default class GridUtils {
         gScore.set(key(start.x, start.y), 0);
         fScore.set(key(start.x, start.y), this.heuristic(start, goal));
 
+        // --- Adiciona diagonais ---
         const dirs = [
             { x: 1, y: 0 },
             { x: -1, y: 0 },
             { x: 0, y: 1 },
-            { x: 0, y: -1 }
+            { x: 0, y: -1 },
+            { x: 1, y: 1 },
+            { x: -1, y: 1 },
+            { x: 1, y: -1 },
+            { x: -1, y: -1 }
         ];
 
         while (openSet.length > 0) {
             // menor fScore
             openSet.sort((a, b) => fScore.get(key(a.x, a.y)) - fScore.get(key(b.x, b.y)));
             const current = openSet.shift();
+
             if (current.x === goal.x && current.y === goal.y) {
                 return this.reconstructPath(cameFrom, current);
             }
@@ -234,7 +240,9 @@ export default class GridUtils {
                 if (grid.isOccupied(neighbor.x, neighbor.y))
                     continue;
 
-                const tentative = gScore.get(cKey) + 1;
+                // custo diagonal = √2, horizontal/vertical = 1
+                const cost = (dir.x !== 0 && dir.y !== 0) ? Math.SQRT2 : 1;
+                const tentative = gScore.get(cKey) + cost;
 
                 if (!gScore.has(nKey) || tentative < gScore.get(nKey)) {
                     cameFrom.set(nKey, current);
@@ -249,8 +257,11 @@ export default class GridUtils {
         return []; // sem caminho
     }
 
+    // --- Distância Euclidiana como heurística ---
     heuristic(a, b) {
-        return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
+        const dx = a.x - b.x;
+        const dy = a.y - b.y;
+        return Math.sqrt(dx * dx + dy * dy);
     }
 
     reconstructPath(cameFrom, current) {
@@ -262,6 +273,7 @@ export default class GridUtils {
         }
         return totalPath;
     }
+
 
     markGround(startX, startY, w, h, value = 'ground') {
         for (let x = startX; x < startX + w; x++) {
@@ -297,10 +309,10 @@ export default class GridUtils {
 
             // converte os 4 cantos reais da célula
             const cornersIso = [
-                { x: x,     y: y },
+                { x: x, y: y },
                 { x: x + 1, y: y },
                 { x: x + 1, y: y + 1 },
-                { x: x,     y: y + 1 },
+                { x: x, y: y + 1 },
             ];
 
             const cornersScreen = cornersIso.map(c => this.isoToScreen(c.x, c.y));
