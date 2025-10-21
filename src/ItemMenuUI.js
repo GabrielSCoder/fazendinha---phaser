@@ -124,6 +124,10 @@ export default class ItemMenuUI {
         if (ocupado) {
             console.log("❌ Tile ocupado — revertendo sprite.");
             sprite.isMoving = true;
+            sprite.setDepth(2000);
+            for (let other of this.scene.sprites) {
+                if (other !== sprite) other.disableInteractive();
+            }
             return;
         }
 
@@ -140,4 +144,5 @@ export default class ItemMenuUI {
 
         this.gridUtils.drawFootprints();
     }
+
 }

@@ -25,6 +25,8 @@ export default class CameraController {
         const { input } = this.scene;
 
         input.on('pointerdown', (pointer) => {
+            if (this.scene.shopMenu.isOpen()) return;
+
             if (pointer.middleButtonDown()) {
                 this.dragging = true;
                 this.dragStart.x = pointer.x;

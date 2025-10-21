@@ -10,20 +10,24 @@ export default class BottomMenu {
 
     createUI() {
         const { width, height } = this.scene.scale;
-        const menuWidth = 200;
+        const menuWidth = 250;
         const menuHeight = 60;
 
+        // Container principal
         this.containerUI = this.scene.add.container(0, 0).setDepth(1000);
         this.containerUI.setScrollFactor(0);
 
+        // Container do bottom menu
         this.bottomMenu = this.scene.add.container(
-            width - menuHeight - 150,
+            width - menuWidth - 150,
             height - menuHeight - 20
         );
+
         this.containerUI.add(this.bottomMenu);
 
         // Fundo do menu
-        const bg = this.scene.add.rectangle(0, 0, menuWidth, menuHeight, 0x222222, 0.85).setOrigin(0);
+        const bg = this.scene.add.rectangle(0, 0, menuWidth, menuHeight, 0x222222, 0.85)
+            .setOrigin(0);
         this.bottomMenu.add(bg);
 
         // =========================
@@ -42,8 +46,8 @@ export default class BottomMenu {
         const btnZoomIn = this.scene.add.text(menuWidth - 100, menuHeight / 2, "+", {
             fontSize: '20px',
             fontFamily: 'LuckiestGuy-Regular',
-            color: '#fff',
-            backgroundColor: '#444',
+            color: 'white',
+            backgroundColor: '#3675bc',
             padding: { left: 8, right: 8, top: 4, bottom: 4 }
         })
             .setOrigin(0.5)
@@ -52,24 +56,53 @@ export default class BottomMenu {
         const btnZoomOut = this.scene.add.text(menuWidth - 130, menuHeight / 2, "-", {
             fontSize: '20px',
             fontFamily: 'LuckiestGuy-Regular',
-            color: '#fff',
-            backgroundColor: '#444',
+            color: 'white',
+            backgroundColor: '#3675bc',
             padding: { left: 8, right: 8, top: 4, bottom: 4 }
         })
             .setOrigin(0.5)
             .setInteractive({ useHandCursor: true });
 
-        this.bottomMenu.add([btnLoja, btnZoomIn, btnZoomOut]);
+        const btnContainer = this.scene.add.container(menuWidth - 180, menuHeight / 2);
 
-        // =========================
-        // Lógica dos botões
-        // =========================
+        const btnBg = this.scene.add.rectangle(0, 0, 50, 50, 0x54c848, 1)
+            .setOrigin(0.5)
+            .setStrokeStyle(2, 0x000000);
+        btnContainer.add(btnBg);
+
+        // Imagem do botão
+        const btnArar = this.scene.add.image(0, 0, "enxada")
+            .setOrigin(0.5)
+            .setDisplaySize(40, 40);
+
+
+        btnContainer.add(btnArar);
+
+        btnContainer.setSize(50, 50);
+        btnContainer.setInteractive({ useHandCursor: true });
+        this.bottomMenu.add([btnLoja, btnZoomIn, btnZoomOut, btnContainer]);
+
+        btnContainer.on('pointerdown', () => {
+            if (!this.scene.arando) {
+                this.scene.freeClick = true;
+            }
+        });
+
+        btnContainer.on('pointerup', () => {
+            this.scene.arando = !this.scene.arando;
+            if (!this.scene.arando) {
+                this.scene.clearPreviewTiles();
+            }
+        });
+
         btnLoja.on('pointerdown', () => {
             if (this.itemMenu) this.itemMenu.setVisible(false);
             if (this.shopMenu) this.shopMenu.open();
         });
 
         btnZoomIn.on('pointerup', () => {
+            this.scene.freeClick = true;
+            this.scene.itemMenuUI.hide()
             const cam = this.scene.cameras.main;
             const zoomChange = 0.15;
             const newZoom = Phaser.Math.Clamp(cam.zoom + zoomChange, 0.5, 2);
@@ -77,6 +110,8 @@ export default class BottomMenu {
         });
 
         btnZoomOut.on('pointerup', () => {
+            this.scene.freeClick = true;
+            this.scene.itemMenuUI.hide()
             const cam = this.scene.cameras.main;
             const zoomChange = -0.15;
             const newZoom = Phaser.Math.Clamp(cam.zoom + zoomChange, 0.5, 2);

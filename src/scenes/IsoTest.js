@@ -12,10 +12,13 @@ export class IsoTest extends Phaser.Scene {
 
     preload() {
         this.load.font('LuckiestGuy-Regular', 'assets/fonts/LuckiestGuy-Regular.ttf', 'truetype');
+         this.load.image('cerejeira.png', 'assets/cerejeira.png');
         this.load.image('abacaxi.png', 'assets/abacaxi.png');
         this.load.image('armazem.png', 'assets/super_armazem.png');
+        this.load.image('estabulo', 'assets/estabulo.png');
         this.load.image('menu_bg', 'assets/fundo_madeira.jpg');
         this.load.image('item_bg', 'assets/fundo_item_loja.png');
+        this.load.image('item_bloqueado', 'assets/bloqueado_ui.png');
         this.load.image('categoria_bg', 'assets/categoria_fundo.png');
         this.load.image('vaca.png', 'assets/vaca.png');
         this.load.image('gold_icon', 'assets/gold.png');
@@ -24,12 +27,20 @@ export class IsoTest extends Phaser.Scene {
         this.load.image('close_button', 'assets/close.png');
         this.load.image('proximo_button', 'assets/proximo.png');
         this.load.image('anterior_button', 'assets/anterior.png');
-        this.load.image('macieira.png', 'assets/macieira.png');
+        this.load.image('macieira.png', 'assets/tree.png');
         this.load.image('planta1.png', 'assets/plantas1.png');
         this.load.image('cerca_madeira_lado.png', 'assets/cerca_madeira_lado.png');
+        this.load.image('boneco_frente', 'assets/boneco_frente.png');
+        this.load.image('bangalo', 'assets/bangalo.png');
 
+        this.load.image('enxada', 'assets/enxada.png');
+
+        this.load.image('solo', 'assets/solo_original2.png');
+        this.load.image('solo2', 'assets/solo.png');
         this.load.image('cow', 'assets/vaca.png');
         this.load.image('trator.png', 'assets/trator.png');
+        this.load.image('trator2.png', 'assets/trator2.png');
+        this.load.image('trator3.png', 'assets/trator3.png');
         this.load.image('super_armazem', 'assets/super_armazem.png');
         this.load.image('chicken.png', 'assets/galo.png');
         this.load.image('ovelha.png', 'assets/ovelha.png');
@@ -40,8 +51,8 @@ export class IsoTest extends Phaser.Scene {
     create() {
 
         this.gridSize = 64;
-        this.gridWidth = 12;
-        this.gridHeight = 12;
+        this.gridWidth = 14;
+        this.gridHeight = 14;
         this.offsetX = 550;
         this.offsetY = 200;
 
@@ -50,7 +61,7 @@ export class IsoTest extends Phaser.Scene {
         );
 
         this.matrixGraphics = this.add.graphics();
-        this.matrixOffsetX = this.offsetX + 300
+        this.matrixOffsetX = this.offsetX - 500
         this.gridUtils.drawMatrix();
 
         this.gridGraphics = this.add.graphics();
@@ -72,6 +83,36 @@ export class IsoTest extends Phaser.Scene {
             }
         }
 
+        const bonecoData = {
+            img: 'boneco_frente',
+            escala: 0.5,
+            area: [1, 1],
+            origem: [0.5, 0.7]
+        };
+
+        // Posição central do grid
+        const centerX = Math.floor(this.gridWidth / 2);
+        const centerY = Math.floor(this.gridHeight / 2);
+
+        // Converte para coordenadas de tela
+        const screenPos = this.gridUtils.isoToScreen(centerX, centerY, this.gridSize, this.offsetX, this.offsetY);
+
+        // Cria o sprite
+        this.boneco = this.add.sprite(screenPos.x, screenPos.y, bonecoData.img)
+            .setScale(bonecoData.escala)
+            .setOrigin(bonecoData.origem[0], bonecoData.origem[1])
+            .setInteractive({ pixelPerfect: true, alphaTolerance: 1, useHandCursor: true });
+
+        // Marca que pode se mover
+        this.boneco.isMoving = false;
+        this.boneco.path = [];
+        this.boneco.currentStep = 0;
+
+        // Guarda footprint
+        this.boneco.footprint = bonecoData.area;
+
+        // Se quiser já marcar o centro como ocupado
+        this.gridUtils.markOccupied(this.boneco, centerX, centerY, bonecoData.area[0], bonecoData.area[1]);
 
         this.footprintGraphics = this.add.graphics();
 
@@ -80,6 +121,11 @@ export class IsoTest extends Phaser.Scene {
         this.middleButtonDown = false;
         this.freeClick = false; //Um clique a mais. Parece não necessário quando o input.on esta no mesmo arquivo que essa cena.
         this.ignoreNextPointerUp = false;
+        this.changeCameraZoom = false;
+        this.arando = false;
+        this.previewTiles = [];
+        this.previewOccupiedtiles = [];
+        this.tileSize = this.gridSize;
 
         this.topUI = new TopUI(this);
         this.shopMenu = new ShopMenu(this);
@@ -89,15 +135,15 @@ export class IsoTest extends Phaser.Scene {
         this.selectedSprite = null;
         // this.storedItemsContainer = this.add.container(50, 50).setDepth(500);
 
-        // Itens de jogo (grid, sprites, footprint) → ignorados pela UI camera
         this.cameraController.ignoreInUICamera([
             this.itemMenuUI.itemMenu,
             this.gridGraphics,
             this.sprites,
-            this.footprintGraphics
+            this.footprintGraphics,
+            this.boneco,
+            this.previewTiles
         ]);
 
-        // Itens de UI (menus, labels, etc) → ignorados pela main camera
         this.cameraController.ignoreInMainCamera([
             this.topUI.containerUI,
             this.bottomMenu.containerUI,
@@ -108,15 +154,59 @@ export class IsoTest extends Phaser.Scene {
 
         this.uiBlocker = this.add.rectangle(0, 0, this.scale.width, this.scale.height, 0x000000, 0)
             .setOrigin(0)
-            .setScrollFactor(0)     // não se move com a câmera
-            .setDepth(9999)        // acima de tudo
-            .setInteractive()      // captura todos os cliques
+            .setScrollFactor(0)     
+            .setDepth(9999)        
+            .setInteractive()      
             .setVisible(false);
 
-        this.gridUtils.drawFootprints();
+        this.gridUtils.drawCharFootprints();
         this.input.setDraggable(this.sprites);
 
+        // this.input.on('pointerdown', (pointer) => {
+
+        //     if (this.middleButtonDown) return;
+
+        //     if (this.shopMenu.isOpen() && this.boneco.isMoving) {
+        //         this.boneco.path = []
+        //         this.boneco.isMoving = false;
+        //         this.boneco.currentStep = 0
+        //         return;
+        //     }
+
+        //     if (this.shopMenu.isOpen() && this.boneco.path.length > 0 && this.boneco.isMoving) return;
+
+        //     if (!this.boneco) return;
+        //         const worldPoint = this.cameras.main.getWorldPoint(pointer.x, pointer.y);
+        //         const targetIso = this.gridUtils.screenToIso(worldPoint.x, worldPoint.y, this.gridSize, this.offsetX, this.offsetY);
+        //         const target = { x: Math.round(targetIso.x), y: Math.round(targetIso.y) };
+
+        //         const startIso = this.gridUtils.screenToIso(this.boneco.x, this.boneco.y, this.gridSize, this.offsetX, this.offsetY);
+        //         const start = { x: Math.round(startIso.x), y: Math.round(startIso.y) };
+
+        //         const path = this.gridUtils.findPath(start, target, {
+        //             width: this.gridWidth,
+        //             height: this.gridHeight,
+        //             isOccupied: (x, y) => this.gridUtils.checkOccupiedGrid(x, y, x, y, this.boneco)
+        //         });
+
+        //         if (path.length > 0) {
+        //             this.boneco.path = path;
+        //             this.boneco.currentStep = 0;
+        //             this.boneco.isMoving = true;
+        //             console.log("Path do boneco:", path);
+        //         }
+        //         this.gridUtils.drawPathDebug(path);
+        // });
+
+
+
+
         this.input.on('pointerup', (pointer, objs, event) => {
+
+            if (this.shopMenu.isOpen() && this.arando) {
+                this.cancelArar();
+            }
+
             if (this.shopMenu.isOpen() && this.selectedSprite && this.selectedSprite.isMoving) {
                 const sprite = this.selectedSprite;
 
@@ -133,13 +223,14 @@ export class IsoTest extends Phaser.Scene {
                     this.sprites = this.sprites.filter(s => s && s !== sprite && !s.destroyed);
                 }
 
+                this.gridUtils.recalculateDepthAround(sprite);
                 this.selectedSprite = null;
 
                 if (!willDestroy) sprite.isMoving = false;
 
                 this.sprites.forEach(s => {
                     if (s && !s.destroyed) {
-                        s.setInteractive({ useHandCursor: true });
+                        s.setInteractive({ pixelPerfect: true, alphaTolerance: 1,  useHandCursor: true});
                     }
                 });
 
@@ -150,12 +241,17 @@ export class IsoTest extends Phaser.Scene {
 
         this.input.on('pointerup', (pointer, objs, event) => {
 
-            // if (this.scene.ignoreNextPointerUp) return;
+            if (this.arando) return;
+
+            if (this.scene.ignoreNextPointerUp) return;
 
             if (this.freeClick) {
+                console.log("free click")
                 this.freeClick = false;
                 return;
             }
+
+            if (this.changeCameraZoom) return;
 
             if (this.middleButtonDown) return;
 
@@ -188,13 +284,15 @@ export class IsoTest extends Phaser.Scene {
 
             sprite.clearTint();
             sprite.isMoving = false;
+            this.gridUtils.recalculateDepthAround(sprite);
             this.selectedSprite = null;
-            sprite.setDepth(1000);
+            // sprite.setDepth(1000);
+
             for (let other of this.sprites) {
-                other.setInteractive({ useHandCursor: true });
+                other.setInteractive({ pixelPerfect: true, alphaTolerance: 1,  useHandCursor: true});
             }
 
-            this.uiBlocker.setVisible(false);
+            // this.uiBlocker.setVisible(false);
             this.gridUtils.drawFootprints();
             console.log("moveu")
         });
@@ -208,17 +306,62 @@ export class IsoTest extends Phaser.Scene {
         this.input.on('pointerup', (pointer) => {
             if (pointer.button === 1) {
                 this.middleButtonDown = false;
-                // this.freeClick = true;
+                if (this.arando) this.freeClick = true;
             }
         });
 
+        this.input.on('pointerup', (pointer) => {
+
+            if (!this.arando) return;
+
+            if (this.freeClick) {
+                console.log("clique de segurança!");
+                this.freeClick = false;
+                return;
+            }
+
+            if (this.changeCameraZoom) return;
+            if (this.middleButtonDown) return;
+
+            if (this.arando && this.previewOccupiedtiles) {
+                console.log(this.previewOccupiedtiles)
+                const startX = Math.min(...this.previewOccupiedtiles.map(t => t.x));
+                const startY = Math.min(...this.previewOccupiedtiles.map(t => t.y));
+                const endX   = Math.max(...this.previewOccupiedtiles.map(t => t.x));
+                const endY   = Math.max(...this.previewOccupiedtiles.map(t => t.y));
+                const w = endX - startX;
+                const h = endY - startY;
+
+                // Checa ocupação
+                const ocupado = this.gridUtils.checkOccupiedBlock(startX, startY, w, h);
+                if (ocupado) {
+                    console.log("❌ Não é possível arar aqui, algum tile já está ocupado.");
+                    return;
+                }
+
+                // Marca o chão
+                this.gridUtils.markGround(startX, startY, w, h);
+
+                console.log(`✅ Chão fixado em ${w}x${h} tiles a partir de (${startX},${startY})`);
+
+                this.clearPreviewOccupiedTiles();
+                this.gridUtils.drawFootprints();
+            }
+        });
 
         this.events.on('itemPurchased', (itemData) => {
             if (!itemData || !itemData.img) return;
 
-            // Cria o sprite no centro da tela
             const scale = itemData.escala;
-            const sprite = this.addGameSprite(itemData.img, this.scale.width / 2, this.scale.height / 2, scale);
+            let originX = 0.5;
+            let originY = 0.5;
+
+            if (itemData.origem) {
+                originX = itemData.origem[0];
+                originY = itemData.origem[1];
+            }
+
+            const sprite = this.addGameSprite(itemData.img, this.scale.width / 2, this.scale.height / 2, scale, originX, originY);
             if (itemData.area) {
                 sprite.footprint = itemData.area;
             }
@@ -254,20 +397,21 @@ export class IsoTest extends Phaser.Scene {
             console.log("🛒 Novo item comprado, pronto pra posicionar.");
         });
 
-        // this.uiBlocker.on('pointerup', () => {
-        //     if (!this.selectedSprite) {
-        //         this.uiBlocker.setVisible(false)
-        //     }
-        // });
     }
 
     update() {
+
+        this.updateArando();
+
+        this.updateBoneco();
 
         if (this.selectedSprite && this.selectedSprite.isMoving) {
             const sprite = this.selectedSprite;
             const pointer = this.input.activePointer;
 
             if (this.middleButtonDown) return;
+
+            if (this.freeClick) return;
 
             // converte para iso usando pointer
             let iso = this.gridUtils.screenToIso(pointer.worldX, pointer.worldY);
@@ -291,8 +435,12 @@ export class IsoTest extends Phaser.Scene {
         }
     }
 
-    addGameSprite(key, x, y, scale = 0.5) {
-        const sprite = this.add.sprite(x, y, key).setScale(scale).setInteractive({ useHandCursor: true });
+    addGameSprite(key, x, y, scale = 0.5, originX, originY) {
+        const sprite = this.add.sprite(x, y, key).setScale(scale).setInteractive({
+            pixelPerfect: true,
+            alphaTolerance: 1,
+            useHandCursor: true
+        }).setOrigin(originX, originY);
 
         sprite.isMoving = false;
         sprite.isDraggable = true;
@@ -314,12 +462,8 @@ export class IsoTest extends Phaser.Scene {
 
             if (!sprite.isMoving) {
                 this.selectedSprite = sprite;
-                // this.camScrollX = this.cameraController.mainCamera.scrollX;
-                // this.camScrollY = this.cameraController.mainCamera.scrollY;
-                // console.log(this.camScrollX, this.camScrollY);
                 this.itemMenuUI.show(this.selectedSprite.x, this.selectedSprite.y, this.selectedSprite);
                 console.log(pointer)
-                // this.itemMenu.setVisible(true);
             }
         });
 
@@ -332,6 +476,103 @@ export class IsoTest extends Phaser.Scene {
         })
 
         return sprite;
+    }
+
+    startArando() {
+        this.arando = true;
+    }
+
+    stopArando() {
+        this.arando = false;
+        this.clearPreviewTiles();
+    }
+
+    // Limpa previews antigos
+    clearPreviewTiles() {
+        for (let tile of this.previewTiles) {
+            tile.destroy();
+        }
+        this.previewTiles = [];
+    }
+
+    clearPreviewOccupiedTiles() {
+        this.previewOccupiedtiles = [];
+    }
+
+    cancelArar()
+    {
+        this.arando = false;
+        this.clearPreviewTiles();
+        this.previewOccupiedtiles = [];
+    }
+
+    updateArando() {
+
+        if (this.middleButtonDown) return;
+        if (!this.arando) return;
+
+        const pointer = this.input.activePointer;
+        const cam = this.cameras.main;
+        const worldPoint = cam.getWorldPoint(pointer.x, pointer.y);
+
+        const iso = this.gridUtils.screenToIso(worldPoint.x, worldPoint.y);
+        const startX = Math.floor(iso.x);
+        const startY = Math.floor(iso.y);
+
+        this.clearPreviewTiles();
+
+        const ts = this.gridSize;
+
+        // Checa se algum dos 4 tiles está ocupado
+        const occupied = this.gridUtils.checkOccupiedGrid(startX, startY, startX + 1, startY + 1, null);
+
+        // Calcula os 4 cantos externos do bloco 2x2 no espaço isométrico
+        const cornersIso = [
+            { x: startX,     y: startY },     // topo esquerdo
+            { x: startX + 2, y: startY },     // topo direito
+            { x: startX + 2, y: startY + 2 }, // baixo direito
+            { x: startX,     y: startY + 2 }, // baixo esquerdo
+        ];
+
+        const cornersScreen = cornersIso.map(c => this.gridUtils.isoToScreen(c.x, c.y));
+
+        const points = [];
+        for (const c of cornersScreen) {
+            points.push(c.x, c.y);
+        }
+
+        const tile = this.add.polygon(0, 0, points, occupied ? 0xff0000 : 0x00ff00, 0.5)
+            .setOrigin(0, 0);
+
+        this.previewOccupiedtiles = cornersIso;
+        this.previewTiles.push(tile);
+        this.cameraController.ignoreInUICamera([tile]);
+    }
+
+    updateBoneco() {
+        if (this.boneco && this.boneco.path && this.boneco.path.length > 0) {
+            const step = this.boneco.path[this.boneco.currentStep];
+
+            if (step) {
+                const screenPos = this.gridUtils.isoToScreen(step.x, step.y, this.gridSize, this.offsetX, this.offsetY);
+                const dx = screenPos.x - this.boneco.x;
+                const dy = screenPos.y - this.boneco.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                const speed = 3;
+
+                if (dist < 2) {
+                    this.boneco.currentStep++;
+                    if (this.boneco.currentStep >= this.boneco.path.length) {
+                        this.boneco.path = [];
+                        this.boneco.isMoving = false;
+                    }
+                } else {
+                    this.boneco.x += (dx / dist) * speed;
+                    this.boneco.y += (dy / dist) * speed;
+                }
+            }
+            // this.gridUtils.drawCharFootprints();
+        }
     }
 
 }

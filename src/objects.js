@@ -6,7 +6,11 @@ export const sementes = [
         "preco_venda": 70,
         "tempo_colheita_horas": 4,
         "xp": 1,
-        "nivel_requerido": 1
+        "nivel_requerido": 1,
+        "img": "solo",
+        "escala": 0.73,
+        "area": [2, 2],
+        "origem": [0.5, 0.45]
     },
     {
         "id": "seed_soja",
@@ -15,7 +19,10 @@ export const sementes = [
         "preco_venda": 165,
         "tempo_colheita_horas": 48,
         "xp": 2,
-        "nivel_requerido": 1
+        "nivel_requerido": 1,
+        "img": "solo2",
+        "escala": 0.78,
+        "area": [2, 2]
     },
     {
         "id": "seed_abobora",
@@ -230,7 +237,8 @@ export const arvores = [
         "nivel_requerido": 8,
         "img": "planta1.png",
         "escala": 0.5,
-        "area": [1, 1]
+        "area": [1, 1],
+        "origem": [0.5, 0.8]
     },
     {
         "id": "arvore_abrico",
@@ -240,7 +248,11 @@ export const arvores = [
         "preco_venda": 25,
         "tempo_colheita_horas": 36,
         "xp": 2,
-        "nivel_requerido": 5
+        "nivel_requerido": 5,
+        "img": "cerejeira.png",
+        "escala": 1.0,
+        "area": [1, 1],
+        "origem": [0.5, 0.8]
     },
     {
         "id": "arvore_banana",
@@ -302,8 +314,9 @@ export const arvores = [
         "xp": 3,
         "nivel_requerido": 5,
         "img": "macieira.png",
-        "escala": 0.5,
-        "area": [1, 1]
+        "escala": 1.0,
+        "area": [1, 1],
+        "origem": [0.5, 0.8]
     },
     {
         "id": "arvore_pessego",
@@ -351,8 +364,9 @@ export const animais = [
         "xp": 100,
         "nivel_requerido": 4,
         "img": "chicken.png",
-        "escala": 0.12,
-        "area": [1, 1]
+        "escala": 0.3,
+        "area": [1, 1],
+        "origem" : [0.5, 0.5]
     },
     {
         "id": "animal_porco",
@@ -384,6 +398,20 @@ export const animais = [
 
 export const decoracoes = [
     {
+        "id": "boneco",
+        "nome": "Boneco",
+        "preco_compra": 0,
+        "preco_compra_grana": 18,
+        "preco_venda": 0,
+        "tempo_colheita_horas": 0,
+        "xp": 490,
+        "nivel_requerido": 0,
+        "img": "boneco_frente",
+        "escala": 0.5,
+        "area": [1, 1],
+        "origem": [0.5, 0.7]
+    },
+    {
         "id": "gazebo",
         "nome": "Gazebo",
         "preco_compra": 0,
@@ -391,7 +419,11 @@ export const decoracoes = [
         "preco_venda": 0,
         "tempo_colheita_horas": 0,
         "xp": 490,
-        "nivel_requerido": 0
+        "nivel_requerido": 0,
+        "img" : "bangalo",
+        "escala": 1.1,
+        "area": [1, 1],
+        "origem": [0.5, 0.7]
     },
     {
         "id": "gazebo_rosa",
@@ -547,8 +579,10 @@ export const decoracoes = [
         "xp": 820,
         "nivel_requerido": 0,
         "img": "armazem.png",
-        "escala": 0.3,
-        "area": [2, 3]
+        "escala": 0.8,
+        "area": [3, 3],
+        "origem": [0.5, 0.6]
+
     },
     {
         "id": "celeiro_velho",
@@ -640,7 +674,47 @@ export const decoracoes = [
         "xp": 1000,
         "nivel_requerido": 0,
         "img": "trator.png",
-        "escala": 0.25,
-        "area": [2, 3]
+        "escala": 0.15,
+        "area": [2, 2]
+    },
+    {
+        "id": "trator_azul",
+        "nome": "Trator Azul",
+        "preco_compra": 0,
+        "preco_compra_grana": 38,
+        "preco_venda": 0,
+        "tempo_colheita_horas": 0,
+        "xp": 1000,
+        "nivel_requerido": 0,
+        "img": "trator2.png",
+        "escala": 0.4,
+        "area": [2, 2]
+    },
+    {
+        "id": "trator_verde",
+        "nome": "Trator Azul",
+        "preco_compra": 0,
+        "preco_compra_grana": 38,
+        "preco_venda": 0,
+        "tempo_colheita_horas": 0,
+        "xp": 1000,
+        "nivel_requerido": 0,
+        "img": "trator3.png",
+        "escala": 1.0,
+        "area": [2, 2]
+    },
+    {
+        "id": "estabulo",
+        "nome": "Estábulo",
+        "preco_compra": 0,
+        "preco_compra_grana": 38,
+        "preco_venda": 0,
+        "tempo_colheita_horas": 0,
+        "xp": 1000,
+        "nivel_requerido": 0,
+        "img": "estabulo",
+        "escala": 0.5,
+        "area": [1, 3]
     }
+
 ]
