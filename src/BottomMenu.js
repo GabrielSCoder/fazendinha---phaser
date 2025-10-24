@@ -85,6 +85,9 @@ export default class BottomMenu {
         btnContainer.on('pointerdown', () => {
             if (!this.scene.arando) {
                 this.scene.freeClick = true;
+                for (let sprite of this.scene.sprites) {
+                    sprite.disableInteractive();
+                }
             }
         });
 
@@ -92,6 +95,9 @@ export default class BottomMenu {
             this.scene.arando = !this.scene.arando;
             if (!this.scene.arando) {
                 this.scene.clearPreviewTiles();
+                for (let other of this.scene.sprites) {
+                    other.setInteractive({ pixelPerfect: true, alphaTolerance: 1, useHandCursor: true });
+                }
             }
         });
 

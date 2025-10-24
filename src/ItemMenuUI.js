@@ -131,9 +131,10 @@ export default class ItemMenuUI {
             return;
         }
 
-        const snapped = this.gridUtils.isoToScreen(startX + (w / 2 - 0.5), startY + (h / 2 - 0.5));
+        const snapped = this.gridUtils.isoToScreen(Math.floor(iso.x) + 0.5, Math.floor(iso.y) + 0.5);
+
         sprite.x = snapped.x;
-        sprite.y = snapped.y;
+        sprite.y = snapped.y + this.scene.gridSize * 0.12;
 
         this.gridUtils.clearOccupied(sprite);
         this.gridUtils.markOccupied(sprite, startX, startY, w, h);
@@ -142,6 +143,7 @@ export default class ItemMenuUI {
         sprite.clearTint();
         sprite.setDepth(1000);
 
+        console.log(this.scene.gridMap);
         this.gridUtils.drawFootprints();
     }
 

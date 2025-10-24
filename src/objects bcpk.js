@@ -9,9 +9,11 @@ export const sementes = [
         "nivel_requerido": 1,
         "img": "solo",
         "escala": 0.73,
-        "area": [4, 4],
-        "origem": [0.5, 0.58],
-        "tipo" : "solo"
+        "origem": [0.5, 0.45],
+        "wL": 2,
+        "hL": 2,
+        "wV": 2,
+        "hV": 2
     },
     {
         "id": "seed_soja",
@@ -23,7 +25,7 @@ export const sementes = [
         "nivel_requerido": 1,
         "img": "solo2",
         "escala": 0.78,
-        "area": [4, 4]
+        "area": [2, 2]
     },
     {
         "id": "seed_abobora",
@@ -239,8 +241,7 @@ export const arvores = [
         "img": "planta1.png",
         "escala": 0.5,
         "area": [1, 1],
-        "origem": [0.5, 0.7],
-        "tipo": "arvore"
+        "origem": [0.5, 0.8]
     },
     {
         "id": "arvore_abrico",
@@ -254,8 +255,57 @@ export const arvores = [
         "img": "cerejeira.png",
         "escala": 1.0,
         "area": [1, 1],
-        "origem": [0.5, 0.9],
-        "tipo": "arvore"
+        "origem": [0.5, 0.8]
+    },
+    {
+        "id": "arvore_banana",
+        "nome": "Banana",
+        "preco_compra": 0,
+        "preco_compra_grana": 4,
+        "preco_venda": 56,
+        "tempo_colheita_horas": 72,
+        "xp": 6,
+        "nivel_requerido": 14
+    },
+    {
+        "id": "arvore_cereja",
+        "nome": "Cereja",
+        "preco_compra": 220,
+        "preco_compra_grana": 0,
+        "preco_venda": 35,
+        "tempo_colheita_horas": 24,
+        "xp": 2,
+        "nivel_requerido": 1
+    },
+    {
+        "id": "arvore_guava",
+        "nome": "Guava",
+        "preco_compra": 0,
+        "preco_compra_grana": 5,
+        "preco_venda": 55,
+        "tempo_colheita_horas": 72,
+        "xp": 6,
+        "nivel_requerido": 8
+    },
+    {
+        "id": "arvore_laranja",
+        "nome": "Laranja",
+        "preco_compra": 425,
+        "preco_compra_grana": 0,
+        "preco_venda": 40,
+        "tempo_colheita_horas": 96,
+        "xp": 4,
+        "nivel_requerido": 5
+    },
+    {
+        "id": "arvore_lima",
+        "nome": "Lima",
+        "preco_compra": 475,
+        "preco_compra_grana": 0,
+        "preco_venda": 41,
+        "tempo_colheita_horas": 72,
+        "xp": 4,
+        "nivel_requerido": 7
     },
     {
         "id": "arvore_maca",
@@ -269,8 +319,7 @@ export const arvores = [
         "img": "macieira.png",
         "escala": 1.0,
         "area": [1, 1],
-        "origem": [0.5, 0.9],
-        "tipo": "arvore"
+        "origem": [0.5, 0.8]
     },
     {
         "id": "arvore_pessego",
@@ -280,8 +329,7 @@ export const arvores = [
         "preco_venda": 60,
         "tempo_colheita_horas": 48,
         "xp": 2,
-        "nivel_requerido": 10,
-        "tipo": "arvore"
+        "nivel_requerido": 10
     },
     {
         "id": "arvore_nectarina",
@@ -291,8 +339,7 @@ export const arvores = [
         "preco_venda": 55,
         "tempo_colheita_horas": 72,
         "xp": 2,
-        "nivel_requerido": 20,
-        "tipo": "arvore"
+        "nivel_requerido": 20
     }
 ]
 
@@ -308,8 +355,10 @@ export const animais = [
         "nivel_requerido": 1,
         "img": "vaca.png",
         "escala": 0.30,
-        "area": [2, 4],
-        "tipo": "animal"
+        "wL": 2,  // largura em células lógicas
+        "hL": 4,  // altura em células lógicas
+        "wV": 1,
+        "hV": 2
     },
     {
         "id": "animal_frango",
@@ -321,10 +370,9 @@ export const animais = [
         "xp": 100,
         "nivel_requerido": 4,
         "img": "chicken.png",
-        "escala": 0.4,
+        "escala": 0.3,
         "area": [1, 1],
-        "origem": [0.5, 0.5],
-        "tipo": "animal"
+        "origem": [0.5, 0.5]
     },
     {
         "id": "animal_porco",
@@ -337,8 +385,7 @@ export const animais = [
         "nivel_requerido": 10,
         "img": "porco.png",
         "escala": 0.20,
-        "area": [2, 2],
-        "tipo": "animal"
+        "area": [1, 1]
     },
     {
         "id": "animal_ovelha",
@@ -351,8 +398,7 @@ export const animais = [
         "nivel_requerido": 7,
         "img": "ovelha.png",
         "escala": 0.25,
-        "area": [1, 1],
-        "tipo": "animal"
+        "area": [1, 1]
     }
 ]
 
@@ -369,7 +415,7 @@ export const decoracoes = [
         "img": "boneco_frente",
         "escala": 0.5,
         "area": [1, 1],
-        "origem": [0.4, 0.8]
+        "origem": [0.5, 0.7]
     },
     {
         "id": "gazebo",
@@ -382,23 +428,18 @@ export const decoracoes = [
         "nivel_requerido": 0,
         "img": "bangalo",
         "escala": 1.1,
-        "area": [2, 2],
+        "area": [1, 1],
         "origem": [0.5, 0.7]
     },
     {
-        "id": "cerca_branca",
-        "nome": "Cerca branca",
-        "tipo": "cerca",
+        "id": "gazebo_rosa",
+        "nome": "Gazebo rosa",
         "preco_compra": 0,
         "preco_compra_grana": 18,
         "preco_venda": 0,
         "tempo_colheita_horas": 0,
         "xp": 490,
-        "nivel_requerido": 0,
-        "img": "cerca_branca.png",
-        "escala": 0.4,
-        "area": [5, 1],
-        "origem": [0.5, 0.5]
+        "nivel_requerido": 0
     },
     {
         "id": "cabana_de_descanso",
@@ -423,63 +464,49 @@ export const decoracoes = [
     {
         "id": "cabana_rosa",
         "nome": "Cabana rosa",
-        "tipo": "cerca",
         "preco_compra": 0,
         "preco_compra_grana": 0,
         "preco_venda": 0,
         "tempo_colheita_horas": 0,
         "xp": 0,
-        "nivel_requerido": 4,
-        "nivel_requerido": 10,
-        "img": "cerca_madeira_CE_canto_inferior.png",
-        "escala": 0.4,
-        "area": [1, 5],
-        "origem": [0.5, 0.5]
+        "nivel_requerido": 4
     },
     {
-        "id": "cerca_de_madeira_CD",
-        "nome": "Cerca CD",
-        "tipo": "cerca",
+        "id": "barraca_de_frutas",
+        "nome": "Barraca de frutas",
         "preco_compra": 0,
         "preco_compra_grana": 0,
         "preco_venda": 0,
         "tempo_colheita_horas": 0,
         "xp": 0,
-        "nivel_requerido": 10,
-        "img": "cerca_madeira_CD.png",
-        "escala": 0.4,
-        "area": [3, 1],
-        "origem": [0.5, 0.5]
+        "nivel_requerido": 10
     },
     {
-        "id": "cerca_de_madeira_CE",
-        "nome": "Cerca CE",
-        "tipo": "cerca",
+        "id": "barracao",
+        "nome": "Barracão",
         "preco_compra": 0,
         "preco_compra_grana": 0,
         "preco_venda": 0,
         "tempo_colheita_horas": 0,
         "xp": 0,
-        "nivel_requerido": 7,
-        "img": "cerca_madeira_CE.png",
-        "escala": 0.4,
-        "area": [4, 1],
-        "origem": [0.5, 0.5]
+        "nivel_requerido": 7
     },
     {
         "id": "cerca_de_madeira",
-        "nome": "Cerca solta",
-        "tipo": "cerca",
+        "nome": "Cerca de madeira",
         "preco_compra": 0,
         "preco_compra_grana": 0,
         "preco_venda": 0,
         "tempo_colheita_horas": 0,
         "xp": 0,
         "nivel_requerido": 4,
-        "img": "cerca_madeira_unico.png",
+        "img": "cerca_madeira_lado.png",
         "escala": 0.4,
-        "area": [4, 1],
-        "origem": [0.5, 0.5]
+        "wL": 0.5,  // largura em células lógicas
+        "hL": 1,  // altura em células lógicas
+        "wV": 1,
+        "hV": 2
+
     },
     {
         "id": "poco",
@@ -489,11 +516,7 @@ export const decoracoes = [
         "preco_venda": 0,
         "tempo_colheita_horas": 0,
         "xp": 0,
-        "nivel_requerido": 4,
-        "img": "toquinho.png",
-        "escala": 0.4,
-        "area": [1, 1],
-        "origem": [0.5, 0.55]
+        "nivel_requerido": 4
     },
     {
         "id": "oficina",
@@ -566,7 +589,7 @@ export const decoracoes = [
         "nivel_requerido": 0,
         "img": "armazem.png",
         "escala": 0.8,
-        "area": [5, 5],
+        "area": [3, 3],
         "origem": [0.5, 0.6]
 
     },
@@ -661,7 +684,10 @@ export const decoracoes = [
         "nivel_requerido": 0,
         "img": "trator.png",
         "escala": 0.15,
-        "area": [2, 4]
+        "wL": 2,
+        "hL": 2,
+        "wV": 2,
+        "hV": 2
     },
     {
         "id": "trator_azul",
@@ -674,7 +700,10 @@ export const decoracoes = [
         "nivel_requerido": 0,
         "img": "trator2.png",
         "escala": 0.4,
-        "area": [2, 2]
+        "wL": 2,
+        "hL": 2,
+        "wV": 2,
+        "hV": 2
     },
     {
         "id": "trator_verde",
@@ -687,7 +716,10 @@ export const decoracoes = [
         "nivel_requerido": 0,
         "img": "trator3.png",
         "escala": 1.0,
-        "area": [4, 4]
+        "wL": 2,
+        "hL": 2,
+        "wV": 2,
+        "hV": 2
     },
     {
         "id": "estabulo",
@@ -700,7 +732,10 @@ export const decoracoes = [
         "nivel_requerido": 0,
         "img": "estabulo",
         "escala": 0.5,
-        "area": [1, 3]
+        "wL": 2,  // largura em células lógicas
+        "hL": 4,  // altura em células lógicas
+        "wV": 1,
+        "hV": 2
     }
 
 ]

@@ -13,6 +13,7 @@ export default class BonecoController {
 
         this.createBoneco();
         this.scene.input.on('pointerup', (pointer) => this.handlePointer(pointer));
+        this.isStoped = true;
     }
 
     createBoneco() {
@@ -20,12 +21,13 @@ export default class BonecoController {
             img: 'boneco_frente',
             escala: 0.5,
             area: [1, 1],
-            origem: [0.5, 0.7]
+            origem: [0.5, 0.8],
+            tipo : "boneco"
         };
 
-        const centerX = Math.floor(this.gridWidth / 2);
-        const centerY = Math.floor(this.gridHeight / 2);
-        const screenPos = this.gridUtils.isoToScreen(centerX, centerY, this.gridSize, this.offsetX, this.offsetY);
+        const centerX = Math.floor(this.gridWidth);
+        const centerY = Math.floor(this.gridHeight );
+        const screenPos = this.gridUtils.isoToScreen(centerX, centerY);
 
         const sprite = this.scene.add.sprite(screenPos.x, screenPos.y, bonecoData.img)
             .setScale(bonecoData.escala)
@@ -37,6 +39,7 @@ export default class BonecoController {
         sprite.currentStep = 0;
         sprite.lastDirection = 'frente';
         sprite._shouldFlipX = false;
+        sprite.tipo = bonecoData.tipo
 
         this.scene.gridUtils.markOccupied(sprite, centerX, centerY, 1, 1);
         this.boneco = sprite;
@@ -76,7 +79,7 @@ export default class BonecoController {
     handlePointer(pointer) {
         const scene = this.scene;
         const boneco = this.boneco;
-        if (!boneco || scene.middleButtonDown) return;
+        if (!boneco || scene.middleButtonDown || this.isStoped) return;
 
         if (scene.shopMenu.isOpen() && boneco.isMoving) {
             this.stopMovement();
@@ -84,10 +87,10 @@ export default class BonecoController {
         }
 
         const worldPoint = scene.cameras.main.getWorldPoint(pointer.x, pointer.y);
-        const targetIso = this.gridUtils.screenToIso(worldPoint.x, worldPoint.y, this.gridSize, this.offsetX, this.offsetY);
+        const targetIso = this.gridUtils.screenToIso(worldPoint.x, worldPoint.y);
         const target = { x: Math.round(targetIso.x), y: Math.round(targetIso.y) };
 
-        const startIso = this.gridUtils.screenToIso(boneco.x, boneco.y, this.gridSize, this.offsetX, this.offsetY);
+        const startIso = this.gridUtils.screenToIso(boneco.x, boneco.y);
         const start = { x: Math.round(startIso.x), y: Math.round(startIso.y) };
 
         const path = this.gridUtils.findPath(start, target, {
@@ -113,12 +116,15 @@ export default class BonecoController {
     // === Atualização de movimento ===
     update() {
         const boneco = this.boneco;
+
+        if (this.isStoped) this.stopMovement();
+
         if (!boneco || !boneco.isMoving || !boneco.path?.length) return;
 
         const step = boneco.path[boneco.currentStep];
         if (!step) return;
 
-        const screenPos = this.gridUtils.isoToScreen(step.x, step.y, this.gridSize, this.offsetX, this.offsetY);
+        const screenPos = this.gridUtils.isoToScreen(step.x, step.y);
         const dx = screenPos.x - boneco.x;
         const dy = screenPos.y - boneco.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
@@ -161,8 +167,8 @@ export default class BonecoController {
     computeAndApplyFacingFromGridVec(fromGrid, toGrid) {
         const boneco = this.boneco;
 
-        const fromS = this.gridUtils.isoToScreen(fromGrid.x, fromGrid.y, this.gridSize, this.offsetX, this.offsetY);
-        const toS = this.gridUtils.isoToScreen(toGrid.x, toGrid.y, this.gridSize, this.offsetX, this.offsetY);
+        const fromS = this.gridUtils.isoToScreen(fromGrid.x, fromGrid.y);
+        const toS = this.gridUtils.isoToScreen(toGrid.x, toGrid.y);
 
         const dx = toS.x - fromS.x;
         const dy = toS.y - fromS.y;
