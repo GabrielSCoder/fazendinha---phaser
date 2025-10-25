@@ -75,7 +75,7 @@ export default class ItemMenuUI {
         if (!sprite) return;
         sprite.originalPosition = { x: sprite.x, y: sprite.y };
         sprite.isMoving = true;
-        sprite.setDepth(2000);
+        sprite.setDepth(300);
 
         for (let other of this.scene.sprites) {
             if (other !== sprite) other.disableInteractive();
@@ -112,39 +112,46 @@ export default class ItemMenuUI {
             sprite.footprint = [origH, origW];
         }
 
-        // Atualiza posição no grid
         const iso = this.gridUtils.screenToIso(sprite.x, sprite.y);
         const [w, h] = sprite.footprint;
         const startX = Math.round(iso.x - (w / 2 - 0.5));
         const startY = Math.round(iso.y - (h / 2 - 0.5));
 
+        sprite.gridX = Math.round(iso.x);
+        sprite.gridY = Math.round(iso.y);
+
         sprite.lastFreePos = { startX, startY };
 
-        const ocupado = this.gridUtils.checkOccupiedGrid(startX, startY, startX + w - 1, startY + h - 1, sprite);
-        if (ocupado) {
-            console.log("❌ Tile ocupado — revertendo sprite.");
-            sprite.isMoving = true;
-            sprite.setDepth(2000);
-            for (let other of this.scene.sprites) {
-                if (other !== sprite) other.disableInteractive();
-            }
-            return;
+        for (let other of this.scene.sprites) {
+            if (other !== sprite) other.disableInteractive();
         }
 
-        const snapped = this.gridUtils.isoToScreen(Math.floor(iso.x) + 0.5, Math.floor(iso.y) + 0.5);
+        // const ocupado = this.gridUtils.checkOccupiedGrid(startX, startY, startX + w - 1, startY + h - 1, sprite);
+        sprite.isMoving = true;
+        sprite.setDepth(2000);
+        
+        // if (ocupado) {
+        //     console.log("❌ Tile ocupado — revertendo sprite.");
+        //     return;
+        // }
 
-        sprite.x = snapped.x;
-        sprite.y = snapped.y + this.scene.gridSize * 0.12;
+        // const snapped = this.gridUtils.isoToScreen(Math.floor(iso.x) + 0.5, Math.floor(iso.y) + 0.5);
 
-        this.gridUtils.clearOccupied(sprite);
-        this.gridUtils.markOccupied(sprite, startX, startY, w, h);
+        // sprite.x = snapped.x;
+        // sprite.y = snapped.y + this.scene.gridSize * 0.12;
 
-        sprite.lastFreePos = { startX, startY };
-        sprite.clearTint();
-        sprite.setDepth(1000);
+        // this.gridUtils.clearOccupied(sprite);
+        // this.gridUtils.markOccupied(sprite, startX, startY, w, h);
 
-        console.log(this.scene.gridMap);
-        this.gridUtils.drawFootprints();
+        // sprite.lastFreePos = { startX, startY };
+        // sprite.clearTint();
+        // this.gridUtils.recalculateDepthAround(sprite);
+
+        // for (let other of this.scene.sprites) {
+        //     other.setInteractive({ pixelPerfect: true, alphaTolerance: 1, useHandCursor: true });
+        // }
+
+        // this.gridUtils.drawFootprints();
     }
 
 }

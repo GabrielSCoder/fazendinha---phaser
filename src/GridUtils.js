@@ -191,21 +191,159 @@ export default class GridUtils {
     recalculateDepthAround(sprite, radius = 3) {
         const targetX = sprite.x;
         const targetY = sprite.y;
+        const targetIso = this.screenToIso(targetX, targetY);
 
         const neighbors = this.scene.sprites.filter(s => {
             const dx = Math.abs(s.x - targetX);
             const dy = Math.abs(s.y - targetY);
-            return dx <= radius * this.scene.gridSize && dy <= radius * this.scene.gridSize;
+            return dx <= radius * this.scene.gridSize && dy <= radius * this.scene.gridSize && s.tipo !== "cerca";
         });
 
-        neighbors.forEach(s => {
-            s.setDepth(s.y + s.x * 0.001);
+        const neighborsFences = this.scene.sprites.filter(s => {
+            const dx = Math.abs(s.x - targetX);
+            const dy = Math.abs(s.y - targetY);
+            return dx <= radius * this.scene.gridSize && dy <= radius * this.scene.gridSize && s.tipo === "cerca";
         });
+
+        console.log("----------------- normais : \n" + neighbors);
+        console.log("----------------- cercas: \n" + neighborsFences);
+
+        // neighbors.forEach(s => {
+
+        //     const iso = this.screenToIso(s.x, s.y);
+        //     const convertIsoX = Math.ceil(iso.x);
+        //     const convertIsoY = Math.ceil(iso.y);
+
+        //     let calc = convertIsoX + convertIsoY * 1.001
+
+        //     console.log("tipo: " + s.tipo + ` depth de: ${calc}`)
+        //     s.setDepth(calc);
+        // });
+
+        neighborsFences.forEach(s => {
+
+            const iso = this.screenToIso(s.x, s.y);
+            const convertIsoX = Math.ceil(iso.x);
+            const convertIsoY = Math.ceil(iso.y);
+
+            let calc = convertIsoX + convertIsoY * 1.001
+
+            // s.setDepth(calc);
+            // console.log(convertIsoY, targetIso.y);
+            // const lefty = convertIsoY > targetIso.y;
+            // lefty ? calc -= 0.2 : calc += 0.2
+            // console.log(lefty);
+            // sprite.setDepth(calc)
+            // console.log("tipo: " + s.tipo + ` depth de: ${calc}`)
+
+            const closeNeighbors = neighbors.filter(n => {
+                if (n === s) return false;
+
+                const isoN = this.screenToIso(n.x, n.y);
+
+                const dx = Math.abs(isoN.x - convertIsoX);
+                const dy = Math.abs(isoN.y - convertIsoY);
+
+                return dx <= 2 && dy <= 2;
+            });
+
+            if (closeNeighbors) {
+
+                closeNeighbors.forEach(n => {
+                    const isoN = this.screenToIso(n.x, n.y);
+                    const neighborDepth = Math.ceil(isoN.x) + Math.ceil(isoN.y) * 1.001;
+                    const diff = Math.abs(calc - neighborDepth);
+
+                    console.log("Depth do vizinho: " + neighborDepth);
+                    console.log("diferença entre os dois: " + diff);
+                    console.log("calculo atual: " + calc);
+
+                    const isLeft = convertIsoY > isoN.y;
+                    const isTop = convertIsoX > isoN.x;
+
+                    if (diff < 1) {
+                        if (calc > neighborDepth) calc -= 0.2;
+                        else calc += 0.2;
+                    }
+                    
+                    n.setDepth(calc);
+                })
+
+
+                
+
+                // } else {
+                //     if (s.flipX && convertIsoX < isoN.x) {
+                //         console.log("diff maior que 1");
+                //         calc -= diff + 0.1
+                //     }
+                // }
+            }
+
+        });
+
+        // neighbors.forEach(s => {
+        //     const iso = this.screenToIso(s.x, s.y);
+        //     const convertIsoX = Math.ceil(iso.x);
+        //     const convertIsoY = Math.ceil(iso.y);
+        //     const realWidth = this.scene.gridWidth * this.scene.logicalFactor - 1;
+        //     const realHeight = this.scene.gridHeight * this.scene.logicalFactor - 1;
+
+        //     let calc = convertIsoX + convertIsoY * 1.001
+
+        //     if (!s.flipX) {
+        //         calc = convertIsoX + convertIsoY * 1.0001;
+        //     } else {
+        //         console.log("--------------------");
+        //         const closeNeighbor = this.scene.sprites.find(n => {
+
+        //             if (n === s) return false;
+        //             if (n.tipo !== "cerca") return false;
+
+        //             const isoN = this.screenToIso(n.x, n.y);
+
+        //             const dx = Math.abs(isoN.x - convertIsoX);
+        //             const dy = Math.abs(isoN.y - convertIsoY);
+
+        //             return dx <= 2 && dy <= 2;
+        //         });
+
+        //         if (closeNeighbor) {
+        //             console.log(closeNeighbor);
+        //             const isoN = this.screenToIso(closeNeighbor.x, closeNeighbor.y);
+        //             const neighborDepth = Math.ceil(isoN.x) + Math.ceil(isoN.y) * 1.001;
+
+        //             const diff = Math.abs(calc - neighborDepth);
+
+        //             console.log("Depth do vizinho: " + neighborDepth);
+        //             console.log("diferença entre os dois: " + diff);
+        //             console.log("calculo atual: " + calc);
+
+        //             if (diff < 1) {
+        //                 if (s.flipX) {
+        //                     console.log("caindo aqui")
+        //                     if (calc > neighborDepth) calc -= 0.2;
+        //                     else calc += 0.2;
+        //                 }
+        //             } else {
+        //                 if (s.flipX && convertIsoX < isoN.x) {
+        //                     console.log("diff maior que 1");
+        //                     calc -= diff + 0.1
+        //                 }
+        //             }
+        //         }
+        //     }
+
+        //     s.setDepth(calc);
+        //     console.log("tipo: " + s.tipo + ` depth de: ${calc}`)
+        // });
+
     }
 
     recalculateAllDepths() {
         this.scene.sprites.forEach(s => {
-            s.setDepth(s.y + s.x * 0.001);
+            const iso = this.gridUtils.screenToIso(s.x, s.y);
+            s.setDepth(iso.x + iso.y * 10);
         });
     }
 
@@ -383,53 +521,9 @@ export default class GridUtils {
         }
     }
 
-    // canSnapFence(heldFence, targetFence) {
-    //     if (!heldFence || !targetFence) return null;
-    //     if (heldFence.tipo !== 'cerca' || targetFence.tipo !== 'cerca') return null;
-
-    //     console.log("passo 1");
-    //     const hFoot = heldFence.footprint;
-    //     const tFoot = targetFence.footprint;
-    //     if (!hFoot?.length || !tFoot?.length) return null;
-
-    //     console.log("passo 2");
-    //     console.log("hfoot: " + hFoot + "tfoot: " + tFoot);
-    //     // Último tile do alvo
-    //     const tEnd = tFoot[tFoot.length - 1]; tFoot
-    //     // Primeiro tile do alvo
-    //     const tStart = tFoot[0];
-    //     // Primeiro e último do que estou segurando
-    //     const hStart = hFoot[0];
-    //     const hEnd = hFoot[hFoot.length - 1];
-
-    //     console.log("passo 4");
-    //     console.log("tEnd: " + tEnd + " tStart: " + tStart + " hstart :" + hStart.x + " hEnd :" + hEnd);
-
-    //     // 🔹 Encostando verticalmente (um abaixo do outro)
-    //     if (hStart.x === tEnd.x && hStart.y === tEnd.y + 1) {
-    //         console.log("if 1")
-    //         return { direction: 'below', targetTile: tEnd };
-    //     }
-    //     if (hEnd.x === tStart.x && hEnd.y === tStart.y - 1) {
-    //         console.log("if 2")
-    //         return { direction: 'above', targetTile: tStart };
-    //     }
-
-    //     // 🔹 Encostando horizontalmente
-    //     if (hStart.y === tEnd.y && hStart.x === tEnd.x + 1) {
-    //         console.log("if 3")
-    //         return { direction: 'right', targetTile: tEnd };
-    //     }
-    //     if (hEnd.y === tStart.y && hEnd.x === tStart.x - 1) {
-    //         console.log("if 4")
-    //         return { direction: 'left', targetTile: tStart };
-    //     }
-
-    //     return null;
-    // }
-
     getSpriteFootprintTiles(sprite) {
         const [w, h] = sprite.footprint || [1, 1];
+        console.log(w, h);
         const iso = this.screenToIso(sprite.x, sprite.y);
         const startX = Math.round(iso.x - (w / 2 - 0.5));
         const startY = Math.round(iso.y - (h / 2 - 0.5));
@@ -460,8 +554,6 @@ export default class GridUtils {
             if (targetSet.has(pos)) overlap.push(pos);
         }
 
-        console.log(overlap);
-
         if (overlap.length === 0) return null;
 
         const toXY = str => {
@@ -479,9 +571,10 @@ export default class GridUtils {
         const tMinY = Math.min(...tTiles.map(t => t.y));
         const tMaxY = Math.max(...tTiles.map(t => t.y));
 
-        const overlapTiles = overlap.map(toXY);
+        const heldVertical = (hMaxY - hMinY) > (hMaxX - hMinX);
+        const targetVertical = (tMaxY - tMinY) > (tMaxX - tMinX);
 
-        // console.log(overlapTiles);
+        const overlapTiles = overlap.map(toXY);
 
         if (overlapTiles.length !== 1) {
             return null;
@@ -489,26 +582,30 @@ export default class GridUtils {
 
         const o = overlapTiles[0];
 
-        console.log(o);
+        let onHeldEdge = false;
+        let onTargetEdge = false;
 
-        const onHeldEdge =
-            o.x === hMinX || o.x === hMaxX || o.y === hMinY || o.y === hMaxY;
-        const onTargetEdge =
-            o.x === tMinX || o.x === tMaxX || o.y === tMinY || o.y === tMaxY;
-
-        console.log(onHeldEdge);
-        console.log(onTargetEdge);
+        if (!heldVertical && !targetVertical) {
+            onHeldEdge =
+                o.x === hMinX || o.x === hMaxX
+            onTargetEdge =
+                o.x === tMinX || o.x === tMaxX
+        } else if (heldVertical && targetVertical) {
+            onHeldEdge = o.y === hMinY || o.y === hMaxY;
+            onTargetEdge = o.y === tMinY || o.y === tMaxY;
+        } else if (heldVertical && !targetVertical) {
+            onHeldEdge = o.y === hMinY || o.y === hMaxY;
+            onTargetEdge = o.x === tMinX || o.x === tMaxX
+        } else {
+            onHeldEdge = o.x === hMinX || o.x === hMaxX
+            onTargetEdge = o.y === tMinY || o.y === tMaxY;
+        }
 
         if (!(onHeldEdge && onTargetEdge)) {
             return null;
         }
 
         const edgeContact = o;
-
-        console.log(edgeContact);
-
-        const heldVertical = (hMaxY - hMinY) > (hMaxX - hMinX);
-        const targetVertical = (tMaxY - tMinY) > (tMaxX - tMinX);
 
         return {
             overlap: overlapTiles,
@@ -523,173 +620,6 @@ export default class GridUtils {
             held: heldFence,
             target: targetFence
         };
-    }
-
-
-    // Helpers -----------------------------------------------------------------
-
-    // Retorna { w, h } em tiles (mesma unidade usada com screenToIso / gridMap)
-
-    // Retorna startX/startY no grid (unidade usada no gridMap) para um sprite.
-    // Usa sprite.lastFreePos se existir, senão calcula a partir da posição do sprite.
-    computeStartFromSprite(sprite) {
-        const fp = this.getSpriteFootprintTiles(sprite);
-        if (sprite.lastFreePos && typeof sprite.lastFreePos.startX === 'number') {
-            return { startX: sprite.lastFreePos.startX, startY: sprite.lastFreePos.startY };
-        }
-
-        const iso = this.screenToIso(sprite.x, sprite.y);
-        const startX = Math.round(iso.x - (fp.w / 2 - 0.5));
-        const startY = Math.round(iso.y - (fp.h / 2 - 0.5));
-
-        return { startX, startY };
-    }
-
-    // Atualiza sprite.x/y baseado no start grid (centraliza no footprint)
-    snapSpriteToGridStart(sprite, startX, startY) {
-        const fp = this.getSpriteFootprintTiles(sprite);
-        const centerIsoX = startX + (fp.w / 2 - 0.5);
-        const centerIsoY = startY + (fp.h / 2 - 0.5);
-        const screen = this.isoToScreen(centerIsoX, centerIsoY, this.scene.gridSize, this.scene.offsetX, this.scene.offsetY);
-
-        sprite.x = screen.x;
-        // pequeno ajuste vertical para encaixe visual (opcional)
-        sprite.y = screen.y + (this.scene.gridSize * 0.12 || 0);
-        // guarda grid coords úteis
-        sprite.gridX = startX;
-        sprite.gridY = startY;
-        sprite.lastFreePos = { startX, startY };
-    }
-
-    snapFence(held, target, snap) {
-        if (!held || !target || !snap) return false;
-
-        // dados
-        const dir = snap.direction; // 'above'|'below'|'left'|'right'
-        const heldFP = this.getSpriteFootprintTiles(held);
-        const targFP = this.getSpriteFootprintTiles(target);
-
-        // start do target (em coords do grid). assume target.lastFreePos existe se ele já estava fixado
-        const tStart = this.computeStartFromSprite(target);
-        let tStartX = tStart.startX;
-        let tStartY = tStart.startY;
-        let tW = targFP.w;
-        let tH = targFP.h;
-
-        // start do held (onde ele está agora); vamos calcular depois baseado no target
-        const hW = heldFP.w;
-        const hH = heldFP.h;
-
-        // --- decide como remover tile do target ---
-        // remover 1 tile da extremidade (se possível). Se remoção deixaria dimensão < 1, aborta.
-        let newTStartX = tStartX;
-        let newTStartY = tStartY;
-        let newTW = tW;
-        let newTH = tH;
-
-        if (dir === 'below') {
-            // held está abaixo -> remove a última linha (na direção y crescente) do target
-            if (tH <= 1) return false; // não dá pra remover
-            newTH = tH - 1;
-            // startX/Y não muda para remoção do fim
-        } else if (dir === 'above') {
-            // held está acima -> remove a primeira linha do target (shift)
-            if (tH <= 1) return false;
-            newTH = tH - 1;
-            newTStartY = tStartY + 1; // shift start para baixo
-        } else if (dir === 'right') {
-            // held está à direita -> remove a última coluna do target
-            if (tW <= 1) return false;
-            newTW = tW - 1;
-        } else if (dir === 'left') {
-            // held está à esquerda -> remove a primeira coluna do target
-            if (tW <= 1) return false;
-            newTW = tW - 1;
-            newTStartX = tStartX + 1; // shift start para direita
-        } else {
-            return false;
-        }
-
-        // --- valida limites do grid antes de aplicar ---
-        const maxW = this.scene.gridMap.length;
-        const maxH = this.scene.gridMap[0].length;
-
-        // target new bounds
-        if (newTStartX < 0 || newTStartY < 0 || newTStartX + newTW - 1 >= maxW || newTStartY + newTH - 1 >= maxH) {
-            console.warn('snapFence: new target out of bounds');
-            return false;
-        }
-
-        // compute held start based on new target extents and direction
-        let hStartX = tStartX;
-        let hStartY = tStartY;
-
-        // Strategy: align held start so it's adjacent to the modified target area.
-        // Simple alignment: align held's startX to target's startX (or center if widths differ).
-        if (dir === 'below') {
-            hStartX = newTStartX;              // alinha no mesmo x inicial
-            hStartY = newTStartY + newTH;      // posicionado logo abaixo do novo target
-        } else if (dir === 'above') {
-            hStartX = newTStartX;
-            hStartY = newTStartY - hH;         // acima do novo target
-        } else if (dir === 'right') {
-            hStartX = newTStartX + newTW;      // à direita do novo target
-            hStartY = newTStartY;
-        } else { // left
-            hStartX = newTStartX - hW;         // à esquerda do novo target
-            hStartY = newTStartY;
-        }
-
-        // --- valida limites do held ---
-        if (hStartX < 0 || hStartY < 0 || hStartX + hW - 1 >= maxW || hStartY + hH - 1 >= maxH) {
-            console.warn('snapFence: held would be out of bounds');
-            return false;
-        }
-
-        // --- checar colisões de espaço livre antes de aplicar ---
-        // Temporariamente limpamos ocupação do target e held para checar (ou só checar ignorando os próprios sprites)
-        // Usaremos checkOccupiedGrid(startX, startY, endX, endY, spriteToIgnore)
-        // checa área do target reduzida (deve estar livre exceto pelo próprio target)
-        const targetOccupied = this.checkOccupiedGrid(newTStartX, newTStartY, newTStartX + newTW - 1, newTStartY + newTH - 1, target);
-        if (targetOccupied) {
-            console.warn('snapFence: reduced target area occupied by others');
-            return false;
-        }
-
-        // checa area do held (onde será colocado), ignorando o próprio held
-        const heldOccupied = this.checkOccupiedGrid(hStartX, hStartY, hStartX + hW - 1, hStartY + hH - 1, held);
-        if (heldOccupied) {
-            console.warn('snapFence: held target area occupied');
-            return false;
-        }
-
-        // --- aplica as alterações --- //
-        // 1) limpar ocupação antiga dos dois
-        this.clearOccupied(target);
-        this.clearOccupied(held);
-
-        // 2) atualizar dados do target (start/size)
-        // atualizar footprint visual lógico (se você quiser manter visual footprint array)
-        target.footprint = [newTW, newTH];
-        target.lastFreePos = { startX: newTStartX, startY: newTStartY };
-
-        // 3) marcar ocupado novo do target
-        this.markOccupied(target, newTStartX, newTStartY, newTW, newTH);
-
-        // 4) posicionar held no grid e marcar
-        this.snapSpriteToGridStart(held, hStartX, hStartY);
-        this.markOccupied(held, hStartX, hStartY, hW, hH);
-
-        // 5) Atualizar sprites (graficamente)
-        // Se você tem que trocar a textura do target/held para refletir "sem ponta", faça aqui.
-        // Exemplo (opcional):
-        // target.setTexture('fence_mid'); held.setTexture('fence_mid');
-
-        // 6) optional: redesenhar footprint/matrix
-        if (typeof this.drawFootprints === 'function') this.drawFootprints();
-        if (typeof this.drawMatrix === 'function') this.drawMatrix();
-
-        return true;
     }
 
 

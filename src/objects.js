@@ -321,9 +321,9 @@ export const animais = [
         "xp": 100,
         "nivel_requerido": 4,
         "img": "chicken.png",
-        "escala": 0.4,
+        "escala": 0.15,
         "area": [1, 1],
-        "origem": [0.5, 0.5],
+        "origem": [0.4, 0.6],
         "tipo": "animal"
     },
     {

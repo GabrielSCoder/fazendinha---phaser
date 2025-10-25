@@ -143,14 +143,35 @@ export class IsoTest extends Phaser.Scene {
 
             if (this.selectedSprite?.tipo === 'cerca' && this.fenceSnapTarget && this.collisionDataTemp) {
 
-                console.log(this.collisionDataTemp);
-                const collisionData = this.collisionDataTemp;
-                const { x, y } = collisionData.contactPoint;
+                if (this.fenceSnapTarget[1]) {
+                    this.fenceSnapTarget.forEach(fenceTarget => {
+                        this.collisionDataTemp.forEach(collisionData => {
+                            const collision = collisionData;
+                            const { x, y } = collision.contactPoint;
+                            if (!x || !y) return;
+                            this.gridUtils.clearOccupiedtile(x, y);
+                            this.selectedSprite.collisions.push({
+                                "dir": collision.direction,
+                                "contactPoint": collision.contactPoint,
+                                "col": collision.target
+                            })
+                        })
+                    });
 
-                if (!x || !y) return;
+                } else {
+                    const collisionData = this.collisionDataTemp;
+                    const { x, y } = collisionData.contactPoint;
 
-                this.gridUtils.clearOccupiedtile(x, y);
-                this.selectedSprite.collisions.push({"dir" : collisionData.direction , "contactPoint" : collisionData.contactPoint ,"col" : collisionData.target})
+                    if (!x || !y) return;
+
+                    this.gridUtils.clearOccupiedtile(x, y);
+                    this.selectedSprite.collisions.push({
+                        "dir": collisionData.direction,
+                        "contactPoint": collisionData.contactPoint,
+                        "col": collisionData.target
+                    })
+                }
+
                 this.fenceSnapTarget = null;
                 this.collisionDataTemp = null;
             }
@@ -253,7 +274,6 @@ export class IsoTest extends Phaser.Scene {
             }
 
             this.gridUtils.drawFootprints();
-            console.log(this.gridMap[startX][startY]);
         });
 
         this.input.on('pointerdown', (pointer) => {
@@ -338,7 +358,7 @@ export class IsoTest extends Phaser.Scene {
                 sprite.tipo = itemData.tipo;
             }
 
-            
+
             if (itemData.tipo === "cerca") sprite.collisions = [];
 
             sprite.isMoving = true;
@@ -381,7 +401,7 @@ export class IsoTest extends Phaser.Scene {
 
         // this.updateArando();
 
-        this.bonecoController.update();
+        // this.bonecoController.update();
         // this.getSpriteByPointerPosition();
 
         if (this.selectedSprite && this.selectedSprite.isMoving) {
@@ -403,8 +423,9 @@ export class IsoTest extends Phaser.Scene {
 
             const startX = Math.round(iso.x - (w / 2 - 0.5));
             const startY = Math.round(iso.y - (h / 2 - 0.5));
+            this.gridUtils.recalculateDepthAround(sprite);
 
-            // const occupied = this.gridUtils.checkOccupiedGrid(startX, startY, startX + w - 1, startY + h - 1, sprite);
+            const occupied = this.gridUtils.checkOccupiedGrid(startX, startY, startX + w - 1, startY + h - 1, sprite);
             // sprite.setTint(occupied ? 0xff8888 : 0x88ff88);
 
             this.gridUtils.drawFootprints();
@@ -489,13 +510,13 @@ export class IsoTest extends Phaser.Scene {
         const sprite = this.selectedSprite;
         if (!sprite || sprite.tipo !== "cerca") return;
 
-        if (sprite.collisions) {
-            sprite.collisions.forEach(collision => {
-                const {x, y} = collision.contactPoint;
-                this.gridUtils.addOccupiedTile(x,y, collision.col);
-            });
-            sprite.collisions = [];
-        }
+        // if (sprite.collisions) {
+        //     sprite.collisions.forEach(collision => {
+        //         const { x, y } = collision.contactPoint;
+        //         this.gridUtils.addOccupiedTile(x, y, collision.col);
+        //     });
+        //     sprite.collisions = [];
+        // }
 
         sprite.setTint(0xffffff);
 
@@ -508,33 +529,47 @@ export class IsoTest extends Phaser.Scene {
         let foundSnap = false;
         let targetFence = null;
 
+        let possibleSnaps = [];
         for (let gx = startX; gx < startX + w; gx++) {
             for (let gy = startY; gy < startY + h; gy++) {
                 if (gx < 0 || gy < 0 || gx > this.gridWidth * this.logicFactor - 1 || gy > this.gridHeight * this.logicFactor - 1) continue;
+
                 const cell = this.gridMap[gx]?.[gy];
                 if (cell && cell.tipo === "cerca" && cell.lastFreePos !== sprite.lastFreePos) {
                     const canSnap = this.gridUtils.canSnapFence(sprite, cell);
                     if (canSnap) {
-                        foundSnap = true;
-                        targetFence = cell;
-                        this.collisionDataTemp = canSnap;
-                        break;
+                        possibleSnaps.push({ cell, data: canSnap });
                     }
                 }
             }
-            if (foundSnap) break;
         }
 
-        if (foundSnap) {
+        if (possibleSnaps.length === 1) {
+            foundSnap = true;
             sprite.setTint(0x00ff00);
-            this.fenceSnapTarget = targetFence;
+            this.fenceSnapTarget = possibleSnaps[0].cell;
+            this.collisionDataTemp = possibleSnaps[0].data;
+        } else if (possibleSnaps.length === 2) {
+            console.log("2");
+            foundSnap = true;
+            sprite.setTint(0x00ff00);
+            this.fenceSnapTarget = possibleSnaps.map(s => s.cell);
+            this.collisionDataTemp = possibleSnaps.map(s => s.data);
         } else {
             sprite.setTint(0xffaaaa);
-            // if (!this.fenceSnapTarget) return;
-            // const { x, y } = this.fenceSnapTarget.collisionData.contactPoint;
-            // this.gridUtils.addOccupiedTile(x, y, this.fenceSnapTarget);
             this.fenceSnapTarget = null;
         }
+
+        // if (foundSnap) {
+        //     sprite.setTint(0x00ff00);
+        //     this.fenceSnapTarget = targetFence;
+        // } else {
+        //     sprite.setTint(0xffaaaa);
+        //     // if (!this.fenceSnapTarget) return;
+        //     // const { x, y } = this.fenceSnapTarget.collisionData.contactPoint;
+        //     // this.gridUtils.addOccupiedTile(x, y, this.fenceSnapTarget);
+        //     this.fenceSnapTarget = null;
+        // }
     }
 
 
@@ -689,7 +724,6 @@ export class IsoTest extends Phaser.Scene {
 
             sprite.x = snapped.x;
             sprite.y = snapped.y - multiFactor;
-            console.log(sprite.y);
 
         } else if (sprite.tipo === "solo") {
             snapped = this.gridUtils.isoToScreen(Math.floor(iso.x) + offsetX, Math.floor(iso.y) + offsetY);
