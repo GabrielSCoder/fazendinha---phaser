@@ -1,8 +1,8 @@
 import { Start } from './scenes/Start.js';
-import {Farm} from './scenes/farm.js';
-import {IsoTest} from './scenes/IsoTest.js';
-import {OrtoTest} from "./scenes/ortoTest.js";
-import {CameraTeste} from "./scenes/cameraTeste.js"
+import { Farm } from './scenes/farm.js';
+import { IsoTest } from './scenes/IsoTest.js';
+import { OrtoTest } from "./scenes/ortoTest.js";
+import { CameraTeste } from "./scenes/cameraTeste.js"
 
 const config = {
     type: Phaser.AUTO,
@@ -16,11 +16,20 @@ const config = {
     scene: [
         IsoTest
     ],
+    physics: {
+        default: 'arcade',
+        arcade: {
+            debug: false
+        }
+    },
     scale: {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
+    fps: {
+        target: 75,
+        forceSetTimeOut: true
+    }
 }
 
 new Phaser.Game(config);
-            

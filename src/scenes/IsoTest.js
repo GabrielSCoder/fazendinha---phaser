@@ -112,6 +112,11 @@ export class IsoTest extends Phaser.Scene {
 
         this.bonecoController = new BonecoController(this);
 
+        this.fpsText = this.add.text(10, 10, '', {
+            font: '16px Arial',
+            fill: '#00ff00'
+        });
+
         this.cameraController.ignoreInUICamera([
             this.itemMenuUI.itemMenu,
             this.gridGraphics,
@@ -140,44 +145,37 @@ export class IsoTest extends Phaser.Scene {
         this.input.setDraggable(this.sprites);
 
         this.input.on("pointerup", (pointer) => {
+            const sprite = this.selectedSprite;
 
-            if (this.selectedSprite?.tipo === 'cerca' && this.fenceSnapTarget && this.collisionDataTemp) {
+            if (!sprite || sprite.tipo !== 'cerca') return;
+            if (!this.fenceSnapTarget || !this.collisionDataTemp) return;
 
-                if (this.fenceSnapTarget[1]) {
-                    this.fenceSnapTarget.forEach(fenceTarget => {
-                        this.collisionDataTemp.forEach(collisionData => {
-                            const collision = collisionData;
-                            const { x, y } = collision.contactPoint;
-                            if (!x || !y) return;
-                            this.gridUtils.clearOccupiedtile(x, y);
-                            this.selectedSprite.collisions.push({
-                                "dir": collision.direction,
-                                "contactPoint": collision.contactPoint,
-                                "col": collision.target
-                            })
-                        })
-                    });
+            // Normaliza para arrays
+            const targets = Array.isArray(this.fenceSnapTarget) ? this.fenceSnapTarget : [this.fenceSnapTarget];
+            const collisions = Array.isArray(this.collisionDataTemp) ? this.collisionDataTemp : [this.collisionDataTemp];
 
-                } else {
-                    const collisionData = this.collisionDataTemp;
-                    const { x, y } = collisionData.contactPoint;
+            targets.forEach((fenceTarget, index) => {
+                const collisionData = collisions[index];
+                if (!collisionData || !collisionData.contactPoint) return;
 
-                    if (!x || !y) return;
+                const { x, y } = collisionData.contactPoint;
 
-                    this.gridUtils.clearOccupiedtile(x, y);
-                    this.selectedSprite.collisions.push({
-                        "dir": collisionData.direction,
-                        "contactPoint": collisionData.contactPoint,
-                        "col": collisionData.target
-                    })
-                }
+                // Remove o tile do sprite que vai se mover
+                this.gridUtils.clearOccupiedtile(x, y, this.fenceSnapTarget);
 
-                this.fenceSnapTarget = null;
-                this.collisionDataTemp = null;
-            }
+                // Armazena os dados de colisão no sprite para a fixação futura
+                sprite.collisions.push({
+                    dir: collisionData.direction,
+                    contactPoint: collisionData.contactPoint,
+                    col: collisionData.target
+                });
+            });
 
-            return;
-        })
+            // Limpa dados temporários, mas mantém o sprite em movimento
+            this.fenceSnapTarget = null;
+            this.collisionDataTemp = null;
+        });
+
 
         // this.input.on('pointerup', (pointer, objs, event) => {
 
@@ -219,25 +217,11 @@ export class IsoTest extends Phaser.Scene {
 
         this.input.on('pointerup', (pointer, objs, event) => {
 
-            if (this.arando) return;
+            const resp = this.breakConditions();
 
-            if (this.scene.ignoreNextPointerUp) return;
-
-            if (this.freeClick) {
-                console.log("free click")
-                this.freeClick = false;
-                return;
-            }
-
-            if (this.changeCameraZoom) return;
-
-            if (this.middleButtonDown) return;
-
-            if (this.itemMenuUI.itemMenu.visible) return;
+            if (!resp) return;
 
             const sprite = this.selectedSprite;
-
-            if (!sprite || !sprite.isMoving) return;
 
             // if (sprite.tipo === "cerca") return;
 
@@ -259,6 +243,12 @@ export class IsoTest extends Phaser.Scene {
             sprite.gridX = Math.round(iso.x);
             sprite.gridY = Math.round(iso.y);
 
+            // if (this.fenceSnapTarget) {
+            //     this.fenceSnapTarget = null;
+            // } else {
+            //     this.gridUtils.checkAndRetakeTiles(sprite);
+            // }
+
             this.gridUtils.clearOccupied(sprite);
             this.gridUtils.markOccupied(sprite, startX, startY, w, h);
 
@@ -267,13 +257,14 @@ export class IsoTest extends Phaser.Scene {
             sprite.clearTint();
             sprite.isMoving = false;
             this.gridUtils.recalculateDepthAround(sprite);
+            console.log(this.selectedSprite);
             this.selectedSprite = null;
+            this.gridUtils.drawFootprints();
 
             for (let other of this.sprites) {
                 other.setInteractive({ pixelPerfect: true, alphaTolerance: 1, useHandCursor: true });
             }
 
-            this.gridUtils.drawFootprints();
         });
 
         this.input.on('pointerdown', (pointer) => {
@@ -397,12 +388,16 @@ export class IsoTest extends Phaser.Scene {
 
     update() {
 
+        const fps = Math.floor(this.game.loop.actualFps);
+        this.fpsText.setText(`FPS: ${fps}`);
+
         this.updateFence();
 
         // this.updateArando();
 
         // this.bonecoController.update();
         // this.getSpriteByPointerPosition();
+
 
         if (this.selectedSprite && this.selectedSprite.isMoving) {
             const sprite = this.selectedSprite;
@@ -423,12 +418,12 @@ export class IsoTest extends Phaser.Scene {
 
             const startX = Math.round(iso.x - (w / 2 - 0.5));
             const startY = Math.round(iso.y - (h / 2 - 0.5));
-            this.gridUtils.recalculateDepthAround(sprite);
+            // this.gridUtils.recalculateDepthAround(sprite);
 
             const occupied = this.gridUtils.checkOccupiedGrid(startX, startY, startX + w - 1, startY + h - 1, sprite);
             // sprite.setTint(occupied ? 0xff8888 : 0x88ff88);
 
-            this.gridUtils.drawFootprints();
+            this.gridUtils.drawSpriteFootprint(sprite);
         }
     }
 
@@ -736,5 +731,27 @@ export class IsoTest extends Phaser.Scene {
             sprite.x = snapped.x;
             sprite.y = snapped.y + multiFactor;
         }
+    }
+
+    breakConditions() {
+        if (this.arando) return false;
+
+        if (this.scene.ignoreNextPointerUp) return false;
+
+        if (this.freeClick) {
+            console.log("free click")
+            this.freeClick = false;
+            return false;
+        }
+
+        if (this.changeCameraZoom) return false;
+
+        if (this.middleButtonDown) return false;
+
+        if (this.itemMenuUI.itemMenu.visible) return false;
+
+        if (!this.selectedSprite || !this.selectedSprite.isMoving) return false;
+
+        return true;
     }
 }

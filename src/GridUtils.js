@@ -113,18 +113,48 @@ export default class GridUtils {
         this.drawMatrix();
     }
 
-    clearOccupiedtile(x, y) {
-        if (x >= this.scene.gridWidth * this.scene.logicalFactor || y >= this.scene.gridHeight * this.scene.logicalFactor) return;
-        this.scene.gridMap[x][y] = null;
-        this.drawMatrix();
-    }
-
     addOccupiedTile(x, y, sprite) {
-        if (x >= this.scene.gridWidth * this.scene.logicalFactor || y >= this.scene.gridHeight * this.scene.logicalFactor || !sprite) return;
+        if (!sprite) return;
+        if (x < 0 || y < 0 || x >= this.scene.gridWidth * this.scene.logicalFactor || y >= this.scene.gridHeight * this.scene.logicalFactor) return;
         this.scene.gridMap[x][y] = sprite;
         this.drawMatrix();
     }
 
+    // --------------------
+    // 2️⃣ Função para limpar um tile ocupado, garantindo que o sprite correto seja removido
+    // --------------------
+    clearOccupiedtile(x, y, sprite) {
+        if (!sprite) return;
+        if (x < 0 || y < 0 || x >= this.scene.gridWidth * this.scene.logicalFactor || y >= this.scene.gridHeight * this.scene.logicalFactor) return;
+        if (this.scene.gridMap[x][y] !== sprite) return; // Só limpa se for o sprite correto
+        this.scene.gridMap[x][y] = null;
+        this.drawMatrix();
+    }
+
+    // --------------------
+    // 3️⃣ Função para checar e restaurar tiles baseado em colisões
+    // --------------------
+    checkAndRetakeTiles(sprite) {
+        if (!sprite.collisions || sprite.collisions.length === 0) return;
+
+        sprite.collisions.forEach(collision => {
+            const { x, y } = collision.contactPoint;
+            const oldSprite = collision.col;
+
+            if (!x || !y) return;
+
+            // Verifica se o antigo dono ainda ocupa esse tile
+            if (oldSprite && this.scene.gridMap[x][y] === null) {
+                this.addOccupiedTile(x, y, oldSprite);
+            }
+
+            // Remove o tile do sprite que está se movendo
+            this.clearOccupiedtile(x, y, sprite);
+        });
+
+        sprite.collisions = [];
+    }
+    
     drawFootprints() {
         this.scene.footprintGraphics.clear();
         for (let sprite of this.scene.sprites) {
@@ -149,6 +179,36 @@ export default class GridUtils {
                     this.scene.footprintGraphics.closePath();
                     this.scene.footprintGraphics.fillPath();
                 }
+            }
+        }
+    }
+
+    drawSpriteFootprint(sprite) {
+
+        if (!sprite) return;
+        const g = this.scene.footprintGraphics;
+        g.clear();
+
+        const { w, h } = this.getSpriteFootprint(sprite);
+        const iso = this.screenToIso(sprite.x, sprite.y);
+        const startX = Math.round(iso.x - (w / 2 - 0.5));
+        const startY = Math.round(iso.y - (h / 2 - 0.5));
+
+        for (let i = 0; i < w; i++) {
+            for (let j = 0; j < h; j++) {
+                const p1 = this.isoToScreen(startX + i, startY + j, this.scene.gridSize, this.scene.offsetX, this.scene.offsetY);
+                const p2 = this.isoToScreen(startX + i + 1, startY + j, this.scene.gridSize, this.scene.offsetX, this.scene.offsetY);
+                const p3 = this.isoToScreen(startX + i + 1, startY + j + 1, this.scene.gridSize, this.scene.offsetX, this.scene.offsetY);
+                const p4 = this.isoToScreen(startX + i, startY + j + 1, this.scene.gridSize, this.scene.offsetX, this.scene.offsetY);
+
+                this.scene.footprintGraphics.fillStyle(0x2ecc71, 0.25);
+                this.scene.footprintGraphics.beginPath();
+                this.scene.footprintGraphics.moveTo(p1.x, p1.y);
+                this.scene.footprintGraphics.lineTo(p2.x, p2.y);
+                this.scene.footprintGraphics.lineTo(p3.x, p3.y);
+                this.scene.footprintGraphics.lineTo(p4.x, p4.y);
+                this.scene.footprintGraphics.closePath();
+                this.scene.footprintGraphics.fillPath();
             }
         }
     }
@@ -191,154 +251,93 @@ export default class GridUtils {
     recalculateDepthAround(sprite, radius = 3) {
         const targetX = sprite.x;
         const targetY = sprite.y;
-        const targetIso = this.screenToIso(targetX, targetY);
+        const gridSize = this.scene.gridSize;
 
         const neighbors = this.scene.sprites.filter(s => {
             const dx = Math.abs(s.x - targetX);
             const dy = Math.abs(s.y - targetY);
-            return dx <= radius * this.scene.gridSize && dy <= radius * this.scene.gridSize && s.tipo !== "cerca";
+            return dx <= radius * gridSize && dy <= radius * gridSize;
         });
 
-        const neighborsFences = this.scene.sprites.filter(s => {
-            const dx = Math.abs(s.x - targetX);
-            const dy = Math.abs(s.y - targetY);
-            return dx <= radius * this.scene.gridSize && dy <= radius * this.scene.gridSize && s.tipo === "cerca";
-        });
-
-        console.log("----------------- normais : \n" + neighbors);
-        console.log("----------------- cercas: \n" + neighborsFences);
-
-        // neighbors.forEach(s => {
-
-        //     const iso = this.screenToIso(s.x, s.y);
-        //     const convertIsoX = Math.ceil(iso.x);
-        //     const convertIsoY = Math.ceil(iso.y);
-
-        //     let calc = convertIsoX + convertIsoY * 1.001
-
-        //     console.log("tipo: " + s.tipo + ` depth de: ${calc}`)
-        //     s.setDepth(calc);
-        // });
-
-        neighborsFences.forEach(s => {
-
-            const iso = this.screenToIso(s.x, s.y);
-            const convertIsoX = Math.ceil(iso.x);
-            const convertIsoY = Math.ceil(iso.y);
-
-            let calc = convertIsoX + convertIsoY * 1.001
-
-            // s.setDepth(calc);
-            // console.log(convertIsoY, targetIso.y);
-            // const lefty = convertIsoY > targetIso.y;
-            // lefty ? calc -= 0.2 : calc += 0.2
-            // console.log(lefty);
-            // sprite.setDepth(calc)
-            // console.log("tipo: " + s.tipo + ` depth de: ${calc}`)
-
-            const closeNeighbors = neighbors.filter(n => {
-                if (n === s) return false;
-
-                const isoN = this.screenToIso(n.x, n.y);
-
-                const dx = Math.abs(isoN.x - convertIsoX);
-                const dy = Math.abs(isoN.y - convertIsoY);
-
-                return dx <= 2 && dy <= 2;
-            });
-
-            if (closeNeighbors) {
-
-                closeNeighbors.forEach(n => {
-                    const isoN = this.screenToIso(n.x, n.y);
-                    const neighborDepth = Math.ceil(isoN.x) + Math.ceil(isoN.y) * 1.001;
-                    const diff = Math.abs(calc - neighborDepth);
-
-                    console.log("Depth do vizinho: " + neighborDepth);
-                    console.log("diferença entre os dois: " + diff);
-                    console.log("calculo atual: " + calc);
-
-                    const isLeft = convertIsoY > isoN.y;
-                    const isTop = convertIsoX > isoN.x;
-
-                    if (diff < 1) {
-                        if (calc > neighborDepth) calc -= 0.2;
-                        else calc += 0.2;
-                    }
-                    
-                    n.setDepth(calc);
-                })
+        neighbors.forEach(s => {
+            let footprintTiles = this.getSpriteFootprintTiles(s);
 
 
-                
+            if (footprintTiles.length === 1) {
+                const base = footprintTiles[0];
 
-                // } else {
-                //     if (s.flipX && convertIsoX < isoN.x) {
-                //         console.log("diff maior que 1");
-                //         calc -= diff + 0.1
-                //     }
-                // }
+                const normalCandidates = this.scene.sprites.filter(n => {
+                    if (n === s) return false;
+                    const nTiles = this.getSpriteFootprintTiles(n);
+                    return nTiles.some(t => t.x === base.x + 1 && t.y === base.y + 1);
+                });
+
+                const flippedCandidates = this.scene.sprites.filter(n => {
+                    if (n === s) return false;
+                    const nTiles = this.getSpriteFootprintTiles(n);
+                    return nTiles.some(t => t.x === base.x - 1 && t.y === base.y + 1);
+                });
+
+
+                const filteredFlipped = flippedCandidates.filter(f => !normalCandidates.includes(f));
+
+
+                const neighborNormal = normalCandidates.find(n => n.tipo === "cerca");
+                const neighborFlipped = filteredFlipped.find(n => n.tipo === "cerca");
+
+
+
+                if (neighborNormal && neighborNormal.tipo === "cerca" && !neighborFlipped) {
+
+                    footprintTiles = [
+                        { x: base.x, y: base.y - 1 },
+                        base,
+                        // { x: base.x, y: base.y + 1 },
+                        // { x: base.x, y: base.y + 2 },
+                    ];
+                    console.log("Cerca normal detectada → tiles extras abaixo");
+                }
+                else if (neighborFlipped && neighborFlipped.tipo === "cerca" && !neighborNormal) {
+
+                    footprintTiles = [
+                        base,
+                        { x: base.x, y: base.y + 1 },
+                        { x: base.x, y: base.y + 2 },
+                        { x: base.x, y: base.y + 3 },
+                    ];
+                    console.log("Cerca flipada detectada → tiles mais longos abaixo");
+                }
+                else if (!neighborNormal && neighborFlipped) {
+
+                    footprintTiles = [
+                        { x: base.x, y: base.y - 1 },
+                        base,
+                    ];
+                    console.log("Cruzamento de cercas → priorizando flipada");
+                }
+                else {
+
+                    footprintTiles = [
+                        base,
+                        { x: base.x, y: base.y + 1 },
+                        { x: base.x, y: base.y + 2 },
+                    ];
+                    console.log("Sem cerca → padrão simples (2 tiles)");
+                }
             }
 
+            let total = 0;
+            footprintTiles.forEach(tile => {
+                const calc = tile.x + tile.y * 1.001;
+                total += calc;
+            });
+
+            const avg = total / footprintTiles.length;
+            s.setDepth(avg);
         });
-
-        // neighbors.forEach(s => {
-        //     const iso = this.screenToIso(s.x, s.y);
-        //     const convertIsoX = Math.ceil(iso.x);
-        //     const convertIsoY = Math.ceil(iso.y);
-        //     const realWidth = this.scene.gridWidth * this.scene.logicalFactor - 1;
-        //     const realHeight = this.scene.gridHeight * this.scene.logicalFactor - 1;
-
-        //     let calc = convertIsoX + convertIsoY * 1.001
-
-        //     if (!s.flipX) {
-        //         calc = convertIsoX + convertIsoY * 1.0001;
-        //     } else {
-        //         console.log("--------------------");
-        //         const closeNeighbor = this.scene.sprites.find(n => {
-
-        //             if (n === s) return false;
-        //             if (n.tipo !== "cerca") return false;
-
-        //             const isoN = this.screenToIso(n.x, n.y);
-
-        //             const dx = Math.abs(isoN.x - convertIsoX);
-        //             const dy = Math.abs(isoN.y - convertIsoY);
-
-        //             return dx <= 2 && dy <= 2;
-        //         });
-
-        //         if (closeNeighbor) {
-        //             console.log(closeNeighbor);
-        //             const isoN = this.screenToIso(closeNeighbor.x, closeNeighbor.y);
-        //             const neighborDepth = Math.ceil(isoN.x) + Math.ceil(isoN.y) * 1.001;
-
-        //             const diff = Math.abs(calc - neighborDepth);
-
-        //             console.log("Depth do vizinho: " + neighborDepth);
-        //             console.log("diferença entre os dois: " + diff);
-        //             console.log("calculo atual: " + calc);
-
-        //             if (diff < 1) {
-        //                 if (s.flipX) {
-        //                     console.log("caindo aqui")
-        //                     if (calc > neighborDepth) calc -= 0.2;
-        //                     else calc += 0.2;
-        //                 }
-        //             } else {
-        //                 if (s.flipX && convertIsoX < isoN.x) {
-        //                     console.log("diff maior que 1");
-        //                     calc -= diff + 0.1
-        //                 }
-        //             }
-        //         }
-        //     }
-
-        //     s.setDepth(calc);
-        //     console.log("tipo: " + s.tipo + ` depth de: ${calc}`)
-        // });
-
     }
+
+
 
     recalculateAllDepths() {
         this.scene.sprites.forEach(s => {
@@ -523,7 +522,6 @@ export default class GridUtils {
 
     getSpriteFootprintTiles(sprite) {
         const [w, h] = sprite.footprint || [1, 1];
-        console.log(w, h);
         const iso = this.screenToIso(sprite.x, sprite.y);
         const startX = Math.round(iso.x - (w / 2 - 0.5));
         const startY = Math.round(iso.y - (h / 2 - 0.5));
@@ -624,3 +622,62 @@ export default class GridUtils {
 
 
 }
+
+
+//  recalculateDepthAround(sprite, radius = 3) {
+//         const targetX = sprite.x;
+//         const targetY = sprite.y;
+//         const gridSize = this.scene.gridSize;
+
+//         // 1️⃣ Busca todos os sprites próximos
+//         const neighbors = this.scene.sprites.filter(s => {
+//             const dx = Math.abs(s.x - targetX);
+//             const dy = Math.abs(s.y - targetY);
+//             return dx <= radius * gridSize && dy <= radius * gridSize;
+//         });
+
+//         // 2️⃣ Calcula o depth para cada vizinho
+//         neighbors.forEach(s => {
+//             let footprintTiles = this.getSpriteFootprintTiles(s);
+
+//             // --- caso 1x1: cria tiles fantasmas dependendo do que está abaixo ---
+//             if (footprintTiles.length === 1) {
+//                 const base = footprintTiles[0];
+
+//                 // encontra o vizinho logo abaixo
+//                 const neighborBelow = this.scene.sprites.find(n => {
+//                     if (n === s) return false;
+//                     const nTiles = this.getSpriteFootprintTiles(n);
+//                     // verifica se ocupa a posição logo abaixo
+//                     return nTiles.some(t => t.x === base.x + 1 && t.y === base.y + 1);
+//                 });
+
+//                 if (neighborBelow && neighborBelow.tipo === "cerca") {
+//                     console.log("cera")
+//                     footprintTiles = [
+//                         base,
+//                         // { x: base.x, y: base.y + 1 },
+//                     ];
+//                 } else {
+//                     console.log("não há nada")
+//                     footprintTiles = [
+//                         base,
+//                         { x: base.x, y: base.y + 1 },
+//                         { x: base.x, y: base.y + 2 },
+//                     ];
+//                 }
+//             }
+
+//             let total = 0;
+//             footprintTiles.forEach(tile => {
+//                 const calc = tile.x + tile.y * 1.001;
+//                 total += calc;
+//             });
+
+//             const avg = total / footprintTiles.length;
+
+//             // aplica o resultado
+//             s.setDepth(avg);
+//         });
+//     }
+
