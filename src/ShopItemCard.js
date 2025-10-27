@@ -81,7 +81,6 @@ export default class ShopItemCard {
                 .setShadow(2, 2, '#000', 2, true, true);
 
             const debouncedComprar = this.debounce(() => {
-                console.log("comprar", this.data);
                 this.scene.shopMenu.close();
                 this.scene.events.emit('itemPurchased', this.data);
             }, 150);

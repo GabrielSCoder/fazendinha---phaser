@@ -308,8 +308,9 @@ export const animais = [
         "nivel_requerido": 1,
         "img": "vaca.png",
         "escala": 0.30,
-        "area": [2, 4],
-        "tipo": "animal"
+        "area": [2, 3],
+        "tipo": "animal",
+        "origem" : [0.6, 0.5]
     },
     {
         "id": "animal_frango",
@@ -382,7 +383,7 @@ export const decoracoes = [
         "nivel_requerido": 0,
         "img": "bangalo",
         "escala": 1.1,
-        "area": [2, 2],
+        "area": [3, 3],
         "origem": [0.5, 0.7]
     },
     {

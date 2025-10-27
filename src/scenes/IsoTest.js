@@ -144,36 +144,36 @@ export class IsoTest extends Phaser.Scene {
         // this.gridUtils.drawCharFootprints();
         this.input.setDraggable(this.sprites);
 
-        this.input.on("pointerup", (pointer) => {
-            const sprite = this.selectedSprite;
+        this.input.on("pointerup", () => {
 
-            if (!sprite || sprite.tipo !== 'cerca') return;
-            if (!this.fenceSnapTarget || !this.collisionDataTemp) return;
+            if (this.selectedSprite?.tipo === "cerca" && this.fenceSnapTarget && this.collisionDataTemp) {
 
-            // Normaliza para arrays
-            const targets = Array.isArray(this.fenceSnapTarget) ? this.fenceSnapTarget : [this.fenceSnapTarget];
-            const collisions = Array.isArray(this.collisionDataTemp) ? this.collisionDataTemp : [this.collisionDataTemp];
+                const sprite = this.selectedSprite;
 
-            targets.forEach((fenceTarget, index) => {
-                const collisionData = collisions[index];
-                if (!collisionData || !collisionData.contactPoint) return;
+                const { w, h } = this.gridUtils.getSpriteFootprint(sprite);
 
-                const { x, y } = collisionData.contactPoint;
+                const iso = this.gridUtils.screenToIso(sprite.x, sprite.y);
+                const startX = Math.round(iso.x - (w / 2 - 0.5));
+                const startY = Math.round(iso.y - (h / 2 - 0.5));
 
-                // Remove o tile do sprite que vai se mover
-                this.gridUtils.clearOccupiedtile(x, y, this.fenceSnapTarget);
+                sprite.gridX = Math.round(iso.x);
+                sprite.gridY = Math.round(iso.y);
 
-                // Armazena os dados de colisão no sprite para a fixação futura
-                sprite.collisions.push({
-                    dir: collisionData.direction,
-                    contactPoint: collisionData.contactPoint,
-                    col: collisionData.target
-                });
-            });
+                this.gridUtils.clearOccupied(sprite);
+                this.gridUtils.markOccupied(sprite, startX, startY, w, h);
 
-            // Limpa dados temporários, mas mantém o sprite em movimento
-            this.fenceSnapTarget = null;
-            this.collisionDataTemp = null;
+                sprite.lastFreePos = { startX, startY };
+
+                sprite.clearTint();
+                sprite.isMoving = false;
+                this.gridUtils.recalculateDepthAround(sprite);
+                this.selectedSprite = null;
+                this.gridUtils.drawFootprints();
+
+                for (let other of this.sprites) {
+                    other.setInteractive({ pixelPerfect: true, alphaTolerance: 1, useHandCursor: true });
+                }
+            }
         });
 
 
@@ -217,6 +217,12 @@ export class IsoTest extends Phaser.Scene {
 
         this.input.on('pointerup', (pointer, objs, event) => {
 
+            if (this.fenceSnapTarget && this.collisionDataTemp) {
+                this.fenceSnapTarget = null;
+                this.collisionDataTemp = null;
+                return;
+            }
+
             const resp = this.breakConditions();
 
             if (!resp) return;
@@ -243,12 +249,6 @@ export class IsoTest extends Phaser.Scene {
             sprite.gridX = Math.round(iso.x);
             sprite.gridY = Math.round(iso.y);
 
-            // if (this.fenceSnapTarget) {
-            //     this.fenceSnapTarget = null;
-            // } else {
-            //     this.gridUtils.checkAndRetakeTiles(sprite);
-            // }
-
             this.gridUtils.clearOccupied(sprite);
             this.gridUtils.markOccupied(sprite, startX, startY, w, h);
 
@@ -257,7 +257,10 @@ export class IsoTest extends Phaser.Scene {
             sprite.clearTint();
             sprite.isMoving = false;
             this.gridUtils.recalculateDepthAround(sprite);
-            console.log(this.selectedSprite);
+
+            if (sprite.tipo === "cerca")
+                this.gridUtils.ReOccupiedFences();
+            
             this.selectedSprite = null;
             this.gridUtils.drawFootprints();
 
@@ -350,7 +353,9 @@ export class IsoTest extends Phaser.Scene {
             }
 
 
-            if (itemData.tipo === "cerca") sprite.collisions = [];
+            if (itemData.tipo === "cerca") sprite.collisions = [
+                { "dir": "left", "pos": null, overwrite: null }, { "dir": "right", "pos": null, overwrite: null }
+            ];
 
             sprite.isMoving = true;
             sprite.setDepth(2000);
@@ -540,6 +545,7 @@ export class IsoTest extends Phaser.Scene {
         }
 
         if (possibleSnaps.length === 1) {
+            console.log("1")
             foundSnap = true;
             sprite.setTint(0x00ff00);
             this.fenceSnapTarget = possibleSnaps[0].cell;

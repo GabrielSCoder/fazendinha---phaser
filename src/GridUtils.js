@@ -92,6 +92,27 @@ export default class GridUtils {
         }
     }
 
+    ReOccupiedFences() {
+        const fences = this.scene.sprites.filter(c => c.tipo === "cerca");
+
+        fences.forEach(fence => {
+            console.log("tamanho", fences.length);
+            const { w, h } = this.getSpriteFootprint(fence);
+            const iso = this.screenToIso(fence.x, fence.y);
+
+            const startX = Math.round(iso.x - (w / 2 - 0.5));
+            const startY = Math.round(iso.y - (h / 2 - 0.5));
+
+            fence.gridX = Math.round(iso.x);
+            fence.gridY = Math.round(iso.y);
+
+            this.clearOccupied(fence);
+            this.markOccupied(fence, startX, startY, w, h);
+        })
+
+        this.drawFootprints();
+    }
+
     markOccupied(sprite, startX, startY, w, h) {
         for (let x = startX; x < startX + w; x++) {
             for (let y = startY; y < startY + h; y++) {
@@ -123,10 +144,8 @@ export default class GridUtils {
     // --------------------
     // 2️⃣ Função para limpar um tile ocupado, garantindo que o sprite correto seja removido
     // --------------------
-    clearOccupiedtile(x, y, sprite) {
-        if (!sprite) return;
+    clearOccupiedtile(x, y) {
         if (x < 0 || y < 0 || x >= this.scene.gridWidth * this.scene.logicalFactor || y >= this.scene.gridHeight * this.scene.logicalFactor) return;
-        if (this.scene.gridMap[x][y] !== sprite) return; // Só limpa se for o sprite correto
         this.scene.gridMap[x][y] = null;
         this.drawMatrix();
     }
@@ -154,7 +173,7 @@ export default class GridUtils {
 
         sprite.collisions = [];
     }
-    
+
     drawFootprints() {
         this.scene.footprintGraphics.clear();
         for (let sprite of this.scene.sprites) {
@@ -620,6 +639,109 @@ export default class GridUtils {
         };
     }
 
+    processFenceCollisions(sprite, targets) {
+        if (!sprite || !targets?.length) return;
+
+        const grid = this.scene.gridMap;
+
+        // 🔹 percorre as colisões existentes no sprite selecionado
+        sprite.collisions.forEach((collision, index) => {
+            const match = targets.find(t => t.dir === collision.dir);
+            if (!match) return; // não há colisão nessa direção
+
+            const { dir, contactPoint, target, overwrite } = match;
+
+            // === SE EXISTIR UMA COLISÃO NESSA DIREÇÃO ===
+            if (overwrite) {
+                // 🔸 caso overwrite = true → o sprite selecionado SOBREPOS outro
+                const oldColSprite = collision.col;
+
+                if (oldColSprite?.collisions?.length) {
+                    // remove a colisão correspondente no antigo sprite
+                    oldColSprite.collisions = oldColSprite.collisions.filter(c =>
+                        !(c.col === sprite && c.dir === this.getOppositeDir(dir))
+                    );
+                }
+
+                // substitui a linha da colisão atual no sprite
+                sprite.collisions[index] = {
+                    dir,
+                    col: target,
+                    contactPoint,
+                    overwrite: false
+                };
+            } else {
+                // 🔸 caso overwrite = false → o sprite foi sobreposto por outro
+                const { x, y } = contactPoint;
+
+                let checkX = x;
+                let checkY = y;
+                if (dir === "left") checkX -= 1;
+                if (dir === "right") checkX += 1;
+
+                // Verifica se o tile ainda pertence ao col armazenado
+                if (grid[checkX] && grid[checkX][checkY] === collision.col) {
+                    // remove a colisão correspondente no sprite que sobrepôs
+                    const colSprite = collision.col;
+                    if (colSprite?.collisions?.length) {
+                        colSprite.collisions = colSprite.collisions.filter(c =>
+                            !(c.col === sprite && c.dir === this.getOppositeDir(dir))
+                        );
+                    }
+
+                    // atualiza o grid, recolocando o sprite no ponto original
+                    grid[x][y] = sprite;
+                }
+
+                // substitui os dados da colisão
+                sprite.collisions[index] = {
+                    dir,
+                    col: target,
+                    contactPoint,
+                    overwrite: false
+                };
+            }
+        });
+
+        // 🔹 2️⃣ se não houver colisões anteriores, cria novas ligações
+        if (sprite.collisions.length === 0) {
+            targets.forEach(t => {
+                const { dir, contactPoint, target } = t;
+
+                // adiciona no sprite atual
+                sprite.collisions.push({
+                    dir,
+                    col: target,
+                    contactPoint,
+                    overwrite: false
+                });
+
+                // adiciona no sprite alvo a referência reversa
+                if (!target.collisions) target.collisions = [];
+
+                target.collisions.push({
+                    dir: this.getOppositeDir(dir),
+                    col: sprite,
+                    contactPoint,
+                    overwrite: true
+                });
+            });
+        }
+
+        // 🔹 3️⃣ limpeza final das variáveis temporárias
+        this.fenceSnapTarget = null;
+        this.collisionDataTemp = null;
+    }
+
+    getOppositeDir(dir) {
+        switch (dir) {
+            case "left": return "right";
+            case "right": return "left";
+            case "top": return "bottom";
+            case "bottom": return "top";
+            default: return dir;
+        }
+    }
 
 }
 
