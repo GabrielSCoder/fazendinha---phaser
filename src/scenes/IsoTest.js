@@ -29,14 +29,15 @@ export class IsoTest extends Phaser.Scene {
         this.load.image('proximo_button', 'assets/proximo.png');
         this.load.image('anterior_button', 'assets/anterior.png');
         this.load.image('macieira.png', 'assets/tree.png');
-        this.load.image('planta1.png', 'assets/plantas1.png');
+        this.load.image('planta1.png', 'assets/planta.png');
 
         this.load.image('cerca_branca.png', 'assets/cerca_branca.png');
-        this.load.image('cerca_madeira_unico.png', 'assets/cerca_branca101.png');
-        this.load.image('cerca_madeira_CD.png', 'assets/cerca_branca_102.png');
+        this.load.image('cerca_madeira_unico.png', 'assets/cerca_verde.png');
+        this.load.image('cerca_madeira_CD.png', 'assets/cerca_verde.png');
         this.load.image('cerca_madeira_CE.png', 'assets/cerca_branca_103.png');
         this.load.image('cerca_madeira_CE_canto_inferior.png', 'assets/cerca_madeira_CE_canto_inferior.png');
         this.load.image('toquinho.png', 'assets/toquinho.png');
+        this.load.image('moinho.png', 'assets/moinho.png');
 
         this.load.image('boneco_frente', 'assets/boneco_frente.png');
         this.load.image('boneco_costas', 'assets/boneco_tras.png');
@@ -259,7 +260,7 @@ export class IsoTest extends Phaser.Scene {
 
             if (sprite.tipo === "cerca")
                 this.gridUtils.ReOccupiedFences();
-            
+
             this.selectedSprite = null;
             this.gridUtils.drawFootprints();
 
@@ -521,31 +522,38 @@ export class IsoTest extends Phaser.Scene {
         const startY = Math.round(iso.y - (h / 2 - 0.5));
 
         let foundSnap = false;
-        let targetFence = null;
-
         let possibleSnaps = [];
+        let cols = []
         for (let gx = startX; gx < startX + w; gx++) {
             for (let gy = startY; gy < startY + h; gy++) {
                 if (gx < 0 || gy < 0 || gx > this.gridWidth * this.logicFactor - 1 || gy > this.gridHeight * this.logicFactor - 1) continue;
-
                 const cell = this.gridMap[gx]?.[gy];
                 if (cell && cell.tipo === "cerca" && cell.lastFreePos !== sprite.lastFreePos) {
-                    const canSnap = this.gridUtils.canSnapFence(sprite, cell);
-                    if (canSnap) {
-                        possibleSnaps.push({ cell, data: canSnap });
-                    }
+                    cols.push(cell);
                 }
             }
         }
 
+        if (cols.length && cols.length === 1) {
+            const cell = cols[0];
+            const canSnap = this.gridUtils.canSnapFence(sprite, cell);
+            if (canSnap) {
+                possibleSnaps.push({ cell, data: canSnap });
+            }
+        } else if (cols.length && cols.length === 2) {
+            const [f1, f2] = cols;
+            const canLink = this.gridUtils.canConnectBetweenFences(sprite, f1, f2);
+            if (canLink) {
+                possibleSnaps.push({ cell: f1, data: canLink });
+            }
+        }
+
         if (possibleSnaps.length === 1) {
-            console.log("1")
             foundSnap = true;
             sprite.setTint(0x00ff00);
             this.fenceSnapTarget = possibleSnaps[0].cell;
             this.collisionDataTemp = possibleSnaps[0].data;
         } else if (possibleSnaps.length === 2) {
-            console.log("2");
             foundSnap = true;
             sprite.setTint(0x00ff00);
             this.fenceSnapTarget = possibleSnaps.map(s => s.cell);

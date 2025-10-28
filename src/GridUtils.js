@@ -96,7 +96,7 @@ export default class GridUtils {
         const fences = this.scene.sprites.filter(c => c.tipo === "cerca");
 
         fences.forEach(fence => {
-            console.log("tamanho", fences.length);
+            //console.log("tamanho", fences.length);
             const { w, h } = this.getSpriteFootprint(fence);
             const iso = this.screenToIso(fence.x, fence.y);
 
@@ -314,7 +314,7 @@ export default class GridUtils {
                         // { x: base.x, y: base.y + 1 },
                         // { x: base.x, y: base.y + 2 },
                     ];
-                    console.log("Cerca normal detectada → tiles extras abaixo");
+                    //console.log("Cerca normal detectada → tiles extras abaixo");
                 }
                 else if (neighborFlipped && neighborFlipped.tipo === "cerca" && !neighborNormal) {
 
@@ -324,7 +324,7 @@ export default class GridUtils {
                         { x: base.x, y: base.y + 2 },
                         { x: base.x, y: base.y + 3 },
                     ];
-                    console.log("Cerca flipada detectada → tiles mais longos abaixo");
+                    //console.log("Cerca flipada detectada → tiles mais longos abaixo");
                 }
                 else if (!neighborNormal && neighborFlipped) {
 
@@ -332,7 +332,7 @@ export default class GridUtils {
                         { x: base.x, y: base.y - 1 },
                         base,
                     ];
-                    console.log("Cruzamento de cercas → priorizando flipada");
+                    //console.log("Cruzamento de cercas → priorizando flipada");
                 }
                 else {
 
@@ -341,7 +341,7 @@ export default class GridUtils {
                         { x: base.x, y: base.y + 1 },
                         { x: base.x, y: base.y + 2 },
                     ];
-                    console.log("Sem cerca → padrão simples (2 tiles)");
+                    //console.log("Sem cerca → padrão simples (2 tiles)");
                 }
             }
 
@@ -630,7 +630,6 @@ export default class GridUtils {
 
 
                     console.log("----------> ", direction);
-
         const grid = this.scene.gridMap;
 
         if (grid) {
@@ -638,113 +637,98 @@ export default class GridUtils {
             let minX = Math.min(hMinX, tMinX);
             let maxX = Math.max(hMaxX, tMaxX);
 
-            if (direction == "left") {
-                minX = Math.min(hMinX, tMinX) + 1;
-                maxX = Math.max(hMaxX, tMaxX);
+            if (!heldVertical && !targetVertical) {
 
-                console.log("faixa de ", minX, " ate ", maxX);
+                if (direction == "left") {
+                    console.log("Held horizontal e target horizontal")
 
-                if (!heldVertical && !targetVertical) {
-                    for (let i = minX; i <= maxX; i++) {
-                        console.log("checando posição: ", minX, " ", hMaxY);
+                    for (let i = minX + 1; i <= maxX; i++) {
                         if (grid[i][hMaxY] !== targetFence && grid[i][hMaxY] !== heldFence && grid[i][hMaxY] !== null) {
                             console.log(grid[i][hMaxY]);
                             return;
                         }
                     }
-                } else if (heldVertical && !targetVertical) {
-                    const maxY = hMaxY - 1;
-                    console.log("held vertical left")
 
-                    for (let i = tMinX; i <= tMaxX; i++) {
-                        console.log("checando posição: ", minX, " ", tMaxX);
-                        if (grid[i][tMaxY] !== targetFence && grid[i][tMaxY] !== heldFence && grid[i][tMaxY] !== null) {
-                            console.log(grid[i][tMaxY]);
-                            return;
-                        }
-                    }
+                } else {
 
-                    console.log("Faixa de altura: " + hMinY + 1 + " ate " + maxY)
-                    for (let i = hMinY + 1; i <= maxY; i++) {
-                        if (grid[hMaxX][i] !== heldFence && grid[hMaxX][i] !== null) {
-                            console.log(grid[hMaxX][i]);
-                            return;
-                        }
-                    }
+                    minX = hMinX;
+                    maxX = tMaxX - 1;
 
-                } else if (!heldVertical && targetVertical) {
-                    console.log("target vertical esquerda")
-
-                    console.log(edgeContact.x, edgeContact.y);
-                    console.log(hMinX, hMaxX)
-                    console.log(tMinY, tMaxY)
-
-                    console.log("Faixa de altura: " + tMinY + " ate " + tMaxY)
-                    for (let i = tMinY; i <= tMaxY; i++) {
-                        if (grid[tMaxX][i] !== targetFence && grid[tMaxX][i] !== heldFence && grid[tMaxX][i] !== null) {
-                            console.log(grid[tMaxX][i]);
-                            return;
-                        }
-                    }
-
-                    const min = hMinX + 1
-
-                    console.log("Faixa de largura: " + min + " ate " + hMaxX)
-                    for (let i = min; i <= hMaxX; i++) {
-                        if (grid[i][hMaxY] !== heldFence && grid[i][hMaxY] !== null) {
+                    console.log("Held horizontal e target horizontal a direita")
+                    for (let i = minX; i <= maxX; i++) {
+                        console.log("checando posição: ", minX, " ", hMaxY);
+                        if (grid[i][hMaxY] !== targetFence && grid[i][hMaxY] !== heldFence && grid[i][hMaxY] !== null) {
                             console.log(grid[i][hMaxY]);
                             return;
-                        }
-                    }
-
-                } else if (heldVertical && heldVertical) {
-                    console.log("ambos verticais esquerda")
-                    console.log(edgeContact.y, edgeContact.x);
-                    console.log(hMinY, hMaxY)
-                    console.log(tMinY, tMaxY)
-
-                    if (hMaxY > tMaxY) {
-                        console.log("subindo")
-
-                        const min = tMinY + 1
-                        console.log("Faixa de " + hMaxY + " até " + min);
-                        for (let i = hMaxY; i >= min; i--) {
-                            if (grid[hMaxX][i] !== targetFence && grid[hMaxX][i] !== heldFence && grid[hMaxX][i] !== null) {
-                                console.log("parou no ", i);
-                                console.log(grid[hMaxX][i]);
-                                return;
-                            }
-                        }
-                    } else {
-                        console.log("descendo")
-
-                        const max = tMaxY - 1
-                        console.log("Faixa de " + hMinY + " até " + max);
-                        for (let i = hMinY; i <= max; i++) {
-                            if (grid[hMaxX][i] !== targetFence && grid[hMaxX][i] !== heldFence && grid[hMaxX][i] !== null) {
-                                console.log("parou no ", i);
-                                console.log(grid[hMaxX][i]);
-                                return;
-                            }
                         }
                     }
 
                 }
 
-            } else if (direction == "right") {
+            } else if (heldVertical && heldVertical) {
 
-                minX = hMinX;
-                maxX = tMaxX - 1;
+                console.log("ambos verticais esquerda")
+                console.log(edgeContact.y, edgeContact.x);
+                console.log(hMinY, hMaxY)
+                console.log(tMinY, tMaxY)
 
-                if (!heldVertical && !targetVertical) {
-                    for (let i = minX; i <= maxX; i++) {
-                        console.log("checando posição: ", minX, " ", hMaxY);
-                        if (grid[i][hMaxY] !== targetFence && grid[i][hMaxY] !== heldFence && grid[i][hMaxY] !== null) {
-                            console.log(grid[i][hMaxY]);
+                if (hMaxY > tMaxY) {
+                    console.log("subindo")
+
+                    const min = tMinY + 1
+                    console.log("Faixa de " + hMaxY + " até " + min);
+                    for (let i = hMaxY; i >= min; i--) {
+                        if (grid[hMaxX][i] !== targetFence && grid[hMaxX][i] !== heldFence && grid[hMaxX][i] !== null) {
+                            console.log("parou no ", i);
+                            console.log(grid[hMaxX][i]);
                             return;
                         }
                     }
-                } else if (heldVertical && !targetVertical) {
+                } else {
+                    console.log("descendo")
+
+                    const max = tMaxY - 1
+                    console.log("Faixa de " + hMinY + " até " + max);
+                    for (let i = hMinY; i <= max; i++) {
+                        if (grid[hMaxX][i] !== targetFence && grid[hMaxX][i] !== heldFence && grid[hMaxX][i] !== null) {
+                            if (i == hMinY && grid[hMaxX][i].tipo !== "cerca") {
+                                console.log("parou no ", i);
+                                console.log(grid[hMaxX][i]);
+                                return;
+                            }
+                        }
+                    }
+                }
+            } else if (heldVertical && !targetVertical) {
+
+                if (direction == "left") {
+                    const maxY = hMaxY - 1;
+
+                    console.log("Held vertical e target horizontal a esquerda")
+
+                    for (let i = tMinX; i <= tMaxX; i++) {
+                        console.log("checando posição: ", tMinX, " ", tMaxX);
+                        if (grid[i][tMaxY] !== targetFence && grid[i][tMaxY] !== heldFence && grid[i][tMaxY] !== null) {
+                            if (i == tMinX && grid[i][tMaxY].tipo !== "cerca") {
+                                console.log("colidiu no: ", i);
+                                return;
+                            }
+                        }
+                    }
+
+                    console.log("Faixa de altura: ", hMinY + 1, " ate " + maxY)
+                    for (let i = hMinY + 1; i <= maxY; i++) {
+                        if (grid[hMaxX][i] !== targetFence && grid[hMaxX][i] !== heldFence && grid[hMaxX][i] !== null) {
+                            if (i == maxY && grid[hMaxX][i].tipo !== "cerca") {
+                                console.log("colidiu no: ", i);
+                                return;
+                            }
+                        }
+                    }
+
+                } else {
+
+                    console.log("Held vertical e target horizontal direita")
 
                     const maxY = hMaxY - 1;
 
@@ -763,8 +747,12 @@ export default class GridUtils {
                             return;
                         }
                     }
-                } else if (!heldVertical && targetVertical) {
-                    console.log("target vertical direita")
+                }
+            } else if (!heldVertical && targetVertical) {
+
+                if (direction === "left") {
+                    console.log("held horizontal e target vertical esquerda")
+
                     console.log(edgeContact.x, edgeContact.y);
                     console.log(hMinX, hMaxX)
                     console.log(tMinY, tMaxY)
@@ -772,8 +760,34 @@ export default class GridUtils {
                     console.log("Faixa de altura: " + tMinY + " ate " + tMaxY)
                     for (let i = tMinY; i <= tMaxY; i++) {
                         if (grid[tMaxX][i] !== targetFence && grid[tMaxX][i] !== heldFence && grid[tMaxX][i] !== null) {
-                            console.log(grid[tMaxX][i]);
+                            if (i == tMaxY && grid[tMaxX][i].tipo !== "cerca") {
+                                console.log("colidiu no ", i)
+                                console.log(grid[tMaxX][i]);
+                                return;
+                            }
+                        }
+                    }
+
+                    const min = hMinX + 1
+
+                    console.log("Faixa de largura: " + min + " ate " + hMaxX)
+                    for (let i = min; i <= hMaxX; i++) {
+                        if (grid[i][hMaxY] !== heldFence && grid[i][hMaxY] !== null) {
+                            console.log(grid[i][hMaxY]);
                             return;
+                        }
+                    }
+                } else {
+                    console.log("Held horizontal e target vertical direita")
+
+                    console.log("Faixa de altura: " + tMinY + " ate " + tMaxY)
+                    for (let i = tMinY; i <= tMaxY; i++) {
+                        if (grid[tMaxX][i] !== targetFence && grid[tMaxX][i] !== heldFence && grid[tMaxX][i] !== null) {
+                            if (i == tMaxY && grid[tMaxX][i].tipo !== "cerca") {
+                                console.log("colidiu no ", i)
+                                console.log(grid[tMaxX][i]);
+                                return;
+                            }
                         }
                     }
 
@@ -781,193 +795,158 @@ export default class GridUtils {
 
                     console.log("Faixa de largura: " + hMinX + " ate " + max)
                     for (let i = hMinX; i <= max; i++) {
-                        if (grid[i][hMaxY] !== heldFence && grid[i][hMaxY] !== null) {
-                            console.log(grid[i][hMaxY]);
-                            return;
+                        if (grid[i][hMaxY] !== targetFence && grid[i][hMaxY] !== heldFence && grid[i][hMaxY] !== null) {
+                            if (hMinX == i && grid[i][hMaxY].tipo !== "cerca") {
+                                console.log("colidiu no: ", i);
+                                return;
+                            }
                         }
                     }
-
                 }
-            }
 
-            return {
-                overlap: overlapTiles,
-                contactPoint: edgeContact,
-                heldVertical,
-                targetVertical,
-                direction:
-                    edgeContact.x === hMinX ? "left" :
-                        edgeContact.x === hMaxX ? "right" :
-                            edgeContact.y === hMinY ? "above" : "below",
-                held: heldFence,
-                target: targetFence
-            };
+
+            }
         }
+
+        return {
+            overlap: overlapTiles,
+            contactPoint: edgeContact,
+            heldVertical,
+            targetVertical,
+            direction:
+                edgeContact.x === hMinX ? "left" :
+                    edgeContact.x === hMaxX ? "right" :
+                        edgeContact.y === hMinY ? "above" : "below",
+            held: heldFence,
+            target: targetFence
+        };
     }
 
-
-
-    processFenceCollisions(sprite, targets) {
-        if (!sprite || !targets?.length) return;
+    canConnectBetweenFences(sprite, fenceA, fenceB) {
+        if (!sprite || !fenceA || !fenceB) return null;
+        if (fenceA === fenceB) return null;
+        if (fenceA.tipo !== "cerca" || fenceB.tipo !== "cerca") return null;
 
         const grid = this.scene.gridMap;
+        if (!grid) return null;
 
-        // 🔹 percorre as colisões existentes no sprite selecionado
-        sprite.collisions.forEach((collision, index) => {
-            const match = targets.find(t => t.dir === collision.dir);
-            if (!match) return; // não há colisão nessa direção
 
-            const { dir, contactPoint, target, overwrite } = match;
+        const tilesSprite = this.getSpriteFootprintTiles(sprite);
+        const tilesA = this.getSpriteFootprintTiles(fenceA);
+        const tilesB = this.getSpriteFootprintTiles(fenceB);
 
-            // === SE EXISTIR UMA COLISÃO NESSA DIREÇÃO ===
-            if (overwrite) {
-                // 🔸 caso overwrite = true → o sprite selecionado SOBREPOS outro
-                const oldColSprite = collision.col;
+        // Limites de cada cerca
+        const aMinX = Math.min(...tilesA.map(t => t.x));
+        const aMaxX = Math.max(...tilesA.map(t => t.x));
+        const aMinY = Math.min(...tilesA.map(t => t.y));
+        const aMaxY = Math.max(...tilesA.map(t => t.y));
 
-                if (oldColSprite?.collisions?.length) {
-                    // remove a colisão correspondente no antigo sprite
-                    oldColSprite.collisions = oldColSprite.collisions.filter(c =>
-                        !(c.col === sprite && c.dir === this.getOppositeDir(dir))
-                    );
-                }
+        const bMinX = Math.min(...tilesB.map(t => t.x));
+        const bMaxX = Math.max(...tilesB.map(t => t.x));
+        const bMinY = Math.min(...tilesB.map(t => t.y));
+        const bMaxY = Math.max(...tilesB.map(t => t.y));
 
-                // substitui a linha da colisão atual no sprite
-                sprite.collisions[index] = {
-                    dir,
-                    col: target,
-                    contactPoint,
-                    overwrite: false
-                };
-            } else {
-                // 🔸 caso overwrite = false → o sprite foi sobreposto por outro
-                const { x, y } = contactPoint;
+        const sMinX = Math.min(...tilesSprite.map(t => t.x));
+        const sMaxX = Math.max(...tilesSprite.map(t => t.x));
+        const sMinY = Math.min(...tilesSprite.map(t => t.y));
+        const sMaxY = Math.max(...tilesSprite.map(t => t.y));
 
-                let checkX = x;
-                let checkY = y;
-                if (dir === "left") checkX -= 1;
-                if (dir === "right") checkX += 1;
+        const aVertical = fenceA.flipX;
+        const bVertical = fenceB.flipX;
 
-                // Verifica se o tile ainda pertence ao col armazenado
-                if (grid[checkX] && grid[checkX][checkY] === collision.col) {
-                    // remove a colisão correspondente no sprite que sobrepôs
-                    const colSprite = collision.col;
-                    if (colSprite?.collisions?.length) {
-                        colSprite.collisions = colSprite.collisions.filter(c =>
-                            !(c.col === sprite && c.dir === this.getOppositeDir(dir))
-                        );
-                    }
+        const sameRow = (aMinY <= bMaxY && aMaxY >= bMinY);
+        const sameCol = (aMinX <= bMaxX && aMaxX >= bMinX);
 
-                    // atualiza o grid, recolocando o sprite no ponto original
-                    grid[x][y] = sprite;
-                }
+        // --- 1️⃣ verifica sobreposição de tiles do sprite com A e B ---
+        const spriteSet = new Set(tilesSprite.map(t => `${t.x},${t.y}`));
+        const overlapA = tilesA.filter(t => spriteSet.has(`${t.x},${t.y}`));
+        const overlapB = tilesB.filter(t => spriteSet.has(`${t.x},${t.y}`));
 
-                // substitui os dados da colisão
-                sprite.collisions[index] = {
-                    dir,
-                    col: target,
-                    contactPoint,
-                    overwrite: false
-                };
-            }
-        });
+        if (overlapA.length === 0 || overlapB.length === 0) return null;
 
-        // 🔹 2️⃣ se não houver colisões anteriores, cria novas ligações
-        if (sprite.collisions.length === 0) {
-            targets.forEach(t => {
-                const { dir, contactPoint, target } = t;
+        if (overlapA.length > 1 || overlapB > 1) return null;
 
-                // adiciona no sprite atual
-                sprite.collisions.push({
-                    dir,
-                    col: target,
-                    contactPoint,
-                    overwrite: false
-                });
+        console.log("checando extremidades");
 
-                // adiciona no sprite alvo a referência reversa
-                if (!target.collisions) target.collisions = [];
+        const touchesExtremityA = overlapA[0].x === aMaxX && overlapA[0].y === aMaxY || overlapA[0].x === aMinX && overlapA[0].y === aMinY
 
-                target.collisions.push({
-                    dir: this.getOppositeDir(dir),
-                    col: sprite,
-                    contactPoint,
-                    overwrite: true
-                });
-            });
+        const touchesExtremityB = overlapB[0].x === bMaxX && overlapB[0].y === bMaxY || overlapB[0].x === bMinX && overlapB[0].y === bMinY
+
+        console.log(touchesExtremityA, touchesExtremityB);
+
+        if (!touchesExtremityA || !touchesExtremityB) {
+            return null;
         }
 
-        // 🔹 3️⃣ limpeza final das variáveis temporárias
-        this.fenceSnapTarget = null;
-        this.collisionDataTemp = null;
-    }
 
-    getOppositeDir(dir) {
-        switch (dir) {
-            case "left": return "right";
-            case "right": return "left";
-            case "top": return "bottom";
-            case "bottom": return "top";
-            default: return dir;
+        if (aVertical && bVertical && sameCol) {
+            // Conexão vertical (uma acima da outra)
+            const startY = Math.min(aMinY, bMinY);
+            const endY = Math.max(aMaxY, bMaxY);
+
+
+            console.log("de ", startY, " ate ", endY);
+            for (let y = startY + 1; y < endY; y++) {
+                const cell = grid[bMaxX]?.[y];
+                if (cell && cell !== fenceA && cell !== fenceB && cell !== sprite) {
+                    console.log("colidindo no", y);
+                    return null;
+                }
+            }
+
+            return { axis: "vertical", from: fenceA, to: fenceB };
+
+        } else if (!aVertical && !bVertical && sameRow) {
+            // Conexão horizontal (lado a lado)
+            const startX = Math.min(aMinX, bMinX);
+            const endX = Math.max(aMaxX, bMaxX);
+
+            for (let x = startX + 1; x < endX; x++) {
+                const cell = grid[x]?.[aMaxY];
+                if (cell && cell !== fenceA && cell !== fenceB && cell !== sprite) {
+                    return null;
+                }
+            }
+
+            return { axis: "horizontal", from: fenceA, to: fenceB };
+
+        } else {
+            if (sameCol) {
+                console.log("SameCol");
+
+                console.log("indo de ", sMinY + 1, " ate ", sMaxY - 1);
+
+                console.log("pontas cerca : ", sMinX, sMinX, sMaxX, sMaxY)
+
+                for (let x = sMinY + 1; x < sMaxY; x++) {
+                    const cell = grid[sMaxX]?.[x];
+                    if (cell != sprite && cell != null) {
+                        console.log("parou no ", x, aMaxX)
+                        console.log(cell);
+                        return null;
+                    }
+                }
+
+                return { axis: "horizontal", from: fenceA, to: fenceB };
+            } else if (sameRow) {
+
+                console.log("SameRow");
+
+                console.log("indo de ", sMinX + 1, " ate ", sMaxX - 1);
+
+                for (let x = sMinX + 1; x < sMaxX; x++) {
+                    const cell = grid[x]?.[sMaxY];
+                    if (cell != sprite && cell != null) {
+                        //console.log("parou no ", x)
+                        return null;
+                    }
+                }
+
+                return { axis: "horizontal", from: fenceA, to: fenceB };
+            }
         }
     }
 
 }
 
-
-//  recalculateDepthAround(sprite, radius = 3) {
-//         const targetX = sprite.x;
-//         const targetY = sprite.y;
-//         const gridSize = this.scene.gridSize;
-
-//         // 1️⃣ Busca todos os sprites próximos
-//         const neighbors = this.scene.sprites.filter(s => {
-//             const dx = Math.abs(s.x - targetX);
-//             const dy = Math.abs(s.y - targetY);
-//             return dx <= radius * gridSize && dy <= radius * gridSize;
-//         });
-
-//         // 2️⃣ Calcula o depth para cada vizinho
-//         neighbors.forEach(s => {
-//             let footprintTiles = this.getSpriteFootprintTiles(s);
-
-//             // --- caso 1x1: cria tiles fantasmas dependendo do que está abaixo ---
-//             if (footprintTiles.length === 1) {
-//                 const base = footprintTiles[0];
-
-//                 // encontra o vizinho logo abaixo
-//                 const neighborBelow = this.scene.sprites.find(n => {
-//                     if (n === s) return false;
-//                     const nTiles = this.getSpriteFootprintTiles(n);
-//                     // verifica se ocupa a posição logo abaixo
-//                     return nTiles.some(t => t.x === base.x + 1 && t.y === base.y + 1);
-//                 });
-
-//                 if (neighborBelow && neighborBelow.tipo === "cerca") {
-//                     console.log("cera")
-//                     footprintTiles = [
-//                         base,
-//                         // { x: base.x, y: base.y + 1 },
-//                     ];
-//                 } else {
-//                     console.log("não há nada")
-//                     footprintTiles = [
-//                         base,
-//                         { x: base.x, y: base.y + 1 },
-//                         { x: base.x, y: base.y + 2 },
-//                     ];
-//                 }
-//             }
-
-//             let total = 0;
-//             footprintTiles.forEach(tile => {
-//                 const calc = tile.x + tile.y * 1.001;
-//                 total += calc;
-//             });
-
-//             const avg = total / footprintTiles.length;
-
-//             // aplica o resultado
-//             s.setDepth(avg);
-//         });
-//     }
 

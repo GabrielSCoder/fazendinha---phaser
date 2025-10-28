@@ -75,6 +75,7 @@ export default class ItemMenuUI {
         if (!sprite) return;
         sprite.originalPosition = { x: sprite.x, y: sprite.y };
         sprite.isMoving = true;
+        this.gridUtils.ReOccupiedFences();
         sprite.setDepth(300);
 
         for (let other of this.scene.sprites) {

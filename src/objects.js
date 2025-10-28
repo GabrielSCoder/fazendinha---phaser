@@ -11,7 +11,7 @@ export const sementes = [
         "escala": 0.73,
         "area": [4, 4],
         "origem": [0.5, 0.58],
-        "tipo" : "solo"
+        "tipo": "solo"
     },
     {
         "id": "seed_soja",
@@ -281,7 +281,12 @@ export const arvores = [
         "tempo_colheita_horas": 48,
         "xp": 2,
         "nivel_requerido": 10,
-        "tipo": "arvore"
+        "tipo": "arvore",
+        "nivel_requerido": 5,
+        "img": "macieira.png",
+        "escala": 1.0,
+        "area": [1, 1],
+        "origem": [0.5, 0.9],
     },
     {
         "id": "arvore_nectarina",
@@ -310,7 +315,7 @@ export const animais = [
         "escala": 0.30,
         "area": [2, 3],
         "tipo": "animal",
-        "origem" : [0.6, 0.5]
+        "origem": [0.6, 0.5]
     },
     {
         "id": "animal_frango",
@@ -434,7 +439,7 @@ export const decoracoes = [
         "nivel_requerido": 10,
         "img": "cerca_madeira_CE_canto_inferior.png",
         "escala": 0.4,
-        "area": [1, 5],
+        "area": [5, 1],
         "origem": [0.5, 0.5]
     },
     {
@@ -449,7 +454,7 @@ export const decoracoes = [
         "nivel_requerido": 10,
         "img": "cerca_madeira_CD.png",
         "escala": 0.4,
-        "area": [3, 1],
+        "area": [5, 1],
         "origem": [0.5, 0.5]
     },
     {
@@ -464,7 +469,7 @@ export const decoracoes = [
         "nivel_requerido": 7,
         "img": "cerca_madeira_CE.png",
         "escala": 0.4,
-        "area": [4, 1],
+        "area": [5, 1],
         "origem": [0.5, 0.5]
     },
     {
@@ -609,7 +614,11 @@ export const decoracoes = [
         "preco_venda": 0,
         "tempo_colheita_horas": 0,
         "xp": 0,
-        "nivel_requerido": 22
+        "nivel_requerido": 22,
+        "img": "moinho.png",
+        "escala": 0.35,
+        "area": [3, 3],
+        "origem" : [0.5, 0.85]
     },
     {
         "id": "casa_da_fazenda",
