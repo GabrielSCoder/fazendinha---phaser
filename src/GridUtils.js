@@ -554,7 +554,6 @@ export default class GridUtils {
         return tiles;
     }
 
-
     canSnapFence(heldFence, targetFence) {
         if (!heldFence || !targetFence) return null;
         if (heldFence === targetFence) return null;
@@ -588,8 +587,11 @@ export default class GridUtils {
         const tMinY = Math.min(...tTiles.map(t => t.y));
         const tMaxY = Math.max(...tTiles.map(t => t.y));
 
-        const heldVertical = (hMaxY - hMinY) > (hMaxX - hMinX);
-        const targetVertical = (tMaxY - tMinY) > (tMaxX - tMinX);
+        const heldVertical = heldFence.flipX
+        const targetVertical = targetFence.flipX
+
+        console.log("Held é vertical: ", heldVertical);
+        console.log("Target é vertical: ", targetVertical);
 
         const overlapTiles = overlap.map(toXY);
 
@@ -603,18 +605,16 @@ export default class GridUtils {
         let onTargetEdge = false;
 
         if (!heldVertical && !targetVertical) {
-            onHeldEdge =
-                o.x === hMinX || o.x === hMaxX
-            onTargetEdge =
-                o.x === tMinX || o.x === tMaxX
+            onHeldEdge = o.x === hMinX || o.x === hMaxX;
+            onTargetEdge = o.x === tMinX || o.x === tMaxX;
         } else if (heldVertical && targetVertical) {
             onHeldEdge = o.y === hMinY || o.y === hMaxY;
             onTargetEdge = o.y === tMinY || o.y === tMaxY;
         } else if (heldVertical && !targetVertical) {
             onHeldEdge = o.y === hMinY || o.y === hMaxY;
-            onTargetEdge = o.x === tMinX || o.x === tMaxX
+            onTargetEdge = o.x === tMinX || o.x === tMaxX;
         } else {
-            onHeldEdge = o.x === hMinX || o.x === hMaxX
+            onHeldEdge = o.x === hMinX || o.x === hMaxX;
             onTargetEdge = o.y === tMinY || o.y === tMaxY;
         }
 
@@ -624,20 +624,188 @@ export default class GridUtils {
 
         const edgeContact = o;
 
-        return {
-            overlap: overlapTiles,
-            contactPoint: edgeContact,
-            heldVertical,
-            targetVertical,
-            direction:
-                edgeContact.x === hMinX ? "left" :
-                    edgeContact.x === hMaxX ? "right" :
-                        edgeContact.y === hMinY ? "above" :
-                            "below",
-            held: heldFence,
-            target: targetFence
-        };
+        const direction =
+            edgeContact.x === hMinX ? "left" :
+                edgeContact.x === hMaxX ? "right" :
+
+
+                    console.log("----------> ", direction);
+
+        const grid = this.scene.gridMap;
+
+        if (grid) {
+
+            let minX = Math.min(hMinX, tMinX);
+            let maxX = Math.max(hMaxX, tMaxX);
+
+            if (direction == "left") {
+                minX = Math.min(hMinX, tMinX) + 1;
+                maxX = Math.max(hMaxX, tMaxX);
+
+                console.log("faixa de ", minX, " ate ", maxX);
+
+                if (!heldVertical && !targetVertical) {
+                    for (let i = minX; i <= maxX; i++) {
+                        console.log("checando posição: ", minX, " ", hMaxY);
+                        if (grid[i][hMaxY] !== targetFence && grid[i][hMaxY] !== heldFence && grid[i][hMaxY] !== null) {
+                            console.log(grid[i][hMaxY]);
+                            return;
+                        }
+                    }
+                } else if (heldVertical && !targetVertical) {
+                    const maxY = hMaxY - 1;
+                    console.log("held vertical left")
+
+                    for (let i = tMinX; i <= tMaxX; i++) {
+                        console.log("checando posição: ", minX, " ", tMaxX);
+                        if (grid[i][tMaxY] !== targetFence && grid[i][tMaxY] !== heldFence && grid[i][tMaxY] !== null) {
+                            console.log(grid[i][tMaxY]);
+                            return;
+                        }
+                    }
+
+                    console.log("Faixa de altura: " + hMinY + 1 + " ate " + maxY)
+                    for (let i = hMinY + 1; i <= maxY; i++) {
+                        if (grid[hMaxX][i] !== heldFence && grid[hMaxX][i] !== null) {
+                            console.log(grid[hMaxX][i]);
+                            return;
+                        }
+                    }
+
+                } else if (!heldVertical && targetVertical) {
+                    console.log("target vertical esquerda")
+
+                    console.log(edgeContact.x, edgeContact.y);
+                    console.log(hMinX, hMaxX)
+                    console.log(tMinY, tMaxY)
+
+                    console.log("Faixa de altura: " + tMinY + " ate " + tMaxY)
+                    for (let i = tMinY; i <= tMaxY; i++) {
+                        if (grid[tMaxX][i] !== targetFence && grid[tMaxX][i] !== heldFence && grid[tMaxX][i] !== null) {
+                            console.log(grid[tMaxX][i]);
+                            return;
+                        }
+                    }
+
+                    const min = hMinX + 1
+
+                    console.log("Faixa de largura: " + min + " ate " + hMaxX)
+                    for (let i = min; i <= hMaxX; i++) {
+                        if (grid[i][hMaxY] !== heldFence && grid[i][hMaxY] !== null) {
+                            console.log(grid[i][hMaxY]);
+                            return;
+                        }
+                    }
+
+                } else if (heldVertical && heldVertical) {
+                    console.log("ambos verticais esquerda")
+                    console.log(edgeContact.y, edgeContact.x);
+                    console.log(hMinY, hMaxY)
+                    console.log(tMinY, tMaxY)
+
+                    if (hMaxY > tMaxY) {
+                        console.log("subindo")
+
+                        const min = tMinY + 1
+                        console.log("Faixa de " + hMaxY + " até " + min);
+                        for (let i = hMaxY; i >= min; i--) {
+                            if (grid[hMaxX][i] !== targetFence && grid[hMaxX][i] !== heldFence && grid[hMaxX][i] !== null) {
+                                console.log("parou no ", i);
+                                console.log(grid[hMaxX][i]);
+                                return;
+                            }
+                        }
+                    } else {
+                        console.log("descendo")
+
+                        const max = tMaxY - 1
+                        console.log("Faixa de " + hMinY + " até " + max);
+                        for (let i = hMinY; i <= max; i++) {
+                            if (grid[hMaxX][i] !== targetFence && grid[hMaxX][i] !== heldFence && grid[hMaxX][i] !== null) {
+                                console.log("parou no ", i);
+                                console.log(grid[hMaxX][i]);
+                                return;
+                            }
+                        }
+                    }
+
+                }
+
+            } else if (direction == "right") {
+
+                minX = hMinX;
+                maxX = tMaxX - 1;
+
+                if (!heldVertical && !targetVertical) {
+                    for (let i = minX; i <= maxX; i++) {
+                        console.log("checando posição: ", minX, " ", hMaxY);
+                        if (grid[i][hMaxY] !== targetFence && grid[i][hMaxY] !== heldFence && grid[i][hMaxY] !== null) {
+                            console.log(grid[i][hMaxY]);
+                            return;
+                        }
+                    }
+                } else if (heldVertical && !targetVertical) {
+
+                    const maxY = hMaxY - 1;
+
+                    for (let i = minX; i <= maxX; i++) {
+                        console.log("checando posição: ", minX, " ", hMaxY);
+                        if (grid[i][hMaxY] !== targetFence && grid[i][hMaxY] !== heldFence && grid[i][hMaxY] !== null) {
+                            console.log(grid[i][hMaxY]);
+                            return;
+                        }
+                    }
+
+                    console.log("Faixa de altura: " + hMinY + " ate " + maxY)
+                    for (let i = hMinY; i <= maxY; i++) {
+                        if (grid[hMaxX][i] !== heldFence && grid[hMaxX][i] !== null) {
+                            console.log(grid[hMaxX][i]);
+                            return;
+                        }
+                    }
+                } else if (!heldVertical && targetVertical) {
+                    console.log("target vertical direita")
+                    console.log(edgeContact.x, edgeContact.y);
+                    console.log(hMinX, hMaxX)
+                    console.log(tMinY, tMaxY)
+
+                    console.log("Faixa de altura: " + tMinY + " ate " + tMaxY)
+                    for (let i = tMinY; i <= tMaxY; i++) {
+                        if (grid[tMaxX][i] !== targetFence && grid[tMaxX][i] !== heldFence && grid[tMaxX][i] !== null) {
+                            console.log(grid[tMaxX][i]);
+                            return;
+                        }
+                    }
+
+                    const max = hMaxX - 1
+
+                    console.log("Faixa de largura: " + hMinX + " ate " + max)
+                    for (let i = hMinX; i <= max; i++) {
+                        if (grid[i][hMaxY] !== heldFence && grid[i][hMaxY] !== null) {
+                            console.log(grid[i][hMaxY]);
+                            return;
+                        }
+                    }
+
+                }
+            }
+
+            return {
+                overlap: overlapTiles,
+                contactPoint: edgeContact,
+                heldVertical,
+                targetVertical,
+                direction:
+                    edgeContact.x === hMinX ? "left" :
+                        edgeContact.x === hMaxX ? "right" :
+                            edgeContact.y === hMinY ? "above" : "below",
+                held: heldFence,
+                target: targetFence
+            };
+        }
     }
+
+
 
     processFenceCollisions(sprite, targets) {
         if (!sprite || !targets?.length) return;

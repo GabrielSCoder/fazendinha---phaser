@@ -75,7 +75,6 @@ export class IsoTest extends Phaser.Scene {
         this.offsetY = 200;
         this.logicFactor = 2;        // quantas células lógicas cabem em 1 tile visual
 
-        // Cria a matriz lógica com resolução maior
         this.gridMap = Array.from({ length: this.gridWidth * this.logicFactor },
             () => Array(this.gridHeight * this.logicFactor).fill(null));
 
@@ -352,11 +351,6 @@ export class IsoTest extends Phaser.Scene {
                 sprite.tipo = itemData.tipo;
             }
 
-
-            if (itemData.tipo === "cerca") sprite.collisions = [
-                { "dir": "left", "pos": null, overwrite: null }, { "dir": "right", "pos": null, overwrite: null }
-            ];
-
             sprite.isMoving = true;
             sprite.setDepth(2000);
             this.selectedSprite = sprite;
@@ -557,20 +551,10 @@ export class IsoTest extends Phaser.Scene {
             this.fenceSnapTarget = possibleSnaps.map(s => s.cell);
             this.collisionDataTemp = possibleSnaps.map(s => s.data);
         } else {
+            console.log("nenhum encontrado")
             sprite.setTint(0xffaaaa);
             this.fenceSnapTarget = null;
         }
-
-        // if (foundSnap) {
-        //     sprite.setTint(0x00ff00);
-        //     this.fenceSnapTarget = targetFence;
-        // } else {
-        //     sprite.setTint(0xffaaaa);
-        //     // if (!this.fenceSnapTarget) return;
-        //     // const { x, y } = this.fenceSnapTarget.collisionData.contactPoint;
-        //     // this.gridUtils.addOccupiedTile(x, y, this.fenceSnapTarget);
-        //     this.fenceSnapTarget = null;
-        // }
     }
 
 
