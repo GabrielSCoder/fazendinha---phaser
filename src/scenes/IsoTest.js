@@ -5,6 +5,8 @@ import BottomMenu from '../bottomMenu.js';
 import ItemMenuUI from '../ItemMenuUI.js';
 import gridUtils from "../GridUtils.js";
 import BonecoController from '../BonecoController.js';
+import { sementes } from '../objects.js';
+import SpriteUtils from '../spriteUtils.js';
 
 export class IsoTest extends Phaser.Scene {
     constructor() {
@@ -65,6 +67,7 @@ export class IsoTest extends Phaser.Scene {
         this.load.image('ovelha.png', 'assets/ovelha.png');
         this.load.image('porco.png', 'assets/porco.png');
         this.gridUtils = new gridUtils(this);
+        this.spriteUtils = new SpriteUtils(this);
     }
 
     create() {
@@ -92,7 +95,7 @@ export class IsoTest extends Phaser.Scene {
         this.sprites = [];
         this.spriteInitialPositions = new Map();
         this.middleButtonDown = false;
-        this.freeClick = false; //Um clique a mais. Parece não necessário quando o input.on esta no mesmo arquivo que essa cena.
+        this.freeClick = false; 
         this.ignoreNextPointerUp = false;
         this.changeCameraZoom = false;
         this.arando = false;
@@ -100,6 +103,7 @@ export class IsoTest extends Phaser.Scene {
         this.previewOccupiedtiles = [];
         this.fenceSnapTarget = null;
         this.tileSize = this.gridSize;
+        this.buyItemTmp = null
 
         this.topUI = new TopUI(this);
         this.shopMenu = new ShopMenu(this);
@@ -173,46 +177,52 @@ export class IsoTest extends Phaser.Scene {
                 for (let other of this.sprites) {
                     other.setInteractive({ pixelPerfect: true, alphaTolerance: 1, useHandCursor: true });
                 }
+
+                if (this.buyItemTmp) {
+                    console.log(this.buyItemTmp)
+                    this.events.emit("itemPurchased", this.buyItemTmp)
+                }
             }
         });
 
 
-        // this.input.on('pointerup', (pointer, objs, event) => {
+        this.input.on('pointerup', () => {
 
-        //     if (this.shopMenu.isOpen() && this.arando) {
-        //         this.cancelArar();
-        //     }
+            if (this.shopMenu.isOpen() && this.arando) {
+                this.cancelArar();
+            }
 
-        //     if (this.shopMenu.isOpen() && this.selectedSprite && this.selectedSprite.isMoving) {
-        //         const sprite = this.selectedSprite;
+            if (this.shopMenu.isOpen() && this.selectedSprite && this.selectedSprite.isMoving) {
+                const sprite = this.selectedSprite;
 
-        //         let willDestroy = !sprite.originalPosition;
+                let willDestroy = !sprite.originalPosition;
 
-        //         if (!willDestroy) {
-        //             sprite.x = sprite.originalPosition.x;
-        //             sprite.y = sprite.originalPosition.y;
-        //             sprite.clearTint();
-        //         } else {
+                if (!willDestroy) {
+                    sprite.x = sprite.originalPosition.x;
+                    sprite.y = sprite.originalPosition.y;
+                    sprite.clearTint();
+                } else {
 
-        //             sprite.destroy();
+                    this.buyItemTmp = null;
+                    sprite.destroy();
 
-        //             this.sprites = this.sprites.filter(s => s && s !== sprite && !s.destroyed);
-        //         }
+                    this.sprites = this.sprites.filter(s => s && s !== sprite && !s.destroyed);
+                }
 
-        //         this.gridUtils.recalculateDepthAround(sprite);
-        //         this.selectedSprite = null;
+                this.gridUtils.recalculateDepthAround(sprite);
+                this.selectedSprite = null;
 
-        //         if (!willDestroy) sprite.isMoving = false;
+                if (!willDestroy) sprite.isMoving = false;
 
-        //         this.sprites.forEach(s => {
-        //             if (s && !s.destroyed) {
-        //                 s.setInteractive({ pixelPerfect: true, alphaTolerance: 1, useHandCursor: true });
-        //             }
-        //         });
+                this.sprites.forEach(s => {
+                    if (s && !s.destroyed) {
+                        s.setInteractive({ pixelPerfect: true, alphaTolerance: 1, useHandCursor: true });
+                    }
+                });
 
-        //         this.gridUtils.drawFootprints();
-        //     }
-        // });
+                this.gridUtils.drawFootprints();
+            }
+        });
 
 
         this.input.on('pointerup', (pointer, objs, event) => {
@@ -268,6 +278,11 @@ export class IsoTest extends Phaser.Scene {
                 other.setInteractive({ pixelPerfect: true, alphaTolerance: 1, useHandCursor: true });
             }
 
+            if (this.buyItemTmp) {
+                console.log(this.buyItemTmp)
+                this.events.emit("itemPurchased", this.buyItemTmp)
+            }
+
         });
 
         this.input.on('pointerdown', (pointer) => {
@@ -302,28 +317,61 @@ export class IsoTest extends Phaser.Scene {
                 const endX = Math.max(...this.previewOccupiedtiles.map(t => t.x));
                 const endY = Math.max(...this.previewOccupiedtiles.map(t => t.y));
 
-                // 🧩 Corrigido — adiciona +1 ao tamanho
                 const w = endX - startX;
                 const h = endY - startY;
 
                 console.log(`Tentando marcar área de ${w}x${h} a partir de (${startX}, ${startY})`);
 
-                // Checa ocupação
                 const ocupado = this.gridUtils.checkOccupiedBlock(startX, startY, w, h);
-
                 if (ocupado) {
                     console.log("❌ Não é possível arar aqui, algum tile já está ocupado.");
                     return;
                 }
 
-                // Marca o chão
                 this.gridUtils.markGround(startX, startY, w, h);
 
-                console.log(`✅ Chão fixado em ${w}x${h} tiles a partir de (${startX}, ${startY})`);
+                const itemData = sementes.find(c => c.nome == "Blueberries");
+                if (!itemData) return;
+
+                const scale = itemData.escala || 1;
+                const originX = itemData.origem?.[0] ?? 0.5;
+                const originY = itemData.origem?.[1] ?? 0.5;
+                const tipo = itemData.tipo || "solo";
+
+                const centerX = startX + (w / 2) - (1 - originX - 0.25);
+                const centerY = startY + (h / 2) - (1 - originY - 0.2);
+
+                console.log(centerX, centerY);
+                
+                const screenPos = this.gridUtils.isoToScreen(centerX, centerY, this.gridSize, this.offsetX, this.offsetY);
+
+                const sprite = this.spriteUtils.addGameSprite(itemData.img, screenPos.x, screenPos.y, scale, originX, originY);
+
+                sprite.footprint = itemData.area || [w, h];
+                sprite.tipo = tipo;
+                sprite.gridX = Math.round(startX + w * 0.5 - 0.5);
+                sprite.gridY = Math.round(startY + h * 0.5 - 0.5);
+                sprite.lastFreePos = { startX, startY };
+
+                sprite.isMoving = false;
+
+                if (!this.sprites) this.sprites = [];
+                this.sprites.push(sprite);
+
+                // Atualiza ocupação e depth
+                this.gridUtils.clearOccupied(sprite);
+                this.gridUtils.markOccupied(sprite, startX, startY, w, h);
+                this.gridUtils.recalculateDepthAround(sprite);
+
+                // Ignora na câmera de UI
+                this.cameraController.ignoreInUICamera([...this.sprites]);
 
                 this.clearPreviewOccupiedTiles();
-                this.gridUtils.drawFootprints();
+                // this.gridUtils.drawFootprints();
+
+                console.log("✅ Solo colocado corretamente no grid com footprint e posição ajustados.");
             }
+
         });
 
 
@@ -344,9 +392,9 @@ export class IsoTest extends Phaser.Scene {
                 itemData.tipo = tipo;
             }
 
-            console.log(itemData.tipo)
+            if (itemData.noStopBuy) this.buyItemTmp = itemData;
 
-            const sprite = this.addGameSprite(itemData.img, this.scale.width / 2, this.scale.height / 2, scale, originX, originY);
+            const sprite = this.spriteUtils.addGameSprite(itemData.img, this.scale.width / 2, this.scale.height / 2, scale, originX, originY);
             if (itemData.area) {
                 sprite.footprint = itemData.area;
                 sprite.tipo = itemData.tipo;
@@ -364,7 +412,6 @@ export class IsoTest extends Phaser.Scene {
 
             sprite.lastFreePos = { startX, startY };
 
-            // Remove qualquer ocupação prévia (caso de bug visual)
             this.gridUtils.clearOccupied(sprite);
 
             // Checa colisão imediatamente
@@ -393,7 +440,7 @@ export class IsoTest extends Phaser.Scene {
 
         this.updateFence();
 
-        // this.updateArando();
+        this.updateArando();
 
         // this.bonecoController.update();
         // this.getSpriteByPointerPosition();
@@ -427,49 +474,6 @@ export class IsoTest extends Phaser.Scene {
         }
     }
 
-
-    addGameSprite(key, x, y, scale = 0.5, originX, originY) {
-        const sprite = this.add.sprite(x, y, key).setScale(scale).setInteractive({
-            pixelPerfect: true,
-            alphaTolerance: 1,
-            useHandCursor: true
-        }).setOrigin(originX, originY);
-
-        sprite.isMoving = false;
-        sprite.isDraggable = true;
-
-        // guarda posição inicial
-        this.spriteInitialPositions.set(sprite, { x: sprite.x, y: sprite.y });
-
-        this.sprites.push(sprite);
-
-        this.input.setDraggable(sprite);
-
-        // this.uiBlocker.setVisible(true);
-
-        // evento para abrir o menu contextual (mesma lógica que usava)
-        sprite.on('pointerup', (pointer) => {
-            pointer.event.stopPropagation();
-
-            if (this.middleButtonDown) return;
-
-            if (!sprite.isMoving) {
-                this.selectedSprite = sprite;
-                this.itemMenuUI.show(this.selectedSprite.x, this.selectedSprite.y, this.selectedSprite);
-                console.log(pointer)
-            }
-        });
-
-        sprite.on("pointerover", () => {
-            sprite.setTint(0xffff00);
-        })
-
-        sprite.on("pointerout", () => {
-            sprite.clearTint()
-        })
-
-        return sprite;
-    }
 
     startArando() {
         this.arando = true;
@@ -567,6 +571,7 @@ export class IsoTest extends Phaser.Scene {
 
 
     updateArando() {
+        
         if (this.middleButtonDown) return;
         if (!this.arando) return;
 
@@ -592,7 +597,6 @@ export class IsoTest extends Phaser.Scene {
             null
         );
 
-        // Calcula os 4 cantos externos do bloco 4x4 no espaço isométrico
         const cornersIso = [
             { x: startX, y: startY },                     // topo esquerdo
             { x: startX + fieldSize, y: startY },         // topo direito
@@ -600,10 +604,8 @@ export class IsoTest extends Phaser.Scene {
             { x: startX, y: startY + fieldSize }          // baixo esquerdo
         ];
 
-        // Converte os cantos de isométrico para tela
         const cornersScreen = cornersIso.map(c => this.gridUtils.isoToScreen(c.x, c.y));
 
-        // Cria o polígono do preview
         const points = [];
         for (const c of cornersScreen) {
             points.push(c.x, c.y);
@@ -681,27 +683,6 @@ export class IsoTest extends Phaser.Scene {
         }
     }
 
-    convertToPlace(sprite) {
-        const offsetX = (w % 2 === 0) ? 0.5 : 0;
-        const offsetY = (h % 2 === 0) ? 0.5 : 0;
-        let snapped = null;
-        let multiFactor = 0;
-
-        if (sprite.tipo === "cerca") {
-            snapped = this.gridUtils.isoToScreen(Math.floor(iso.x) + 0.5, Math.floor(iso.y) + 0.5);
-            multiFactor = this.gridSize * 0.20;
-        } else {
-            snapped = this.gridUtils.isoToScreen(Math.floor(iso.x) + offsetX, Math.floor(iso.y) + offsetY);
-            multiFactor = this.gridSize * 0.12;
-        }
-
-        sprite.x = snapped.x;
-        sprite.y = snapped.y + multiFactor;
-
-        sprite.gridX = Math.round(iso.x);
-        sprite.gridY = Math.round(iso.y);
-    }
-
     convert(iso, sprite) {
         const { w, h } = this.gridUtils.getSpriteFootprint(sprite);
         const offsetX = (w % 2 === 0) ? 0.5 : 0;
@@ -753,3 +734,56 @@ export class IsoTest extends Phaser.Scene {
         return true;
     }
 }
+
+/*
+
+   updateArando() {
+        
+        if (this.middleButtonDown) return;
+        if (!this.arando) return;
+
+        const pointer = this.input.activePointer;
+        const cam = this.cameras.main;
+        const worldPoint = cam.getWorldPoint(pointer.x, pointer.y);
+
+        const iso = this.gridUtils.screenToIso(worldPoint.x, worldPoint.y);
+        const startX = Math.floor(iso.x);
+        const startY = Math.floor(iso.y);
+
+        this.clearPreviewTiles();
+
+        // Novo tamanho do campo arado (4x4)
+        const fieldSize = 4;
+
+        // Verifica se algum tile dentro da área 4x4 está ocupado
+        const occupied = this.gridUtils.checkOccupiedGrid(
+            startX,
+            startY,
+            startX + fieldSize - 1,
+            startY + fieldSize - 1,
+            null
+        );
+
+        const cornersIso = [
+            { x: startX, y: startY },                     // topo esquerdo
+            { x: startX + fieldSize, y: startY },         // topo direito
+            { x: startX + fieldSize, y: startY + fieldSize }, // baixo direito
+            { x: startX, y: startY + fieldSize }          // baixo esquerdo
+        ];
+
+        const cornersScreen = cornersIso.map(c => this.gridUtils.isoToScreen(c.x, c.y));
+
+        const points = [];
+        for (const c of cornersScreen) {
+            points.push(c.x, c.y);
+        }
+
+        const tile = this.add
+            .polygon(0, 0, points, occupied ? 0xff0000 : 0x00ff00, 0.5)
+            .setOrigin(0, 0);
+
+        this.previewOccupiedtiles = cornersIso;
+        this.previewTiles.push(tile);
+        this.cameraController.ignoreInUICamera([tile]);
+    }
+        */

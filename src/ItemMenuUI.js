@@ -18,7 +18,6 @@ export default class ItemMenuUI {
         this.selectedSprite = null;
         this.storedItemsContainer = scene.add.container(50, 50).setDepth(500);
 
-        // === Eventos dos botões ===
         btnMove.on('pointerup', (pointer, localX, localY, event) => {
             this.onMoveClick(pointer, localX, localY, event);
         });
@@ -89,8 +88,6 @@ export default class ItemMenuUI {
         if (!sprite || !sprite.footprint) return;
         this.hide();
 
-        console.log("rotacionando")
-
         // Salva footprint original na primeira rotação
         if (!sprite.originalFootprint) {
             if (Array.isArray(sprite.footprint)) {
@@ -130,6 +127,7 @@ export default class ItemMenuUI {
         // const ocupado = this.gridUtils.checkOccupiedGrid(startX, startY, startX + w - 1, startY + h - 1, sprite);
         sprite.isMoving = true;
         sprite.setDepth(2000);
+        this.scene.selectedSprite = sprite;
         
         // if (ocupado) {
         //     console.log("❌ Tile ocupado — revertendo sprite.");

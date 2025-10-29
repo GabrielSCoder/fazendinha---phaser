@@ -11,7 +11,8 @@ export const sementes = [
         "escala": 0.73,
         "area": [4, 4],
         "origem": [0.5, 0.58],
-        "tipo": "solo"
+        "tipo": "solo",
+        "noStopBuy" : false
     },
     {
         "id": "seed_soja",
@@ -404,7 +405,8 @@ export const decoracoes = [
         "img": "cerca_branca.png",
         "escala": 0.4,
         "area": [5, 1],
-        "origem": [0.5, 0.5]
+        "origem": [0.5, 0.5],
+        "noStopBuy" : true
     },
     {
         "id": "cabana_de_descanso",

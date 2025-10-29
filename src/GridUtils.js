@@ -590,8 +590,8 @@ export default class GridUtils {
         const heldVertical = heldFence.flipX
         const targetVertical = targetFence.flipX
 
-        console.log("Held é vertical: ", heldVertical);
-        console.log("Target é vertical: ", targetVertical);
+        // console.log("Held é vertical: ", heldVertical);
+        // console.log("Target é vertical: ", targetVertical);
 
         const overlapTiles = overlap.map(toXY);
 
@@ -626,10 +626,10 @@ export default class GridUtils {
 
         const direction =
             edgeContact.x === hMinX ? "left" :
-                edgeContact.x === hMaxX ? "right" :
+                edgeContact.x === hMaxX ? "right" : null
 
 
-                    console.log("----------> ", direction);
+                    // console.log("----------> ", direction);
         const grid = this.scene.gridMap;
 
         if (grid) {
@@ -640,11 +640,11 @@ export default class GridUtils {
             if (!heldVertical && !targetVertical) {
 
                 if (direction == "left") {
-                    console.log("Held horizontal e target horizontal")
+                    // console.log("Held horizontal e target horizontal")
 
                     for (let i = minX + 1; i <= maxX; i++) {
                         if (grid[i][hMaxY] !== targetFence && grid[i][hMaxY] !== heldFence && grid[i][hMaxY] !== null) {
-                            console.log(grid[i][hMaxY]);
+                            // console.log(grid[i][hMaxY]);
                             return;
                         }
                     }
@@ -654,11 +654,11 @@ export default class GridUtils {
                     minX = hMinX;
                     maxX = tMaxX - 1;
 
-                    console.log("Held horizontal e target horizontal a direita")
+                    // console.log("Held horizontal e target horizontal a direita")
                     for (let i = minX; i <= maxX; i++) {
-                        console.log("checando posição: ", minX, " ", hMaxY);
+                        // console.log("checando posição: ", minX, " ", hMaxY);
                         if (grid[i][hMaxY] !== targetFence && grid[i][hMaxY] !== heldFence && grid[i][hMaxY] !== null) {
-                            console.log(grid[i][hMaxY]);
+                            // console.log(grid[i][hMaxY]);
                             return;
                         }
                     }
@@ -667,33 +667,33 @@ export default class GridUtils {
 
             } else if (heldVertical && heldVertical) {
 
-                console.log("ambos verticais esquerda")
-                console.log(edgeContact.y, edgeContact.x);
-                console.log(hMinY, hMaxY)
-                console.log(tMinY, tMaxY)
+                // console.log("ambos verticais esquerda")
+                // console.log(edgeContact.y, edgeContact.x);
+                // console.log(hMinY, hMaxY)
+                // console.log(tMinY, tMaxY)
 
                 if (hMaxY > tMaxY) {
-                    console.log("subindo")
+                    // console.log("subindo")
 
                     const min = tMinY + 1
-                    console.log("Faixa de " + hMaxY + " até " + min);
+                    // console.log("Faixa de " + hMaxY + " até " + min);
                     for (let i = hMaxY; i >= min; i--) {
                         if (grid[hMaxX][i] !== targetFence && grid[hMaxX][i] !== heldFence && grid[hMaxX][i] !== null) {
-                            console.log("parou no ", i);
-                            console.log(grid[hMaxX][i]);
+                            // console.log("parou no ", i);
+                            // console.log(grid[hMaxX][i]);
                             return;
                         }
                     }
                 } else {
-                    console.log("descendo")
+                    // console.log("descendo")
 
                     const max = tMaxY - 1
-                    console.log("Faixa de " + hMinY + " até " + max);
+                    // console.log("Faixa de " + hMinY + " até " + max);
                     for (let i = hMinY; i <= max; i++) {
                         if (grid[hMaxX][i] !== targetFence && grid[hMaxX][i] !== heldFence && grid[hMaxX][i] !== null) {
                             if (i == hMinY && grid[hMaxX][i].tipo !== "cerca") {
-                                console.log("parou no ", i);
-                                console.log(grid[hMaxX][i]);
+                                // console.log("parou no ", i);
+                                // console.log(grid[hMaxX][i]);
                                 return;
                             }
                         }
@@ -704,23 +704,23 @@ export default class GridUtils {
                 if (direction == "left") {
                     const maxY = hMaxY - 1;
 
-                    console.log("Held vertical e target horizontal a esquerda")
+                    // console.log("Held vertical e target horizontal a esquerda")
 
                     for (let i = tMinX; i <= tMaxX; i++) {
-                        console.log("checando posição: ", tMinX, " ", tMaxX);
+                        // console.log("checando posição: ", tMinX, " ", tMaxX);
                         if (grid[i][tMaxY] !== targetFence && grid[i][tMaxY] !== heldFence && grid[i][tMaxY] !== null) {
                             if (i == tMinX && grid[i][tMaxY].tipo !== "cerca") {
-                                console.log("colidiu no: ", i);
+                                // console.log("colidiu no: ", i);
                                 return;
                             }
                         }
                     }
 
-                    console.log("Faixa de altura: ", hMinY + 1, " ate " + maxY)
+                    // console.log("Faixa de altura: ", hMinY + 1, " ate " + maxY)
                     for (let i = hMinY + 1; i <= maxY; i++) {
                         if (grid[hMaxX][i] !== targetFence && grid[hMaxX][i] !== heldFence && grid[hMaxX][i] !== null) {
                             if (i == maxY && grid[hMaxX][i].tipo !== "cerca") {
-                                console.log("colidiu no: ", i);
+                                // console.log("colidiu no: ", i);
                                 return;
                             }
                         }
@@ -728,22 +728,22 @@ export default class GridUtils {
 
                 } else {
 
-                    console.log("Held vertical e target horizontal direita")
+                    // console.log("Held vertical e target horizontal direita")
 
                     const maxY = hMaxY - 1;
 
                     for (let i = minX; i <= maxX; i++) {
-                        console.log("checando posição: ", minX, " ", hMaxY);
+                        // console.log("checando posição: ", minX, " ", hMaxY);
                         if (grid[i][hMaxY] !== targetFence && grid[i][hMaxY] !== heldFence && grid[i][hMaxY] !== null) {
-                            console.log(grid[i][hMaxY]);
+                            // console.log(grid[i][hMaxY]);
                             return;
                         }
                     }
 
-                    console.log("Faixa de altura: " + hMinY + " ate " + maxY)
+                    // console.log("Faixa de altura: " + hMinY + " ate " + maxY)
                     for (let i = hMinY; i <= maxY; i++) {
                         if (grid[hMaxX][i] !== heldFence && grid[hMaxX][i] !== null) {
-                            console.log(grid[hMaxX][i]);
+                            // console.log(grid[hMaxX][i]);
                             return;
                         }
                     }
@@ -751,18 +751,18 @@ export default class GridUtils {
             } else if (!heldVertical && targetVertical) {
 
                 if (direction === "left") {
-                    console.log("held horizontal e target vertical esquerda")
+                    // console.log("held horizontal e target vertical esquerda")
 
-                    console.log(edgeContact.x, edgeContact.y);
-                    console.log(hMinX, hMaxX)
-                    console.log(tMinY, tMaxY)
+                    // console.log(edgeContact.x, edgeContact.y);
+                    // console.log(hMinX, hMaxX)
+                    // console.log(tMinY, tMaxY)
 
-                    console.log("Faixa de altura: " + tMinY + " ate " + tMaxY)
+                    // console.log("Faixa de altura: " + tMinY + " ate " + tMaxY)
                     for (let i = tMinY; i <= tMaxY; i++) {
                         if (grid[tMaxX][i] !== targetFence && grid[tMaxX][i] !== heldFence && grid[tMaxX][i] !== null) {
                             if (i == tMaxY && grid[tMaxX][i].tipo !== "cerca") {
-                                console.log("colidiu no ", i)
-                                console.log(grid[tMaxX][i]);
+                                // console.log("colidiu no ", i)
+                                // console.log(grid[tMaxX][i]);
                                 return;
                             }
                         }
@@ -770,22 +770,22 @@ export default class GridUtils {
 
                     const min = hMinX + 1
 
-                    console.log("Faixa de largura: " + min + " ate " + hMaxX)
+                    // console.log("Faixa de largura: " + min + " ate " + hMaxX)
                     for (let i = min; i <= hMaxX; i++) {
                         if (grid[i][hMaxY] !== heldFence && grid[i][hMaxY] !== null) {
-                            console.log(grid[i][hMaxY]);
+                            // console.log(grid[i][hMaxY]);
                             return;
                         }
                     }
                 } else {
-                    console.log("Held horizontal e target vertical direita")
+                    // console.log("Held horizontal e target vertical direita")
 
-                    console.log("Faixa de altura: " + tMinY + " ate " + tMaxY)
+                    // console.log("Faixa de altura: " + tMinY + " ate " + tMaxY)
                     for (let i = tMinY; i <= tMaxY; i++) {
                         if (grid[tMaxX][i] !== targetFence && grid[tMaxX][i] !== heldFence && grid[tMaxX][i] !== null) {
                             if (i == tMaxY && grid[tMaxX][i].tipo !== "cerca") {
-                                console.log("colidiu no ", i)
-                                console.log(grid[tMaxX][i]);
+                                // console.log("colidiu no ", i)
+                                // console.log(grid[tMaxX][i]);
                                 return;
                             }
                         }
@@ -793,11 +793,11 @@ export default class GridUtils {
 
                     const max = hMaxX - 1
 
-                    console.log("Faixa de largura: " + hMinX + " ate " + max)
+                    // console.log("Faixa de largura: " + hMinX + " ate " + max)
                     for (let i = hMinX; i <= max; i++) {
                         if (grid[i][hMaxY] !== targetFence && grid[i][hMaxY] !== heldFence && grid[i][hMaxY] !== null) {
                             if (hMinX == i && grid[i][hMaxY].tipo !== "cerca") {
-                                console.log("colidiu no: ", i);
+                                // console.log("colidiu no: ", i);
                                 return;
                             }
                         }
@@ -866,8 +866,6 @@ export default class GridUtils {
 
         if (overlapA.length > 1 || overlapB > 1) return null;
 
-        console.log("checando extremidades");
-
         const touchesExtremityA = overlapA[0].x === aMaxX && overlapA[0].y === aMaxY || overlapA[0].x === aMinX && overlapA[0].y === aMinY
 
         const touchesExtremityB = overlapB[0].x === bMaxX && overlapB[0].y === bMaxY || overlapB[0].x === bMinX && overlapB[0].y === bMinY
@@ -877,6 +875,9 @@ export default class GridUtils {
         if (!touchesExtremityA || !touchesExtremityB) {
             return null;
         }
+
+
+        if (sameCol && sameRow) return;
 
 
         if (aVertical && bVertical && sameCol) {
@@ -889,7 +890,7 @@ export default class GridUtils {
             for (let y = startY + 1; y < endY; y++) {
                 const cell = grid[bMaxX]?.[y];
                 if (cell && cell !== fenceA && cell !== fenceB && cell !== sprite) {
-                    console.log("colidindo no", y);
+                    // console.log("colidindo no", y);
                     return null;
                 }
             }
@@ -912,17 +913,17 @@ export default class GridUtils {
 
         } else {
             if (sameCol) {
-                console.log("SameCol");
+                // console.log("SameCol");
 
-                console.log("indo de ", sMinY + 1, " ate ", sMaxY - 1);
+                // console.log("indo de ", sMinY + 1, " ate ", sMaxY - 1);
 
-                console.log("pontas cerca : ", sMinX, sMinX, sMaxX, sMaxY)
+                // console.log("pontas cerca : ", sMinX, sMinX, sMaxX, sMaxY)
 
                 for (let x = sMinY + 1; x < sMaxY; x++) {
                     const cell = grid[sMaxX]?.[x];
                     if (cell != sprite && cell != null) {
-                        console.log("parou no ", x, aMaxX)
-                        console.log(cell);
+                        // console.log("parou no ", x, aMaxX)
+                        // console.log(cell);
                         return null;
                     }
                 }
@@ -930,9 +931,9 @@ export default class GridUtils {
                 return { axis: "horizontal", from: fenceA, to: fenceB };
             } else if (sameRow) {
 
-                console.log("SameRow");
+                // console.log("SameRow");
 
-                console.log("indo de ", sMinX + 1, " ate ", sMaxX - 1);
+                // console.log("indo de ", sMinX + 1, " ate ", sMaxX - 1);
 
                 for (let x = sMinX + 1; x < sMaxX; x++) {
                     const cell = grid[x]?.[sMaxY];
