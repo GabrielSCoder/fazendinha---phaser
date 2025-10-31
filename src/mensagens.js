@@ -1,0 +1,1 @@
+export const plantar_solo = "Clique para plantar"

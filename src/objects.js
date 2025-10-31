@@ -1,229 +1,296 @@
 export const sementes = [
     {
-        "id": "seed_blueberries",
-        "nome": "Blueberries",
+        "id": "semente_mirtilo",
+        "nome": "Mirtilo",
         "preco_compra": 20,
         "preco_venda": 70,
         "tempo_colheita_horas": 4,
         "xp": 1,
         "nivel_requerido": 1,
-        "img": "solo",
+        "img": "mirtilo.png",
         "escala": 0.73,
         "area": [4, 4],
         "origem": [0.5, 0.58],
-        "tipo": "solo",
-        "noStopBuy" : false
+        "tipo": "semente",
+        "noStopBuy": false,
+        "tipo_plantacao" : "solo_plantado_simples"
     },
     {
-        "id": "seed_soja",
+        "id": "semente_soja",
         "nome": "Soja",
         "preco_compra": 50,
         "preco_venda": 165,
         "tempo_colheita_horas": 48,
         "xp": 2,
         "nivel_requerido": 1,
-        "img": "solo2",
+        "img": "soja.png",
         "escala": 0.78,
-        "area": [4, 4]
+        "area": [4, 4],
+        "tipo": "semente",
     },
     {
-        "id": "seed_abobora",
+        "id": "semente_abobora",
         "nome": "Abóbora",
         "preco_compra": 70,
         "preco_venda": 115,
         "tempo_colheita_horas": 36,
         "xp": 2,
-        "nivel_requerido": 1
+        "nivel_requerido": 1,
+        "img": "abobora.png",
+        "tipo": "semente",
     },
     {
-        "id": "seed_pimentoes",
-        "nome": "Pimentões",
+        "id": "semente_abobora_moranga",
+        "nome": "Abóbora Moranga",
+        "preco_compra": 70,
+        "preco_venda": 115,
+        "tempo_colheita_horas": 36,
+        "xp": 2,
+        "nivel_requerido": 1,
+        "img": "abobora_moranga.png",
+        "tipo": "semente",
+    },
+    {
+        "id": "semente_pimentao",
+        "nome": "Pimentão",
         "preco_compra": 30,
         "preco_venda": 125,
         "tempo_colheita_horas": 24,
         "xp": 2,
-        "nivel_requerido": 1
+        "nivel_requerido": 1,
+        "img": "pimentao.png",
+        "tipo": "semente",
     },
     {
-        "id": "seed_pimenta",
+        "id": "semente_pimenta",
         "nome": "Pimenta",
         "preco_compra": 80,
         "preco_venda": 240,
         "tempo_colheita_horas": 48,
         "xp": 2,
-        "nivel_requerido": 2
+        "nivel_requerido": 2,
+        "img": "pimenta.png",
+        "tipo": "semente",
     },
     {
-        "id": "seed_cenoura",
+        "id": "semente_cenoura",
         "nome": "Cenoura",
         "preco_compra": 65,
         "preco_venda": 140,
         "tempo_colheita_horas": 8,
         "xp": 1,
-        "nivel_requerido": 3
+        "nivel_requerido": 3,
+        "img": "cenoura.png",
+        "tipo": "semente",
     },
     {
-        "id": "seed_arroz",
+        "id": "semente_beterraba",
+        "nome": "Beterraba",
+        "preco_compra": 65,
+        "preco_venda": 140,
+        "tempo_colheita_horas": 8,
+        "xp": 1,
+        "nivel_requerido": 3,
+        "img": "beterraba.png",
+        "tipo": "semente",
+    },
+    {
+        "id": "semente_arroz",
         "nome": "Arroz",
         "preco_compra": 140,
         "preco_venda": 400,
         "tempo_colheita_horas": 72,
         "xp": 2,
-        "nivel_requerido": 4
+        "nivel_requerido": 4,
+        "img": "arroz.png",
+        "tipo": "semente",
     },
     {
-        "id": "seed_alcachofra",
+        "id": "semente_rabanete",
+        "nome": "Rabanete",
+        "preco_compra": 140,
+        "preco_venda": 400,
+        "tempo_colheita_horas": 72,
+        "xp": 2,
+        "nivel_requerido": 4,
+        "img": "rabanete.png",
+        "tipo": "semente",
+    },
+    {
+        "id": "semente_alcachofra",
         "nome": "Alcachofra",
         "preco_compra": 90,
         "preco_venda": 185,
         "tempo_colheita_horas": 12,
         "xp": 1,
-        "nivel_requerido": 5
+        "nivel_requerido": 5,
+        "img": "alcachofra.png",
+        "tipo": "semente",
     },
     {
-        "id": "seed_abacaxi",
+        "id": "semente_abacaxi",
         "nome": "Abacaxi",
         "preco_compra": 40,
         "preco_venda": 95,
         "tempo_colheita_horas": 2,
         "xp": 1,
         "nivel_requerido": 6,
-        "img": "abacaxi.png"
+        "img": "abacaxi.png",
+        "tipo": "semente"
     },
     {
-        "id": "seed_uvas",
-        "nome": "Uvas",
+        "id": "semente_uva",
+        "nome": "Uva",
         "preco_compra": 150,
         "preco_venda": 414,
         "tempo_colheita_horas": 36,
         "xp": 2,
-        "nivel_requerido": 7
+        "nivel_requerido": 7,
+        "img": "uva.png",
+        "tipo": "semente",
     },
     {
-        "id": "seed_berinjela",
+        "id": "semente_berinjela",
         "nome": "Berinjela",
         "preco_compra": 150,
         "preco_venda": 398,
         "tempo_colheita_horas": 48,
         "xp": 2,
-        "nivel_requerido": 8
+        "nivel_requerido": 8,
+        "img": "berinjela.png",
+        "tipo": "semente",
     },
     {
-        "id": "seed_trigo",
+        "id": "semente_trigo",
         "nome": "Trigo",
         "preco_compra": 140,
         "preco_venda": 321,
         "tempo_colheita_horas": 24,
         "xp": 2,
-        "nivel_requerido": 9
+        "nivel_requerido": 9,
+        "img": "trigo.png",
+        "tipo": "semente",
     },
     {
-        "id": "seed_tomate",
+        "id": "semente_tomate",
         "nome": "Tomate",
         "preco_compra": 100,
         "preco_venda": 165,
         "tempo_colheita_horas": 6,
         "xp": 1,
-        "nivel_requerido": 10
+        "nivel_requerido": 10,
+        "img": "tomate.png",
+        "tipo": "semente",
     },
     {
-        "id": "seed_framboesa",
+        "id": "semente_framboesa",
         "nome": "Framboesa",
         "preco_compra": 190,
         "preco_venda": 475,
         "tempo_colheita_horas": 48,
         "xp": 2,
-        "nivel_requerido": 11
+        "nivel_requerido": 11,
+        "img": "framboesa.png",
+        "tipo": "semente",
     },
     {
-        "id": "seed_morango",
+        "id": "semente_morango",
         "nome": "Morango",
         "preco_compra": 100,
         "preco_venda": 175,
         "tempo_colheita_horas": 4,
         "xp": 1,
-        "nivel_requerido": 12
+        "nivel_requerido": 12,
+        "img": "morango.png",
+        "tipo": "semente"
     },
     {
-        "id": "seed_batatas",
-        "nome": "Batatas",
+        "id": "semente_batata",
+        "nome": "Batata",
         "preco_compra": 260,
         "preco_venda": 175,
         "tempo_colheita_horas": 4,
         "xp": 1,
-        "nivel_requerido": 13
+        "nivel_requerido": 13,
+        "img": "batata_inglesa.png",
+        "tipo": "semente"
     },
     {
-        "id": "seed_algodao",
+        "id": "semente_algodao",
         "nome": "Algodão",
         "preco_compra": 170,
         "preco_venda": 538,
         "tempo_colheita_horas": 24,
         "xp": 2,
-        "nivel_requerido": 14
+        "nivel_requerido": 14,
+        "img": "algodao.png",
+        "tipo": "semente",
     },
     {
-        "id": "seed_aloe_vera",
-        "nome": "Aloe vera - Babosa",
+        "id": "semente_aloe_vera",
+        "nome": "Aloe vera",
         "preco_compra": 200,
         "preco_venda": 349,
         "tempo_colheita_horas": 8,
         "xp": 1,
-        "nivel_requerido": 15
+        "nivel_requerido": 15,
+        "img": "aloe_vera.png",
+        "tipo": "semente",
     },
     {
-        "id": "seed_hortela",
+        "id": "semente_hortela",
         "nome": "Hortelã",
         "preco_compra": 250,
         "preco_venda": 510,
         "tempo_colheita_horas": 24,
         "xp": 2,
-        "nivel_requerido": 16
+        "nivel_requerido": 16,
+        "img": "alcachofra.png",
+        "tipo": "semente",
     },
     {
-        "id": "seed_espinafre",
+        "id": "semente_espinafre",
         "nome": "Espinafre",
         "preco_compra": 100,
         "preco_venda": 136,
         "tempo_colheita_horas": 0.0833,
         "xp": 1,
-        "nivel_requerido": 16
+        "nivel_requerido": 16,
+        "img": "espinafre.png",
+        "tipo": "semente",
     },
     {
-        "id": "seed_melancia",
+        "id": "semente_melancia",
         "nome": "Melancia",
         "preco_compra": 270,
         "preco_venda": 438,
         "tempo_colheita_horas": 72,
         "xp": 8,
-        "nivel_requerido": 16
+        "nivel_requerido": 16,
+        "img": "melancia.png",
+        "tipo": "semente",
     },
     {
-        "id": "seed_girassol",
+        "id": "semente_girassol",
         "nome": "Girassol",
         "preco_compra": 125,
         "preco_venda": 315,
         "tempo_colheita_horas": 24,
         "xp": 2,
-        "nivel_requerido": 17
+        "nivel_requerido": 17,
+        "img": "girassol.png",
+        "tipo": "semente",
     },
     {
-        "id": "seed_girassol_2",
-        "nome": "Girassol",
-        "preco_compra": 220,
-        "preco_venda": 402,
-        "tempo_colheita_horas": 12,
-        "xp": 1,
-        "nivel_requerido": 17
-    },
-    {
-        "id": "seed_cebola",
+        "id": "semente_cebola",
         "nome": "Cebola",
         "preco_compra": 170,
         "preco_venda": 275,
         "tempo_colheita_horas": 12,
         "xp": 1,
-        "nivel_requerido": 19
+        "nivel_requerido": 19,
+        "img": "cebola.png",
+        "tipo": "semente"
     }
 ]
 
@@ -237,10 +304,10 @@ export const arvores = [
         "tempo_colheita_horas": 48,
         "xp": 4,
         "nivel_requerido": 8,
-        "img": "planta1.png",
-        "escala": 0.5,
+        "img": "abrico.png",
+        "escala": 0.4,
         "area": [1, 1],
-        "origem": [0.5, 0.7],
+        "origem": [0.5, 0.85],
         "tipo": "arvore"
     },
     {
@@ -253,9 +320,9 @@ export const arvores = [
         "xp": 2,
         "nivel_requerido": 5,
         "img": "cerejeira.png",
-        "escala": 1.0,
+        "escala": 0.6,
         "area": [1, 1],
-        "origem": [0.5, 0.9],
+        "origem": [0.5, 0.75],
         "tipo": "arvore"
     },
     {
@@ -268,9 +335,9 @@ export const arvores = [
         "xp": 3,
         "nivel_requerido": 5,
         "img": "macieira.png",
-        "escala": 1.0,
+        "escala": 0.45,
         "area": [1, 1],
-        "origem": [0.5, 0.9],
+        "origem": [0.5, 0.85],
         "tipo": "arvore"
     },
     {
@@ -284,10 +351,10 @@ export const arvores = [
         "nivel_requerido": 10,
         "tipo": "arvore",
         "nivel_requerido": 5,
-        "img": "macieira.png",
-        "escala": 1.0,
+        "img": "pessegueiro.png",
+        "escala": 0.5,
         "area": [1, 1],
-        "origem": [0.5, 0.9],
+        "origem": [0.5, 0.75],
     },
     {
         "id": "arvore_nectarina",
@@ -298,7 +365,11 @@ export const arvores = [
         "tempo_colheita_horas": 72,
         "xp": 2,
         "nivel_requerido": 20,
-        "tipo": "arvore"
+        "tipo": "arvore",
+        "img": "nectarina.png",
+        "escala": 0.5,
+        "area": [1, 1],
+        "origem": [0.5, 0.82],
     }
 ]
 
@@ -316,7 +387,7 @@ export const animais = [
         "escala": 0.30,
         "area": [2, 3],
         "tipo": "animal",
-        "origem": [0.6, 0.5]
+        "origem": [0.6, 0.6]
     },
     {
         "id": "animal_frango",
@@ -327,7 +398,7 @@ export const animais = [
         "tempo_colheita_horas": 48,
         "xp": 100,
         "nivel_requerido": 4,
-        "img": "chicken.png",
+        "img": "galo.png",
         "escala": 0.15,
         "area": [1, 1],
         "origem": [0.4, 0.6],
@@ -358,7 +429,8 @@ export const animais = [
         "nivel_requerido": 7,
         "img": "ovelha.png",
         "escala": 0.25,
-        "area": [1, 1],
+        "area": [1, 2],
+        "origem": [0.6, 0.6],
         "tipo": "animal"
     }
 ]
@@ -390,7 +462,7 @@ export const decoracoes = [
         "img": "bangalo",
         "escala": 1.1,
         "area": [3, 3],
-        "origem": [0.5, 0.7]
+        "origem": [0.5, 0.8]
     },
     {
         "id": "cerca_branca",
@@ -406,7 +478,7 @@ export const decoracoes = [
         "escala": 0.4,
         "area": [5, 1],
         "origem": [0.5, 0.5],
-        "noStopBuy" : true
+        "noStopBuy": true
     },
     {
         "id": "cabana_de_descanso",
@@ -441,8 +513,8 @@ export const decoracoes = [
         "nivel_requerido": 10,
         "img": "cerca_madeira_CE_canto_inferior.png",
         "escala": 0.4,
-        "area": [5, 1],
-        "origem": [0.5, 0.5]
+        "area": [2, 4],
+        "origem": [0.35, 0.7]
     },
     {
         "id": "cerca_de_madeira_CD",
@@ -485,9 +557,10 @@ export const decoracoes = [
         "xp": 0,
         "nivel_requerido": 4,
         "img": "cerca_madeira_unico.png",
-        "escala": 0.4,
-        "area": [4, 1],
-        "origem": [0.5, 0.5]
+        "escala": 0.6,
+        "area": [5, 2],
+        "origem": [0.55, 0.65],
+        "origem_flip": [0.4, 0.65]
     },
     {
         "id": "poco",
@@ -499,9 +572,10 @@ export const decoracoes = [
         "xp": 0,
         "nivel_requerido": 4,
         "img": "toquinho.png",
-        "escala": 0.4,
-        "area": [1, 1],
-        "origem": [0.5, 0.55]
+        "escala": 0.6,
+        "area": [5, 4],
+        "origem": [0.5, 0.65]
+
     },
     {
         "id": "oficina",
@@ -573,9 +647,9 @@ export const decoracoes = [
         "xp": 820,
         "nivel_requerido": 0,
         "img": "armazem.png",
-        "escala": 0.8,
-        "area": [5, 5],
-        "origem": [0.5, 0.6]
+        "escala": 0.9,
+        "area": [6, 6],
+        "origem": [0.5, 0.7]
 
     },
     {
@@ -620,7 +694,7 @@ export const decoracoes = [
         "img": "moinho.png",
         "escala": 0.35,
         "area": [3, 3],
-        "origem" : [0.5, 0.85]
+        "origem": [0.5, 0.85]
     },
     {
         "id": "casa_da_fazenda",
@@ -672,8 +746,8 @@ export const decoracoes = [
         "xp": 1000,
         "nivel_requerido": 0,
         "img": "trator.png",
-        "escala": 0.15,
-        "area": [2, 4]
+        "escala": 0.2,
+        "area": [3, 4]
     },
     {
         "id": "trator_azul",
@@ -686,7 +760,7 @@ export const decoracoes = [
         "nivel_requerido": 0,
         "img": "trator2.png",
         "escala": 0.4,
-        "area": [2, 2]
+        "area": [3, 4]
     },
     {
         "id": "trator_verde",
@@ -712,7 +786,29 @@ export const decoracoes = [
         "nivel_requerido": 0,
         "img": "estabulo",
         "escala": 0.5,
-        "area": [1, 3]
+        "area": [2, 5],
+        "origem": [0.5, 0.65]
     }
 
+]
+
+export const solos = [
+    {
+        "nome": "solo_preparado",
+        "img": "solo.png",
+        "escala": 0.73,
+        "area": [4, 4],
+        "origem": [0.5, 0.58],
+        "tipo": "solo",
+        "noStopBuy": false
+    },
+    {
+        "nome": "solo_plantado_simples",
+        "img": "solo_plantado_simples.png",
+        "escala": 0.73,
+        "area": [4, 4],
+        "origem": [0.5, 0.58],
+        "tipo": "solo",
+        "noStopBuy": false
+    }
 ]
