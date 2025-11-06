@@ -63,16 +63,10 @@ export default class ItemMenuUI {
         this.hide();
         event.stopPropagation();
 
-        // this.scene.ignoreNextPointerUp = true;
-        // this.scene.uiBlocker.setVisible(true);
-        // this.scene.time.delayedCall(50, () => {
-        //     this.scene.ignoreNextPointerUp = false;
-        // });
-
-
         const sprite = this.scene.selectedSprite;
         if (!sprite) return;
         sprite.originalPosition = { x: sprite.x, y: sprite.y };
+        sprite.setAlpha(0.7);
         sprite.isMoving = true;
         this.gridUtils.ReOccupiedFences();
         sprite.setDepth(300);

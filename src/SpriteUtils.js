@@ -1,4 +1,4 @@
-import {plantar_solo} from "./msgs.js";
+import { plantar_solo } from "./msgs.js";
 
 export default class SpriteUtils {
 
@@ -26,23 +26,16 @@ export default class SpriteUtils {
 
         this.scene.input.setDraggable(sprite);
 
-        if (!this.hoverText) {
-            this.hoverText = this.scene.add.text(0, 0, "", {
-                fontSize: "12px",
-                fontFamily: "Arial",
-                color: "#ffffff",
-                padding: { x: 6, y: 3 }
-            }).setDepth(10000).setVisible(false);
-
-            this.scene.cameraController.ignoreInUICamera([this.hoverText]);
-        }
-
         if (is_semente) this.scene.planting = true;
+
 
         sprite.on('pointerup', (pointer) => {
             pointer.event.stopPropagation();
+            if (!this.scene.hoverEnabled) return;
 
             if (this.middleButtonDown) return;
+
+            if (this.scene.plantingBar) this.scene.hoverText.setVisible(false);
 
             if (!sprite.isMoving && sprite.tipo !== "solo") {
                 this.scene.selectedSprite = sprite;
@@ -60,25 +53,25 @@ export default class SpriteUtils {
 
             if (!sprite.isMoving) {
                 if (sprite.tipo !== "solo") {
-                    this.hoverText.setText(sprite.nome || "Sem nome");
+                    this.scene.hoverText.setText(sprite.nome || "Sem nome");
                 } else if (sprite.nome !== "solo_plantado_simples") {
-                    this.hoverText.setText(plantar_solo);
+                    this.scene.hoverText.setText(plantar_solo);
                 } else {
-                    this.hoverText.setText(sprite.plata_cultivada || "0%");
+                    this.scene.hoverText.setText(sprite.plata_cultivada || "0%");
                 }
-                
+
                 const offsetY = 5;
-                this.hoverText.setPosition(
-                    sprite.x - this.hoverText.width / 2,
+                this.scene.hoverText.setPosition(
+                    sprite.x - this.scene.hoverText.width / 2,
                     sprite.y - sprite.displayHeight / 2
                 );
-                this.hoverText.setVisible(true);
+                this.scene.hoverText.setVisible(true);
             }
         })
 
         sprite.on("pointerout", () => {
             sprite.clearTint()
-            this.hoverText.setVisible(false);
+            this.scene.hoverText.setVisible(false);
         })
 
         return sprite;

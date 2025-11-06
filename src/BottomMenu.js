@@ -10,29 +10,33 @@ export default class BottomMenu {
 
     createUI() {
         const { width, height } = this.scene.scale;
-        const menuWidth = 250;
+        const menuWidth = 270;
         const menuHeight = 60;
 
-        // Container principal
+        const upperMenuWidth = 40
+        const upperMenuHeight = 100
+
         this.containerUI = this.scene.add.container(0, 0).setDepth(1000);
         this.containerUI.setScrollFactor(0);
 
-        // Container do bottom menu
+        // this.upperMenu = this.scene.add.container(
+        //     width - upperMenuWidth - 90,
+        //     height - upperMenuHeight - 50
+        // )
+
         this.bottomMenu = this.scene.add.container(
-            width - menuWidth - 150,
+            width - menuWidth - 90,
             height - menuHeight - 20
         );
 
         this.containerUI.add(this.bottomMenu);
 
-        // Fundo do menu
         const bg = this.scene.add.rectangle(0, 0, menuWidth, menuHeight, 0x222222, 0.85)
             .setOrigin(0);
-        this.bottomMenu.add(bg);
 
-        // =========================
-        // Botão de Loja
-        // =========================
+        this.bottomMenu.add(bg);
+        // this.upperMenu.add(bg);
+
         const btnLoja = this.scene.add.text(menuWidth - 50, menuHeight / 2, "LOJA", {
             fontSize: '16px',
             fontFamily: 'LuckiestGuy-Regular',
@@ -80,7 +84,26 @@ export default class BottomMenu {
 
         btnContainer.setSize(50, 50);
         btnContainer.setInteractive({ useHandCursor: true });
-        this.bottomMenu.add([btnLoja, btnZoomIn, btnZoomOut, btnContainer]);
+
+        const btnContainerPa = this.scene.add.container(menuWidth - 240, menuHeight / 2);
+
+        const btnBgPa = this.scene.add.rectangle(0, 0, 50, 50, 0xfa0202, 1)
+            .setOrigin(0.5)
+            .setStrokeStyle(2, 0x000000);
+        btnContainerPa.add(btnBgPa);
+
+        // Imagem do botão
+        const btnCavar = this.scene.add.image(0, 0, "pa")
+            .setOrigin(0.5)
+            .setDisplaySize(40, 40);
+
+
+        btnContainerPa.add(btnCavar);
+
+        btnContainerPa.setSize(50, 50);
+        btnContainerPa.setInteractive({ useHandCursor: true });
+
+        this.bottomMenu.add([btnLoja, btnZoomIn, btnZoomOut, btnContainer, btnContainerPa]);
 
         btnContainer.on('pointerdown', () => {
             if (!this.scene.arando) {

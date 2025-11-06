@@ -61,6 +61,7 @@ export class IsoTest extends Phaser.Scene {
         this.load.image('proximo_button', 'assets/ui/proximo.png');
         this.load.image('anterior_button', 'assets/ui/anterior.png');
         this.load.image('enxada', 'assets/ui/enxada.png');
+        this.load.image('pa', 'assets/ui/pazinha.png');
 
         this.load.image('macieira.png', 'assets/arvore/macieira.png');
         this.load.image('pereira.png', 'assets/arvore/pereira.png');
@@ -149,6 +150,7 @@ export class IsoTest extends Phaser.Scene {
         this.buyItemTmp = null
         this.planting = false;
         this.plantingBar = false;
+        this.hoverEnabled = true;
 
         this.topUI = new TopUI(this);
         this.shopMenu = new ShopMenu(this);
@@ -167,13 +169,23 @@ export class IsoTest extends Phaser.Scene {
             fill: '#00ff00'
         });
 
+        this.hoverText = this.add.text(0, 0, "", {
+            fontSize: "12px",
+            fontFamily: "Arial",
+            color: "#ffffff",
+            padding: { x: 6, y: 3 }
+        })
+            .setDepth(10000)
+            .setVisible(false);
+
         this.cameraController.ignoreInUICamera([
             this.itemMenuUI.itemMenu,
             this.gridGraphics,
             this.sprites,
             this.footprintGraphics,
             // this.bonecoController.boneco,
-            this.previewTiles
+            this.previewTiles,
+            this.hoverText
         ]);
 
         this.cameraController.ignoreInMainCamera([
@@ -211,6 +223,7 @@ export class IsoTest extends Phaser.Scene {
 
                 this.gridUtils.clearOccupied(sprite);
                 this.gridUtils.markOccupied(sprite, startX, startY, w, h);
+                sprite.setAlpha(1);
 
                 sprite.lastFreePos = { startX, startY };
 
@@ -220,9 +233,7 @@ export class IsoTest extends Phaser.Scene {
                 this.selectedSprite = null;
                 this.gridUtils.drawFootprints();
 
-                for (let other of this.sprites) {
-                    other.setInteractive({ pixelPerfect: true, alphaTolerance: 1, useHandCursor: true });
-                }
+                this.ativarInteratividadeItens();
 
                 if (this.buyItemTmp) {
                     console.log(this.buyItemTmp)
@@ -324,6 +335,7 @@ export class IsoTest extends Phaser.Scene {
             sprite.lastFreePos = { startX, startY };
 
             sprite.clearTint();
+            sprite.setAlpha(1);
             sprite.isMoving = false;
             this.gridUtils.recalculateDepthAround(sprite);
 
@@ -333,9 +345,7 @@ export class IsoTest extends Phaser.Scene {
             this.selectedSprite = null;
             this.gridUtils.drawFootprints();
 
-            for (let other of this.sprites) {
-                other.setInteractive({ pixelPerfect: true, alphaTolerance: 1, useHandCursor: true });
-            }
+            this.ativarInteratividadeItens();
 
             if (this.buyItemTmp) {
                 console.log(this.buyItemTmp)
@@ -359,8 +369,6 @@ export class IsoTest extends Phaser.Scene {
 
         this.input.on('pointerup', (pointer) => {
 
-            console.log("aqui")
-
             if (!this.arando) return;
 
             if (this.freeClick) {
@@ -372,7 +380,7 @@ export class IsoTest extends Phaser.Scene {
             if (this.changeCameraZoom) return;
             if (this.middleButtonDown) return;
 
-            
+
             this.ararSolo();
 
         });
@@ -380,89 +388,31 @@ export class IsoTest extends Phaser.Scene {
         this.input.on('pointerup', () => {
             if (!this.planting) return;
             if (!this.selectedSprite) return;
-            if (!this.selectedSprite) return;
+            if (this.selectedSprite.nome != "solo_preparado") return;
+            if (!this.selectedSeed) return;
+
+            console.log(this.selectedSprite.nome)
 
             const solo = this.selectedSprite;
-            const seed = this.selectedSeed;
-
-            const iso = this.gridUtils.screenToIso(solo.x, solo.y);
 
             const startX = solo.x - 100 / 2
             const startY = solo.y - solo.displayHeight / 2
 
+            solo.setAlpha(0.7);
+            solo.disableInteractive();
+            this.setHoverEnabled(false);
+
             if (!this.plantingBar)
-                this.criarBarraProgresso(startX, startY, 50, 10, 1.8, this.plantarSemente)
+                this.criarBarraProgresso(startX, startY, 50, 10, 1.8, () => {
+                    this.plantarSemente();
+                    this.setHoverEnabled(true);
+                });
         })
 
         this.events.on('itemPurchased', (itemData) => {
             if (!itemData || !itemData.img) return;
 
-            const scale = itemData.escala;
-            let originX = 0.5;
-            let originY = 0.5;
-            let tipo = "normal";
-
-            if (itemData.origem) {
-                originX = itemData.origem[0];
-                originY = itemData.origem[1];
-            }
-
-            if (!itemData.tipo) {
-                itemData.tipo = tipo;
-            }
-
-            if (itemData.noStopBuy) this.buyItemTmp = itemData;
-
-            const sprite = this.spriteUtils.addGameSprite(itemData, this.scale.width / 2, this.scale.height / 2, scale, originX, originY);
-            if (itemData.area) {
-                sprite.footprint = itemData.area;
-                sprite.tipo = itemData.tipo;
-            }
-
-            sprite.nome = itemData.nome;
-            sprite.isMoving = true;
-            sprite.setDepth(2000);
-
-            if (sprite.tipo === "semente") {
-                sprite.tipo_plantacao = itemData.tipo_plantacao
-                this.selectedSeed = sprite
-            }
-            else
-                this.selectedSprite = sprite;
-
-            const { w, h } = this.gridUtils.getSpriteFootprint(sprite);
-
-            const iso = this.gridUtils.screenToIso(sprite.x, sprite.y);
-            const startX = Math.round(iso.x - (w / 2 - 0.5));
-            const startY = Math.round(iso.y - (h / 2 - 0.5));
-
-            sprite.lastFreePos = { startX, startY };
-
-            this.gridUtils.clearOccupied(sprite);
-
-            // Checa colisão imediatamente
-            const ocupado = this.gridUtils.checkOccupiedGrid(startX, startY, startX + w - 1, startY + h - 1, sprite);
-            sprite.setTint(ocupado ? 0xff8888 : 0x88ff88);
-
-
-            if (sprite.tipo !== "semente") {
-                for (let other of this.sprites) {
-                    if (other !== sprite) other.disableInteractive();
-                }
-            }
-            else {
-                for (let other of this.sprites) {
-                    if (other !== sprite && other.nome !== "solo_preparado") other.disableInteractive();
-                }
-            }
-
-
-            if (!this.sprites) this.sprites = [];
-            this.sprites.push(sprite);
-
-            this.cameraController.ignoreInUICamera([...this.sprites])
-
-            console.log("🛒 Novo item comprado, pronto pra posicionar.");
+            this.comprarItem(itemData)
         });
 
     }
@@ -485,6 +435,14 @@ export class IsoTest extends Phaser.Scene {
 
     }
 
+    setHoverEnabled(enabled) {
+        this.hoverEnabled = enabled;
+
+        if (!enabled) {
+            this.hoverText.setVisible(false);
+            this.input.manager.canvas.style.cursor = "default";
+        }
+    }
 
     startArando() {
         this.arando = true;
@@ -511,9 +469,7 @@ export class IsoTest extends Phaser.Scene {
         this.arando = false;
         this.clearPreviewTiles();
         this.previewOccupiedtiles = [];
-        for (let other of this.sprites) {
-            other.setInteractive({ pixelPerfect: true, alphaTolerance: 1, useHandCursor: true });
-        }
+        this.ativarInteratividadeItens();
     }
 
     updateSeed() {
@@ -535,7 +491,11 @@ export class IsoTest extends Phaser.Scene {
         // const sprite_del = this.selectedSeed;
         // sprite_del.destroy();
         // this.sprites = this.sprites.filter(s => s && s !== sprite_del && !s.destroyed);
+
         this.selectedSprite = null;
+
+        this.ativarInteratividadeItensPorNome("solo_prepadado");
+
         // this.planting = false;
     }
 
@@ -831,15 +791,16 @@ export class IsoTest extends Phaser.Scene {
         const barra = this.add.graphics();
         barra.fillStyle(0x000000, 0.5);
         barra.fillRect(x, y, largura, altura);
-        barra.setAlpha(0); // começa invisível
+        barra.setAlpha(0);
 
         const progresso = this.add.graphics();
-        progresso.setAlpha(0); // começa invisível também
+        progresso.setAlpha(0);
 
-        // Ignorar na câmera de UI
+        barra.setDepth(1999)
+        progresso.setDepth(1999)
+
         this.cameraController.ignoreInUICamera([progresso, barra]);
 
-        // Fade in suave
         this.tweens.add({
             targets: [barra, progresso],
             alpha: 1,
@@ -857,7 +818,7 @@ export class IsoTest extends Phaser.Scene {
                 const ratio = Phaser.Math.Clamp(elapsed / duracaoSegundos, 0, 1);
 
                 progresso.clear();
-                progresso.fillStyle(0x00ff00);
+                progresso.fillStyle(0xeb4034);
                 progresso.fillRect(x + 1, y + 1, (largura - 2) * ratio, altura - 2);
 
                 if (ratio >= 1) {
@@ -887,11 +848,10 @@ export class IsoTest extends Phaser.Scene {
     }
 
     plantarSemente() {
-        if (!this.selectedSeed || !this.selectedSprite || this.selectedSprite.nome !== "solo_preparado") return;
+        if (!this.selectedSeed || !this.selectedSprite || this.selectedSprite.nome != "solo_preparado") return;
         const semente = this.selectedSeed;
         const tipo_plantacao = semente.tipo_plantacao;
 
-        console.log(tipo_plantacao)
         if (!tipo_plantacao) return;
 
         const itemData = solos.find(solo => solo.nome === tipo_plantacao);
@@ -1016,57 +976,99 @@ export class IsoTest extends Phaser.Scene {
         }
     }
 
-}
+    comprarItem(itemData) {
 
-/*
+        const scale = itemData.escala;
+        let originX = 0.5;
+        let originY = 0.5;
+        let tipo = "normal";
 
-   updateArando() {
-        
-        if (this.middleButtonDown) return;
-        if (!this.arando) return;
-
-        const pointer = this.input.activePointer;
-        const cam = this.cameras.main;
-        const worldPoint = cam.getWorldPoint(pointer.x, pointer.y);
-
-        const iso = this.gridUtils.screenToIso(worldPoint.x, worldPoint.y);
-        const startX = Math.floor(iso.x);
-        const startY = Math.floor(iso.y);
-
-        this.clearPreviewTiles();
-
-        // Novo tamanho do campo arado (4x4)
-        const fieldSize = 4;
-
-        // Verifica se algum tile dentro da área 4x4 está ocupado
-        const occupied = this.gridUtils.checkOccupiedGrid(
-            startX,
-            startY,
-            startX + fieldSize - 1,
-            startY + fieldSize - 1,
-            null
-        );
-
-        const cornersIso = [
-            { x: startX, y: startY },                     // topo esquerdo
-            { x: startX + fieldSize, y: startY },         // topo direito
-            { x: startX + fieldSize, y: startY + fieldSize }, // baixo direito
-            { x: startX, y: startY + fieldSize }          // baixo esquerdo
-        ];
-
-        const cornersScreen = cornersIso.map(c => this.gridUtils.isoToScreen(c.x, c.y));
-
-        const points = [];
-        for (const c of cornersScreen) {
-            points.push(c.x, c.y);
+        if (itemData.origem) {
+            originX = itemData.origem[0];
+            originY = itemData.origem[1];
         }
 
-        const tile = this.add
-            .polygon(0, 0, points, occupied ? 0xff0000 : 0x00ff00, 0.5)
-            .setOrigin(0, 0);
+        if (!itemData.tipo) {
+            itemData.tipo = tipo;
+        }
 
-        this.previewOccupiedtiles = cornersIso;
-        this.previewTiles.push(tile);
-        this.cameraController.ignoreInUICamera([tile]);
+        if (itemData.noStopBuy) this.buyItemTmp = itemData;
+
+        const sprite = this.spriteUtils.addGameSprite(itemData, this.scale.width / 2, this.scale.height / 2, scale, originX, originY);
+
+        if (itemData.area) {
+            sprite.footprint = itemData.area;
+            sprite.tipo = itemData.tipo;
+        }
+
+        sprite.setAlpha(0.7);
+        sprite.nome = itemData.nome;
+        sprite.isMoving = true;
+        sprite.setDepth(2000);
+
+        if (sprite.tipo === "semente") {
+            sprite.tipo_plantacao = itemData.tipo_plantacao
+            this.selectedSeed = sprite
+            sprite.setAlpha(1);
+        }
+        else
+            this.selectedSprite = sprite;
+
+        const { w, h } = this.gridUtils.getSpriteFootprint(sprite);
+
+        const iso = this.gridUtils.screenToIso(sprite.x, sprite.y);
+        const startX = Math.round(iso.x - (w / 2 - 0.5));
+        const startY = Math.round(iso.y - (h / 2 - 0.5));
+
+        sprite.lastFreePos = { startX, startY };
+
+        this.gridUtils.clearOccupied(sprite);
+
+        const ocupado = this.gridUtils.checkOccupiedGrid(startX, startY, startX + w - 1, startY + h - 1, sprite);
+        sprite.setTint(ocupado ? 0xff8888 : 0x88ff88);
+
+        if (sprite.tipo !== "semente") {
+            for (let other of this.sprites) {
+                if (other !== sprite) other.disableInteractive();
+            }
+        }
+        else {
+            for (let other of this.sprites) {
+                if (other !== sprite && other.nome !== "solo_preparado") other.disableInteractive();
+            }
+        }
+
+
+        if (!this.sprites) this.sprites = [];
+        this.sprites.push(sprite);
+
+        this.cameraController.ignoreInUICamera([...this.sprites])
+
+        console.log("🛒 Novo item comprado, pronto pra posicionar.");
     }
-        */
+
+    desativarInteratividadeItens() {
+        for (let other of this.sprites) {
+            if (other !== this.selectedSprite) other.disableInteractive();
+        }
+    }
+
+
+    desativarInteratividadeItensExceto(nome) {
+        for (let other of this.sprites) {
+            if (other !== this.selectedSprite && other.nome !== nome) other.disableInteractive();
+        }
+    }
+
+    ativarInteratividadeItens() {
+        for (let other of this.sprites) {
+            other.setInteractive({ pixelPerfect: true, alphaTolerance: 1, useHandCursor: true });
+        }
+    }
+
+    ativarInteratividadeItensPorNome(nome) {
+        for (let other of this.sprites) {
+            if (other.nome === nome) other.setInteractive({ pixelPerfect: true, alphaTolerance: 1, useHandCursor: true });
+        }
+    }
+}
