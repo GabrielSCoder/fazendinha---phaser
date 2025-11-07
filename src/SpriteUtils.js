@@ -1,4 +1,4 @@
-import { plantar_solo } from "./msgs.js";
+import { plantar_solo, vender } from "./msgs.js";
 
 export default class SpriteUtils {
 
@@ -37,7 +37,10 @@ export default class SpriteUtils {
 
             if (this.scene.plantingBar) this.scene.hoverText.setVisible(false);
 
-            if (!sprite.isMoving && sprite.tipo !== "solo") {
+            if (this.scene.selling) {
+                this.scene.selectedSprite = sprite;
+                this.scene.venderItem();
+            } else if (!sprite.isMoving && sprite.tipo !== "solo") {
                 this.scene.selectedSprite = sprite;
                 this.scene.itemMenuUI.show(this.scene.selectedSprite.x, this.scene.selectedSprite.y, this.scene.selectedSprite);
             } else if (sprite.nome === "solo_preparado" && !this.scene.planting) {
@@ -52,13 +55,20 @@ export default class SpriteUtils {
             sprite.setTint(0xffff00);
 
             if (!sprite.isMoving) {
+                let text = ""
+
                 if (sprite.tipo !== "solo") {
-                    this.scene.hoverText.setText(sprite.nome || "Sem nome");
+                    text = sprite.nome || "Sem nome";
                 } else if (sprite.nome !== "solo_plantado_simples") {
-                    this.scene.hoverText.setText(plantar_solo);
+                    text = plantar_solo;
                 } else {
-                    this.scene.hoverText.setText(sprite.plata_cultivada || "0%");
+                    text = sprite.plata_cultivada || "0%";
                 }
+
+                if (this.scene.selling)
+                    text = text + "\n" + vender
+
+                this.scene.hoverText.setText(text);
 
                 const offsetY = 5;
                 this.scene.hoverText.setPosition(

@@ -82,14 +82,6 @@ export default class GridUtils {
             this.scene.gridHeight * 20
         );
 
-        if (!this.scene.matrixLabel) {
-            this.scene.matrixLabel = this.scene.add.text(
-                this.scene.matrixOffsetX,
-                this.scene.offsetY - 20,
-                'Matriz de ocupação',
-                { fontSize: '14px', color: '#ffffff' }
-            );
-        }
     }
 
     ReOccupiedFences() {
@@ -177,6 +169,7 @@ export default class GridUtils {
     drawFootprints() {
         this.scene.footprintGraphics.clear();
         for (let sprite of this.scene.sprites) {
+            if (sprite.nome === "tool") continue;
             const { w, h } = this.getSpriteFootprint(sprite);
             const iso = this.screenToIso(sprite.x, sprite.y);
             const startX = Math.round(iso.x - (w / 2 - 0.5));

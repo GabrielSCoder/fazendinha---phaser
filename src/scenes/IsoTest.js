@@ -117,8 +117,8 @@ export class IsoTest extends Phaser.Scene {
     create() {
 
         this.gridSize = 32;
-        this.gridWidth = 14;
-        this.gridHeight = 14;
+        this.gridWidth = 10;
+        this.gridHeight = 10;
         this.offsetX = 550;
         this.offsetY = 200;
         this.logicFactor = 2;
@@ -127,12 +127,20 @@ export class IsoTest extends Phaser.Scene {
             () => Array(this.gridHeight * this.logicFactor).fill(null));
 
         this.matrixGraphics = this.add.graphics();
+        this.matrixGraphics.setVisible(false);
         this.matrixOffsetX = this.offsetX - 500
         this.gridUtils.drawMatrix();
 
         this.gridGraphics = this.add.graphics();
 
         this.footprintGraphics = this.add.graphics();
+
+        this.matrixLabel = this.add.text(
+            this.matrixOffsetX,
+            this.offsetY - 20,
+            'Matriz de ocupação',
+            { fontSize: '14px', color: '#ffffff' }
+        ).setVisible(false);
 
         this.gridStart();
 
@@ -149,8 +157,10 @@ export class IsoTest extends Phaser.Scene {
         this.tileSize = this.gridSize;
         this.buyItemTmp = null
         this.planting = false;
+        this.selling = false;
         this.plantingBar = false;
         this.hoverEnabled = true;
+        this.matrixVisible = false;
 
         this.topUI = new TopUI(this);
         this.shopMenu = new ShopMenu(this);
@@ -160,6 +170,7 @@ export class IsoTest extends Phaser.Scene {
         this.selectedSprite = null;
         this.selectedSeed = null;
         this.collisionDataTemp = null;
+        this.toolSprite = null;
         // this.storedItemsContainer = this.add.container(50, 50).setDepth(500);
 
         // this.bonecoController = new BonecoController(this);
@@ -255,10 +266,9 @@ export class IsoTest extends Phaser.Scene {
                         s.setInteractive({ pixelPerfect: true, alphaTolerance: 1, useHandCursor: true });
                     }
                 });
-
-            }
-
-            if (this.shopMenu.isOpen() && this.arando) {
+            } else if (this.shopMenu.isOpen() && this.selling) {
+                this.stopSell();
+            } else if (this.shopMenu.isOpen() && this.arando) {
                 this.cancelArar();
             }
 
@@ -422,6 +432,8 @@ export class IsoTest extends Phaser.Scene {
         const fps = Math.floor(this.game.loop.actualFps);
         this.fpsText.setText(`FPS: ${fps}`);
 
+        this.updateSelling();
+
         this.updateFence();
 
         this.updateArando();
@@ -445,6 +457,11 @@ export class IsoTest extends Phaser.Scene {
     }
 
     startArando() {
+        if (this.arando) return;
+
+        if (this.planting) this.stopSeed();
+        if (this.selling) this.stopSell();
+
         this.arando = true;
     }
 
@@ -453,7 +470,6 @@ export class IsoTest extends Phaser.Scene {
         this.clearPreviewTiles();
     }
 
-    // Limpa previews antigos
     clearPreviewTiles() {
         for (let tile of this.previewTiles) {
             tile.destroy();
@@ -475,6 +491,8 @@ export class IsoTest extends Phaser.Scene {
     updateSeed() {
         if (!this.planting) return;
         if (!this.selectedSeed) return;
+        if (this.selling) this.stopSell();
+        if (this.arando) this.stopArando();
 
         const sprite = this.selectedSeed;
 
@@ -484,19 +502,88 @@ export class IsoTest extends Phaser.Scene {
         sprite.y = pointer.worldY
     }
 
-    stopSeed() {
+    freeSolo() {
         if (!this.planting) return;
         if (!this.selectedSeed) return;
         this.selectedSeed.setDepth(2000);
-        // const sprite_del = this.selectedSeed;
-        // sprite_del.destroy();
-        // this.sprites = this.sprites.filter(s => s && s !== sprite_del && !s.destroyed);
 
         this.selectedSprite = null;
 
         this.ativarInteratividadeItensPorNome("solo_prepadado");
 
         // this.planting = false;
+    }
+
+    stopSeed() {
+        if (!this.planting) return;
+        if (!this.selectedSeed) return;
+        this.selectedSeed.setDepth(2000);
+
+        const sprite_del = this.selectedSeed;
+        sprite_del.destroy();
+        this.sprites = this.sprites.filter(s => s && s !== sprite_del && !s.destroyed);
+
+        this.selectedSprite = null;
+        this.selectedSeed = null;
+
+        this.ativarInteratividadeItensPorNome("solo_prepadado");
+
+        this.planting = false;
+    }
+
+    startSell() {
+        if (this.selling) return;
+
+        if (this.arando) this.cancelArar();
+
+        if (this.planting) this.stopSeed();
+
+        let originX = 0.5;
+        let originY = 0.5;
+        let scale = 0.2
+        let itemData = { img: "pa" }
+
+        const sprite = this.spriteUtils.addGameSprite(itemData, this.scale.width / 2, this.scale.height / 2, scale, originX, originY);
+
+        sprite.nome = "tool";
+        sprite.isMoving = true;
+        sprite.setDepth(2000);
+        sprite.disableInteractive();
+
+        this.toolSprite = sprite;
+
+        if (!this.sprites) this.sprites = [];
+        this.sprites.push(sprite);
+
+        this.cameraController.ignoreInUICamera([...this.sprites])
+
+        this.selling = true
+    }
+
+    stopSell() {
+        if (!this.selling) return;
+        if (!this.toolSprite) return;
+
+        const sprite_del = this.toolSprite;
+        sprite_del.destroy();
+        this.sprites = this.sprites.filter(s => s && s !== sprite_del && !s.destroyed);
+
+        this.toolSprite = null;
+        this.selling = false;
+
+        console.log("venda cancelada");
+    }
+
+    updateSelling() {
+        if (!this.selling) return;
+        if (!this.toolSprite) return;
+
+        const sprite = this.toolSprite;
+
+        const pointer = this.input.activePointer;
+
+        sprite.x = pointer.worldX + 10
+        sprite.y = pointer.worldY - 10
     }
 
     updateFence() {
@@ -588,10 +675,11 @@ export class IsoTest extends Phaser.Scene {
         }
     }
 
-
     updateArando(blocksWide = 1, blocksHigh = 1) {
         if (this.middleButtonDown) return;
         if (!this.arando) return;
+        if (this.selling) this.stopSell();
+        if (this.planting) this.stopSeed();
 
         const pointer = this.input.activePointer;
         const cam = this.cameras.main;
@@ -665,7 +753,6 @@ export class IsoTest extends Phaser.Scene {
         this.previewTiles.push(outerBorder);
         this.cameraController.ignoreInUICamera([outerBorder]);
     }
-
 
     getSpriteByPointerPosition() {
 
@@ -867,9 +954,9 @@ export class IsoTest extends Phaser.Scene {
         const originY = itemData.origem?.[1] ?? 0.5;
         const tipo = itemData.tipo || "solo";
 
-        const { w, h } = this.gridUtils.getSpriteFootprint(itemData);
+        const { w, h } = this.gridUtils.getSpriteFootprint(this.selectedSprite);
 
-        const iso = this.gridUtils.screenToIso(sprite_del.x, sprite_del.y);
+        const iso = this.gridUtils.screenToIso(this.selectedSprite.x, this.selectedSprite.y);
         const startX = Math.round(iso.x - (w / 2 - 0.5));
         const startY = Math.round(iso.y - (h / 2 - 0.5));
 
@@ -891,11 +978,10 @@ export class IsoTest extends Phaser.Scene {
         this.sprites.push(sprite);
         this.cameraController.ignoreInUICamera([...this.sprites])
 
-        this.gridUtils.clearOccupied(sprite);
         this.gridUtils.markOccupied(sprite, startX, startY, w, h);
         this.gridUtils.recalculateDepthAround(sprite);
 
-        this.stopSeed();
+        this.freeSolo();
     }
 
     ararSolo() {
@@ -1045,6 +1131,25 @@ export class IsoTest extends Phaser.Scene {
         this.cameraController.ignoreInUICamera([...this.sprites])
 
         console.log("🛒 Novo item comprado, pronto pra posicionar.");
+    }
+
+    venderItem() {
+        if (!this.selectedSprite) return;
+        if (!this.selling) return;
+        if (!this.toolSprite) return;
+
+        const item = this.selectedSprite;
+        this.gridUtils.clearOccupied(item);
+
+        this.hoverText.setVisible(false);
+        const sprite_del = item;
+        sprite_del.destroy();
+        this.sprites = this.sprites.filter(s => s && s !== sprite_del && !s.destroyed);
+
+        this.selectedSprite = null;
+
+        this.gridUtils.drawFootprints();
+        this.gridUtils.drawMatrix();
     }
 
     desativarInteratividadeItens() {
