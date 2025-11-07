@@ -63,7 +63,7 @@ export default class ItemMenuUI {
         this.hide();
         event.stopPropagation();
 
-        const sprite = this.scene.selectedSprite;
+        const sprite = this.scene.gameVariables.selectedSprite;
         if (!sprite) return;
         sprite.originalPosition = { x: sprite.x, y: sprite.y };
         sprite.setAlpha(0.7);
@@ -71,14 +71,14 @@ export default class ItemMenuUI {
         this.gridUtils.ReOccupiedFences();
         sprite.setDepth(300);
 
-        for (let other of this.scene.sprites) {
+        for (let other of this.scene.gameVariables.sprites) {
             if (other !== sprite) other.disableInteractive();
         }
 
     }
 
     onRotateClick() {
-        const sprite = this.scene.selectedSprite;
+        const sprite = this.scene.gameVariables.selectedSprite;
         if (!sprite || !sprite.footprint) return;
         this.hide();
 
@@ -114,14 +114,14 @@ export default class ItemMenuUI {
 
         sprite.lastFreePos = { startX, startY };
 
-        for (let other of this.scene.sprites) {
+        for (let other of this.scene.gameVariables.sprites) {
             if (other !== sprite) other.disableInteractive();
         }
 
         // const ocupado = this.gridUtils.checkOccupiedGrid(startX, startY, startX + w - 1, startY + h - 1, sprite);
         sprite.isMoving = true;
         sprite.setDepth(2000);
-        this.scene.selectedSprite = sprite;
+        this.scene.gameVariables.selectedSprite = sprite;
         
         // if (ocupado) {
         //     console.log("❌ Tile ocupado — revertendo sprite.");

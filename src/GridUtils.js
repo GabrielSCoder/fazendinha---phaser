@@ -1,6 +1,48 @@
 export default class GridUtils {
     constructor(scene) {
         this.scene = scene;
+
+        this.gridSize = scene.gameVariables.gridSize;
+        this.gridWidth = scene.gameVariables.gridWidth;
+        this.gridHeight = scene.gameVariables.gridHeight;
+        this.offsetX = scene.gameVariables.offsetX;
+        this.offsetY = scene.gameVariables.offsetY;
+        this.logicFactor = scene.gameVariables.logicFactor;
+        this.input = scene.input;
+        this.itemMenuUI = scene.itemMenuUI;
+        this.gridUtils = scene.gridUtils;
+    }
+
+    gridStart() {
+        const g = this.scene.gridGraphics;
+        g.clear();
+
+        const fillColor = 0x00ff00;
+        const fillAlpha = 0.15;
+
+        for (let x = 0; x < this.gridWidth * 2; x++) {
+            for (let y = 0; y < this.gridHeight * 2; y++) {
+                const p1 = this.isoToScreen(x, y, this.gridSize, this.offsetX, this.offsetY);
+                const p2 = this.isoToScreen(x + 1, y, this.gridSize, this.offsetX, this.offsetY);
+                const p3 = this.isoToScreen(x + 1, y + 1, this.gridSize, this.offsetX, this.offsetY);
+                const p4 = this.isoToScreen(x, y + 1, this.gridSize, this.offsetX, this.offsetY);
+
+                g.beginPath();
+                g.moveTo(p1.x, p1.y);
+                g.lineTo(p2.x, p2.y);
+                g.lineTo(p3.x, p3.y);
+                g.lineTo(p4.x, p4.y);
+                g.closePath();
+
+                // Preenche a célula
+                g.fillStyle(fillColor, fillAlpha);
+                g.fillPath();
+
+                // (Opcional) desenha contorno leve
+                g.lineStyle(1, 0x00ff00, 0.3);
+                g.strokePath();
+            }
+        }
     }
 
     snapToGrid(sprite) {
@@ -9,8 +51,8 @@ export default class GridUtils {
         const startX = Math.round(iso.x - (w / 2 - 0.5));
         const startY = Math.round(iso.y - (h / 2 - 0.5));
 
-        const maxW = this.scene.gridMap.length;
-        const maxH = this.scene.gridMap[0].length;
+        const maxW = this.scene.gameVariables.gridMap.length;
+        const maxH = this.scene.gameVariables.gridMap[0].length;
 
         const clampedX = Phaser.Math.Clamp(startX, 0, maxW - w);
         const clampedY = Phaser.Math.Clamp(startY, 0, maxH - h);
@@ -31,16 +73,16 @@ export default class GridUtils {
         const w = this.scene.gridSize;
         const h = this.scene.gridSize / 2;
         return {
-            x: this.scene.offsetX + (x - y) * (w / 2),
-            y: this.scene.offsetY + (x + y) * (h / 2)
+            x: this.offsetX + (x - y) * (w / 2),
+            y: this.offsetY + (x + y) * (h / 2)
         };
     }
 
     screenToIso(x, y) {
         const w = this.scene.gridSize;
         const h = this.scene.gridSize / 2;
-        const isoX = ((x - this.scene.offsetX) / (w / 2) + (y - this.scene.offsetY) / (h / 2)) / 2;
-        const isoY = ((y - this.scene.offsetY) / (h / 2) - (x - this.scene.offsetX) / (w / 2)) / 2;
+        const isoX = ((x - this.offsetX) / (w / 2) + (y - this.offsetY) / (h / 2)) / 2;
+        const isoY = ((y - this.offsetY) / (h / 2) - (x - this.offsetX) / (w / 2)) / 2;
         return { x: isoX, y: isoY };
     }
 
@@ -48,10 +90,10 @@ export default class GridUtils {
         for (let x = startX; x <= endX; x++) {
             for (let y = startY; y <= endY; y++) {
                 if (x < 0 || y < 0 ||
-                    x >= this.scene.gridMap.length ||
-                    y >= this.scene.gridMap[0].length)
+                    x >= this.scene.gameVariables.gridMap.length ||
+                    y >= this.scene.gameVariables.gridMap[0].length)
                     return true;
-                const cell = this.scene.gridMap[x][y];
+                const cell = this.scene.gameVariables.gridMap[x][y];
                 if (cell && cell !== sprite) return true;
             }
         }
@@ -61,14 +103,14 @@ export default class GridUtils {
     drawMatrix() {
         this.scene.matrixGraphics.clear();
 
-        for (let y = 0; y < this.scene.gridHeight * 2; y++) {
-            for (let x = 0; x < this.scene.gridWidth * 2; x++) {
-                const occupied = this.scene.gridMap[x][y] ? true : false;
+        for (let y = 0; y < this.gridHeight * 2; y++) {
+            for (let x = 0; x < this.gridWidth * 2; x++) {
+                const occupied = this.scene.gameVariables.gridMap[x][y] ? true : false;
                 const color = occupied ? 0xe74c3c : 0x2ecc71;
                 this.scene.matrixGraphics.fillStyle(color, 1);
                 this.scene.matrixGraphics.fillRect(
                     this.scene.matrixOffsetX + x * 10,
-                    this.scene.offsetY + y * 10,
+                    this.offsetY + y * 10,
                     10, 10
                 );
             }
@@ -77,15 +119,15 @@ export default class GridUtils {
         this.scene.matrixGraphics.lineStyle(1, 0xffffff, 0.5);
         this.scene.matrixGraphics.strokeRect(
             this.scene.matrixOffsetX,
-            this.scene.offsetY,
-            this.scene.gridWidth * 20,
-            this.scene.gridHeight * 20
+            this.offsetY,
+            this.gridWidth * 20,
+            this.gridHeight * 20
         );
 
     }
 
     ReOccupiedFences() {
-        const fences = this.scene.sprites.filter(c => c.tipo === "cerca");
+        const fences = this.scene.gameVariables.sprites.filter(c => c.tipo === "cerca");
 
         fences.forEach(fence => {
             //console.log("tamanho", fences.length);
@@ -108,7 +150,7 @@ export default class GridUtils {
     markOccupied(sprite, startX, startY, w, h) {
         for (let x = startX; x < startX + w; x++) {
             for (let y = startY; y < startY + h; y++) {
-                this.scene.gridMap[x][y] = sprite;
+                this.scene.gameVariables.gridMap[x][y] = sprite;
             }
         }
         this.drawMatrix();
@@ -116,10 +158,10 @@ export default class GridUtils {
 
 
     clearOccupied(sprite) {
-        for (let x = 0; x < this.scene.gridWidth * 2; x++) {
-            for (let y = 0; y < this.scene.gridHeight * 2; y++) {
-                if (this.scene.gridMap[x][y] === sprite) {
-                    this.scene.gridMap[x][y] = null;
+        for (let x = 0; x < this.gridWidth * 2; x++) {
+            for (let y = 0; y < this.gridHeight * 2; y++) {
+                if (this.scene.gameVariables.gridMap[x][y] === sprite) {
+                    this.scene.gameVariables.gridMap[x][y] = null;
                 }
             }
         }
@@ -128,8 +170,8 @@ export default class GridUtils {
 
     addOccupiedTile(x, y, sprite) {
         if (!sprite) return;
-        if (x < 0 || y < 0 || x >= this.scene.gridWidth * this.scene.logicalFactor || y >= this.scene.gridHeight * this.scene.logicalFactor) return;
-        this.scene.gridMap[x][y] = sprite;
+        if (x < 0 || y < 0 || x >= this.gridWidth * this.scene.logicalFactor || y >= this.gridHeight * this.scene.logicalFactor) return;
+        this.scene.gameVariables.gridMap[x][y] = sprite;
         this.drawMatrix();
     }
 
@@ -137,8 +179,8 @@ export default class GridUtils {
     // 2️⃣ Função para limpar um tile ocupado, garantindo que o sprite correto seja removido
     // --------------------
     clearOccupiedtile(x, y) {
-        if (x < 0 || y < 0 || x >= this.scene.gridWidth * this.scene.logicalFactor || y >= this.scene.gridHeight * this.scene.logicalFactor) return;
-        this.scene.gridMap[x][y] = null;
+        if (x < 0 || y < 0 || x >= this.gridWidth * this.scene.logicalFactor || y >= this.gridHeight * this.scene.logicalFactor) return;
+        this.scene.gameVariables.gridMap[x][y] = null;
         this.drawMatrix();
     }
 
@@ -155,7 +197,7 @@ export default class GridUtils {
             if (!x || !y) return;
 
             // Verifica se o antigo dono ainda ocupa esse tile
-            if (oldSprite && this.scene.gridMap[x][y] === null) {
+            if (oldSprite && this.scene.gameVariables.gridMap[x][y] === null) {
                 this.addOccupiedTile(x, y, oldSprite);
             }
 
@@ -168,7 +210,7 @@ export default class GridUtils {
 
     drawFootprints() {
         this.scene.footprintGraphics.clear();
-        for (let sprite of this.scene.sprites) {
+        for (let sprite of this.scene.gameVariables.sprites) {
             if (sprite.nome === "tool") continue;
             const { w, h } = this.getSpriteFootprint(sprite);
             const iso = this.screenToIso(sprite.x, sprite.y);
@@ -177,10 +219,10 @@ export default class GridUtils {
 
             for (let i = 0; i < w; i++) {
                 for (let j = 0; j < h; j++) {
-                    const p1 = this.isoToScreen(startX + i, startY + j, this.scene.gridSize, this.scene.offsetX, this.scene.offsetY);
-                    const p2 = this.isoToScreen(startX + i + 1, startY + j, this.scene.gridSize, this.scene.offsetX, this.scene.offsetY);
-                    const p3 = this.isoToScreen(startX + i + 1, startY + j + 1, this.scene.gridSize, this.scene.offsetX, this.scene.offsetY);
-                    const p4 = this.isoToScreen(startX + i, startY + j + 1, this.scene.gridSize, this.scene.offsetX, this.scene.offsetY);
+                    const p1 = this.isoToScreen(startX + i, startY + j, this.scene.gridSize, this.offsetX, this.offsetY);
+                    const p2 = this.isoToScreen(startX + i + 1, startY + j, this.scene.gridSize, this.offsetX, this.offsetY);
+                    const p3 = this.isoToScreen(startX + i + 1, startY + j + 1, this.scene.gridSize, this.offsetX, this.offsetY);
+                    const p4 = this.isoToScreen(startX + i, startY + j + 1, this.scene.gridSize, this.offsetX, this.offsetY);
 
                     this.scene.footprintGraphics.fillStyle(0x2ecc71, 0.25);
                     this.scene.footprintGraphics.beginPath();
@@ -208,10 +250,10 @@ export default class GridUtils {
 
         for (let i = 0; i < w; i++) {
             for (let j = 0; j < h; j++) {
-                const p1 = this.isoToScreen(startX + i, startY + j, this.scene.gridSize, this.scene.offsetX, this.scene.offsetY);
-                const p2 = this.isoToScreen(startX + i + 1, startY + j, this.scene.gridSize, this.scene.offsetX, this.scene.offsetY);
-                const p3 = this.isoToScreen(startX + i + 1, startY + j + 1, this.scene.gridSize, this.scene.offsetX, this.scene.offsetY);
-                const p4 = this.isoToScreen(startX + i, startY + j + 1, this.scene.gridSize, this.scene.offsetX, this.scene.offsetY);
+                const p1 = this.isoToScreen(startX + i, startY + j, this.scene.gridSize, this.offsetX, this.offsetY);
+                const p2 = this.isoToScreen(startX + i + 1, startY + j, this.scene.gridSize, this.offsetX, this.offsetY);
+                const p3 = this.isoToScreen(startX + i + 1, startY + j + 1, this.scene.gridSize, this.offsetX, this.offsetY);
+                const p4 = this.isoToScreen(startX + i, startY + j + 1, this.scene.gridSize, this.offsetX, this.offsetY);
 
                 this.scene.footprintGraphics.fillStyle(0x2ecc71, 0.25);
                 this.scene.footprintGraphics.beginPath();
@@ -229,16 +271,16 @@ export default class GridUtils {
         const charSprite = this.scene.boneco;
 
         const { w, h } = this.getSpriteFootprint(charSprite);
-        const iso = this.screenToIso(charSprite.x, charSprite.y, this.scene.gridSize, this.scene.offsetX, this.scene.offsetY);
+        const iso = this.screenToIso(charSprite.x, charSprite.y, this.scene.gridSize, this.offsetX, this.offsetY);
         const startX = Math.round(iso.x - (w / 2 - 0.5));
         const startY = Math.round(iso.y - (h / 2 - 0.5));
 
         for (let i = 0; i < w; i++) {
             for (let j = 0; j < h; j++) {
-                const p1 = this.isoToScreen(startX + i, startY + j, this.scene.gridSize, this.scene.offsetX, this.scene.offsetY);
-                const p2 = this.isoToScreen(startX + i + 1, startY + j, this.scene.gridSize, this.scene.offsetX, this.scene.offsetY);
-                const p3 = this.isoToScreen(startX + i + 1, startY + j + 1, this.scene.gridSize, this.scene.offsetX, this.scene.offsetY);
-                const p4 = this.isoToScreen(startX + i, startY + j + 1, this.scene.gridSize, this.scene.offsetX, this.scene.offsetY);
+                const p1 = this.isoToScreen(startX + i, startY + j, this.scene.gridSize, this.offsetX, this.offsetY);
+                const p2 = this.isoToScreen(startX + i + 1, startY + j, this.scene.gridSize, this.offsetX, this.offsetY);
+                const p3 = this.isoToScreen(startX + i + 1, startY + j + 1, this.scene.gridSize, this.offsetX, this.offsetY);
+                const p4 = this.isoToScreen(startX + i, startY + j + 1, this.scene.gridSize, this.offsetX, this.offsetY);
 
                 this.scene.footprintGraphics.fillStyle(0xff0000, 0.25);
                 this.scene.footprintGraphics.beginPath();
@@ -265,7 +307,7 @@ export default class GridUtils {
         const targetY = sprite.y;
         const gridSize = this.scene.gridSize;
 
-        const neighbors = this.scene.sprites.filter(s => {
+        const neighbors = this.scene.gameVariables.sprites.filter(s => {
             const dx = Math.abs(s.x - targetX);
             const dy = Math.abs(s.y - targetY);
             return dx <= radius * gridSize && dy <= radius * gridSize;
@@ -278,13 +320,13 @@ export default class GridUtils {
             if (footprintTiles.length === 1) {
                 const base = footprintTiles[0];
 
-                const normalCandidates = this.scene.sprites.filter(n => {
+                const normalCandidates = this.scene.gameVariables.sprites.filter(n => {
                     if (n === s) return false;
                     const nTiles = this.getSpriteFootprintTiles(n);
                     return nTiles.some(t => t.x === base.x + 1 && t.y === base.y + 1);
                 });
 
-                const flippedCandidates = this.scene.sprites.filter(n => {
+                const flippedCandidates = this.scene.gameVariables.sprites.filter(n => {
                     if (n === s) return false;
                     const nTiles = this.getSpriteFootprintTiles(n);
                     return nTiles.some(t => t.x === base.x - 1 && t.y === base.y + 1);
@@ -352,7 +394,7 @@ export default class GridUtils {
 
 
     recalculateAllDepths() {
-        this.scene.sprites.forEach(s => {
+        this.scene.gameVariables.sprites.forEach(s => {
             const iso = this.gridUtils.screenToIso(s.x, s.y);
             s.setDepth(iso.x + iso.y * 10);
         });
@@ -366,9 +408,9 @@ export default class GridUtils {
     }
 
     findPath(start, goal) {
-        const gridMap = this.scene.gridMap;      // já 28x28
-        const gridWidth = this.scene.gridWidth * 2;  // 14*2 = 28
-        const gridHeight = this.scene.gridHeight * 2; // idem
+        const gridMap = this.scene.gameVariables.gridMap;      // já 28x28
+        const gridWidth = this.gridWidth * 2;  // 14*2 = 28
+        const gridHeight = this.gridHeight * 2; // idem
 
         const openSet = [start];
         const cameFrom = new Map();
@@ -452,14 +494,14 @@ export default class GridUtils {
 
 
     markGround(startX, startY, w, h, value = 'ground') {
-        const map = this.scene.gridMap;
+        const map = this.scene.gameVariables.gridMap;
 
         for (let x = startX; x < startX + w; x++) {
             for (let y = startY; y < startY + h; y++) {
                 // Ignora posições fora do limite do grid
                 if (x < 0 || y < 0 ||
-                    x >= this.scene.gridMap.length ||
-                    y >= this.scene.gridMap[0].length)
+                    x >= this.scene.gameVariables.gridMap.length ||
+                    y >= this.scene.gameVariables.gridMap[0].length)
                     return true;
                 // Marca o valor no mapa
                 map[x][y] = value;
@@ -474,14 +516,14 @@ export default class GridUtils {
 
 
     checkOccupiedBlock(startX, startY, w, h) {
-        const map = this.scene.gridMap;
+        const map = this.scene.gameVariables.gridMap;
 
         for (let x = startX; x < startX + w; x++) {
             for (let y = startY; y < startY + h; y++) {
                 // Se a área passar dos limites do grid, consideramos "ocupado"
                 if (x < 0 || y < 0 ||
-                    x >= this.scene.gridMap.length ||
-                    y >= this.scene.gridMap[0].length)
+                    x >= this.scene.gameVariables.gridMap.length ||
+                    y >= this.scene.gameVariables.gridMap[0].length)
                     return true;
 
                 const cell = map[x]?.[y];
@@ -622,8 +664,8 @@ export default class GridUtils {
                 edgeContact.x === hMaxX ? "right" : null
 
 
-                    // console.log("----------> ", direction);
-        const grid = this.scene.gridMap;
+        // console.log("----------> ", direction);
+        const grid = this.scene.gameVariables.gridMap;
 
         if (grid) {
 
@@ -820,7 +862,7 @@ export default class GridUtils {
         if (fenceA === fenceB) return null;
         if (fenceA.tipo !== "cerca" || fenceB.tipo !== "cerca") return null;
 
-        const grid = this.scene.gridMap;
+        const grid = this.scene.gameVariables.gridMap;
         if (!grid) return null;
 
 

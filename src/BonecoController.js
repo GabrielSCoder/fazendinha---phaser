@@ -79,7 +79,7 @@ export default class BonecoController {
     handlePointer(pointer) {
         const scene = this.scene;
         const boneco = this.boneco;
-        if (!boneco || scene.middleButtonDown || this.isStoped) return;
+        if (!boneco || scene.gameVariables.middleButtonDown || this.isStoped) return;
 
         if (scene.shopMenu.isOpen() && boneco.isMoving) {
             this.stopMovement();
@@ -113,7 +113,6 @@ export default class BonecoController {
         this.gridUtils.drawPathDebug(path);
     }
 
-    // === Atualização de movimento ===
     update() {
         const boneco = this.boneco;
 
@@ -163,7 +162,6 @@ export default class BonecoController {
         boneco.setFlipX(boneco._shouldFlipX);
     }
 
-    // === Atualiza frente/costas e flip ===
     computeAndApplyFacingFromGridVec(fromGrid, toGrid) {
         const boneco = this.boneco;
 
@@ -191,15 +189,12 @@ export default class BonecoController {
             flipX = true;
         }
 
-        // ---- Aplica flip se mudou ----
         if (flipX !== boneco._shouldFlipX) {
             boneco._shouldFlipX = flipX;
             boneco.setFlipX(flipX);
         }
 
-        // ---- Toca a animação correta sempre que necessário ----
         const animKey = dir === 'costas' ? 'andar_costas' : 'andar_frente';
-        // adiciona o flip na verificação para forçar re-play se necessário
         const currentAnimKey = boneco.anims.currentAnim?.key;
         if (currentAnimKey !== animKey || !boneco.anims.isPlaying) {
             boneco.play(animKey, true);
@@ -209,6 +204,3 @@ export default class BonecoController {
     }
 
 }
-
-
-

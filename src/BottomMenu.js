@@ -1,4 +1,4 @@
-// BottomMenu.js
+
 export default class BottomMenu {
     constructor(scene, config = {}) {
         this.scene = scene;
@@ -113,39 +113,31 @@ export default class BottomMenu {
         this.bottomMenu.add([btnLoja, btnContainer, btnContainerPa]);
 
         btnMatriz.on('pointerup', () => {
-            const visible = this.scene.matrixVisible
+            const visible = this.scene.gameVariables.matrixVisible
             this.scene.matrixGraphics.setVisible(!visible)
             this.scene.matrixLabel.setVisible(!visible)
-            this.scene.matrixVisible = !visible;
+            this.scene.gameVariables.matrixVisible = !visible;
         })
 
         btnContainer.on('pointerdown', () => {
-            if (!this.scene.arando) {
-                this.scene.freeClick = true;
-                for (let sprite of this.scene.sprites) {
-                    sprite.disableInteractive();
-                }
-            }
+            // if (!this.arando) {
+            //     this.scene.gameVariables.freeClick = true;
+            // }
         });
 
         btnContainer.on('pointerup', () => {
-            this.scene.arando = !this.scene.arando;
-            if (!this.scene.arando) {
-                this.scene.clearPreviewTiles();
-                for (let other of this.scene.sprites) {
-                    other.setInteractive({ pixelPerfect: true, alphaTolerance: 1, useHandCursor: true });
-                }
-            }
+            const arando = this.scene.gameVariables.arando;
+            arando ? this.scene.acoesUtils.stopArando() : this.scene.acoesUtils.startArando();
         });
 
         btnContainerPa.on('pointerdown', () => {
-            if (!this.scene.selling) {
-                this.scene.freeClick = true;
+            if (!this.scene.gameVariables.selling) {
+                this.scene.gameVariables.freeClick = true;
             }
         });
 
         btnContainerPa.on('pointerup', () => {
-            this.scene.selling ? this.scene.stopSell() : this.scene.startSell();
+            this.scene.gameVariables.selling ? this.scene.acoesUtils.stopSell() : this.scene.acoesUtils.startSell();
         });
 
         btnLoja.on('pointerdown', () => {
@@ -154,7 +146,7 @@ export default class BottomMenu {
         });
 
         btnZoomIn.on('pointerup', () => {
-            this.scene.freeClick = true;
+            this.scene.gameVariables.freeClick = true;
             this.scene.itemMenuUI.hide()
             const cam = this.scene.cameras.main;
             const zoomChange = 0.15;
@@ -163,7 +155,7 @@ export default class BottomMenu {
         });
 
         btnZoomOut.on('pointerup', () => {
-            this.scene.freeClick = true;
+            this.scene.gameVariables.freeClick = true;
             this.scene.itemMenuUI.hide()
             const cam = this.scene.cameras.main;
             const zoomChange = -0.15;
