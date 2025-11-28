@@ -5,11 +5,11 @@ import BottomMenu from '../bottomMenu.js';
 import ItemMenuUI from '../ItemMenuUI.js';
 import GridUtils from "../GridUtils.js";
 import BonecoController from '../BonecoController.js';
-import { sementes, solos } from '../objects.js';
 import SpriteUtils from '../spriteUtils.js';
 import AcoesUtils from "../AcoesUtils.js";
 import GameVariablesController from '../GameVariablesController.js';
 import GameEventsController from '../GameEventsController.js';
+import ActionQueue from '../ActionQueueController.js';
 
 export class IsoTest extends Phaser.Scene {
     constructor() {
@@ -145,6 +145,7 @@ export class IsoTest extends Phaser.Scene {
 
         this.gridUtils.gridStart();
 
+        this.queue = new ActionQueue();
         this.topUI = new TopUI(this);
         this.shopMenu = new ShopMenu(this);
         this.bottomMenu = new BottomMenu(this, { shopMenu: this.shopMenu });
@@ -200,7 +201,7 @@ export class IsoTest extends Phaser.Scene {
         this.input.setDraggable(this.gameVariables.sprites);
 
         this.input.on("pointerup", () => {
-          this.gameEvents.colocarCercasCheck();
+            this.gameEvents.colocarCercasCheck();
         });
 
         this.input.on('pointerup', () => {
@@ -229,7 +230,10 @@ export class IsoTest extends Phaser.Scene {
         });
 
         this.input.on('pointerup', () => {
-           this.gameEvents.plantarSementeCheck()
+            this.queue.add((done) => {
+                this.gameEvents.plantarSementeCheck()
+                done();
+            })
         })
 
         this.events.on('itemPurchased', (itemData) => {

@@ -185,6 +185,7 @@ export default class GameEventsController {
                 this.scene.acoesUtils.plantarSemente();
                 this.scene.acoesUtils.setHoverEnabled(true);
             });
+
     }
 
     ararSoloCheck() {
