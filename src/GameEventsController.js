@@ -46,7 +46,9 @@ export default class GameEventsController {
     abrirLojaCheck() {
         if (this.scene.shopMenu.isOpen() && this.scene.gameVariables.planting) {
             const sprite = this.scene.gameVariables.selectedSeed;
-            sprite.destroy();
+
+            if (sprite)
+                sprite.destroy();
 
             this.scene.gameVariables.sprites = this.scene.gameVariables.sprites.filter(
                 (s) => s && s !== sprite && !s.destroyed
@@ -184,19 +186,6 @@ export default class GameEventsController {
             });
     }
 
-    markI(solo, done) {
-
-        const startX = solo.x - 100 / 2;
-        const startY = solo.y - solo.displayHeight / 2;
-
-        this.scene.acoesUtils.criarBarraProgresso(startX, startY, 50, 10, 1.8, () => {
-            solo.setAlpha(0.7)
-            solo.isQueued = false;
-            done();
-        })
-    }
-
-
     ararSoloCheck(pointer, done) {
         if (!this.scene.gameVariables.arando) return;
 
@@ -212,6 +201,7 @@ export default class GameEventsController {
     }
 
     controleSolo() {
+
         if (!this.scene.gameVariables.arando) return;
         if (!this.scene.gameVariables.previewOccupiedtiles?.length) return;
         if (this.scene.queue.isFull()) return;
@@ -223,12 +213,19 @@ export default class GameEventsController {
         reserva.sprite.setAlpha(0.4);
 
         this.scene.queue.add({
+
             sprite: reserva.sprite,
+
             action: (done) => {
                 reserva.sprite.setAlpha(0.7);
                 this.scene.acoesUtils.executarArarSolo(reserva, done);
-            }}
-        )
+            },
+
+            onCancel: () => {
+                this.scene.acoesUtils.cancelReserva(reserva);
+            }
+
+        });
     }
 
     controleSolo2() {
@@ -279,7 +276,6 @@ export default class GameEventsController {
     }
 
 
-
     constrolePlantar() {
         const solo = this.scene.gameVariables.selectedSprite;
 
@@ -298,10 +294,20 @@ export default class GameEventsController {
         solo.disableInteractive();
 
         this.scene.queue.add({
+
             sprite: solo,
+
             action: (done) => {
                 this.plantarSementeCheck(solo, done);
+            },
+
+            onCancel: () => {
+                solo.clearTint();
+                solo.setAlpha(1);
+                solo.isQueued = false;
+                solo.setInteractive({ useHandCursor: true });
             }
+
         });
     }
 }

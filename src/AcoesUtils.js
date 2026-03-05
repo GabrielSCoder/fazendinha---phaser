@@ -869,7 +869,7 @@ export default class AcoesUtils {
         sprite.tipo = tipo;
         sprite.disableInteractive();
 
-        this.gridUtils.markGround(startX, startY, blockSize, blockSize);
+        this.gridUtils.markTemporaryReserved(startX, startY, blockSize, blockSize);
 
         if (!this.scene.gameVariables.sprites)
             this.scene.gameVariables.sprites = [];
@@ -892,13 +892,30 @@ export default class AcoesUtils {
 
         const { gridStartX, gridStartY, blockSize } = sprite;
 
-        // Remove reserva temporária
-        // this.gridUtils.clearTemporaryReserved(gridStartX, gridStartY, blockSize, blockSize);
+        this.gridUtils.clearTemporaryReserved(
+            gridStartX,
+            gridStartY,
+            blockSize,
+            blockSize
+        );
 
-        this.gridUtils.markGround(gridStartX, gridStartY, blockSize, blockSize);
-        this.gridUtils.markOccupied(sprite, gridStartX, gridStartY, blockSize, blockSize);
+        this.gridUtils.markGround(
+            gridStartX,
+            gridStartY,
+            blockSize,
+            blockSize
+        );
+
+        this.gridUtils.markOccupied(
+            sprite,
+            gridStartX,
+            gridStartY,
+            blockSize,
+            blockSize
+        );
 
         this.gridUtils.recalculateDepthAround(sprite);
+
     }
 
     executarArarSolo(reserva, done) {
@@ -920,15 +937,21 @@ export default class AcoesUtils {
         );
     }
 
-    cancelReserva(sprite) {
+    cancelReserva(reserva) {
+
+        const sprite = reserva.sprite;
 
         const { gridStartX, gridStartY, blockSize } = sprite;
 
-        this.gridUtils.clearTemporaryReserved(gridStartX, gridStartY, blockSize, blockSize);
+        this.gridUtils.clearTemporaryReserved(
+            gridStartX,
+            gridStartY,
+            blockSize,
+            blockSize
+        );
 
         sprite.destroy();
     }
-
     criarReservaSolo2(tile) {
 
         if (!tile) return null;

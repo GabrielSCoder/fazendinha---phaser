@@ -225,16 +225,12 @@ export class IsoTest extends Phaser.Scene {
             }
         });
 
-        // this.input.on('pointerup', (pointer) => {
-        //     this.gameEvents.ararSoloCheck()
-        // });
 
         this.input.on('pointerup', () => {
             this.gameEvents.controleSolo();
         });
 
 
-        //Função queue das sementes;
         this.input.on('pointerup', (pointer) => {
 
             this.gameEvents.constrolePlantar();

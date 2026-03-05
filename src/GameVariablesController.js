@@ -12,18 +12,22 @@ export default class GameVariablesController {
         this.gridMap = Array.from({ length: this.gridWidth * this.logicFactor },
             () => Array(this.gridHeight * this.logicFactor).fill(null));
 
+        this.gridReserved = Array.from({ length: this.gridWidth * this.logicFactor },
+            () => Array(this.gridHeight * this.logicFactor).fill(null));
+            
         this.sprites = [];
         this.spriteInitialPositions = new Map();
         this.middleButtonDown = false;
         this.freeClick = false;
         this.ignoreNextPointerUp = false;
         this.changeCameraZoom = false;
-        this.arando = false;
         this.previewTiles = [];
         this.previewOccupiedtiles = [];
         this.fenceSnapTarget = null;
         this.tileSize = this.gridSize;
-        this.buyItemTmp = null
+
+        this.arando = false;
+        this.buyItemTmp = null;
         this.planting = false;
         this.selling = false;
         this.plantingBar = false;
@@ -32,6 +36,7 @@ export default class GameVariablesController {
 
         this.selectedSprite = null;
         this.selectedSeed = null;
+        
         this.collisionDataTemp = null;
         this.toolSprite = null;
 

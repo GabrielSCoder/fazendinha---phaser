@@ -515,19 +515,17 @@ export default class GridUtils {
     }
 
 
-    checkOccupiedBlock(startX, startY, w, h) {
+    checkOccupiedBlock2(startX, startY, w, h) {
         const map = this.scene.gameVariables.gridMap;
 
         for (let x = startX; x < startX + w; x++) {
             for (let y = startY; y < startY + h; y++) {
-                // Se a área passar dos limites do grid, consideramos "ocupado"
                 if (x < 0 || y < 0 ||
                     x >= this.scene.gameVariables.gridMap.length ||
                     y >= this.scene.gameVariables.gridMap[0].length)
                     return true;
 
                 const cell = map[x]?.[y];
-                // Se a célula tem qualquer valor que não seja null/undefined/false — é ocupada
                 if (cell) return true;
             }
         }
@@ -983,6 +981,86 @@ export default class GridUtils {
         }
     }
 
+    initReservedGrid(width, height) {
+
+        this.scene.gameVariables.gridReserved = [];
+
+        for (let x = 0; x < width; x++) {
+
+            this.scene.gameVariables.gridReserved[x] = [];
+
+            for (let y = 0; y < height; y++) {
+                this.scene.gameVariables.gridReserved[x][y] = null;
+            }
+
+        }
+
+    }
+
+    markTemporaryReserved(startX, startY, w, h, sprite = true) {
+
+        const reserved = this.scene.gameVariables.gridReserved;
+
+        for (let x = startX; x < startX + w; x++) {
+
+            for (let y = startY; y < startY + h; y++) {
+
+                reserved[x][y] = sprite;
+
+            }
+
+        }
+
+        this.drawMatrix();
+
+    }
+
+    clearTemporaryReserved(startX, startY, w, h) {
+
+        const reserved = this.scene.gameVariables.gridReserved;
+
+        for (let x = startX; x < startX + w; x++) {
+
+            for (let y = startY; y < startY + h; y++) {
+
+                reserved[x][y] = null;
+
+            }
+
+        }
+
+        this.drawMatrix();
+
+    }
+
+    checkOccupiedBlock(startX, startY, w, h) {
+
+        const grid = this.scene.gameVariables.gridMap;
+        const reserved = this.scene.gameVariables.gridReserved;
+
+        for (let x = startX; x < startX + w; x++) {
+            for (let y = startY; y < startY + h; y++) {
+
+                if (
+                    x < 0 ||
+                    y < 0 ||
+                    x >= grid.length ||
+                    y >= grid[0].length
+                ) {
+                    return true;
+                }
+
+                const cell = grid[x]?.[y];
+                const reservedCell = reserved?.[x]?.[y];
+
+                if (cell || reservedCell) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
 }
 
 

@@ -58,15 +58,8 @@ export default class ActionQueue {
 
         this.queue.forEach(item => {
 
-            const sprite = item.sprite;
-
-            if (!sprite) return;
-
-            sprite.setAlpha(1);
-            sprite.isQueued = false;
-
-            if (!sprite.destroyed) {
-                sprite.setInteractive({ useHandCursor: true });
+            if (item.onCancel) {
+                item.onCancel(item);
             }
 
         });
@@ -79,6 +72,10 @@ export default class ActionQueue {
     cancelCurrent() {
 
         if (!this.current) return;
+
+        if (this.current.onCancel) {
+            this.current.onCancel();
+        }
 
         const sprite = this.current.sprite;
 
