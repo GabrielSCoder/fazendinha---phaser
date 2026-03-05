@@ -1,7 +1,8 @@
 export default class ItemMenuUI {
-    constructor(scene) {
+    constructor(scene, config = {}) {
         this.scene = scene;
         this.gridUtils = scene.gridUtils;
+         this.uiEvents = config.uiEvents;
 
         this.itemMenu = scene.add.container(0, 0)
             .setDepth(2000)
@@ -51,9 +52,10 @@ export default class ItemMenuUI {
     }
 
     hide() {
-        this.itemMenu.setVisible(false);
         this.selectedSprite = null;
+        this.itemMenu.setVisible(false);
     }
+
 
     isVisibile() {
         return this.itemMenu.visible
@@ -121,7 +123,7 @@ export default class ItemMenuUI {
         // const ocupado = this.gridUtils.checkOccupiedGrid(startX, startY, startX + w - 1, startY + h - 1, sprite);
         sprite.isMoving = true;
         sprite.setDepth(2000);
-        this.scene.gameVariables.selectedSprite = sprite;
+        // this.scene.gameVariables.selectedSprite = sprite;
         
         // if (ocupado) {
         //     console.log("❌ Tile ocupado — revertendo sprite.");

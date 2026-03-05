@@ -27,6 +27,9 @@ export default class SpriteUtils {
 
         sprite.on('pointerup', (pointer) => {
             pointer.event.stopPropagation();
+
+            if (sprite.isReserved) return;
+
             if (!this.scene.gameVariables.hoverEnabled) return;
 
             if (this.scene.gameVariables.middleButtonDown) return;
@@ -48,17 +51,22 @@ export default class SpriteUtils {
                 sprite.nome === "solo_preparado" &&
                 !this.scene.gameVariables.planting
             ) {
+                this.scene.shopMenu.activeCategory = 'Sementes';
                 this.scene.shopMenu.open();
             } else if (
                 sprite.nome === "solo_preparado" &&
                 this.scene.gameVariables.planting &&
                 this.scene.gameVariables.selectedSeed
             ) {
+                console.log("aqui")
                 this.scene.gameVariables.selectedSprite = sprite;
             }
         });
 
         sprite.on("pointerover", () => {
+
+            if (sprite.isReserved) return;
+            
             sprite.setTint(0xffff00);
 
             if (!sprite.isMoving) {
@@ -73,7 +81,7 @@ export default class SpriteUtils {
                 }
 
                 if (this.scene.gameVariables.selling)
-                    text = text + "\n" + vender;
+                    text = vender;
 
                 this.scene.hoverText.setText(text);
 

@@ -37,5 +37,6 @@ export default class GameVariablesController {
 
         this.actionQueue = [];
         this.isProcessingAction = false;
+        this.eventsCenter = new Phaser.Events.EventEmitter();
     }
 }

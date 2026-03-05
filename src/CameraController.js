@@ -9,6 +9,10 @@ export default class CameraController {
         this.camStart = { x: 0, y: 0 };
 
         this.setupDragControls();
+
+        const cam = this.mainCamera;
+        const newZoom = 1.599999999
+        cam.setZoom(newZoom);
     }
 
     // === Permite adicionar entidades que devem ser ignoradas ===

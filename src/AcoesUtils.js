@@ -1,7 +1,7 @@
 import { solos } from "./objects.js"
 
 export default class AcoesUtils {
-    constructor(scene) {
+    constructor(scene, config = {}) {
         this.scene = scene;
 
         this.gridSize = scene.gameVariables.gridSize;
@@ -13,6 +13,7 @@ export default class AcoesUtils {
         this.input = scene.input;
         this.itemMenuUI = scene.itemMenuUI;
         this.gridUtils = scene.gridUtils;
+        this.uiEvents = config.uiEvents;
     }
 
     setHoverEnabled(enabled) {
@@ -29,7 +30,7 @@ export default class AcoesUtils {
 
         if (this.scene.gameVariables.planting) this.stopSeed();
         if (this.scene.gameVariables.selling) this.stopSell();
-
+        this.desativarInteratividadeItens();
         this.scene.gameVariables.arando = true;
 
         console.log(this.scene.gameVariables.arando);
@@ -41,6 +42,7 @@ export default class AcoesUtils {
         this.scene.gameVariables.arando = false;
         this.clearPreviewTiles();
         console.log("parando arar");
+        this.ativarInteratividadeItens()
     }
 
     clearPreviewOccupiedTiles() {
@@ -106,7 +108,7 @@ export default class AcoesUtils {
         this.scene.gameVariables.selectedSprite = null;
         this.scene.gameVariables.selectedSeed = null;
 
-        this.ativarInteratividadeItensPorNome("solo_prepadado");
+        this.ativarInteratividadeItens();
 
         this.scene.gameVariables.planting = false;
     }
@@ -133,7 +135,7 @@ export default class AcoesUtils {
 
         sprite.nome = "tool";
         sprite.isMoving = true;
-        sprite.setDepth(2000);
+        sprite.setDepth(9999);
         sprite.disableInteractive();
 
         this.scene.gameVariables.toolSprite = sprite;
@@ -239,9 +241,11 @@ export default class AcoesUtils {
 
         if (this.scene.gameVariables.planting) return;
 
+
         if (this.scene.gameVariables.selectedSprite && this.scene.gameVariables.selectedSprite.isMoving) {
             const sprite = this.scene.gameVariables.selectedSprite;
             const pointer = this.scene.input.activePointer;
+            // this.uiEvents.emit('ui:desativarBottonMenu');
 
             if (this.scene.gameVariables.middleButtonDown) return;
 
@@ -329,7 +333,8 @@ export default class AcoesUtils {
                 const tile = this.scene.add
                     .polygon(0, 0, points, fillColor, 0.35)
                     .setStrokeStyle(1, borderColor, 0.9)
-                    .setOrigin(0, 0);
+                    .setOrigin(0, 0)
+                    .setDepth(9999);
 
                 this.scene.gameVariables.previewTiles.push(tile);
                 this.scene.cameraController.ignoreInUICamera([tile]);
@@ -527,8 +532,8 @@ export default class AcoesUtils {
         return { barra, progresso };
     }
 
-    plantarSemente() {
-        if (!this.scene.gameVariables.selectedSeed || !this.scene.gameVariables.selectedSprite || this.scene.gameVariables.selectedSprite.nome != "solo_preparado") return;
+    plantarSemente(solo) {
+        if (!this.scene.gameVariables.selectedSeed || !solo || solo.nome != "solo_preparado") return;
         const semente = this.scene.gameVariables.selectedSeed;
         const tipo_plantacao = semente.tipo_plantacao;
 
@@ -538,7 +543,7 @@ export default class AcoesUtils {
 
         if (!itemData) return;
 
-        const sprite_del = this.scene.gameVariables.selectedSprite;
+        const sprite_del = solo;
         sprite_del.destroy();
         this.scene.gameVariables.sprites = this.scene.gameVariables.sprites.filter(s => s && s !== sprite_del && !s.destroyed);
 
@@ -547,9 +552,9 @@ export default class AcoesUtils {
         const originY = itemData.origem?.[1] ?? 0.5;
         const tipo = itemData.tipo || "solo";
 
-        const { w, h } = this.gridUtils.getSpriteFootprint(this.scene.gameVariables.selectedSprite);
+        const { w, h } = this.gridUtils.getSpriteFootprint(solo);
 
-        const iso = this.gridUtils.screenToIso(this.scene.gameVariables.selectedSprite.x, this.scene.gameVariables.selectedSprite.y);
+        const iso = this.gridUtils.screenToIso(solo.x, solo.y);
         const startX = Math.round(iso.x - (w / 2 - 0.5));
         const startY = Math.round(iso.y - (h / 2 - 0.5));
 
@@ -591,7 +596,6 @@ export default class AcoesUtils {
 
             const blockSize = 4;
 
-            // Guarda os blocos efetivamente ocupados
             const placedTiles = [];
 
             for (const tile of this.scene.gameVariables.previewOccupiedtiles) {
@@ -630,8 +634,8 @@ export default class AcoesUtils {
                 sprite.lastFreePos = { startX, startY };
                 sprite.isMoving = false;
                 sprite.nome = itemData.nome || "solo_preparado";
-                // sprite.setAlpha(0.7);
-                // sprite.disableInteractive();
+                sprite.disableInteractive();
+                sprite.setAlpha(0.7);
 
                 if (!this.scene.gameVariables.sprites) this.scene.gameVariables.sprites = [];
                 this.scene.gameVariables.sprites.push(sprite);
@@ -641,6 +645,10 @@ export default class AcoesUtils {
                 this.gridUtils.recalculateDepthAround(sprite);
 
                 placedTiles.push({ startX, startY, endX, endY });
+
+                this.scene.acoesUtils.criarBarraProgresso(screenPos.x, screenPos.y, 50, 10, 1.8, () => {
+                    sprite.setAlpha(1.0)
+                })
             }
 
             this.scene.gameVariables.previewOccupiedtiles = placedTiles;
@@ -797,4 +805,184 @@ export default class AcoesUtils {
         }
     }
 
+    ararSoloAction(done) {
+        const reserva = this.criarReservaSolo();
+
+        if (!reserva) return done();
+
+        this.criarBarraProgresso(
+            reserva.screenX,
+            reserva.screenY,
+            50,
+            10,
+            1.8,
+            () => {
+                this.confirmarSolo(reserva.sprite);
+                done();
+            }
+        );
+    }
+
+    criarReservaSolo() {
+
+        const tile = this.scene.gameVariables.previewOccupiedtiles[0];
+        if (!tile) return null;
+
+        const blockSize = 4;
+        const startX = tile.startX ?? tile.x;
+        const startY = tile.startY ?? tile.y;
+
+        const ocupado = this.gridUtils.checkOccupiedBlock(startX, startY, blockSize, blockSize);
+        if (ocupado) return null;
+
+        const itemData = solos.find(c => c.nome === "solo_preparado");
+        if (!itemData) return null;
+
+        const scale = itemData.escala || 1;
+        const originX = itemData.origem?.[0] ?? 0.5;
+        const originY = itemData.origem?.[1] ?? 0.5;
+        const tipo = itemData.tipo || "solo";
+
+        const w = blockSize;
+        const h = blockSize;
+
+        const centerX = startX + (w / 2) - (1 - originX - 0.25);
+        const centerY = startY + (h / 2) - (1 - originY - 0.18);
+
+        const screenPos = this.gridUtils.isoToScreen(centerX, centerY);
+
+        const sprite = this.scene.spriteUtils.addGameSprite(
+            itemData,
+            screenPos.x,
+            screenPos.y,
+            scale,
+            originX,
+            originY
+        );
+
+        sprite.setAlpha(0.4);
+        sprite.isReserved = true;
+        sprite.gridStartX = startX;
+        sprite.gridStartY = startY;
+        sprite.blockSize = blockSize;
+        sprite.nome = "solo_preparado";
+        sprite.tipo = tipo;
+        sprite.disableInteractive();
+
+        this.gridUtils.markGround(startX, startY, blockSize, blockSize);
+
+        if (!this.scene.gameVariables.sprites)
+            this.scene.gameVariables.sprites = [];
+
+        this.scene.gameVariables.sprites.push(sprite);
+
+        this.scene.cameraController.ignoreInUICamera([...this.scene.gameVariables.sprites]);
+
+        return {
+            sprite,
+            screenX: screenPos.x,
+            screenY: screenPos.y
+        };
+    }
+
+    confirmarSolo(sprite) {
+
+        sprite.setAlpha(1);
+        sprite.isReserved = false;
+
+        const { gridStartX, gridStartY, blockSize } = sprite;
+
+        // Remove reserva temporária
+        // this.gridUtils.clearTemporaryReserved(gridStartX, gridStartY, blockSize, blockSize);
+
+        this.gridUtils.markGround(gridStartX, gridStartY, blockSize, blockSize);
+        this.gridUtils.markOccupied(sprite, gridStartX, gridStartY, blockSize, blockSize);
+
+        this.gridUtils.recalculateDepthAround(sprite);
+    }
+
+    executarArarSolo(reserva, done) {
+
+        const { sprite, screenX, screenY } = reserva;
+
+        this.criarBarraProgresso(
+            screenX,
+            screenY,
+            50,
+            10,
+            1.8,
+            () => {
+
+                this.confirmarSolo(sprite);
+
+                done();
+            }
+        );
+    }
+
+    cancelReserva(sprite) {
+
+        const { gridStartX, gridStartY, blockSize } = sprite;
+
+        this.gridUtils.clearTemporaryReserved(gridStartX, gridStartY, blockSize, blockSize);
+
+        sprite.destroy();
+    }
+
+    criarReservaSolo2(tile) {
+
+        if (!tile) return null;
+
+        const blockSize = 4;
+        const startX = tile.startX ?? tile.x;
+        const startY = tile.startY ?? tile.y;
+
+        const ocupado = this.gridUtils.checkOccupiedBlock(startX, startY, blockSize, blockSize);
+        if (ocupado) return null;
+
+        const itemData = solos.find(c => c.nome === "solo_preparado");
+        if (!itemData) return null;
+
+        const scale = itemData.escala || 1;
+        const originX = itemData.origem?.[0] ?? 0.5;
+        const originY = itemData.origem?.[1] ?? 0.5;
+        const tipo = itemData.tipo || "solo";
+
+        const w = blockSize;
+        const h = blockSize;
+
+        const centerX = startX + (w / 2) - (1 - originX - 0.25);
+        const centerY = startY + (h / 2) - (1 - originY - 0.18);
+
+        const screenPos = this.gridUtils.isoToScreen(centerX, centerY);
+
+        const sprite = this.scene.spriteUtils.addGameSprite(
+            itemData,
+            screenPos.x,
+            screenPos.y,
+            scale,
+            originX,
+            originY
+        );
+
+        sprite.setAlpha(0.4);
+        sprite.isReserved = true;
+        sprite.gridStartX = startX;
+        sprite.gridStartY = startY;
+        sprite.blockSize = blockSize;
+        sprite.nome = "solo_preparado";
+        sprite.tipo = tipo;
+        sprite.disableInteractive();
+
+        this.gridUtils.markGround(startX, startY, blockSize, blockSize);
+
+        if (!this.scene.gameVariables.sprites)
+            this.scene.gameVariables.sprites = [];
+
+        this.scene.gameVariables.sprites.push(sprite);
+
+        this.scene.cameraController.ignoreInUICamera([...this.scene.gameVariables.sprites]);
+
+        return sprite;
+    }
 }

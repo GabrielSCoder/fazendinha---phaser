@@ -308,7 +308,8 @@ export const arvores = [
         "escala": 0.4,
         "area": [1, 1],
         "origem": [0.5, 0.85],
-        "tipo": "arvore"
+        "tipo": "arvore",
+        "noStopBuy": true
     },
     {
         "id": "arvore_abrico",

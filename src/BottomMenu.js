@@ -4,8 +4,10 @@ export default class BottomMenu {
         this.scene = scene;
         this.shopMenu = config.shopMenu || null;
         this.itemMenu = config.itemMenu || null;
-
+        this.uiEvents = config.uiEvents;
+        this.buttons = {};
         this.createUI();
+        this.registerEvents();
     }
 
     createUI() {
@@ -37,7 +39,7 @@ export default class BottomMenu {
 
         this.bottomMenu.add(bg);
 
-        const btnLoja = this.scene.add.text(menuWidth - 40, menuHeight / 2, "LOJA", {
+        this.btnLoja = this.scene.add.text(menuWidth - 40, menuHeight / 2, "LOJA", {
             fontSize: '16px',
             fontFamily: 'LuckiestGuy-Regular',
             color: '#fff',
@@ -47,7 +49,7 @@ export default class BottomMenu {
             .setOrigin(0.5)
             .setInteractive({ useHandCursor: true });
 
-        const btnMatriz = this.scene.add.text(menuWidth - 100, menuHeight / 2, "Matriz", {
+        this.btnMatriz = this.scene.add.text(menuWidth - 100, menuHeight / 2, "Matriz", {
             fontSize: '14px',
             fontFamily: 'LuckiestGuy-Regular',
             color: 'white',
@@ -57,7 +59,18 @@ export default class BottomMenu {
             .setOrigin(0.5)
             .setInteractive({ useHandCursor: true });
 
-        const btnZoomIn = this.scene.add.text(menuWidth - 50, menuHeight / 2, "+", {
+        this.btnCancelar = this.scene.add.text(menuWidth - 180, menuHeight / 2, "Cancelar", {
+            fontSize: '14px',
+            fontFamily: 'LuckiestGuy-Regular',
+            color: 'white',
+            backgroundColor: '#d31d1d',
+            padding: { left: 8, right: 8, top: 4, bottom: 4 }
+        })
+            .setOrigin(0.5)
+            .setInteractive({ useHandCursor: true })
+            .setVisible(false);
+
+        this.btnZoomIn = this.scene.add.text(menuWidth - 50, menuHeight / 2, "+", {
             fontSize: '20px',
             fontFamily: 'LuckiestGuy-Regular',
             color: 'white',
@@ -67,7 +80,7 @@ export default class BottomMenu {
             .setOrigin(0.5)
             .setInteractive({ useHandCursor: true });
 
-        const btnZoomOut = this.scene.add.text(menuWidth - 20, menuHeight / 2, "-", {
+        this.btnZoomOut = this.scene.add.text(menuWidth - 20, menuHeight / 2, "-", {
             fontSize: '20px',
             fontFamily: 'LuckiestGuy-Regular',
             color: 'white',
@@ -77,84 +90,106 @@ export default class BottomMenu {
             .setOrigin(0.5)
             .setInteractive({ useHandCursor: true });
 
-        const btnContainer = this.scene.add.container(menuWidth - 100, menuHeight / 2);
+        this.btnContainer = this.scene.add.container(menuWidth - 100, menuHeight / 2);
 
-        const btnBg = this.scene.add.rectangle(0, 0, 50, 50, 0x54c848, 1)
+        this.btnBg = this.scene.add.rectangle(0, 0, 50, 50, 0x54c848, 1)
             .setOrigin(0.5)
             .setStrokeStyle(2, 0x000000);
-        btnContainer.add(btnBg);
+        this.btnContainer.add(this.btnBg);
 
-        const btnArar = this.scene.add.image(0, 0, "enxada")
+        this.btnArar = this.scene.add.image(0, 0, "enxada")
             .setOrigin(0.5)
             .setDisplaySize(40, 40);
 
-        btnContainer.add(btnArar);
+        this.btnContainer.add(this.btnArar);
 
-        btnContainer.setSize(50, 50);
-        btnContainer.setInteractive({ useHandCursor: true });
+        this.btnContainer.setSize(50, 50);
+        this.btnContainer.setInteractive({ useHandCursor: true });
 
-        const btnContainerPa = this.scene.add.container(menuWidth - 155, menuHeight / 2);
+        this.btnContainerPa = this.scene.add.container(menuWidth - 155, menuHeight / 2);
 
-        const btnBgPa = this.scene.add.rectangle(0, 0, 50, 50, 0xfa0202, 1)
+        this.btnBgPa = this.scene.add.rectangle(0, 0, 50, 50, 0xfa0202, 1)
             .setOrigin(0.5)
             .setStrokeStyle(2, 0x000000);
-        btnContainerPa.add(btnBgPa);
+        this.btnContainerPa.add(this.btnBgPa);
 
-        const btnCavar = this.scene.add.image(0, 0, "pa")
+        this.btnCavar = this.scene.add.image(0, 0, "pa")
             .setOrigin(0.5)
             .setDisplaySize(40, 40);
 
-        btnContainerPa.add(btnCavar);
+        this.btnContainerPa.add(this.btnCavar);
 
-        btnContainerPa.setSize(50, 50);
-        btnContainerPa.setInteractive({ useHandCursor: true });
+        this.btnContainerPa.setSize(50, 50);
+        this.btnContainerPa.setInteractive({ useHandCursor: true });
 
-        this.upperMenu.add([btnMatriz, btnZoomIn, btnZoomOut])
-        this.bottomMenu.add([btnLoja, btnContainer, btnContainerPa]);
+        this.upperMenu.add([this.btnMatriz, this.btnZoomIn, this.btnZoomOut, this.btnCancelar])
+        this.bottomMenu.add([this.btnLoja, this.btnContainer, this.btnContainerPa]);
 
-        btnMatriz.on('pointerup', () => {
+        this.buttons['arar'] = this.btnContainer;
+        this.buttons['loja'] = this.btnLoja;
+        this.buttons['vender'] = this.btnContainerPa;
+        this.buttons['zoomIn'] = this.btnZoomIn;
+        this.buttons['zoomOut'] = this.btnZoomOut;
+        this.buttons['matriz'] = this.btnMatriz;
+        this.buttons['cancelar'] = this.btnCancelar;
+
+        this.btnMatriz.on('pointerup', () => {
+            this.scene.gameVariables.freeClick = true;
             const visible = this.scene.gameVariables.matrixVisible
             this.scene.matrixGraphics.setVisible(!visible)
             this.scene.matrixLabel.setVisible(!visible)
             this.scene.gameVariables.matrixVisible = !visible;
         })
 
-        btnContainer.on('pointerdown', () => {
-            // if (!this.arando) {
-            //     this.scene.gameVariables.freeClick = true;
-            // }
-        });
 
-        btnContainer.on('pointerup', () => {
+        this.btnContainer.on('pointerup', () => {
+
+            if (this.scene.gameVariables.selectedSprite && this.scene.gameVariables.selectedSprite.isMoving) {
+                console.log(this.scene.gameVariables.selectedSprite)
+                this.scene.gameVariables.freeClick = true;
+                return;
+            }
+
             const arando = this.scene.gameVariables.arando;
             arando ? this.scene.acoesUtils.stopArando() : this.scene.acoesUtils.startArando();
         });
 
-        btnContainerPa.on('pointerdown', () => {
+        this.btnContainerPa.on('pointerdown', () => {
             if (!this.scene.gameVariables.selling) {
                 this.scene.gameVariables.freeClick = true;
             }
         });
 
-        btnContainerPa.on('pointerup', () => {
+        this.btnContainerPa.on('pointerup', () => {
+
+            if (this.scene.gameVariables.selectedSprite && this.scene.gameVariables.selectedSprite.isMoving) {
+                this.scene.gameVariables.freeClick = true;
+                return;
+            }
+
             this.scene.gameVariables.selling ? this.scene.acoesUtils.stopSell() : this.scene.acoesUtils.startSell();
         });
 
-        btnLoja.on('pointerdown', () => {
+        this.btnLoja.on('pointerdown', () => {
             if (this.itemMenu) this.itemMenu.setVisible(false);
             if (this.shopMenu) this.shopMenu.open();
         });
 
-        btnZoomIn.on('pointerup', () => {
+        this.btnCancelar.on('pointerup', () => {
+            this.uiEvents.emit("queue:cancelAll");
+        });
+
+        this.btnZoomIn.on('pointerup', () => {
             this.scene.gameVariables.freeClick = true;
             this.scene.itemMenuUI.hide()
             const cam = this.scene.cameras.main;
             const zoomChange = 0.15;
             const newZoom = Phaser.Math.Clamp(cam.zoom + zoomChange, 0.5, 2);
+            console.log(newZoom);
             cam.setZoom(newZoom);
         });
 
-        btnZoomOut.on('pointerup', () => {
+        this.btnZoomOut.on('pointerup', () => {
             this.scene.gameVariables.freeClick = true;
             this.scene.itemMenuUI.hide()
             const cam = this.scene.cameras.main;
@@ -164,4 +199,88 @@ export default class BottomMenu {
         });
     }
 
+    setButtonState(buttonName, enabled) {
+
+        const button = this.buttons[buttonName];
+
+        if (!button) return;
+
+        if (enabled) {
+            button.setInteractive({ useHandCursor: true });
+            // button.setAlpha(1);
+        } else {
+            button.disableInteractive();
+            // button.setAlpha(0.5);
+        }
+    }
+
+    setVisibleState(buttonName, enabled) {
+
+        const button = this.buttons[buttonName];
+
+        if (!button) return;
+
+        if (enabled) {
+            button.setVisible(true);
+        } else {
+            button.setVisible(false);
+        }
+    }
+
+    desativarTodosBotoes() {
+        Object.keys(this.buttons).forEach(name => {
+            this.setButtonState(name, false);
+        });
+    }
+
+    ativarTodosBotoes() {
+        Object.keys(this.buttons).forEach(name => {
+            this.setButtonState(name, true);
+        });
+    }
+
+    registerEvents() {
+
+        this.uiEvents.on('ui:setButtonState', (buttonName, enabled) => {
+            this.setButtonState(buttonName, enabled);
+        });
+
+        this.uiEvents.on('ui:ativarBottomMenu', () => {
+            this.ativarTodosBotoes();
+        })
+
+        this.uiEvents.on('ui:desativarBottonMenu', () => {
+            this.desativarTodosBotoes();
+        })
+
+        this.uiEvents.on('queue:changed', (busy) => {
+
+            if (busy) {
+                this.setButtonState('arar', false);
+                // this.setButtonState('loja', false);
+                this.setButtonState('vender', false);
+                this.setVisibleState('cancelar', true);
+            } else {
+                this.setButtonState('arar', true);
+                // this.setButtonState('loja', true);
+                this.setButtonState('vender', true);
+                this.setVisibleState('cancelar', false);
+            }
+
+        });
+    }
+
+    // registerEvents() {
+
+    //     this.uiEvents.on('disableBtnPa', () => {
+    //         this.btnContainerPa.disableInteractive();
+    //         this.btnContainerPa.setAlpha(0.5);
+    //     });
+
+    //     this.uiEvents.on('enableBtnPa', () => {
+    //         this.btnContainerPa.setInteractive({ useHandCursor: true });
+    //         this.btnContainerPa.setAlpha(1);
+    //     });
+
+    // }
 }

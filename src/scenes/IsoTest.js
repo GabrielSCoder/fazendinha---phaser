@@ -145,12 +145,12 @@ export class IsoTest extends Phaser.Scene {
 
         this.gridUtils.gridStart();
 
-        this.queue = new ActionQueue();
-        this.topUI = new TopUI(this);
+        this.queue = new ActionQueue(this, { uiEvents: this.gameVariables.eventsCenter });
         this.shopMenu = new ShopMenu(this);
-        this.bottomMenu = new BottomMenu(this, { shopMenu: this.shopMenu });
+        this.bottomMenu = new BottomMenu(this, { shopMenu: this.shopMenu, uiEvents: this.gameVariables.eventsCenter });
+        this.topUI = new TopUI(this);
         this.cameraController = new CameraController(this);
-        this.itemMenuUI = new ItemMenuUI(this);
+        this.itemMenuUI = new ItemMenuUI(this, { uiEvents: this.gameVariables.eventsCenter });
 
         this.selectedSprite = this.gameVariables.selectedSprite;
         this.selectedSeed = this.gameVariables.selectedSeed;
@@ -158,11 +158,11 @@ export class IsoTest extends Phaser.Scene {
         this.toolSprite = this.gameVariables.toolSprite;
 
         this.spriteUtils = new SpriteUtils(this);
-        this.acoesUtils = new AcoesUtils(this);
-        this.gameEvents = new GameEventsController(this);
+        this.acoesUtils = new AcoesUtils(this, { uiEvents: this.gameVariables.eventsCenter });
+        this.gameEvents = new GameEventsController(this, { uiEvents: this.gameVariables.eventsCenter });
 
 
-        this.bonecoController = new BonecoController(this);
+        //this.bonecoController = new BonecoController(this);
 
         this.fpsText = this.add.text(10, 10, '', {
             font: '16px Arial',
@@ -183,7 +183,7 @@ export class IsoTest extends Phaser.Scene {
             this.gridGraphics,
             this.gameVariables.sprites,
             this.footprintGraphics,
-            this.bonecoController.boneco,
+            //this.bonecoController.boneco,
             this.gameVariables.previewTiles,
             this.hoverText
         ]);
@@ -225,15 +225,19 @@ export class IsoTest extends Phaser.Scene {
             }
         });
 
-        this.input.on('pointerup', (pointer) => {
-            this.gameEvents.ararSoloCheck()
-        });
+        // this.input.on('pointerup', (pointer) => {
+        //     this.gameEvents.ararSoloCheck()
+        // });
 
         this.input.on('pointerup', () => {
-            this.queue.add((done) => {
-                this.gameEvents.plantarSementeCheck()
-                done();
-            })
+            this.gameEvents.controleSolo();
+        });
+
+
+        //Função queue das sementes;
+        this.input.on('pointerup', (pointer) => {
+
+            this.gameEvents.constrolePlantar();
         })
 
         this.events.on('itemPurchased', (itemData) => {
@@ -253,10 +257,10 @@ export class IsoTest extends Phaser.Scene {
 
         this.acoesUtils.updateFence();
 
-        this.acoesUtils.updateArando();
+        this.acoesUtils.updateArando(1, 1);
 
-        this.bonecoController.update();
-        // this.getSpriteByPointerPosition();
+        //this.bonecoController.update();
+        //this.getSpriteByPointerPosition();
 
         this.acoesUtils.updateSprite();
 
