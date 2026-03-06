@@ -34,7 +34,7 @@ export default class GameEventsController {
             this.scene.gameVariables.selectedSprite = null;
             this.gridUtils.drawFootprints();
 
-            this.scene.acoesUtils.ativarInteratividadeItens();
+            this.uiEvents.emit("interact:ActivateAll");
 
             if (this.scene.gameVariables.buyItemTmp) {
                 console.log(this.scene.gameVariables.buyItemTmp);
@@ -67,7 +67,7 @@ export default class GameEventsController {
             });
         } else if (this.scene.shopMenu.isOpen() && this.scene.gameVariables.selling) {
             this.scene.acoesUtils.stopSell();
-        } else if (this.scene.shopMenu.isOpen() && this.scene.gameVariables.arando) {
+        } else if (this.scene.shopMenu.isOpen() && this.scene.gameVariables.plowing) {
             this.scene.acoesUtils.cancelArar();
         }
 
@@ -161,7 +161,7 @@ export default class GameEventsController {
         this.scene.gameVariables.selectedSprite = null;
         this.gridUtils.drawFootprints();
 
-        this.scene.acoesUtils.ativarInteratividadeItens();
+        this.uiEvents.emit("interact:ActivateAll");
         this.uiEvents.emit('ui:setButtonState', 'vender', true);
         this.uiEvents.emit('ui:setButtonState', 'arar', true);
 
@@ -172,22 +172,41 @@ export default class GameEventsController {
     }
 
     plantarSementeCheck(solo, done) {
+
+        const token = this.scene.queue.cancelToken;
+
+        if (solo.cancelled) return done();
+        if (token !== this.scene.queue.cancelToken) return done();
+
         if (!this.scene.gameVariables.planting) return done();
         if (!this.scene.gameVariables.selectedSeed) return done();
 
         const startX = solo.x - 100 / 2;
         const startY = solo.y - solo.displayHeight / 2;
 
-        if (!this.scene.gameVariables.plantingBar)
-            this.scene.acoesUtils.criarBarraProgresso(startX, startY, 50, 10, 1.8, () => {
-                this.scene.acoesUtils.plantarSemente(solo);
-                this.scene.acoesUtils.setHoverEnabled(true);
-                done()
-            });
+        if (solo.progressBar) return;
+        solo.progressBar = this.scene.barController.criarBarraProgresso(
+            startX,
+            startY,
+            50,
+            10,
+            1.8,
+            () => {
+
+                if (solo.cancelled) return;
+                if (token !== this.scene.queue.cancelToken) return;
+
+                this.uiEvents.emit("action:Seed", solo);
+
+                solo.progressBar = null;
+
+                done();
+            }
+        );
     }
 
     ararSoloCheck(pointer, done) {
-        if (!this.scene.gameVariables.arando) return;
+        if (!this.scene.gameVariables.plowing) return;
 
         if (this.scene.gameVariables.freeClick) {
             this.scene.gameVariables.freeClick = false;
@@ -202,11 +221,11 @@ export default class GameEventsController {
 
     controleSolo() {
 
-        if (!this.scene.gameVariables.arando) return;
+        if (!this.scene.gameVariables.plowing) return;
         if (!this.scene.gameVariables.previewOccupiedtiles?.length) return;
         if (this.scene.queue.isFull()) return;
 
-        const reserva = this.scene.acoesUtils.criarReservaSolo();
+        const reserva = this.scene.soilControl.createReserveSoil();
 
         if (!reserva) return;
 
@@ -218,65 +237,27 @@ export default class GameEventsController {
 
             action: (done) => {
                 reserva.sprite.setAlpha(0.7);
-                this.scene.acoesUtils.executarArarSolo(reserva, done);
+                this.scene.soilControl.executePlowingSoil(reserva, done);
             },
 
             onCancel: () => {
-                this.scene.acoesUtils.cancelReserva(reserva);
+
+                if (reserva.sprite.progressBar) {
+                    reserva.sprite.progressBar.cancel();
+                    reserva.sprite.progressBar = null;
+                }
+
+                this.scene.soilControl.cancelReserve(reserva);
+
             }
 
         });
     }
 
-    controleSolo2() {
 
-        if (!this.scene.gameVariables.arando) return;
-        const preview = this.scene.gameVariables.previewOccupiedtiles;
-        if (!preview || preview.length === 0) return;
+    controlePlantar() {
 
-        const validTiles = preview.filter(tile => !tile.occupied);
-
-        if (validTiles.length === 0) {
-            console.log("⚠ nenhum tile livre");
-            return;
-        }
-
-        const reservedSprites = [];
-
-        for (const tile of validTiles) {
-
-            const sprite = this.scene.acoesUtils.criarReservaSolo2(tile);
-
-            if (sprite) {
-                reservedSprites.push(sprite);
-            }
-        }
-
-        if (reservedSprites.length === 0) return;
-
-        const center = reservedSprites[0];
-
-        this.scene.acoesUtils.criarBarraProgresso(
-            center.x,
-            center.y,
-            50,
-            10,
-            1.8,
-            () => {
-
-
-                reservedSprites.forEach(sprite => {
-                    console.log(sprite);
-                    sprite.setAlpha(1.0);
-                    sprite.isReserved = false;
-                });
-
-            }
-        );
-    }
-
-
-    constrolePlantar() {
+        console.log("entrando")
         const solo = this.scene.gameVariables.selectedSprite;
 
         if (this.scene.queue.isFull()) return;
@@ -291,23 +272,36 @@ export default class GameEventsController {
         solo.isQueued = true;
 
         solo.setAlpha(0.7);
+        solo.clearTint();
         solo.disableInteractive();
+        solo.cancelled = false;
+        solo.hoverEnabled = false;
 
         this.scene.queue.add({
-
-            sprite: solo,
 
             action: (done) => {
                 this.plantarSementeCheck(solo, done);
             },
 
             onCancel: () => {
+
+                solo.cancelled = true;
+
+                if (solo.progressBar) {
+                    solo.progressBar.cancel();
+                    solo.progressBar = null;
+                    this.scene.gameVariables.selectedSprite = null;
+                }
+
                 solo.clearTint();
                 solo.setAlpha(1);
                 solo.isQueued = false;
                 solo.setInteractive({ useHandCursor: true });
+
             }
 
         });
+
+
     }
 }

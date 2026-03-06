@@ -1,3 +1,5 @@
+import { solos } from "../objects.js"
+
 export default class PlantaController {
     constructor(scene, config = {}) {
         this.scene = scene;
@@ -12,13 +14,24 @@ export default class PlantaController {
         this.itemMenuUI = scene.itemMenuUI;
         this.gridUtils = scene.gridUtils;
         this.uiEvents = config.uiEvents;
+        this.classEvents();
     }
 
-    updateSeed() {
+    classEvents() {
+        this.uiEvents.on("action:StopSeeding", () => {
+            this.stopSeeding();
+        })
+
+        this.uiEvents.on("action:Seed", (solo) => {
+            this.plantSeed(solo);
+        })
+    }
+
+    updateSeeding() {
         if (!this.scene.gameVariables.planting) return;
         if (!this.scene.gameVariables.selectedSeed) return;
-        if (this.scene.gameVariables.selling) this.stopSell();
-        if (this.scene.gameVariables.arando) this.stopArando();
+        if (this.scene.gameVariables.selling) this.uiEvents.emit("action:StopSelling");
+        if (this.scene.gameVariables.plowing) this.uiEvents.emit("action:StopPlowing");
 
         const sprite = this.scene.gameVariables.selectedSeed;
         const pointer = this.scene.input.activePointer;
@@ -27,7 +40,7 @@ export default class PlantaController {
         sprite.y = pointer.worldY;
     }
 
-    stopSeed() {
+    stopSeeding() {
         if (!this.scene.gameVariables.planting) return;
         if (!this.scene.gameVariables.selectedSeed) return;
 
@@ -43,12 +56,12 @@ export default class PlantaController {
         this.scene.gameVariables.selectedSprite = null;
         this.scene.gameVariables.selectedSeed = null;
 
-        this.ativarInteratividadeItens();
+        this.uiEvents.emit("interact:ActivateAll");
 
         this.scene.gameVariables.planting = false;
     }
 
-    plantarSemente(solo) {
+    plantSeed(solo) {
         if (!this.scene.gameVariables.selectedSeed || !solo || solo.nome != "solo_preparado") return;
         const semente = this.scene.gameVariables.selectedSeed;
         const tipo_plantacao = semente.tipo_plantacao;
@@ -95,7 +108,7 @@ export default class PlantaController {
         this.gridUtils.markOccupied(sprite, startX, startY, w, h);
         this.gridUtils.recalculateDepthAround(sprite);
 
-        this.freeSolo();
+        this.uiEvents.emit("action:FreeSoil");
     }
 
     

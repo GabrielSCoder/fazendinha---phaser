@@ -1,5 +1,5 @@
 import ShopItemCard from './ShopItemCard.js';
-import { sementes, arvores, animais, decoracoes } from './objects.js';
+import { sementes, arvores, animais, decoracoes } from '../objects.js';
 
 export default class ShopMenu {
     constructor(scene) {

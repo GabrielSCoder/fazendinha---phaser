@@ -26,11 +26,12 @@ export default class GameVariablesController {
         this.fenceSnapTarget = null;
         this.tileSize = this.gridSize;
 
-        this.arando = false;
+        this.canInteract = true;
+
+        this.plowing = false;
         this.buyItemTmp = null;
         this.planting = false;
         this.selling = false;
-        this.plantingBar = false;
         this.hoverEnabled = true;
         this.matrixVisible = false;
 

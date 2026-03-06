@@ -1,4 +1,4 @@
-import { plantar_solo, vender } from "./msgs.js";
+import { plantar_solo, vender } from "../msgs.js";
 
 export default class SpriteUtils {
     constructor(scene) {
@@ -66,6 +66,7 @@ export default class SpriteUtils {
         sprite.on("pointerover", () => {
 
             if (sprite.isReserved) return;
+            if (sprite.isQueued) return;
             
             sprite.setTint(0xffff00);
 

@@ -12,14 +12,30 @@ export default class VendaController {
         this.itemMenuUI = scene.itemMenuUI;
         this.gridUtils = scene.gridUtils;
         this.uiEvents = config.uiEvents;
+        this.plantingController = scene.plantControl;
+        this.soilController = scene.soilControl;
+        this.classEvents();
     }
 
+    classEvents() {
+        this.uiEvents.on("action:StartSelling", () => {
+            this.startSelling();
+        })
 
-    startSell() {
+        this.uiEvents.on("action:StopSelling", () => {
+            this.stopSelling();
+        })
+
+        this.uiEvents.on("action:SellItem", () => {
+            this.sellItem();
+        })
+    }
+
+    startSelling() {
         if (this.scene.gameVariables.selling) return;
 
-        if (this.scene.gameVariables.arando) this.cancelArar();
-        if (this.scene.gameVariables.planting) this.stopSeed();
+        if (this.scene.gameVariables.plowing) this.uiEvents.emit("action:StopPlowing");
+        if (this.scene.gameVariables.planting) this.uiEvents.emit("action:StopSeeding");
 
         let originX = 0.5;
         let originY = 0.5;
@@ -54,7 +70,7 @@ export default class VendaController {
         this.scene.gameVariables.selling = true;
     }
 
-    stopSell() {
+    stopSelling() {
         if (!this.scene.gameVariables.selling) return;
         if (!this.scene.gameVariables.toolSprite) return;
 
@@ -68,7 +84,6 @@ export default class VendaController {
         this.scene.gameVariables.toolSprite = null;
         this.scene.gameVariables.selling = false;
 
-        console.log("venda cancelada");
     }
 
     updateSelling() {
@@ -82,7 +97,7 @@ export default class VendaController {
         sprite.y = pointer.worldY - 10;
     }
 
-    venderItem() {
+    sellItem() {
         if (!this.scene.gameVariables.selectedSprite) return;
         if (!this.scene.gameVariables.selling) return;
         if (!this.scene.gameVariables.toolSprite) return;

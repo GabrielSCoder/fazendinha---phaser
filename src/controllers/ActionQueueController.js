@@ -1,15 +1,17 @@
 export default class ActionQueue {
 
     constructor(scene, config = {}, maxsize = 5) {
+
         this.scene = scene;
         this.queue = [];
         this.executing = false;
         this.maxSize = maxsize;
         this.uiEvents = config.uiEvents;
+
         this.current = null;
+        this.cancelToken = 0;
 
         this.uiEvents.on("queue:cancelAll", () => {
-            console.log("chegando")
             this.cancelAll();
         });
     }
@@ -17,7 +19,6 @@ export default class ActionQueue {
     add(actionObj) {
 
         if (this.queue.length >= this.maxSize) {
-            console.log("⚠ Fila cheia");
             return false;
         }
 
@@ -31,6 +32,7 @@ export default class ActionQueue {
         if (this.executing) return;
 
         const next = this.queue.shift();
+
         if (!next) {
             this.emitChange();
             return;
@@ -38,11 +40,16 @@ export default class ActionQueue {
 
         this.current = next;
         this.executing = true;
+
+        const token = this.cancelToken;
+
         this.emitChange();
 
         next.action(() => {
 
-            if (next.sprite) {
+            if (token !== this.cancelToken) return;
+
+            if (next.sprite && next.sprite.scene) {
                 next.sprite.isQueued = false;
             }
 
@@ -52,9 +59,23 @@ export default class ActionQueue {
             this.emitChange();
             this.runNext();
         });
+
     }
 
     cancelAll() {
+
+        this.cancelToken++;
+
+        if (this.current) {
+
+            if (this.current.onCancel) {
+                this.current.onCancel(this.current);
+            }
+
+            this.restoreSprite(this.current.sprite);
+
+            this.current = null;
+        }
 
         this.queue.forEach(item => {
 
@@ -62,9 +83,12 @@ export default class ActionQueue {
                 item.onCancel(item);
             }
 
+            this.restoreSprite(item.sprite);
+
         });
 
         this.queue = [];
+        this.executing = false;
 
         this.emitChange();
     }
@@ -73,22 +97,33 @@ export default class ActionQueue {
 
         if (!this.current) return;
 
+        this.cancelToken++;
+
         if (this.current.onCancel) {
-            this.current.onCancel();
+            this.current.onCancel(this.current);
         }
 
-        const sprite = this.current.sprite;
+        this.restoreSprite(this.current.sprite);
 
-        if (sprite) {
-            sprite.setAlpha(1);
-            sprite.isQueued = false;
-            sprite.setInteractive({ useHandCursor: true });
-        }
-
-        this.executing = false;
         this.current = null;
+        this.executing = false;
 
         this.runNext();
+    }
+
+    restoreSprite(sprite) {
+
+        if (!sprite || !sprite.scene) return;
+
+        sprite.clearTint?.();
+        sprite.setAlpha?.(1);
+
+        sprite.isQueued = false;
+
+        if (!sprite.destroyed) {
+            sprite.setInteractive?.({ useHandCursor: true });
+        }
+
     }
 
     size() {
@@ -106,6 +141,5 @@ export default class ActionQueue {
     emitChange() {
         this.uiEvents.emit('queue:changed', this.isBusy());
     }
-
 
 }

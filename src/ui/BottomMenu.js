@@ -5,6 +5,8 @@ export default class BottomMenu {
         this.shopMenu = config.shopMenu || null;
         this.itemMenu = config.itemMenu || null;
         this.uiEvents = config.uiEvents;
+        this.soilControl = scene.soilControl;
+        this.sellControl = scene.sellControl;
         this.buttons = {};
         this.createUI();
         this.registerEvents();
@@ -150,8 +152,8 @@ export default class BottomMenu {
                 return;
             }
 
-            const arando = this.scene.gameVariables.arando;
-            arando ? this.scene.acoesUtils.stopArando() : this.scene.acoesUtils.startArando();
+            const arando = this.scene.gameVariables.plowing;
+            arando ? this.uiEvents.emit("action:StopPlowing") : this.uiEvents.emit("action:StartPlowing");
         });
 
         this.btnContainerPa.on('pointerdown', () => {
@@ -167,7 +169,7 @@ export default class BottomMenu {
                 return;
             }
 
-            this.scene.gameVariables.selling ? this.scene.acoesUtils.stopSell() : this.scene.acoesUtils.startSell();
+            this.scene.gameVariables.selling ? this.uiEvents.emit("action:StopSelling") : this.uiEvents.emit("action:StartSelling");
         });
 
         this.btnLoja.on('pointerdown', () => {
@@ -185,7 +187,6 @@ export default class BottomMenu {
             const cam = this.scene.cameras.main;
             const zoomChange = 0.15;
             const newZoom = Phaser.Math.Clamp(cam.zoom + zoomChange, 0.5, 2);
-            console.log(newZoom);
             cam.setZoom(newZoom);
         });
 
@@ -270,17 +271,4 @@ export default class BottomMenu {
         });
     }
 
-    // registerEvents() {
-
-    //     this.uiEvents.on('disableBtnPa', () => {
-    //         this.btnContainerPa.disableInteractive();
-    //         this.btnContainerPa.setAlpha(0.5);
-    //     });
-
-    //     this.uiEvents.on('enableBtnPa', () => {
-    //         this.btnContainerPa.setInteractive({ useHandCursor: true });
-    //         this.btnContainerPa.setAlpha(1);
-    //     });
-
-    // }
 }
