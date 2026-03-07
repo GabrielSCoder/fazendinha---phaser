@@ -34,9 +34,6 @@ export default class SpriteUtils {
 
             if (this.scene.gameVariables.middleButtonDown) return;
 
-            if (this.scene.gameVariables.plantingBar)
-                this.scene.hoverText.setVisible(false);
-
             if (this.scene.gameVariables.selling) {
                 this.scene.gameVariables.selectedSprite = sprite;
                 this.scene.acoesUtils.venderItem();

@@ -13,7 +13,7 @@ export const sementes = [
         "origem": [0.5, 0.58],
         "tipo": "semente",
         "noStopBuy": false,
-        "tipo_plantacao" : "solo_plantado_simples"
+        "tipo_plantacao": "solo_plantado_simples"
     },
     {
         "id": "semente_soja",
@@ -27,6 +27,8 @@ export const sementes = [
         "escala": 0.78,
         "area": [4, 4],
         "tipo": "semente",
+        "noStopBuy": false,
+        "tipo_plantacao": "solo_plantado_simples"
     },
     {
         "id": "semente_abobora",
@@ -38,6 +40,8 @@ export const sementes = [
         "nivel_requerido": 1,
         "img": "abobora.png",
         "tipo": "semente",
+        "noStopBuy": false,
+        "tipo_plantacao": "solo_plantado_simples"
     },
     {
         "id": "semente_abobora_moranga",
@@ -49,6 +53,8 @@ export const sementes = [
         "nivel_requerido": 1,
         "img": "abobora_moranga.png",
         "tipo": "semente",
+        "noStopBuy": false,
+        "tipo_plantacao": "solo_plantado_simples"
     },
     {
         "id": "semente_pimentao",
@@ -60,6 +66,8 @@ export const sementes = [
         "nivel_requerido": 1,
         "img": "pimentao.png",
         "tipo": "semente",
+        "noStopBuy": false,
+        "tipo_plantacao": "solo_plantado_simples"
     },
     {
         "id": "semente_pimenta",
@@ -71,6 +79,8 @@ export const sementes = [
         "nivel_requerido": 2,
         "img": "pimenta.png",
         "tipo": "semente",
+        "noStopBuy": false,
+        "tipo_plantacao": "solo_plantado_simples"
     },
     {
         "id": "semente_cenoura",
@@ -82,6 +92,8 @@ export const sementes = [
         "nivel_requerido": 3,
         "img": "cenoura.png",
         "tipo": "semente",
+        "noStopBuy": false,
+        "tipo_plantacao" : "solo_plantado_simples"
     },
     {
         "id": "semente_beterraba",
@@ -93,6 +105,8 @@ export const sementes = [
         "nivel_requerido": 3,
         "img": "beterraba.png",
         "tipo": "semente",
+        "noStopBuy": false,
+        "tipo_plantacao" : "solo_plantado_simples"
     },
     {
         "id": "semente_arroz",
@@ -104,6 +118,8 @@ export const sementes = [
         "nivel_requerido": 4,
         "img": "arroz.png",
         "tipo": "semente",
+        "noStopBuy": false,
+        "tipo_plantacao" : "solo_alagado_2"
     },
     {
         "id": "semente_rabanete",
@@ -115,6 +131,8 @@ export const sementes = [
         "nivel_requerido": 4,
         "img": "rabanete.png",
         "tipo": "semente",
+        "noStopBuy": false,
+        "tipo_plantacao" : "solo_plantado_simples"
     },
     {
         "id": "semente_alcachofra",
@@ -126,6 +144,8 @@ export const sementes = [
         "nivel_requerido": 5,
         "img": "alcachofra.png",
         "tipo": "semente",
+        "noStopBuy": false,
+        "tipo_plantacao" : "solo_plantado_simples"
     },
     {
         "id": "semente_abacaxi",
@@ -136,7 +156,9 @@ export const sementes = [
         "xp": 1,
         "nivel_requerido": 6,
         "img": "abacaxi.png",
-        "tipo": "semente"
+        "tipo": "semente",
+        "noStopBuy": false,
+        "tipo_plantacao" : "solo_plantado_simples"
     },
     {
         "id": "semente_uva",
@@ -148,6 +170,8 @@ export const sementes = [
         "nivel_requerido": 7,
         "img": "uva.png",
         "tipo": "semente",
+        "noStopBuy": false,
+        "tipo_plantacao" : "solo_plantado_simples"
     },
     {
         "id": "semente_berinjela",
@@ -159,6 +183,8 @@ export const sementes = [
         "nivel_requerido": 8,
         "img": "berinjela.png",
         "tipo": "semente",
+        "noStopBuy": false,
+        "tipo_plantacao" : "solo_plantado_simples"
     },
     {
         "id": "semente_trigo",
@@ -170,6 +196,8 @@ export const sementes = [
         "nivel_requerido": 9,
         "img": "trigo.png",
         "tipo": "semente",
+        "noStopBuy": false,
+        "tipo_plantacao" : "solo_plantado_simples"
     },
     {
         "id": "semente_tomate",
@@ -181,6 +209,8 @@ export const sementes = [
         "nivel_requerido": 10,
         "img": "tomate.png",
         "tipo": "semente",
+        "noStopBuy": false,
+        "tipo_plantacao" : "solo_plantado_simples"
     },
     {
         "id": "semente_framboesa",
@@ -192,6 +222,8 @@ export const sementes = [
         "nivel_requerido": 11,
         "img": "framboesa.png",
         "tipo": "semente",
+        "noStopBuy": false,
+        "tipo_plantacao" : "solo_plantado_simples"
     },
     {
         "id": "semente_morango",
@@ -202,7 +234,9 @@ export const sementes = [
         "xp": 1,
         "nivel_requerido": 12,
         "img": "morango.png",
-        "tipo": "semente"
+        "tipo": "semente",
+        "noStopBuy": false,
+        "tipo_plantacao" : "solo_plantado_simples"
     },
     {
         "id": "semente_batata",
@@ -213,7 +247,9 @@ export const sementes = [
         "xp": 1,
         "nivel_requerido": 13,
         "img": "batata_inglesa.png",
-        "tipo": "semente"
+        "tipo": "semente",
+        "noStopBuy": false,
+        "tipo_plantacao" : "solo_plantado_simples"
     },
     {
         "id": "semente_algodao",
@@ -225,6 +261,8 @@ export const sementes = [
         "nivel_requerido": 14,
         "img": "algodao.png",
         "tipo": "semente",
+        "noStopBuy": false,
+        "tipo_plantacao" : "solo_plantado_simples"
     },
     {
         "id": "semente_aloe_vera",
@@ -236,6 +274,8 @@ export const sementes = [
         "nivel_requerido": 15,
         "img": "aloe_vera.png",
         "tipo": "semente",
+        "noStopBuy": false,
+        "tipo_plantacao" : "solo_plantado_simples"
     },
     {
         "id": "semente_hortela",
@@ -247,6 +287,8 @@ export const sementes = [
         "nivel_requerido": 16,
         "img": "alcachofra.png",
         "tipo": "semente",
+        "noStopBuy": false,
+        "tipo_plantacao" : "solo_plantado_simples"
     },
     {
         "id": "semente_espinafre",
@@ -258,6 +300,8 @@ export const sementes = [
         "nivel_requerido": 16,
         "img": "espinafre.png",
         "tipo": "semente",
+        "noStopBuy": false,
+        "tipo_plantacao" : "solo_plantado_simples"
     },
     {
         "id": "semente_melancia",
@@ -269,6 +313,8 @@ export const sementes = [
         "nivel_requerido": 16,
         "img": "melancia.png",
         "tipo": "semente",
+        "noStopBuy": false,
+        "tipo_plantacao" : "solo_plantado_simples"
     },
     {
         "id": "semente_girassol",
@@ -280,6 +326,8 @@ export const sementes = [
         "nivel_requerido": 17,
         "img": "girassol.png",
         "tipo": "semente",
+        "noStopBuy": false,
+        "tipo_plantacao" : "solo_plantado_simples"
     },
     {
         "id": "semente_cebola",
@@ -290,7 +338,9 @@ export const sementes = [
         "xp": 1,
         "nivel_requerido": 19,
         "img": "cebola.png",
-        "tipo": "semente"
+        "tipo": "semente",
+        "noStopBuy": false,
+        "tipo_plantacao" : "solo_plantado_simples"
     }
 ]
 

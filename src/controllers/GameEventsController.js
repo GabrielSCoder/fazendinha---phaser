@@ -65,6 +65,9 @@ export default class GameEventsController {
                     });
                 }
             });
+
+            this.scene.gameVariables.planting = false;
+            
         } else if (this.scene.shopMenu.isOpen() && this.scene.gameVariables.selling) {
             this.scene.acoesUtils.stopSell();
         } else if (this.scene.shopMenu.isOpen() && this.scene.gameVariables.plowing) {
