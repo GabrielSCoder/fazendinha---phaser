@@ -16,14 +16,32 @@ export default class SpriteUtils {
             useHandCursor: true
         }).setOrigin(originX, originY);
 
+        sprite.originalScale = sprite.scaleX;
         sprite.isMoving = false;
         sprite.isDraggable = true;
+        sprite.nome = data.nome;
+        sprite.tipo = data.tipo;
+        sprite.preco_venda = data.preco_venda;
+
+        if (is_semente) {
+            this.scene.gameVariables.planting = true;
+            sprite.regrow = false;
+        }
+
+        const canGrow = this.scene.spriteController.growingSprites.find(c => c == data.tipo);
+
+        if (canGrow) {
+            sprite.tempoColheita = data.tempo_colheita_horas;
+            sprite.spriteColheitaCompleta = data.img_pronta ?? "";
+            sprite.growthStage = 0;
+            sprite.harvestReady = false;
+            sprite.preco_colheita = data.preco_venda;
+            if (!is_semente) sprite.regrow = true;
+        }
 
         this.scene.gameVariables.spriteInitialPositions.set(sprite, { x: sprite.x, y: sprite.y });
         this.scene.gameVariables.sprites.push(sprite);
         this.scene.input.setDraggable(sprite);
-
-        if (is_semente) this.scene.gameVariables.planting = true;
 
         sprite.on('pointerup', (pointer) => {
             pointer.event.stopPropagation();
@@ -37,7 +55,7 @@ export default class SpriteUtils {
             if (this.scene.gameVariables.selling) {
                 this.scene.gameVariables.selectedSprite = sprite;
                 this.scene.acoesUtils.venderItem();
-            } else if (!sprite.isMoving && sprite.tipo !== "solo") {
+            } else if (!sprite.isMoving && sprite.tipo !== "solo_plantado_simples" && sprite.tipo !== "solo_preparado") {
                 this.scene.gameVariables.selectedSprite = sprite;
                 this.scene.itemMenuUI.show(
                     this.scene.gameVariables.selectedSprite.x,
@@ -62,40 +80,36 @@ export default class SpriteUtils {
 
         sprite.on("pointerover", () => {
 
+
             if (sprite.isReserved) return;
             if (sprite.isQueued) return;
-            
-            sprite.setTint(0xffff00);
+
+            sprite.setTint(0xf2d602);
+
+            this.scene.gameVariables.hoveredSprite = sprite;
 
             if (!sprite.isMoving) {
-                let text = "";
 
-                if (sprite.tipo !== "solo") {
-                    text = sprite.nome || "Sem nome";
-                } else if (sprite.nome !== "solo_plantado_simples") {
-                    text = plantar_solo;
-                } else {
-                    text = sprite.plata_cultivada || "0%";
-                }
+                this.scene.updateHoverText(sprite);
 
-                if (this.scene.gameVariables.selling)
-                    text = vender;
-
-                this.scene.hoverText.setText(text);
-
-                const offsetY = 5;
                 this.scene.hoverText.setPosition(
                     sprite.x - this.scene.hoverText.width / 2,
                     sprite.y - sprite.displayHeight / 2
                 );
+
                 this.scene.hoverText.setVisible(true);
             }
+
         });
 
         sprite.on("pointerout", () => {
             sprite.clearTint();
+            // sprite.setScale(sprite.originalScale);
+            this.scene.gameVariables.hoveredSprite = null;
             this.scene.hoverText.setVisible(false);
         });
+
+        console.log(sprite);
 
         return sprite;
     }

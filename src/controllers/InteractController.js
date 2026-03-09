@@ -27,7 +27,6 @@ export default class InteractController {
 
 
     desativarInteratividadeItens() {
-        console.log(this.scene.gameVariables.sprites);
         for (let other of this.scene.gameVariables.sprites) {
             if (other !== this.scene.gameVariables.selectedSprite) other.disableInteractive();
         }
@@ -47,7 +46,6 @@ export default class InteractController {
     }
 
     ativarInteratividadeItensPorNome(nome) {
-        console.log(this.scene.gameVariables.sprites);
         for (let other of this.scene.gameVariables.sprites) {
             if (other.nome === nome) other.setInteractive({ pixelPerfect: true, alphaTolerance: 1, useHandCursor: true });
         }

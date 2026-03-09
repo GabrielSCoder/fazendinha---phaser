@@ -4,16 +4,17 @@ export const sementes = [
         "nome": "Mirtilo",
         "preco_compra": 20,
         "preco_venda": 70,
-        "tempo_colheita_horas": 4,
+        "tempo_colheita_horas": 0.1,
         "xp": 1,
         "nivel_requerido": 1,
-        "img": "mirtilo.png",
+        "img": "semente_mirtilo",
+        "img_pronta": "pronto_mirtilo",
         "escala": 0.73,
         "area": [4, 4],
         "origem": [0.5, 0.58],
         "tipo": "semente",
         "noStopBuy": false,
-        "tipo_plantacao": "solo_plantado_simples"
+        "tipo_plantacao": "solo_plantado_simples",
     },
     {
         "id": "semente_soja",
@@ -23,7 +24,8 @@ export const sementes = [
         "tempo_colheita_horas": 48,
         "xp": 2,
         "nivel_requerido": 1,
-        "img": "soja.png",
+        "img": "semente_soja",
+        "img_pronta": "pronto_soja",
         "escala": 0.78,
         "area": [4, 4],
         "tipo": "semente",
@@ -38,7 +40,8 @@ export const sementes = [
         "tempo_colheita_horas": 36,
         "xp": 2,
         "nivel_requerido": 1,
-        "img": "abobora.png",
+        "img": "semente_abobora",
+        "img_pronta": "pronto_abobora",
         "escala": 0.78,
         "area": [4, 4],
         "tipo": "semente",
@@ -55,7 +58,8 @@ export const sementes = [
         "nivel_requerido": 1,
         "escala": 0.78,
         "area": [4, 4],
-        "img": "abobora_moranga.png",
+        "img": "semente_abobora_moranga",
+        "img_pronta": "pronto_abobora_moranga",
         "tipo": "semente",
         "noStopBuy": false,
         "tipo_plantacao": "solo_plantado_simples"
@@ -68,7 +72,8 @@ export const sementes = [
         "tempo_colheita_horas": 24,
         "xp": 2,
         "nivel_requerido": 1,
-        "img": "pimentao.png",
+        "img": "semente_pimentao",
+        "img_pronta": "pronto_pimentao",
         "tipo": "semente",
         "escala": 0.78,
         "area": [4, 4],
@@ -83,7 +88,8 @@ export const sementes = [
         "tempo_colheita_horas": 48,
         "xp": 2,
         "nivel_requerido": 2,
-        "img": "pimenta.png",
+        "img": "semente_pimenta",
+        "img_pronta": "pronto_pimenta",
         "tipo": "semente",
         "escala": 0.78,
         "area": [4, 4],
@@ -98,7 +104,8 @@ export const sementes = [
         "tempo_colheita_horas": 8,
         "xp": 1,
         "nivel_requerido": 3,
-        "img": "cenoura.png",
+        "img": "semente_cenoura",
+        "img_pronta": "pronto_cenoura",
         "tipo": "semente",
         "escala": 0.78,
         "area": [4, 4],
@@ -113,7 +120,8 @@ export const sementes = [
         "tempo_colheita_horas": 8,
         "xp": 1,
         "nivel_requerido": 3,
-        "img": "beterraba.png",
+        "img": "semente_beterraba",
+        "img_pronta": "pronto_beterraba",
         "tipo": "semente",
         "escala": 0.78,
         "area": [4, 4],
@@ -128,7 +136,8 @@ export const sementes = [
         "tempo_colheita_horas": 72,
         "xp": 2,
         "nivel_requerido": 4,
-        "img": "arroz.png",
+        "img": "semente_arroz",
+        "img_pronta": "pronto_arroz",
         "tipo": "semente",
         "escala": 0.78,
         "area": [4, 4],
@@ -143,7 +152,8 @@ export const sementes = [
         "tempo_colheita_horas": 72,
         "xp": 2,
         "nivel_requerido": 4,
-        "img": "rabanete.png",
+        "img": "semente_rabanete",
+        "img_pronta": "pronto_rabanete",
         "tipo": "semente",
         "escala": 0.78,
         "area": [4, 4],
@@ -158,7 +168,8 @@ export const sementes = [
         "tempo_colheita_horas": 12,
         "xp": 1,
         "nivel_requerido": 5,
-        "img": "alcachofra.png",
+        "img": "semente_alcachofra",
+        "img_pronta": "pronto_alcachofra",
         "tipo": "semente",
         "escala": 0.78,
         "area": [4, 4],
@@ -173,7 +184,8 @@ export const sementes = [
         "tempo_colheita_horas": 2,
         "xp": 1,
         "nivel_requerido": 6,
-        "img": "abacaxi.png",
+        "img": "semente_abacaxi",
+        "img_pronta": "pronto_abacaxi",
         "tipo": "semente",
         "escala": 0.78,
         "area": [4, 4],
@@ -188,7 +200,8 @@ export const sementes = [
         "tempo_colheita_horas": 36,
         "xp": 2,
         "nivel_requerido": 7,
-        "img": "uva.png",
+        "img": "semente_uva",
+        "img_pronta": "pronto_uva",
         "tipo": "semente",
         "escala": 0.78,
         "area": [4, 4],
@@ -203,7 +216,8 @@ export const sementes = [
         "tempo_colheita_horas": 48,
         "xp": 2,
         "nivel_requerido": 8,
-        "img": "berinjela.png",
+        "img": "semente_berinjela",
+        "img_pronta": "pronto_berinjela",
         "tipo": "semente",
         "escala": 0.78,
         "area": [4, 4],
@@ -218,7 +232,8 @@ export const sementes = [
         "tempo_colheita_horas": 24,
         "xp": 2,
         "nivel_requerido": 9,
-        "img": "trigo.png",
+        "img": "semente_trigo",
+        "img_pronta": "pronto_trigo",
         "tipo": "semente",
         "escala": 0.78,
         "area": [4, 4],
@@ -233,7 +248,8 @@ export const sementes = [
         "tempo_colheita_horas": 6,
         "xp": 1,
         "nivel_requerido": 10,
-        "img": "tomate.png",
+        "img": "semente_tomate",
+        "img_pronta": "pronto_tomate",
         "tipo": "semente",
         "escala": 0.78,
         "area": [4, 4],
@@ -248,7 +264,8 @@ export const sementes = [
         "tempo_colheita_horas": 48,
         "xp": 2,
         "nivel_requerido": 11,
-        "img": "framboesa.png",
+        "img": "semente_framboesa",
+        "img_pronta": "pronto_framboesa",
         "tipo": "semente",
         "escala": 0.78,
         "area": [4, 4],
@@ -263,7 +280,8 @@ export const sementes = [
         "tempo_colheita_horas": 4,
         "xp": 1,
         "nivel_requerido": 12,
-        "img": "morango.png",
+        "img": "semente_morango",
+        "img_pronta": "pronto_morango",
         "tipo": "semente",
         "escala": 0.78,
         "area": [4, 4],
@@ -278,7 +296,8 @@ export const sementes = [
         "tempo_colheita_horas": 4,
         "xp": 1,
         "nivel_requerido": 13,
-        "img": "batata_inglesa.png",
+        "img": "semente_batata_inglesa",
+        "img_pronta": "pronto_batata_inglesa",
         "tipo": "semente",
         "escala": 0.78,
         "area": [4, 4],
@@ -290,10 +309,11 @@ export const sementes = [
         "nome": "Algodão",
         "preco_compra": 170,
         "preco_venda": 538,
-        "tempo_colheita_horas": 24,
+        "tempo_colheita_horas": 0.20,
         "xp": 2,
         "nivel_requerido": 14,
-        "img": "algodao.png",
+        "img": "semente_algodao",
+        "img_pronta": "pronto_algodao",
         "tipo": "semente",
         "escala": 0.78,
         "area": [4, 4],
@@ -308,7 +328,8 @@ export const sementes = [
         "tempo_colheita_horas": 8,
         "xp": 1,
         "nivel_requerido": 15,
-        "img": "aloe_vera.png",
+        "img": "semente_aloe_vera",
+        "img_pronta": "pronto_aloe_vera",
         "tipo": "semente",
         "escala": 0.78,
         "area": [4, 4],
@@ -323,7 +344,8 @@ export const sementes = [
         "tempo_colheita_horas": 24,
         "xp": 2,
         "nivel_requerido": 16,
-        "img": "alcachofra.png",
+        "img": "semente_alcachofra",
+        "img_pronta": "pronto_mirtilo",
         "tipo": "semente",
         "escala": 0.78,
         "area": [4, 4],
@@ -338,7 +360,8 @@ export const sementes = [
         "tempo_colheita_horas": 0.0833,
         "xp": 1,
         "nivel_requerido": 16,
-        "img": "espinafre.png",
+        "img": "semente_espinafre",
+        "img_pronta": "pronto_espinafre",
         "tipo": "semente",
         "escala": 0.78,
         "area": [4, 4],
@@ -353,7 +376,8 @@ export const sementes = [
         "tempo_colheita_horas": 72,
         "xp": 8,
         "nivel_requerido": 16,
-        "img": "melancia.png",
+        "img": "semente_melancia",
+        "img_pronta": "pronto_melancia",
         "tipo": "semente",
         "escala": 0.78,
         "area": [4, 4],
@@ -365,10 +389,11 @@ export const sementes = [
         "nome": "Girassol",
         "preco_compra": 125,
         "preco_venda": 315,
-        "tempo_colheita_horas": 24,
+        "tempo_colheita_horas": 0.20,
         "xp": 2,
         "nivel_requerido": 17,
-        "img": "girassol.png",
+        "img": "semente_girassol",
+        "img_pronta": "pronto_girassol",
         "tipo": "semente",
         "escala": 0.78,
         "area": [4, 4],
@@ -383,7 +408,8 @@ export const sementes = [
         "tempo_colheita_horas": 12,
         "xp": 1,
         "nivel_requerido": 19,
-        "img": "cebola.png",
+        "img": "semente_cebola",
+        "img_pronta": "pronto_cebola",
         "tipo": "semente",
         "escala": 0.78,
         "area": [4, 4],
@@ -402,7 +428,7 @@ export const arvores = [
         "tempo_colheita_horas": 48,
         "xp": 4,
         "nivel_requerido": 8,
-        "img": "abrico.png",
+        "img": "abrico",
         "escala": 0.4,
         "area": [1, 1],
         "origem": [0.5, 0.85],
@@ -418,7 +444,7 @@ export const arvores = [
         "tempo_colheita_horas": 36,
         "xp": 2,
         "nivel_requerido": 5,
-        "img": "cerejeira.png",
+        "img": "cerejeira",
         "escala": 0.6,
         "area": [1, 1],
         "origem": [0.5, 0.75],
@@ -433,7 +459,7 @@ export const arvores = [
         "tempo_colheita_horas": 72,
         "xp": 3,
         "nivel_requerido": 5,
-        "img": "macieira.png",
+        "img": "macieira",
         "escala": 0.45,
         "area": [1, 1],
         "origem": [0.5, 0.85],
@@ -450,7 +476,7 @@ export const arvores = [
         "nivel_requerido": 10,
         "tipo": "arvore",
         "nivel_requerido": 5,
-        "img": "pessegueiro.png",
+        "img": "pessegueiro",
         "escala": 0.5,
         "area": [1, 1],
         "origem": [0.5, 0.75],
@@ -465,7 +491,7 @@ export const arvores = [
         "xp": 2,
         "nivel_requerido": 20,
         "tipo": "arvore",
-        "img": "nectarina.png",
+        "img": "nectarina",
         "escala": 0.5,
         "area": [1, 1],
         "origem": [0.5, 0.82],
@@ -479,10 +505,10 @@ export const animais = [
         "preco_compra": 600,
         "preco_compra_grana": 0,
         "preco_venda": 12,
-        "tempo_colheita_horas": 24,
+        "tempo_colheita_horas": 1,
         "xp": 150,
         "nivel_requerido": 1,
-        "img": "vaca.png",
+        "img": "vaca",
         "escala": 0.30,
         "area": [2, 3],
         "tipo": "animal",
@@ -497,7 +523,7 @@ export const animais = [
         "tempo_colheita_horas": 48,
         "xp": 100,
         "nivel_requerido": 4,
-        "img": "galo.png",
+        "img": "galo",
         "escala": 0.15,
         "area": [1, 1],
         "origem": [0.4, 0.6],
@@ -512,7 +538,7 @@ export const animais = [
         "tempo_colheita_horas": 48,
         "xp": 200,
         "nivel_requerido": 10,
-        "img": "porco.png",
+        "img": "porco",
         "escala": 0.20,
         "area": [2, 2],
         "tipo": "animal"
@@ -526,7 +552,7 @@ export const animais = [
         "tempo_colheita_horas": 36,
         "xp": 150,
         "nivel_requerido": 7,
-        "img": "ovelha.png",
+        "img": "ovelha",
         "escala": 0.25,
         "area": [1, 2],
         "origem": [0.6, 0.6],
@@ -547,7 +573,8 @@ export const decoracoes = [
         "img": "boneco_frente",
         "escala": 0.5,
         "area": [1, 1],
-        "origem": [0.4, 0.8]
+        "origem": [0.4, 0.8],
+        "tipo" : "decoracao"
     },
     {
         "id": "gazebo",
@@ -561,7 +588,8 @@ export const decoracoes = [
         "img": "bangalo",
         "escala": 1.1,
         "area": [3, 3],
-        "origem": [0.5, 0.8]
+        "origem": [0.5, 0.8],
+        "tipo" : "decoracao"
     },
     {
         "id": "cerca_branca",
@@ -573,11 +601,12 @@ export const decoracoes = [
         "tempo_colheita_horas": 0,
         "xp": 490,
         "nivel_requerido": 0,
-        "img": "cerca_branca.png",
+        "img": "cerca_branca",
         "escala": 0.4,
         "area": [5, 1],
         "origem": [0.5, 0.5],
-        "noStopBuy": true
+        "noStopBuy": true,
+        "tipo" : "decoracao"
     },
     {
         "id": "cabana_de_descanso",
@@ -587,7 +616,8 @@ export const decoracoes = [
         "preco_venda": 0,
         "tempo_colheita_horas": 0,
         "xp": 0,
-        "nivel_requerido": 2
+        "nivel_requerido": 2,
+        "tipo" : "decoracao"
     },
     {
         "id": "cabana",
@@ -597,7 +627,8 @@ export const decoracoes = [
         "preco_venda": 0,
         "tempo_colheita_horas": 0,
         "xp": 0,
-        "nivel_requerido": 4
+        "nivel_requerido": 4,
+        "tipo" : "decoracao"
     },
     {
         "id": "cabana_rosa",
@@ -610,10 +641,11 @@ export const decoracoes = [
         "xp": 0,
         "nivel_requerido": 4,
         "nivel_requerido": 10,
-        "img": "cerca_madeira_CE_canto_inferior.png",
+        "img": "cerca_madeira_CE_canto_inferior",
         "escala": 0.4,
         "area": [2, 4],
-        "origem": [0.35, 0.7]
+        "origem": [0.35, 0.7],
+        "tipo" : "decoracao"
     },
     {
         "id": "cerca_de_madeira_CD",
@@ -625,10 +657,11 @@ export const decoracoes = [
         "tempo_colheita_horas": 0,
         "xp": 0,
         "nivel_requerido": 10,
-        "img": "cerca_madeira_CD.png",
+        "img": "cerca_madeira_CD",
         "escala": 0.4,
         "area": [5, 1],
-        "origem": [0.5, 0.5]
+        "origem": [0.5, 0.5],
+        "tipo" : "decoracao"
     },
     {
         "id": "cerca_de_madeira_CE",
@@ -640,10 +673,11 @@ export const decoracoes = [
         "tempo_colheita_horas": 0,
         "xp": 0,
         "nivel_requerido": 7,
-        "img": "cerca_madeira_CE.png",
+        "img": "cerca_madeira_CE",
         "escala": 0.4,
         "area": [5, 1],
-        "origem": [0.5, 0.5]
+        "origem": [0.5, 0.5],
+        "tipo" : "decoracao"
     },
     {
         "id": "cerca_de_madeira",
@@ -655,11 +689,12 @@ export const decoracoes = [
         "tempo_colheita_horas": 0,
         "xp": 0,
         "nivel_requerido": 4,
-        "img": "cerca_madeira_unico.png",
+        "img": "cerca_madeira_unico",
         "escala": 0.6,
         "area": [5, 2],
         "origem": [0.55, 0.65],
-        "origem_flip": [0.4, 0.65]
+        "origem_flip": [0.4, 0.65],
+        "tipo" : "decoracao"
     },
     {
         "id": "poco",
@@ -670,10 +705,11 @@ export const decoracoes = [
         "tempo_colheita_horas": 0,
         "xp": 0,
         "nivel_requerido": 4,
-        "img": "toquinho.png",
+        "img": "toquinho",
         "escala": 0.6,
         "area": [5, 4],
-        "origem": [0.5, 0.65]
+        "origem": [0.5, 0.65],
+        "tipo" : "decoracao"
 
     },
     {
@@ -684,7 +720,8 @@ export const decoracoes = [
         "preco_venda": 0,
         "tempo_colheita_horas": 0,
         "xp": 0,
-        "nivel_requerido": 15
+        "nivel_requerido": 15,
+        "tipo" : "decoracao"
     },
     {
         "id": "celeiro_vermelho",
@@ -694,7 +731,8 @@ export const decoracoes = [
         "preco_venda": 0,
         "tempo_colheita_horas": 0,
         "xp": 410,
-        "nivel_requerido": 0
+        "nivel_requerido": 0,
+        "tipo" : "decoracao"
     },
     {
         "id": "celerio_rosa",
@@ -704,7 +742,8 @@ export const decoracoes = [
         "preco_venda": 0,
         "tempo_colheita_horas": 0,
         "xp": 820,
-        "nivel_requerido": 0
+        "nivel_requerido": 0,
+        "tipo" : "decoracao"
     },
     {
         "id": "celeiro_preto",
@@ -714,7 +753,8 @@ export const decoracoes = [
         "preco_venda": 0,
         "tempo_colheita_horas": 0,
         "xp": 820,
-        "nivel_requerido": 0
+        "nivel_requerido": 0,
+        "tipo" : "decoracao"
     },
     {
         "id": "celerio_azul",
@@ -724,7 +764,8 @@ export const decoracoes = [
         "preco_venda": 0,
         "tempo_colheita_horas": 0,
         "xp": 820,
-        "nivel_requerido": 0
+        "nivel_requerido": 0,
+        "tipo" : "decoracao"
     },
     {
         "id": "celeiro_branco",
@@ -734,7 +775,8 @@ export const decoracoes = [
         "preco_venda": 0,
         "tempo_colheita_horas": 0,
         "xp": 820,
-        "nivel_requerido": 0
+        "nivel_requerido": 0,
+        "tipo" : "decoracao"
     },
     {
         "id": "celeiro",
@@ -745,10 +787,11 @@ export const decoracoes = [
         "tempo_colheita_horas": 0,
         "xp": 820,
         "nivel_requerido": 0,
-        "img": "armazem.png",
+        "img": "armazem",
         "escala": 0.9,
         "area": [6, 6],
-        "origem": [0.5, 0.7]
+        "origem": [0.5, 0.7],
+        "tipo" : "decoracao"
 
     },
     {
@@ -759,7 +802,8 @@ export const decoracoes = [
         "preco_venda": 0,
         "tempo_colheita_horas": 0,
         "xp": 0,
-        "nivel_requerido": 3
+        "nivel_requerido": 3,
+        "tipo" : "decoracao"
     },
     {
         "id": "barracao_rosa",
@@ -769,7 +813,8 @@ export const decoracoes = [
         "preco_venda": 0,
         "tempo_colheita_horas": 0,
         "xp": 0,
-        "nivel_requerido": 7
+        "nivel_requerido": 7,
+        "tipo" : "decoracao"
     },
     {
         "id": "silo_de_graos",
@@ -779,7 +824,8 @@ export const decoracoes = [
         "preco_venda": 0,
         "tempo_colheita_horas": 0,
         "xp": 0,
-        "nivel_requerido": 13
+        "nivel_requerido": 13,
+        "tipo" : "decoracao"
     },
     {
         "id": "moinho_de_vento",
@@ -790,10 +836,11 @@ export const decoracoes = [
         "tempo_colheita_horas": 0,
         "xp": 0,
         "nivel_requerido": 22,
-        "img": "moinho.png",
+        "img": "moinho",
         "escala": 0.35,
         "area": [3, 3],
-        "origem": [0.5, 0.85]
+        "origem": [0.5, 0.85],
+        "tipo" : "decoracao"
     },
     {
         "id": "casa_da_fazenda",
@@ -803,7 +850,8 @@ export const decoracoes = [
         "preco_venda": 0,
         "tempo_colheita_horas": 0,
         "xp": 0,
-        "nivel_requerido": 26
+        "nivel_requerido": 26,
+        "tipo" : "decoracao"
     },
     {
         "id": "casa_da_fazenda_azul",
@@ -813,7 +861,8 @@ export const decoracoes = [
         "preco_venda": 0,
         "tempo_colheita_horas": 0,
         "xp": 0,
-        "nivel_requerido": 26
+        "nivel_requerido": 26,
+        "tipo" : "decoracao"
     },
     {
         "id": "pagoda",
@@ -823,7 +872,8 @@ export const decoracoes = [
         "preco_venda": 0,
         "tempo_colheita_horas": 0,
         "xp": 1500,
-        "nivel_requerido": 0
+        "nivel_requerido": 0,
+        "tipo" : "decoracao"
     },
     {
         "id": "casa_de_cha",
@@ -833,7 +883,8 @@ export const decoracoes = [
         "preco_venda": 0,
         "tempo_colheita_horas": 0,
         "xp": 1000,
-        "nivel_requerido": 0
+        "nivel_requerido": 0,
+        "tipo" : "decoracao"
     },
     {
         "id": "trator",
@@ -844,9 +895,10 @@ export const decoracoes = [
         "tempo_colheita_horas": 0,
         "xp": 1000,
         "nivel_requerido": 0,
-        "img": "trator.png",
+        "img": "trator",
         "escala": 0.2,
-        "area": [3, 4]
+        "area": [3, 4],
+        "tipo" : "decoracao"
     },
     {
         "id": "trator_azul",
@@ -857,9 +909,10 @@ export const decoracoes = [
         "tempo_colheita_horas": 0,
         "xp": 1000,
         "nivel_requerido": 0,
-        "img": "trator2.png",
+        "img": "trator2",
         "escala": 0.4,
-        "area": [3, 4]
+        "area": [3, 4],
+        "tipo" : "decoracao"
     },
     {
         "id": "trator_verde",
@@ -870,9 +923,10 @@ export const decoracoes = [
         "tempo_colheita_horas": 0,
         "xp": 1000,
         "nivel_requerido": 0,
-        "img": "trator3.png",
+        "img": "trator3",
         "escala": 1.0,
-        "area": [4, 4]
+        "area": [4, 4],
+        "tipo" : "decoracao"
     },
     {
         "id": "estabulo",
@@ -886,7 +940,8 @@ export const decoracoes = [
         "img": "estabulo",
         "escala": 0.5,
         "area": [2, 5],
-        "origem": [0.5, 0.65]
+        "origem": [0.5, 0.65],
+        "tipo" : "decoracao"
     }
 
 ]
@@ -898,7 +953,7 @@ export const solos = [
         "escala": 0.73,
         "area": [4, 4],
         "origem": [0.5, 0.58],
-        "tipo": "solo",
+        "tipo": "solo_preparado",
         "noStopBuy": false
     },
     {
@@ -907,7 +962,7 @@ export const solos = [
         "escala": 0.73,
         "area": [4, 4],
         "origem": [0.5, 0.58],
-        "tipo": "solo",
+        "tipo": "solo_plantado_simples",
         "noStopBuy": false
     }
 ]

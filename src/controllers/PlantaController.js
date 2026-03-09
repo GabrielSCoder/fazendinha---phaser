@@ -66,6 +66,7 @@ export default class PlantaController {
         const semente = this.scene.gameVariables.selectedSeed;
         const tipo_plantacao = semente.tipo_plantacao;
 
+
         if (!tipo_plantacao) return;
 
         const itemData = solos.find(solo => solo.nome === tipo_plantacao);
@@ -79,7 +80,7 @@ export default class PlantaController {
         const scale = itemData.escala || 1;
         const originX = itemData.origem?.[0] ?? 0.5;
         const originY = itemData.origem?.[1] ?? 0.5;
-        const tipo = itemData.tipo || "solo";
+        const tipo = "solo_plantado_simples";
 
         const { w, h } = this.gridUtils.getSpriteFootprint(solo);
 
@@ -91,19 +92,25 @@ export default class PlantaController {
 
         const sprite = this.scene.spriteUtils.addGameSprite(itemData, screenPos.x, screenPos.y, scale, originX, originY);
 
+        const stages = [
+            { percent: 1, texture: semente.img_pronta }
+        ];
+
+        this.scene.growthController.startGrowth(sprite, semente.tempoColheita * 60 * 1000, stages);
+
         sprite.footprint = itemData.area || [w, h];
         sprite.tipo = tipo;
         sprite.gridX = Math.round(startX + w * 0.5 - 0.5);
         sprite.gridY = Math.round(startY + h * 0.5 - 0.5);
         sprite.lastFreePos = { startX, startY };
         sprite.isMoving = false;
-        sprite.nome = itemData.nome
-        sprite.plantado = true
-        sprite.plata_cultivada = semente.nome;
+        sprite.nome = semente.nome;
+        sprite.plantado = true;
+        sprite.planta_cultivada = semente.nome;
 
         if (!this.scene.gameVariables.sprites) this.scene.gameVariables.sprites = [];
         this.scene.gameVariables.sprites.push(sprite);
-        this.scene.cameraController.ignoreInUICamera([...this.scene.gameVariables.sprites])
+        this.scene.cameraController.ignoreInUICamera([...this.scene.gameVariables.sprites]);
 
         this.gridUtils.markOccupied(sprite, startX, startY, w, h);
         this.gridUtils.recalculateDepthAround(sprite);
@@ -111,5 +118,5 @@ export default class PlantaController {
         this.uiEvents.emit("action:FreeSoil");
     }
 
-    
+
 }

@@ -67,7 +67,7 @@ export default class GameEventsController {
             });
 
             this.scene.gameVariables.planting = false;
-            
+
         } else if (this.scene.shopMenu.isOpen() && this.scene.gameVariables.selling) {
             this.scene.acoesUtils.stopSell();
         } else if (this.scene.shopMenu.isOpen() && this.scene.gameVariables.plowing) {
@@ -168,6 +168,18 @@ export default class GameEventsController {
         this.uiEvents.emit('ui:setButtonState', 'vender', true);
         this.uiEvents.emit('ui:setButtonState', 'arar', true);
 
+        if (sprite.tipo == "arvore" || sprite.tipo == "animal") {
+
+            if (!sprite.harvestReady && !sprite.growthStart) {
+
+                const stages = [
+                    { percent: 1, texture: sprite.texture.key }
+                ];
+
+                this.scene.growthController.startGrowth(sprite, sprite.tempoColheita * 60 * 1000, stages)
+            }
+        }
+
         if (this.scene.gameVariables.buyItemTmp) {
             console.log(this.scene.gameVariables.buyItemTmp);
             this.scene.events.emit("itemPurchased", this.scene.gameVariables.buyItemTmp);
@@ -260,7 +272,6 @@ export default class GameEventsController {
 
     controlePlantar() {
 
-        console.log("entrando")
         const solo = this.scene.gameVariables.selectedSprite;
 
         if (this.scene.queue.isFull()) return;

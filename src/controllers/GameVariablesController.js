@@ -14,7 +14,7 @@ export default class GameVariablesController {
 
         this.gridReserved = Array.from({ length: this.gridWidth * this.logicFactor },
             () => Array(this.gridHeight * this.logicFactor).fill(null));
-            
+
         this.sprites = [];
         this.spriteInitialPositions = new Map();
         this.middleButtonDown = false;
@@ -25,7 +25,7 @@ export default class GameVariablesController {
         this.previewOccupiedtiles = [];
         this.fenceSnapTarget = null;
         this.tileSize = this.gridSize;
-
+        this.hoveredSprite = null;
         this.canInteract = true;
 
         this.plowing = false;
@@ -37,7 +37,7 @@ export default class GameVariablesController {
 
         this.selectedSprite = null;
         this.selectedSeed = null;
-        
+
         this.collisionDataTemp = null;
         this.toolSprite = null;
 

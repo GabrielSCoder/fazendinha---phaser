@@ -175,12 +175,10 @@ export default class AcoesUtils {
         const sprite = this.scene.spriteUtils.addGameSprite(itemData, this.scale / 2, this.scale / 2, scale, originX, originY);
 
         if (itemData.area) {
-            sprite.footprint = itemData.area;
-            sprite.tipo = itemData.tipo;
+            sprite.footprint = itemData.area; 
         }
 
         sprite.setAlpha(0.7);
-        sprite.nome = itemData.nome;
         sprite.isMoving = true;
         sprite.setDepth(2000);
 
@@ -222,7 +220,6 @@ export default class AcoesUtils {
 
         this.scene.cameraController.ignoreInUICamera([...this.scene.gameVariables.sprites])
 
-        console.log("🛒 Novo item comprado, pronto pra posicionar.");
     }
 
 
