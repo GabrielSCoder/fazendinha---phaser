@@ -32,7 +32,7 @@ export default class SpriteUtils {
 
         if (canGrow) {
             sprite.tempoColheita = data.tempo_colheita_horas;
-            sprite.spriteColheitaCompleta = data.img_pronta ?? "";
+            sprite.img_pronta = data.img_pronta ?? "";
             sprite.growthStage = 0;
             sprite.harvestReady = false;
             sprite.preco_colheita = data.preco_venda;
