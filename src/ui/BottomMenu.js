@@ -10,6 +10,23 @@ export default class BottomMenu {
         this.buttons = {};
         this.createUI();
         this.registerEvents();
+
+
+    }
+
+    createButton({ text, x, y, onClick }) {
+
+        const btn = this.scene.add.text(x, y, text, {
+            fontSize: '16px',
+            fontFamily: 'LuckiestGuy-Regular',
+            color: '#fff',
+            backgroundColor: '#444',
+            padding: { left: 8, right: 8, top: 4, bottom: 4 }
+        })
+            .setOrigin(0.5)
+            .setInteractive({ useHandCursor: true });
+
+        return btn;
     }
 
     createUI() {
@@ -135,6 +152,11 @@ export default class BottomMenu {
         this.buttons['matriz'] = this.btnMatriz;
         this.buttons['cancelar'] = this.btnCancelar;
 
+        const cheatUi = this.createCheatMenu();
+
+        this.containerUI.add(cheatUi.upper);
+        this.containerUI.add(cheatUi.bottom);
+
         this.btnMatriz.on('pointerup', () => {
             this.scene.gameVariables.freeClick = true;
             const visible = this.scene.gameVariables.matrixVisible
@@ -198,6 +220,101 @@ export default class BottomMenu {
             const newZoom = Phaser.Math.Clamp(cam.zoom + zoomChange, 0.5, 2);
             cam.setZoom(newZoom);
         });
+    }
+
+    createCheatMenu() {
+        const { width, height } = this.scene.scale;
+        const menuWidth = 250;
+        const menuHeight = 40;
+
+        this.CheatMenu = this.scene.add.container(
+            50,
+            height - menuHeight - 20
+        );
+
+        this.CheatMenuUpper = this.scene.add.container(
+            50,
+            height - menuHeight - 60
+        );
+
+        const bg = this.scene.add.rectangle(0, 0, menuWidth, menuHeight, 0x222222, 0.85)
+            .setOrigin(0);
+
+        const bg2 = this.scene.add.rectangle(0, 0, menuWidth, menuHeight, 0x222222, 0.85)
+            .setOrigin(0);
+
+        this.CheatMenu.add(bg);
+        this.CheatMenuUpper.add(bg2);
+
+        this.btnMinusGold = this.createButton({
+            text: "- Ouro",
+            x: menuWidth - 70,
+            y: menuHeight / 2,
+        })
+
+        this.btnMinusMoney = this.createButton({
+            text: "- Grana",
+            x: menuWidth - 150,
+            y: menuHeight / 2,
+        })
+
+        this.btnMinusXp = this.createButton({
+            text: "- Xp",
+            x: menuWidth - 220,
+            y: menuHeight / 2,
+        })
+
+        this.btnPlusGold = this.createButton({
+            text: "+ Ouro",
+            x: menuWidth - 70,
+            y: menuHeight / 2,
+        })
+
+        this.btnPlusMoney = this.createButton({
+            text: "+ Grana",
+            x: menuWidth - 150,
+            y: menuHeight / 2,
+        })
+
+        this.btnPlusXp = this.createButton({
+            text: "+ Xp",
+            x: menuWidth - 220,
+            y: menuHeight / 2,
+        })
+
+        this.btnMinusGold.on("pointerup", () => {
+            console.log("dhuahdsau")
+        })
+
+        this.btnMinusMoney.on("pointerup", () => {
+            console.log("dhuahdsau")
+        })
+
+        this.btnMinusXp.on("pointerup", () => {
+            console.log("dhuahdsau")
+        })
+        
+        this.btnPlusGold.on("pointerup", () => {
+            console.log("dhuahdsau")
+        })
+
+        this.btnPlusMoney.on("pointerup", () => {
+            console.log("dhuahdsau")
+        })
+
+         this.btnPlusXp.on("pointerup", () => {
+            console.log("dhuahdsau")
+        })
+
+        this.CheatMenu.add([this.btnPlusGold, this.btnPlusMoney, this.btnPlusXp]);
+        this.CheatMenuUpper.add([this.btnMinusGold, this.btnMinusMoney, this.btnMinusXp]);
+
+        const ui = {
+            upper: this.CheatMenu,
+            bottom: this.CheatMenuUpper
+        }
+
+        return ui
     }
 
     setButtonState(buttonName, enabled) {
@@ -270,5 +387,6 @@ export default class BottomMenu {
 
         });
     }
+
 
 }

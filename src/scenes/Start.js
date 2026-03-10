@@ -19,6 +19,7 @@ import ControlBar from '../ui/ControlBar.js';
 import GrowthController from '../controllers/GrowthController.js';
 import { colher, plantar_solo, vender } from '../msgs.js';
 import HarvestController from '../controllers/HarvestController.js';
+import ProfileController from '../controllers/ProfileController.js';
 
 export class Start extends Phaser.Scene {
     constructor() {
@@ -187,6 +188,7 @@ export class Start extends Phaser.Scene {
         this.gridUtils.gridStart();
         this.growthController = new GrowthController(this);
         this.barController = new ControlBar(this);
+        this.profileController = new ProfileController(this, { uiEvents: this.gameVariables.eventsCenter })
         this.acoesUtils = new AcoesUtils(this, { uiEvents: this.gameVariables.eventsCenter });
         this.spriteController = new SpriteController(this, { uiEvents: this.gameVariables.eventsCenter });
         this.queue = new ActionQueue(this, { uiEvents: this.gameVariables.eventsCenter });
@@ -199,7 +201,7 @@ export class Start extends Phaser.Scene {
 
         this.shopMenu = new ShopMenu(this);
         this.bottomMenu = new BottomMenu(this, { shopMenu: this.shopMenu, uiEvents: this.gameVariables.eventsCenter });
-        this.topUI = new TopUI(this);
+        this.topUI = new TopUI(this , { uiEvents: this.gameVariables.eventsCenter });
         this.cameraController = new CameraController(this);
         this.itemMenuUI = new ItemMenuUI(this, { uiEvents: this.gameVariables.eventsCenter });
 

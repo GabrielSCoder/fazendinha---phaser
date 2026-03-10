@@ -35,11 +35,8 @@ export default class HarvestController {
                         done();
                     }
                 );
-
             }
-
         });
-
     }
 
 
@@ -72,6 +69,6 @@ export default class HarvestController {
         );
 
         sprite.setInteractive({ pixelPerfect: true, alphaTolerance: 1, useHandCursor: true });
-
+        sprite.setAlpha(1);
     }
 }
