@@ -17,7 +17,7 @@ export default class ShopItemCard {
 
     createCard() {
         const { x, y, width, height, data, scene, container } = this;
-        this.Locked = this.requiredLevel >= this.playerLevel;
+        this.Locked = this.requiredLevel > this.playerLevel;
         this.unlockedList = [];
         this.lockedList = [];
 

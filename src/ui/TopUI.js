@@ -1,41 +1,49 @@
 export default class TopUI {
+
     constructor(scene, config = {}) {
+
         this.scene = scene;
         this.uiEvents = config.uiEvents;
 
         this.userName = config.userName || "Gabriel";
-        this.ExperienceAmount = 0;
-        this.xpObjetivo = 100;
+
         this.level = 1;
         this.gold = 0;
         this.money = 0;
+
+        this.xpAtual = 0;
+        this.xpObjetivo = 1;
 
         this.createUI();
 
         this.uiEvents.emit("action:GetAllProfileData", (result) => {
 
-            console.log(result.gold);
-
-            this.level = result.level
-            this.gold = result.gold
-            this.money = result.money
-            this.ExperienceAmount = result.ExperienceAmount
+            this.gold = result.gold;
+            this.money = result.money;
 
             this.updateUI();
-            this.updateXP(
-                result.ExperienceAmount,
-                this.xpObjetivo
-            );
-        })
+
+        });
 
         this.uiEvents.on("update:profile", (data) => {
 
-            this.level = data.level;
             this.gold = data.gold;
             this.money = data.money;
 
             this.updateUI();
-            this.updateXP(data.xp, this.xpObjetivo);
+
+        });
+
+        this.uiEvents.on("profile:xpUpdated", (data) => {
+
+            this.level = data.level;
+
+            this.updateXP(
+                data.xpAtual,
+                data.xpObjetivo
+            );
+
+            this.updateUI();
 
         });
     }
@@ -45,21 +53,23 @@ export default class TopUI {
         this.levelText.setText(this.level);
         this.moneyText.setText(this.money);
         this.goldText.setText(this.gold);
-        // this.xpText.setText(this.ExperienceAmount);
 
     }
 
-    updateXP(ExperienceAmount, xpObjetivo) {
+    updateXP(xpAtual, xpObjetivo) {
 
-        this.ExperienceAmount = ExperienceAmount;
+        this.xpAtual = xpAtual;
         this.xpObjetivo = xpObjetivo;
 
-        const ratio = Phaser.Math.Clamp(ExperienceAmount / xpObjetivo, 0, 1);
+        const ratio = Phaser.Math.Clamp(xpAtual / xpObjetivo, 0, 1);
 
-        this.barraXp.displayWidth = this.barraWidth * ratio;
+        this.barraXp.width = this.barraWidth * ratio;
 
-        this.xpText.setText(`${ExperienceAmount}/${xpObjetivo}`);
+        this.xpText.setText(`${xpAtual}/${xpObjetivo}`);
+
     }
+
+
 
     createUI() {
         const { width } = this.scene.scale;
@@ -81,9 +91,15 @@ export default class TopUI {
         this.barraWidth = 180;
         this.barraHeight = 20;
         this.barraBg = this.scene.add.rectangle(10, 10, this.barraWidth, this.barraHeight, 0x55e4f8).setOrigin(0, 0);
-        this.barraXp = this.scene.add.rectangle(10, 10, this.barraWidth * (this.ExperienceAmount / this.xpObjetivo), this.barraHeight, 0xfff08a).setOrigin(0, 0);
+        this.barraXp = this.scene.add.rectangle(
+            10,
+            10,
+            0,
+            this.barraHeight,
+            0xfff08a
+        ).setOrigin(0, 0);
 
-        this.xpText = this.scene.add.text(this.barraWidth / 4, this.barraHeight, `${this.ExperienceAmount}/${this.xpObjetivo}`, {
+        this.xpText = this.scene.add.text(this.barraWidth / 4, this.barraHeight, `${this.xpAtual}/${this.xpObjetivo}`, {
             fontSize: '14px',
             color: 'black',
             fontStyle: 'bold'
@@ -116,7 +132,7 @@ export default class TopUI {
         const centerBg = this.scene.add.rectangle(0, 0, 200, 40, 0xffffff, 0.3).setOrigin(0.5, 0);
         this.uiCenterContainer.add(centerBg);
 
- 
+
         this.moedaIcon = this.scene.add.image(-70, 20, 'gold_icon').setOrigin(0.5, 0.5);
         this.moedaIcon.setDisplaySize(30, 30);
         this.goldText = this.scene.add.text(-50, 20, this.gold, { fontSize: '16px', color: 'yellow', fontStyle: "bold", fontFamily: 'LuckiestGuy-Regular' }).setOrigin(0, 0.5);
@@ -129,11 +145,5 @@ export default class TopUI {
         this.uiCenterContainer.add([this.moedaIcon, this.goldText, this.moneyIcon, this.moneyText]);
     }
 
- 
-    updateXP(valorAtual) {
-        this.ExperienceAmount = valorAtual;
-        this.barraXp.width = this.barraWidth * (this.ExperienceAmount / this.xpObjetivo);
-        this.xpText.setText(`${this.ExperienceAmount}/${this.xpObjetivo}`);
-    }
 }
 

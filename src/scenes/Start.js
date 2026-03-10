@@ -20,6 +20,7 @@ import GrowthController from '../controllers/GrowthController.js';
 import { colher, plantar_solo, vender } from '../msgs.js';
 import HarvestController from '../controllers/HarvestController.js';
 import ProfileController from '../controllers/ProfileController.js';
+import XPController from '../controllers/XpController.js';
 
 export class Start extends Phaser.Scene {
     constructor() {
@@ -29,6 +30,8 @@ export class Start extends Phaser.Scene {
     preload() {
         this.load.font('LuckiestGuy-Regular', 'assets/fonts/LuckiestGuy-Regular.ttf', 'truetype');
 
+
+        this.load.text('xpTable', 'assets/data/xp_levels.csv');
         this.load.image('semente_abacaxi', 'assets/semente/icone_abacaxi.png');
         this.load.image('semente_abobora', 'assets/semente/icone_abobora.png');
         this.load.image('semente_abobora_moranga', 'assets/semente/icone_abobora_moranga.png');
@@ -185,7 +188,15 @@ export class Start extends Phaser.Scene {
             { fontSize: '14px', color: '#ffffff' }
         ).setVisible(false);
 
+        const raw = this.cache.text.get("xpTable");
+
+        const xpTable = this.parseCSV(raw);
+
         this.gridUtils.gridStart();
+        this.xpController = new XPController(this, xpTable, this.gameVariables.eventsCenter);
+
+        this.xpController.emitUpdate();
+
         this.growthController = new GrowthController(this);
         this.barController = new ControlBar(this);
         this.profileController = new ProfileController(this, { uiEvents: this.gameVariables.eventsCenter })
@@ -199,9 +210,9 @@ export class Start extends Phaser.Scene {
         this.plantControl = new PlantaController(this, { uiEvents: this.gameVariables.eventsCenter });
         this.sellControl = new VendaController(this, { uiEvents: this.gameVariables.eventsCenter });
 
-        this.shopMenu = new ShopMenu(this , { uiEvents: this.gameVariables.eventsCenter });
+        this.shopMenu = new ShopMenu(this, { uiEvents: this.gameVariables.eventsCenter });
         this.bottomMenu = new BottomMenu(this, { shopMenu: this.shopMenu, uiEvents: this.gameVariables.eventsCenter });
-        this.topUI = new TopUI(this , { uiEvents: this.gameVariables.eventsCenter });
+        this.topUI = new TopUI(this, { uiEvents: this.gameVariables.eventsCenter });
         this.cameraController = new CameraController(this);
         this.itemMenuUI = new ItemMenuUI(this, { uiEvents: this.gameVariables.eventsCenter });
 
@@ -338,7 +349,7 @@ export class Start extends Phaser.Scene {
             text = plantar_solo;
         }
 
-        else if (sprite.tipo == "solo_plantado_simples" || sprite.tipo == "animal" || sprite.tipo == "arvore"  ) {
+        else if (sprite.tipo == "solo_plantado_simples" || sprite.tipo == "animal" || sprite.tipo == "arvore") {
 
             let percent = this.growthController.getGrowthPercent(sprite);
             percent = Math.floor(percent * 100);
@@ -367,6 +378,27 @@ export class Start extends Phaser.Scene {
         console.log(sprite)
 
         this.updateHoverText(sprite);
+
+    }
+
+    parseCSV(csv) {
+
+        const lines = csv.trim().split("\n");
+        const headers = lines.shift().split(",");
+
+        return lines.map(line => {
+
+            const values = line.split(",");
+
+            const obj = {};
+
+            headers.forEach((h, i) => {
+                obj[h.trim()] = Number(values[i]);
+            });
+
+            return obj;
+
+        });
 
     }
 

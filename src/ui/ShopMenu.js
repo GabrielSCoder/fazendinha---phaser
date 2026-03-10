@@ -13,25 +13,26 @@ export default class ShopMenu {
         this.shopItems = [];
         this.playerLevel = 1;
         this.uiEvents = config.uiEvents;
+        this.requestLevel();
         this.listenEvents();
-        this.requestProfileData();
 
         this.create();
     }
 
-    requestProfileData() {
+    listenEvents() {
 
-        this.uiEvents.emit("action:GetAllProfileData", (data) => {
+        this.uiEvents.on("profile:xpUpdated", (data) => {
 
             this.playerLevel = data.level;
 
-        });
+            console.log(this.playerLevel)
 
+        });
     }
 
-    listenEvents() {
+    requestLevel() {
 
-        this.uiEvents.on("update:level", (level) => {
+        this.uiEvents.emit("xp:getLevel", (level) => {
 
             this.playerLevel = level;
 
