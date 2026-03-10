@@ -74,12 +74,22 @@ export default class ShopMenu {
             fontFamily: 'LuckiestGuy-Regular'
         }).setStroke('#000', 4).setOrigin(0.5);
 
-        const closeBtn = scene.add.image(840, this.container.height + 10, 'close_button')
-            .setDisplaySize(50, 50)
+        const closeBtn = scene.add.image(840, this.container.height + 15, 'close_button')
+            .setScale(0.2)
             .setOrigin(0.5)
             .setInteractive({ useHandCursor: true });
 
+        const baseScale = closeBtn.scale;
+
         const debouncedClose = this.debounce(() => this.close(), 150);
+
+        closeBtn.on("pointerover", () => {
+            closeBtn.setScale(baseScale * 1.2);
+        });
+
+        closeBtn.on("pointerout", () => {
+            closeBtn.setScale(baseScale);
+        });
 
         closeBtn.on('pointerdown', debouncedClose);
 
@@ -110,7 +120,7 @@ export default class ShopMenu {
                 color: cat === this.activeCategory ? '#000' : '#fff',
             }).setOrigin(0.5);
 
-            // Efeitos de hover
+
             btn.on('pointerover', () => {
                 if (this.activeCategory !== cat) {
                     btn.setTint(0xf9d070);
@@ -261,6 +271,7 @@ export default class ShopMenu {
             .setInteractive({ useHandCursor: true });
 
         btn.canClick = true;
+        console.log(btn)
 
         const debouncedClick = this.debounce(() => {
             if (btn.canClick) onClick();
@@ -269,11 +280,11 @@ export default class ShopMenu {
         btn.on('pointerdown', debouncedClick);
 
         btn.on('pointerover', () => {
-            btn.setTint(0xffff00); // amarelo
+            btn.setScale(0.6)
         });
 
         btn.on('pointerout', () => {
-            btn.clearTint(); // volta ao normal
+            btn.setScale(0.5)
         });
 
         return btn;
