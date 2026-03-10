@@ -241,25 +241,35 @@ export default class GameEventsController {
         if (this.scene.queue.isFull()) return;
 
         const reserva = this.scene.soilControl.createReserveSoil();
+        if (!reserva?.length) return;
 
-        if (!reserva) return;
+        reserva.forEach(tile => {
+            tile.sprite.setAlpha(0.4);
+        });
 
-        reserva.sprite.setAlpha(0.4);
+        let progressBar = null;
 
         this.scene.queue.add({
 
-            sprite: reserva.sprite,
-
             action: (done) => {
-                reserva.sprite.setAlpha(0.7);
-                this.scene.soilControl.executePlowingSoil(reserva, done);
+
+                console.log("executando solo");
+
+                progressBar = this.scene.soilControl.executePlowingSoil(reserva, () => {
+
+                    console.log("solo terminou");
+
+                    done();
+
+                });
+
             },
 
             onCancel: () => {
 
-                if (reserva.sprite.progressBar) {
-                    reserva.sprite.progressBar.cancel();
-                    reserva.sprite.progressBar = null;
+                if (progressBar) {
+                    progressBar.cancel();
+                    progressBar = null;
                 }
 
                 this.scene.soilControl.cancelReserve(reserva);
@@ -267,8 +277,8 @@ export default class GameEventsController {
             }
 
         });
-    }
 
+    }
 
     controlePlantar() {
 

@@ -36,6 +36,7 @@ export default class SpriteUtils {
             sprite.growthStage = 0;
             sprite.harvestReady = false;
             sprite.preco_colheita = data.preco_venda;
+            sprite.canGrow = true;
             if (!is_semente) sprite.regrow = true;
         }
 
@@ -56,7 +57,7 @@ export default class SpriteUtils {
 
             if (this.scene.gameVariables.selling) {
                 this.scene.gameVariables.selectedSprite = sprite;
-                this.scene.acoesUtils.venderItem();
+                this.scene.gameVariables.eventsCenter.emit("action:SellItem");
             } else if (!sprite.isMoving && sprite.tipo !== "solo_plantado_simples" && sprite.tipo !== "solo_preparado") {
                 this.scene.gameVariables.selectedSprite = sprite;
                 this.scene.itemMenuUI.show(

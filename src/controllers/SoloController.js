@@ -148,66 +148,85 @@ export default class SoloController {
 
     createReserveSoil() {
 
-        const tile = this.scene.gameVariables.previewOccupiedtiles[0];
-        if (!tile) return null;
+        const tiles = [];
+        const validTiles = [];
 
         const blockSize = 4;
-        const startX = tile.startX ?? tile.x;
-        const startY = tile.startY ?? tile.y;
 
-        const ocupado = this.gridUtils.checkOccupiedBlock(startX, startY, blockSize, blockSize);
-        if (ocupado) return null;
+        // PASSO 1: verificar quais podem ser usados
+        this.scene.gameVariables.previewOccupiedtiles.forEach(tile => {
+
+            const startX = tile.startX ?? tile.x;
+            const startY = tile.startY ?? tile.y;
+
+            const ocupado = this.gridUtils.checkOccupiedBlock(startX, startY, blockSize, blockSize);
+
+            if (!ocupado) {
+                validTiles.push({ startX, startY });
+            }
+
+        });
+
+        if (!validTiles.length) return [];
 
         const itemData = solos.find(c => c.nome === "solo_preparado");
-        if (!itemData) return null;
+        if (!itemData) return [];
 
         const scale = itemData.escala || 1;
         const originX = itemData.origem?.[0] ?? 0.5;
         const originY = itemData.origem?.[1] ?? 0.5;
         const tipo = itemData.tipo || "solo";
 
-        const w = blockSize;
-        const h = blockSize;
+        // PASSO 2: criar reservas
+        validTiles.forEach(({ startX, startY }) => {
 
-        const centerX = startX + (w / 2) - (1 - originX - 0.25);
-        const centerY = startY + (h / 2) - (1 - originY - 0.18);
+            const w = blockSize;
+            const h = blockSize;
 
-        const screenPos = this.gridUtils.isoToScreen(centerX, centerY);
+            const centerX = startX + (w / 2) - (1 - originX - 0.25);
+            const centerY = startY + (h / 2) - (1 - originY - 0.18);
 
-        const sprite = this.scene.spriteUtils.addGameSprite(
-            itemData,
-            screenPos.x,
-            screenPos.y,
-            scale,
-            originX,
-            originY
-        );
+            const screenPos = this.gridUtils.isoToScreen(centerX, centerY);
 
-        sprite.harvestTime = 0;
-        sprite.setAlpha(0.4);
-        sprite.isReserved = true;
-        sprite.hoverEnabled = true;
-        sprite.gridStartX = startX;
-        sprite.gridStartY = startY;
-        sprite.blockSize = blockSize;
-        sprite.nome = "solo_preparado";
-        sprite.tipo = tipo;
-        sprite.disableInteractive();
+            const sprite = this.scene.spriteUtils.addGameSprite(
+                itemData,
+                screenPos.x,
+                screenPos.y,
+                scale,
+                originX,
+                originY
+            );
 
-        this.gridUtils.markTemporaryReserved(startX, startY, blockSize, blockSize);
+            sprite.harvestTime = 0;
+            sprite.setAlpha(0.4);
+            sprite.isReserved = true;
+            sprite.hoverEnabled = true;
+            sprite.gridStartX = startX;
+            sprite.gridStartY = startY;
+            sprite.blockSize = blockSize;
+            sprite.nome = "solo_preparado";
+            sprite.tipo = tipo;
+            sprite.disableInteractive();
 
-        if (!this.scene.gameVariables.sprites)
-            this.scene.gameVariables.sprites = [];
+            // agora reserva
+            this.gridUtils.markTemporaryReserved(startX, startY, blockSize, blockSize);
 
-        this.scene.gameVariables.sprites.push(sprite);
+            if (!this.scene.gameVariables.sprites)
+                this.scene.gameVariables.sprites = [];
 
-        this.scene.cameraController.ignoreInUICamera([...this.scene.gameVariables.sprites]);
+            this.scene.gameVariables.sprites.push(sprite);
 
-        return {
-            sprite,
-            screenX: screenPos.x,
-            screenY: screenPos.y
-        };
+            this.scene.cameraController.ignoreInUICamera([sprite]);
+
+            tiles.push({
+                sprite,
+                screenX: screenPos.x,
+                screenY: screenPos.y
+            });
+
+        });
+
+        return tiles;
     }
 
     confirmSoil(sprite) {
@@ -245,42 +264,49 @@ export default class SoloController {
 
     executePlowingSoil(reserva, done) {
 
-        const { sprite, screenX, screenY } = reserva;
+        const first = reserva[0];
 
-        sprite.progressBar = this.scene.barController.criarBarraProgresso(
-            screenX,
-            screenY,
+        const bar = this.scene.barController.criarBarraProgresso(
+            first.screenX,
+            first.screenY,
             50,
             10,
             1.8,
             () => {
 
-                sprite.progressBar = null;
-
-                this.confirmSoil(sprite);
+                reserva.forEach(tile => {
+                    this.confirmSoil(tile.sprite);
+                });
 
                 done();
+
             }
         );
+
+        return bar;
     }
 
     cancelReserve(reserva) {
 
-        const sprite = reserva.sprite;
+        reserva.forEach(tile => {
 
-        const { gridStartX, gridStartY, blockSize } = sprite;
+            const sprite = tile.sprite;
 
-        this.gridUtils.clearTemporaryReserved(
-            gridStartX,
-            gridStartY,
-            blockSize,
-            blockSize
-        );
+            const { gridStartX, gridStartY, blockSize } = sprite;
 
-        this.scene.gameVariables.sprites =
-            this.scene.gameVariables.sprites.filter(s => s !== sprite);
+            sprite.destroy();
 
-        sprite.destroy();
+            this.gridUtils.clearTemporaryReserved(
+                gridStartX,
+                gridStartY,
+                blockSize,
+                blockSize
+            );
+
+            this.scene.gameVariables.sprites = this.scene.gameVariables.sprites.filter(s => s !== sprite);
+
+        });
+
     }
 
     clearSoil(sprite) {
@@ -299,6 +325,8 @@ export default class SoloController {
         sprite.harvestReady = false;
         sprite.preco_colheita = null;
         sprite.setTexture("solo.png");
+        sprite.setAlpha(1);
+        sprite.setInteractive({ pixelPerfect: true, alphaTolerance: 1, useHandCursor: true });
     }
 
 }

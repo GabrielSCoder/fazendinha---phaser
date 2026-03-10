@@ -103,6 +103,11 @@ export default class VendaController {
         if (!this.scene.gameVariables.toolSprite) return;
 
         const item = this.scene.gameVariables.selectedSprite;
+
+        if (item.growthStart && !item.harvestReady) {
+            this.scene.growthController.cancelGrowth(item);
+        }
+
         this.gridUtils.clearOccupied(item);
 
         this.scene.hoverText.setVisible(false);
@@ -111,10 +116,11 @@ export default class VendaController {
         this.scene.gameVariables.sprites = this.scene.gameVariables.sprites.filter(s => s && s !== sprite_del && !s.destroyed);
 
         this.scene.gameVariables.selectedSprite = null;
+        this.scene.gameVariables.hoveredSprite = null;
 
         this.gridUtils.drawFootprints();
         this.gridUtils.drawMatrix();
     }
 
-    
+
 }

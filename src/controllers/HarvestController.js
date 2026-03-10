@@ -8,38 +8,44 @@ export default class HarvestController {
 
         if (!sprite.harvestReady) return;
 
-        if (sprite.regrow) {
+        sprite.setAlpha(0.7);
+        sprite.disableInteractive();
+        sprite.clearTint();
+        this.scene.gameVariables.hoveredSprite = null;
+        this.scene.hoverText.setVisible(false);
 
-            sprite.disableInteractive();
-            this.scene.gameVariables.hoveredSprite = null;
-            this.scene.hoverText.setVisible(false);
+        this.scene.queue.add({
 
-            sprite.clearTint();
+            action: (done) => {
 
-            this.scene.barController.criarBarraProgresso(
-                sprite.x,
-                sprite.y + 10,
-                50,
-                10,
-                1.8, () => {
-                    this.harvestRenewable(sprite);
-                })
-        }
-        else {
-            this.scene.barController.criarBarraProgresso(
-                sprite.x,
-                sprite.y + 10,
-                50,
-                10,
-                1.8, () => {
-                    this.harvestPlant(sprite);
-                })
-        }
+                this.scene.barController.criarBarraProgresso(
+                    sprite.x,
+                    sprite.y + 10,
+                    50,
+                    10,
+                    1.8,
+                    () => {
+
+                        if (sprite.regrow) {
+                            this.harvestRenewable(sprite);
+                        } else {
+                            this.harvestPlant(sprite);
+                        }
+
+                        done();
+                    }
+                );
+
+            }
+
+        });
+
     }
+
 
     harvestPlant(sprite) {
 
-        if (sprite.harvestTime == undefined ) return;
+        if (sprite.harvestTime == undefined) return;
         // const semente = sprite.sementeData;
 
         // this.scene.inventory.add(semente.planta_colheita);
