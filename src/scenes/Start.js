@@ -199,7 +199,7 @@ export class Start extends Phaser.Scene {
         this.plantControl = new PlantaController(this, { uiEvents: this.gameVariables.eventsCenter });
         this.sellControl = new VendaController(this, { uiEvents: this.gameVariables.eventsCenter });
 
-        this.shopMenu = new ShopMenu(this);
+        this.shopMenu = new ShopMenu(this , { uiEvents: this.gameVariables.eventsCenter });
         this.bottomMenu = new BottomMenu(this, { shopMenu: this.shopMenu, uiEvents: this.gameVariables.eventsCenter });
         this.topUI = new TopUI(this , { uiEvents: this.gameVariables.eventsCenter });
         this.cameraController = new CameraController(this);

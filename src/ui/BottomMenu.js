@@ -283,27 +283,27 @@ export default class BottomMenu {
         })
 
         this.btnMinusGold.on("pointerup", () => {
-            console.log("dhuahdsau")
+            this.uiEvents.emit("action:setGold", -10)
         })
 
         this.btnMinusMoney.on("pointerup", () => {
-            console.log("dhuahdsau")
+            this.uiEvents.emit("action:setMoney", -10)
         })
 
         this.btnMinusXp.on("pointerup", () => {
-            console.log("dhuahdsau")
+            this.uiEvents.emit("action:setExperience", -10)
         })
         
         this.btnPlusGold.on("pointerup", () => {
-            console.log("dhuahdsau")
+            this.uiEvents.emit("action:setGold", 10)
         })
 
         this.btnPlusMoney.on("pointerup", () => {
-            console.log("dhuahdsau")
+            this.uiEvents.emit("action:setMoney", 10)
         })
 
          this.btnPlusXp.on("pointerup", () => {
-            console.log("dhuahdsau")
+            this.uiEvents.emit("action:setExperience", 10)
         })
 
         this.CheatMenu.add([this.btnPlusGold, this.btnPlusMoney, this.btnPlusXp]);

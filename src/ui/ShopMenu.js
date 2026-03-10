@@ -2,7 +2,7 @@ import ShopItemCard from './ShopItemCard.js';
 import { sementes, arvores, animais, decoracoes } from '../objects.js';
 
 export default class ShopMenu {
-    constructor(scene) {
+    constructor(scene, config = {}) {
         if (!scene) throw new Error("ShopMenu: scene não foi passada!");
         this.scene = scene;
         this.width = 850;
@@ -11,9 +11,34 @@ export default class ShopMenu {
         this.currentPage = 0;
         this.itemsPerPage = 10;
         this.shopItems = [];
+        this.playerLevel = 1;
+        this.uiEvents = config.uiEvents;
+        this.listenEvents();
+        this.requestProfileData();
 
         this.create();
     }
+
+    requestProfileData() {
+
+        this.uiEvents.emit("action:GetAllProfileData", (data) => {
+
+            this.playerLevel = data.level;
+
+        });
+
+    }
+
+    listenEvents() {
+
+        this.uiEvents.on("update:level", (level) => {
+
+            this.playerLevel = level;
+
+        });
+
+    }
+
 
     create() {
         const { scene, width, height } = this;
@@ -193,7 +218,10 @@ export default class ShopMenu {
         this.itemsContainer.removeAll(true);
         this.shopItems = [];
 
-        const items = this.itemsData[this.activeCategory] || [];
+        // const items = this.itemsData[this.activeCategory] || [];
+        const items = (this.itemsData[this.activeCategory] || [])
+            .slice()
+            .sort((a, b) => a.nivel_requerido - b.nivel_requerido);
         const startIndex = this.currentPage * this.itemsPerPage;
         const pageItems = items.slice(startIndex, startIndex + this.itemsPerPage);
 
@@ -211,7 +239,7 @@ export default class ShopMenu {
             const x = startX + col * (itemWidth + spacingX);
             const y = startY + row * (itemHeight + spacingY);
 
-            const card = new ShopItemCard(this.scene, this.itemsContainer, data, x, y, itemWidth, itemHeight);
+            const card = new ShopItemCard(this.scene, this.itemsContainer, data, x, y, itemWidth, itemHeight, this.playerLevel);
             this.shopItems.push(card);
         });
 

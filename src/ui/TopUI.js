@@ -4,11 +4,11 @@ export default class TopUI {
         this.uiEvents = config.uiEvents;
 
         this.userName = config.userName || "Gabriel";
-        this.xpAtual = 0;
+        this.ExperienceAmount = 0;
         this.xpObjetivo = 100;
         this.level = 1;
-        this.moedas = 0;
-        this.grana = 0;
+        this.gold = 0;
+        this.money = 0;
 
         this.createUI();
 
@@ -17,9 +17,9 @@ export default class TopUI {
             console.log(result.gold);
 
             this.level = result.level
-            this.moedas = result.gold
-            this.grana = result.gold
-            this.xpAtual = result.ExperienceAmount
+            this.gold = result.gold
+            this.money = result.money
+            this.ExperienceAmount = result.ExperienceAmount
 
             this.updateUI();
             this.updateXP(
@@ -27,27 +27,38 @@ export default class TopUI {
                 this.xpObjetivo
             );
         })
+
+        this.uiEvents.on("update:profile", (data) => {
+
+            this.level = data.level;
+            this.gold = data.gold;
+            this.money = data.money;
+
+            this.updateUI();
+            this.updateXP(data.xp, this.xpObjetivo);
+
+        });
     }
 
     updateUI() {
 
         this.levelText.setText(this.level);
-        this.granaText.setText(this.moedas);
-        this.moedaText.setText(this.grana);
-        // this.xpText.setText(this.xpAtual);
+        this.moneyText.setText(this.money);
+        this.goldText.setText(this.gold);
+        // this.xpText.setText(this.ExperienceAmount);
 
     }
 
-    updateXP(xpAtual, xpObjetivo) {
+    updateXP(ExperienceAmount, xpObjetivo) {
 
-        this.xpAtual = xpAtual;
+        this.ExperienceAmount = ExperienceAmount;
         this.xpObjetivo = xpObjetivo;
 
-        const ratio = Phaser.Math.Clamp(xpAtual / xpObjetivo, 0, 1);
+        const ratio = Phaser.Math.Clamp(ExperienceAmount / xpObjetivo, 0, 1);
 
         this.barraXp.displayWidth = this.barraWidth * ratio;
 
-        this.xpText.setText(`${xpAtual}/${xpObjetivo}`);
+        this.xpText.setText(`${ExperienceAmount}/${xpObjetivo}`);
     }
 
     createUI() {
@@ -63,22 +74,22 @@ export default class TopUI {
         this.uiLeftContainer = this.scene.add.container(leftX, leftY);
         this.containerUI.add(this.uiLeftContainer);
 
-        // Fundo do container
+
         const leftBg = this.scene.add.rectangle(0, 0, 250, 60, 0x222222, 0.3).setOrigin(0, 0);
         this.uiLeftContainer.add(leftBg);
 
         this.barraWidth = 180;
         this.barraHeight = 20;
         this.barraBg = this.scene.add.rectangle(10, 10, this.barraWidth, this.barraHeight, 0x55e4f8).setOrigin(0, 0);
-        this.barraXp = this.scene.add.rectangle(10, 10, this.barraWidth * (this.xpAtual / this.xpObjetivo), this.barraHeight, 0xfff08a).setOrigin(0, 0);
+        this.barraXp = this.scene.add.rectangle(10, 10, this.barraWidth * (this.ExperienceAmount / this.xpObjetivo), this.barraHeight, 0xfff08a).setOrigin(0, 0);
 
-        this.xpText = this.scene.add.text(this.barraWidth / 4, this.barraHeight, `${this.xpAtual}/${this.xpObjetivo}`, {
+        this.xpText = this.scene.add.text(this.barraWidth / 4, this.barraHeight, `${this.ExperienceAmount}/${this.xpObjetivo}`, {
             fontSize: '14px',
             color: 'black',
             fontStyle: 'bold'
         }).setOrigin(0.5, 0.5);
 
-        // Nome da fazenda
+
         this.farmNameText = this.scene.add.text(10, this.barraHeight + 12, `Fazenda de ${this.userName}`, {
             fontSize: '16px',
             color: 'yellow',
@@ -87,7 +98,7 @@ export default class TopUI {
 
         }).setStroke('#000', 4).setOrigin(0, 0);
 
-        // Nível
+
         this.levelText = this.scene.add.text(this.barraWidth + 20, this.barraHeight - 1, `${this.level}`, {
             fontSize: '24px',
             color: 'yellow',
@@ -97,48 +108,32 @@ export default class TopUI {
 
         this.uiLeftContainer.add([this.barraBg, this.barraXp, this.xpText, this.farmNameText, this.levelText]);
 
-        // =========================
-        // UI Centro - Moedas e Grana
-        // =========================
+
         const centerY = 20;
         this.uiCenterContainer = this.scene.add.container(width / 2, centerY);
         this.containerUI.add(this.uiCenterContainer);
 
-        // Fundo do container (apenas para visualização)
         const centerBg = this.scene.add.rectangle(0, 0, 200, 40, 0xffffff, 0.3).setOrigin(0.5, 0);
         this.uiCenterContainer.add(centerBg);
 
-        // Ícones e textos
-        // Ícones de moeda
+ 
         this.moedaIcon = this.scene.add.image(-70, 20, 'gold_icon').setOrigin(0.5, 0.5);
         this.moedaIcon.setDisplaySize(30, 30);
-        this.moedaText = this.scene.add.text(-50, 20, this.moedas, { fontSize: '16px', color: 'yellow', fontStyle: "bold", fontFamily: 'LuckiestGuy-Regular' }).setOrigin(0, 0.5);
+        this.goldText = this.scene.add.text(-50, 20, this.gold, { fontSize: '16px', color: 'yellow', fontStyle: "bold", fontFamily: 'LuckiestGuy-Regular' }).setOrigin(0, 0.5);
 
-        // Ícones de dinheiro
-        this.granaIcon = this.scene.add.image(40, 20, 'cash_icon').setOrigin(0.5, 0.5);
-        this.granaIcon.setDisplaySize(30, 30);
-        this.granaText = this.scene.add.text(60, 20, this.grana, { fontSize: '16px', color: 'green', fontStyle: "bold", fontFamily: 'LuckiestGuy-Regular' }).setOrigin(0, 0.5);
 
-        this.uiCenterContainer.add([this.moedaIcon, this.moedaText, this.granaIcon, this.granaText]);
+        this.moneyIcon = this.scene.add.image(40, 20, 'cash_icon').setOrigin(0.5, 0.5);
+        this.moneyIcon.setDisplaySize(30, 30);
+        this.moneyText = this.scene.add.text(60, 20, this.money, { fontSize: '16px', color: 'green', fontStyle: "bold", fontFamily: 'LuckiestGuy-Regular' }).setOrigin(0, 0.5);
+
+        this.uiCenterContainer.add([this.moedaIcon, this.goldText, this.moneyIcon, this.moneyText]);
     }
 
-    // =========================
-    // Métodos auxiliares para atualizar UI
-    // =========================
+ 
     updateXP(valorAtual) {
-        this.xpAtual = valorAtual;
-        this.barraXp.width = this.barraWidth * (this.xpAtual / this.xpObjetivo);
-        this.xpText.setText(`${this.xpAtual}/${this.xpObjetivo}`);
-    }
-
-    updateMoedas(qtde) {
-        this.moedas = qtde;
-        this.moedaText.setText(this.moedas);
-    }
-
-    updateGrana(qtde) {
-        this.grana = qtde;
-        this.granaText.setText(this.grana);
+        this.ExperienceAmount = valorAtual;
+        this.barraXp.width = this.barraWidth * (this.ExperienceAmount / this.xpObjetivo);
+        this.xpText.setText(`${this.ExperienceAmount}/${this.xpObjetivo}`);
     }
 }
 

@@ -18,7 +18,7 @@ export default class ProfileController {
         this.actualLevel = preset.actualLevel ?? 2;
         this.experienceAmount = preset.experience ?? 30;
         this.gold = preset.gold ?? 600;
-        this.money = preset.gold ?? 0;
+        this.money = preset.money ?? 600;
 
         this.classEvents();
 
@@ -27,14 +27,19 @@ export default class ProfileController {
     classEvents() {
         this.uiEvents.on("action:getExperience", () => {
             this.getExperience()
+
+
         })
 
         this.uiEvents.on("action:setExperience", (amount) => {
             this.setExperience(amount);
+
+            this.uiEvents.emit("update:profile", this.getData());
         })
 
         this.uiEvents.on("action:getLevel", () => {
             this.getLevel()
+
         })
 
         this.uiEvents.on("action:getGold", () => {
@@ -42,7 +47,10 @@ export default class ProfileController {
         })
 
         this.uiEvents.on("action:setGold", (amount) => {
+            console.log("modificando ouro")
             this.setGold(amount)
+
+            this.uiEvents.emit("update:profile", this.getData());
         })
 
         this.uiEvents.on("action:getMoney", () => {
@@ -50,28 +58,44 @@ export default class ProfileController {
         })
 
         this.uiEvents.on("action:setMoney", (amount) => {
+            console.log("modificando grana")
             this.setMoney(amount)
+
+            this.uiEvents.emit("update:profile", this.getData());
         })
 
         this.uiEvents.on("action:buyItemGold", (amount, level) => {
-            this.getExperience(amount, level);
+            this.buyItemGold(amount, level);
+
+            this.uiEvents.emit("update:profile", this.getData());
         })
 
         this.uiEvents.on("action:buyItemMoney", (amount, level) => {
-            this.getExperience(amount, level);
+            this.buyItemMoney(amount, level);
+
+            this.uiEvents.emit("update:profile", this.getData());
         })
 
         this.uiEvents.on("action:GetAllProfileData", (callback) => {
 
             const data = {
-                "level" : this.actualLevel,
-                "ExperienceAmount" : this.experienceAmount,
-                "gold" : this.gold,
-                "money" : this.money
+                "level": this.actualLevel,
+                "ExperienceAmount": this.experienceAmount,
+                "gold": this.gold,
+                "money": this.money
             }
 
             callback(data)
         })
+    }
+
+    getData() {
+        return {
+            level: this.actualLevel,
+            gold: this.gold,
+            money: this.money,
+            xp: this.experienceAmount
+        }
     }
 
     getExperience() {

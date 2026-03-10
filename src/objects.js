@@ -419,22 +419,7 @@ export const sementes = [
 ]
 
 export const arvores = [
-    {
-        "id": "arvore_atemoia",
-        "nome": "Atemoia",
-        "preco_compra": 600,
-        "preco_compra_grana": 0,
-        "preco_venda": 40,
-        "tempo_colheita_horas": 48,
-        "xp": 4,
-        "nivel_requerido": 8,
-        "img": "abrico",
-        "escala": 0.4,
-        "area": [1, 1],
-        "origem": [0.5, 0.85],
-        "tipo": "arvore",
-        "noStopBuy": true
-    },
+
     {
         "id": "arvore_abrico",
         "nome": "Abricó",
@@ -464,6 +449,22 @@ export const arvores = [
         "area": [1, 1],
         "origem": [0.5, 0.85],
         "tipo": "arvore"
+    },
+    {
+        "id": "arvore_atemoia",
+        "nome": "Atemoia",
+        "preco_compra": 600,
+        "preco_compra_grana": 0,
+        "preco_venda": 40,
+        "tempo_colheita_horas": 48,
+        "xp": 4,
+        "nivel_requerido": 8,
+        "img": "abrico",
+        "escala": 0.4,
+        "area": [1, 1],
+        "origem": [0.5, 0.85],
+        "tipo": "arvore",
+        "noStopBuy": true
     },
     {
         "id": "arvore_pessego",
@@ -574,7 +575,7 @@ export const decoracoes = [
         "escala": 0.5,
         "area": [1, 1],
         "origem": [0.4, 0.8],
-        "tipo" : "decoracao"
+        "tipo": "decoracao"
     },
     {
         "id": "gazebo",
@@ -589,7 +590,7 @@ export const decoracoes = [
         "escala": 1.1,
         "area": [3, 3],
         "origem": [0.5, 0.8],
-        "tipo" : "decoracao"
+        "tipo": "decoracao"
     },
     {
         "id": "cerca_branca",
@@ -616,7 +617,7 @@ export const decoracoes = [
         "tempo_colheita_horas": 0,
         "xp": 0,
         "nivel_requerido": 2,
-        "tipo" : "decoracao"
+        "tipo": "decoracao"
     },
     {
         "id": "cabana",
@@ -627,7 +628,7 @@ export const decoracoes = [
         "tempo_colheita_horas": 0,
         "xp": 0,
         "nivel_requerido": 4,
-        "tipo" : "decoracao"
+        "tipo": "decoracao"
     },
     {
         "id": "cabana_rosa",
@@ -674,7 +675,7 @@ export const decoracoes = [
         "escala": 0.6,
         "area": [5, 4],
         "origem": [0.5, 0.65],
-        "tipo" : "decoracao"
+        "tipo": "decoracao"
 
     },
     {
@@ -686,7 +687,7 @@ export const decoracoes = [
         "tempo_colheita_horas": 0,
         "xp": 0,
         "nivel_requerido": 15,
-        "tipo" : "decoracao"
+        "tipo": "decoracao"
     },
     {
         "id": "celeiro_vermelho",
@@ -697,7 +698,7 @@ export const decoracoes = [
         "tempo_colheita_horas": 0,
         "xp": 410,
         "nivel_requerido": 0,
-        "tipo" : "decoracao"
+        "tipo": "decoracao"
     },
     {
         "id": "celerio_rosa",
@@ -708,7 +709,7 @@ export const decoracoes = [
         "tempo_colheita_horas": 0,
         "xp": 820,
         "nivel_requerido": 0,
-        "tipo" : "decoracao"
+        "tipo": "decoracao"
     },
     {
         "id": "celeiro_preto",
@@ -719,7 +720,7 @@ export const decoracoes = [
         "tempo_colheita_horas": 0,
         "xp": 820,
         "nivel_requerido": 0,
-        "tipo" : "decoracao"
+        "tipo": "decoracao"
     },
     {
         "id": "celerio_azul",
@@ -730,7 +731,7 @@ export const decoracoes = [
         "tempo_colheita_horas": 0,
         "xp": 820,
         "nivel_requerido": 0,
-        "tipo" : "decoracao"
+        "tipo": "decoracao"
     },
     {
         "id": "celeiro_branco",
@@ -741,7 +742,7 @@ export const decoracoes = [
         "tempo_colheita_horas": 0,
         "xp": 820,
         "nivel_requerido": 0,
-        "tipo" : "decoracao"
+        "tipo": "decoracao"
     },
     {
         "id": "celeiro",
@@ -756,7 +757,7 @@ export const decoracoes = [
         "escala": 0.9,
         "area": [6, 6],
         "origem": [0.5, 0.7],
-        "tipo" : "decoracao"
+        "tipo": "decoracao"
 
     },
     {
@@ -768,7 +769,7 @@ export const decoracoes = [
         "tempo_colheita_horas": 0,
         "xp": 0,
         "nivel_requerido": 3,
-        "tipo" : "decoracao"
+        "tipo": "decoracao"
     },
     {
         "id": "barracao_rosa",
@@ -779,7 +780,7 @@ export const decoracoes = [
         "tempo_colheita_horas": 0,
         "xp": 0,
         "nivel_requerido": 7,
-        "tipo" : "decoracao"
+        "tipo": "decoracao"
     },
     {
         "id": "silo_de_graos",
@@ -790,7 +791,7 @@ export const decoracoes = [
         "tempo_colheita_horas": 0,
         "xp": 0,
         "nivel_requerido": 13,
-        "tipo" : "decoracao"
+        "tipo": "decoracao"
     },
     {
         "id": "moinho_de_vento",
@@ -805,7 +806,7 @@ export const decoracoes = [
         "escala": 0.35,
         "area": [3, 3],
         "origem": [0.5, 0.85],
-        "tipo" : "decoracao"
+        "tipo": "decoracao"
     },
     {
         "id": "casa_da_fazenda",
@@ -816,7 +817,7 @@ export const decoracoes = [
         "tempo_colheita_horas": 0,
         "xp": 0,
         "nivel_requerido": 26,
-        "tipo" : "decoracao"
+        "tipo": "decoracao"
     },
     {
         "id": "casa_da_fazenda_azul",
@@ -827,7 +828,7 @@ export const decoracoes = [
         "tempo_colheita_horas": 0,
         "xp": 0,
         "nivel_requerido": 26,
-        "tipo" : "decoracao"
+        "tipo": "decoracao"
     },
     {
         "id": "pagoda",
@@ -838,7 +839,7 @@ export const decoracoes = [
         "tempo_colheita_horas": 0,
         "xp": 1500,
         "nivel_requerido": 0,
-        "tipo" : "decoracao"
+        "tipo": "decoracao"
     },
     {
         "id": "casa_de_cha",
@@ -849,7 +850,7 @@ export const decoracoes = [
         "tempo_colheita_horas": 0,
         "xp": 1000,
         "nivel_requerido": 0,
-        "tipo" : "decoracao"
+        "tipo": "decoracao"
     },
     {
         "id": "trator",
@@ -863,7 +864,7 @@ export const decoracoes = [
         "img": "trator",
         "escala": 0.2,
         "area": [3, 4],
-        "tipo" : "decoracao"
+        "tipo": "decoracao"
     },
     {
         "id": "trator_azul",
@@ -877,7 +878,7 @@ export const decoracoes = [
         "img": "trator2",
         "escala": 0.4,
         "area": [3, 4],
-        "tipo" : "decoracao"
+        "tipo": "decoracao"
     },
     {
         "id": "trator_verde",
@@ -891,7 +892,7 @@ export const decoracoes = [
         "img": "trator3",
         "escala": 1.0,
         "area": [4, 4],
-        "tipo" : "decoracao"
+        "tipo": "decoracao"
     },
     {
         "id": "estabulo",
@@ -906,7 +907,7 @@ export const decoracoes = [
         "escala": 0.5,
         "area": [2, 5],
         "origem": [0.5, 0.65],
-        "tipo" : "decoracao"
+        "tipo": "decoracao"
     }
 
 ]

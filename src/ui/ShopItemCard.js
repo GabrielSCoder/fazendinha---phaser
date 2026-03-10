@@ -1,21 +1,23 @@
 export default class ShopItemCard {
-    constructor(scene, container, data, x, y, width = 130, height = 180) {
+    constructor(scene, container, data, x, y, width = 130, height = 180, playerLevel) {
         if (!scene) throw new Error("ShopItemCard: scene não foi passado!");
         if (!container) throw new Error("ShopItemCard: container não foi passado!");
         this.scene = scene;
         this.container = container;
         this.data = data;
+        this.requiredLevel = data.nivel_requerido || 1;
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
+        this.playerLevel = playerLevel;
 
         this.createCard();
     }
 
     createCard() {
         const { x, y, width, height, data, scene, container } = this;
-        this.Locked = false;
+        this.Locked = this.requiredLevel >= this.playerLevel;
         this.unlockedList = [];
         this.lockedList = [];
 
@@ -37,7 +39,7 @@ export default class ShopItemCard {
 
         if (this.Locked) {
             const bloqueado = scene.add.tileSprite(20, 100, 140, 90, 'item_bloqueado').setOrigin(0).setScale(0.8)
-            const bloqueioTexto = scene.add.text(50, 120, `Bloqueado \n nível 18`, {
+            const bloqueioTexto = scene.add.text(50, 120, `Bloqueado \n nível ${this.requiredLevel}`, {
                 fontSize: '12px',
                 color: 'white',
                 fontFamily: 'Arial'
