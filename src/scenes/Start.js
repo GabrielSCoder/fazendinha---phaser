@@ -21,6 +21,7 @@ import { colher, plantar_solo, vender } from '../msgs.js';
 import HarvestController from '../controllers/HarvestController.js';
 import ProfileController from '../controllers/ProfileController.js';
 import XPController from '../controllers/XpController.js';
+import FloatingTextController from '../controllers/FloatingTextController.js';
 
 export class Start extends Phaser.Scene {
     constructor() {
@@ -110,6 +111,9 @@ export class Start extends Phaser.Scene {
         this.load.image('anterior_button', 'assets/ui/anterior.png');
         this.load.image('enxada', 'assets/ui/enxada.png');
         this.load.image('pa', 'assets/ui/pazinha.png');
+        this.load.image('star', 'assets/ui/star.png');
+        this.load.image('energy', 'assets/ui/energy.png');
+        this.load.image('grama', 'assets/fundo/grama_tile.png');
 
         this.load.image('macieira', 'assets/arvore/macieira.png');
         this.load.image('pereira', 'assets/arvore/pereira.png');
@@ -178,6 +182,7 @@ export class Start extends Phaser.Scene {
         this.gridUtils.drawMatrix();
 
         this.gridGraphics = this.add.graphics();
+        this.gridGraphics.setDepth(1)
 
         this.footprintGraphics = this.add.graphics();
 
@@ -192,11 +197,8 @@ export class Start extends Phaser.Scene {
 
         const xpTable = this.parseCSV(raw);
 
-        this.gridUtils.gridStart();
+        this.gridUtils.drawGridBorder();
         this.xpController = new XPController(this, xpTable, this.gameVariables.eventsCenter);
-
-        this.xpController.emitUpdate();
-
         this.growthController = new GrowthController(this);
         this.barController = new ControlBar(this);
         this.profileController = new ProfileController(this, { uiEvents: this.gameVariables.eventsCenter })
@@ -213,6 +215,8 @@ export class Start extends Phaser.Scene {
         this.shopMenu = new ShopMenu(this, { uiEvents: this.gameVariables.eventsCenter });
         this.bottomMenu = new BottomMenu(this, { shopMenu: this.shopMenu, uiEvents: this.gameVariables.eventsCenter });
         this.topUI = new TopUI(this, { uiEvents: this.gameVariables.eventsCenter });
+        this.xpController.emitUpdate();
+        this.floatingController = new FloatingTextController(this, { uiEvents: this.gameVariables.eventsCenter });
         this.cameraController = new CameraController(this);
         this.itemMenuUI = new ItemMenuUI(this, { uiEvents: this.gameVariables.eventsCenter });
 
@@ -250,6 +254,14 @@ export class Start extends Phaser.Scene {
             .setDepth(9999)
             .setVisible(false);
 
+        this.ground = this.add.tileSprite(
+            0,
+            0,
+            2000,
+            2000,
+            'grama'
+        ).setOrigin(0.5).setDepth(-9999).setScrollFactor(1);;
+
         this.cameraController.ignoreInUICamera([
             this.itemMenuUI.itemMenu,
             this.gridGraphics,
@@ -257,7 +269,8 @@ export class Start extends Phaser.Scene {
             this.footprintGraphics,
             //this.bonecoController.boneco,
             this.gameVariables.previewTiles,
-            this.hoverText
+            this.hoverText,
+            this.ground
         ]);
 
         this.cameraController.ignoreInMainCamera([
@@ -268,6 +281,8 @@ export class Start extends Phaser.Scene {
             this.shopMenu.container,
             this.fpsText
         ]);
+
+
 
 
         this.input.setDraggable(this.gameVariables.sprites);
@@ -401,5 +416,6 @@ export class Start extends Phaser.Scene {
         });
 
     }
+
 
 }

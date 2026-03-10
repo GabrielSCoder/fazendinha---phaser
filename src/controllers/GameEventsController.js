@@ -180,6 +180,19 @@ export default class GameEventsController {
             }
         }
 
+        if (sprite.xp && !sprite.xpYeld) {
+
+            this.uiEvents.emit("ui:floatingText", {
+                text: `${sprite.xp}`,
+                x: sprite.x,
+                y: sprite.y,
+                color: "#ffff66",
+                icon: "star"
+            });
+            
+            sprite.xpYeld = true;
+        }
+
         if (this.scene.gameVariables.buyItemTmp) {
             console.log(this.scene.gameVariables.buyItemTmp);
             this.scene.events.emit("itemPurchased", this.scene.gameVariables.buyItemTmp);

@@ -14,14 +14,16 @@ export default class GridUtils {
     }
 
     gridStart() {
+
         const g = this.scene.gridGraphics;
         g.clear();
 
-        const fillColor = 0x00ff00;
+        const fillColor = 0xcfe317;
         const fillAlpha = 0.15;
 
         for (let x = 0; x < this.gridWidth * 2; x++) {
             for (let y = 0; y < this.gridHeight * 2; y++) {
+
                 const p1 = this.isoToScreen(x, y, this.gridSize, this.offsetX, this.offsetY);
                 const p2 = this.isoToScreen(x + 1, y, this.gridSize, this.offsetX, this.offsetY);
                 const p3 = this.isoToScreen(x + 1, y + 1, this.gridSize, this.offsetX, this.offsetY);
@@ -34,15 +36,37 @@ export default class GridUtils {
                 g.lineTo(p4.x, p4.y);
                 g.closePath();
 
-                // Preenche a célula
                 g.fillStyle(fillColor, fillAlpha);
                 g.fillPath();
 
-                // (Opcional) desenha contorno leve
-                g.lineStyle(1, 0x00ff00, 0.3);
+                g.lineStyle(1, 0x39FF14, 0.3);
                 g.strokePath();
             }
         }
+    }
+
+    drawGridBorder() {
+
+        const g = this.scene.gridGraphics;
+        g.clear();
+
+        const w = this.gridWidth * 2;
+        const h = this.gridHeight * 2;
+
+        const p1 = this.isoToScreen(0, 0);
+        const p2 = this.isoToScreen(w, 0);
+        const p3 = this.isoToScreen(w, h);
+        const p4 = this.isoToScreen(0, h);
+
+        g.lineStyle(3, 0x39FF14, 1);
+
+        g.beginPath();
+        g.moveTo(p1.x, p1.y);
+        g.lineTo(p2.x, p2.y);
+        g.lineTo(p3.x, p3.y);
+        g.lineTo(p4.x, p4.y);
+        g.closePath();
+        g.strokePath();
     }
 
     snapToGrid(sprite) {
@@ -101,25 +125,33 @@ export default class GridUtils {
     }
 
     drawMatrix() {
-        this.scene.matrixGraphics.clear();
+
+        const g = this.scene.matrixGraphics;
+        g.clear();
+
+        const startX = 20;
+        const startY = 120;
 
         for (let y = 0; y < this.gridHeight * 2; y++) {
             for (let x = 0; x < this.gridWidth * 2; x++) {
+
                 const occupied = this.scene.gameVariables.gridMap[x][y] ? true : false;
                 const color = occupied ? 0xe74c3c : 0x2ecc71;
-                this.scene.matrixGraphics.fillStyle(color, 1);
-                this.scene.matrixGraphics.fillRect(
-                    this.scene.matrixOffsetX + x * 10,
-                    this.offsetY + y * 10,
-                    10, 10
+
+                g.fillStyle(color, 1);
+                g.fillRect(
+                    startX + x * 10,
+                    startY + y * 10,
+                    10,
+                    10
                 );
             }
         }
 
-        this.scene.matrixGraphics.lineStyle(1, 0xffffff, 0.5);
-        this.scene.matrixGraphics.strokeRect(
-            this.scene.matrixOffsetX,
-            this.offsetY,
+        g.lineStyle(1, 0xffffff, 0.5);
+        g.strokeRect(
+            startX,
+            startY,
             this.gridWidth * 20,
             this.gridHeight * 20
         );

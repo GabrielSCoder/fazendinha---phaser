@@ -5,8 +5,10 @@ export default class GameVariablesController {
         this.gridSize = 32;
         this.gridWidth = 10;
         this.gridHeight = 10;
-        this.offsetX = 550;
-        this.offsetY = 200;
+        this.offsetX = 0;
+        this.offsetY = -this.gridHeight * (this.gridSize / 4);
+        this.matrixOffsetX = 20;
+        this.matrixOffsetY = 120;
         this.logicFactor = 2;
 
         this.gridMap = Array.from({ length: this.gridWidth * this.logicFactor },

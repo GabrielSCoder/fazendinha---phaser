@@ -7,15 +7,27 @@ export default class CameraController {
         this.dragging = false;
         this.dragStart = { x: 0, y: 0 };
         this.camStart = { x: 0, y: 0 };
+        const worldWidth = 2000;
+        const worldHeight = 2000;
 
         this.setupDragControls();
+
+        this.mainCamera.setBounds(
+            -worldWidth / 2,
+            -worldHeight / 2,
+            worldWidth,
+            worldHeight
+        );
 
         const cam = this.mainCamera;
         const newZoom = 1.599999999
         cam.setZoom(newZoom);
+        // this.mainCamera.centerOn(0, 0);
+        const center = this.scene.gridUtils.isoToScreen(this.scene.gameVariables.gridWidth, this.scene.gameVariables.gridHeight);
+
+        this.mainCamera.centerOn(center.x, center.y);
     }
 
-    // === Permite adicionar entidades que devem ser ignoradas ===
     ignoreInUICamera(...gameObjects) {
         this.uiCamera.ignore(gameObjects.flat());
     }
@@ -24,7 +36,6 @@ export default class CameraController {
         this.mainCamera.ignore(gameObjects.flat());
     }
 
-    // === Controles de movimento da câmera principal ===
     setupDragControls() {
         const { input } = this.scene;
 

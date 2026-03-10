@@ -217,7 +217,7 @@ export default class BottomMenu {
             this.scene.itemMenuUI.hide()
             const cam = this.scene.cameras.main;
             const zoomChange = -0.15;
-            const newZoom = Phaser.Math.Clamp(cam.zoom + zoomChange, 0.5, 2);
+            const newZoom = Phaser.Math.Clamp(cam.zoom + zoomChange, 0.7, 2);
             cam.setZoom(newZoom);
         });
     }
@@ -303,7 +303,7 @@ export default class BottomMenu {
         })
 
         this.btnPlusXp.on("pointerup", () => {
-            this.uiEvents.emit("action:addXP", 100);
+            this.uiEvents.emit("action:addXP", {amount : 100});
         });
 
         this.CheatMenu.add([this.btnPlusGold, this.btnPlusMoney, this.btnPlusXp]);

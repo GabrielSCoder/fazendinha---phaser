@@ -16,8 +16,26 @@ export default class XPController {
     }
 
     gameEvents() {
-        this.uiEvents.on("action:addXP", (amount) => {
-            this.addXP(amount);
+
+        // this.uiEvents.on("action:addXP", (amount) => {
+        //     this.addXP(amount);
+        // });
+
+        this.uiEvents.on("action:addXP", (data) => {
+
+            this.addXP(data.amount);
+
+            if (data.x !== undefined) {
+
+                this.uiEvents.emit("ui:floatingText", {
+                    text: `+${data.amount} XP`,
+                    x: data.x,
+                    y: data.y,
+                    color: "#ffff66"
+                });
+
+            }
+
         });
 
         this.uiEvents.on("xp:getLevel", (callback) => {
@@ -48,7 +66,6 @@ export default class XPController {
 
     }
 
-    // encontra level pelo xp total
     getLevelFromXP(xp) {
 
         let left = 0;

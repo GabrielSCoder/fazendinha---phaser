@@ -7,12 +7,12 @@ export default class TopUI {
 
         this.userName = config.userName || "Gabriel";
 
-        this.level = 1;
+        this.level = 0;
         this.gold = 0;
         this.money = 0;
 
         this.xpAtual = 0;
-        this.xpObjetivo = 1;
+        this.xpObjetivo = 0;
 
         this.createUI();
 
@@ -66,9 +66,7 @@ export default class TopUI {
         this.barraXp.width = this.barraWidth * ratio;
 
         this.xpText.setText(`${xpAtual}/${xpObjetivo}`);
-
     }
-
 
 
     createUI() {

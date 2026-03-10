@@ -22,6 +22,8 @@ export default class SpriteUtils {
         sprite.nome = data.nome;
         sprite.tipo = data.tipo;
         sprite.preco_venda = data.preco_venda;
+        sprite.xp = data.xp;
+        sprite.xpYeld = false;
 
         if (is_semente) {
             this.scene.gameVariables.planting = true;
