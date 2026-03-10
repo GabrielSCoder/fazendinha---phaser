@@ -4,7 +4,7 @@ export const sementes = [
         "nome": "Mirtilo",
         "preco_compra": 20,
         "preco_venda": 70,
-        "tempo_colheita_horas": 0.1,
+        "tempo_colheita_horas": 0.05,
         "xp": 1,
         "nivel_requerido": 1,
         "img": "semente_mirtilo",
@@ -505,7 +505,7 @@ export const animais = [
         "preco_compra": 600,
         "preco_compra_grana": 0,
         "preco_venda": 12,
-        "tempo_colheita_horas": 1,
+        "tempo_colheita_horas": 0.2,
         "xp": 150,
         "nivel_requerido": 1,
         "img": "vaca",
@@ -606,7 +606,6 @@ export const decoracoes = [
         "area": [5, 1],
         "origem": [0.5, 0.5],
         "noStopBuy": true,
-        "tipo" : "decoracao"
     },
     {
         "id": "cabana_de_descanso",
@@ -645,39 +644,6 @@ export const decoracoes = [
         "escala": 0.4,
         "area": [2, 4],
         "origem": [0.35, 0.7],
-        "tipo" : "decoracao"
-    },
-    {
-        "id": "cerca_de_madeira_CD",
-        "nome": "Cerca CD",
-        "tipo": "cerca",
-        "preco_compra": 0,
-        "preco_compra_grana": 0,
-        "preco_venda": 0,
-        "tempo_colheita_horas": 0,
-        "xp": 0,
-        "nivel_requerido": 10,
-        "img": "cerca_madeira_CD",
-        "escala": 0.4,
-        "area": [5, 1],
-        "origem": [0.5, 0.5],
-        "tipo" : "decoracao"
-    },
-    {
-        "id": "cerca_de_madeira_CE",
-        "nome": "Cerca CE",
-        "tipo": "cerca",
-        "preco_compra": 0,
-        "preco_compra_grana": 0,
-        "preco_venda": 0,
-        "tempo_colheita_horas": 0,
-        "xp": 0,
-        "nivel_requerido": 7,
-        "img": "cerca_madeira_CE",
-        "escala": 0.4,
-        "area": [5, 1],
-        "origem": [0.5, 0.5],
-        "tipo" : "decoracao"
     },
     {
         "id": "cerca_de_madeira",
@@ -693,8 +659,7 @@ export const decoracoes = [
         "escala": 0.6,
         "area": [5, 2],
         "origem": [0.55, 0.65],
-        "origem_flip": [0.4, 0.65],
-        "tipo" : "decoracao"
+        "origem_flip": [0.4, 0.65]
     },
     {
         "id": "poco",

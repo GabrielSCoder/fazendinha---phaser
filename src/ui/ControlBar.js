@@ -8,6 +8,9 @@ export default class ControlBar {
 
         let cancelled = false;
 
+        if (this.scene.gameVariables.ActiveBar) return;
+        this.scene.gameVariables.ActiveBar = true;
+
         const barra = this.scene.add.graphics();
         barra.fillStyle(0x000000, 0.5);
         barra.fillRect(x, y, largura, altura);
@@ -72,6 +75,7 @@ export default class ControlBar {
 
                             if (!cancelled && typeof funcao === "function") {
                                 funcao();
+                                this.scene.gameVariables.ActiveBar = false;
                             }
 
                         }

@@ -107,6 +107,9 @@ export default class PlantaController {
         sprite.nome = semente.nome;
         sprite.plantado = true;
         sprite.planta_cultivada = semente.nome;
+        sprite.preco_venda = semente.preco_venda;
+        sprite.regrow = false;
+        sprite.harvestTime = solo.harvestTime;
 
         if (!this.scene.gameVariables.sprites) this.scene.gameVariables.sprites = [];
         this.scene.gameVariables.sprites.push(sprite);

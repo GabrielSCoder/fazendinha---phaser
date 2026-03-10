@@ -18,6 +18,7 @@ import SpriteController from '../controllers/SpriteController.js';
 import ControlBar from '../ui/ControlBar.js';
 import GrowthController from '../controllers/GrowthController.js';
 import { colher, plantar_solo } from '../msgs.js';
+import HarvestController from '../controllers/HarvestController.js';
 
 export class Start extends Phaser.Scene {
     constructor() {
@@ -207,7 +208,7 @@ export class Start extends Phaser.Scene {
         this.collisionDataTemp = this.gameVariables.collisionDataTemp;
         this.toolSprite = this.gameVariables.toolSprite;
         this.spriteUtils = new SpriteUtils(this);
-
+        this.harvestController = new HarvestController(this);
 
         //this.bonecoController = new BonecoController(this);
 
@@ -310,7 +311,7 @@ export class Start extends Phaser.Scene {
 
         this.spriteController.updateFence();
 
-        this.soilControl.updatePlowing(1, 1);
+        this.soilControl.updatePlowing(2, 2);
 
         //this.bonecoController.update();
         //this.getSpriteByPointerPosition();

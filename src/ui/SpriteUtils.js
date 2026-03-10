@@ -48,6 +48,8 @@ export default class SpriteUtils {
 
             if (sprite.isReserved) return;
 
+            if (sprite.harvestReady) return;
+
             if (!this.scene.gameVariables.hoverEnabled) return;
 
             if (this.scene.gameVariables.middleButtonDown) return;
@@ -77,6 +79,10 @@ export default class SpriteUtils {
                 this.scene.gameVariables.selectedSprite = sprite;
             }
         });
+
+        sprite.on("pointerup", () => {
+            this.scene.harvestController.tryHarvest(sprite)
+        })
 
         sprite.on("pointerover", () => {
 

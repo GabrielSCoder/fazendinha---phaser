@@ -1,4 +1,4 @@
-class HarvestController {
+export default class HarvestController {
 
     constructor(scene) {
         this.scene = scene;
@@ -8,37 +8,54 @@ class HarvestController {
 
         if (!sprite.harvestReady) return;
 
-        if (sprite.tipo == "solo_plantado_simples") {
-            this.harvestPlant(sprite);
-        }
+        if (sprite.regrow) {
 
-        else if (sprite.tipo == "arvore" || sprite.tipo == "animal") {
-            this.harvestRenewable(sprite);
-        }
+            sprite.disableInteractive();
+            this.scene.gameVariables.hoveredSprite = null;
+            this.scene.hoverText.setVisible(false);
 
+            sprite.clearTint();
+
+            this.scene.barController.criarBarraProgresso(
+                sprite.x,
+                sprite.y + 10,
+                50,
+                10,
+                1.8, () => {
+                    this.harvestRenewable(sprite);
+                })
+        }
+        else {
+            this.scene.barController.criarBarraProgresso(
+                sprite.x,
+                sprite.y + 10,
+                50,
+                10,
+                1.8, () => {
+                    this.harvestPlant(sprite);
+                })
+        }
     }
 
     harvestPlant(sprite) {
 
-        const semente = sprite.sementeData;
+        if (sprite.harvestTime == undefined ) return;
+        // const semente = sprite.sementeData;
 
-        this.scene.inventory.add(semente.planta_colheita);
+        // this.scene.inventory.add(semente.planta_colheita);
 
         // this.scene.player.addXP(semente.xp);
 
-        sprite.destroy();
+        // sprite.destroy();
+        sprite.harvestTime += 1;
 
-        this.scene.tileController.createPreparedSoil(
-            sprite.x,
-            sprite.y
-        );
+        this.scene.soilControl.clearSoil(sprite);
+
     }
 
     harvestRenewable(sprite) {
 
         const data = sprite;
-
-        // this.scene.inventory.add(data.produz);
 
         sprite.harvestReady = false;
 
@@ -47,6 +64,8 @@ class HarvestController {
             sprite.growthDuration,
             data.stages
         );
+
+        sprite.setInteractive({ pixelPerfect: true, alphaTolerance: 1, useHandCursor: true });
 
     }
 }

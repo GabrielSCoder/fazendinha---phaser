@@ -27,6 +27,7 @@ export default class GameVariablesController {
         this.tileSize = this.gridSize;
         this.hoveredSprite = null;
         this.canInteract = true;
+        this.ActiveBar = false
 
         this.plowing = false;
         this.buyItemTmp = null;

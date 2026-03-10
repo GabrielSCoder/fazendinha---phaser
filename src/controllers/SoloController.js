@@ -183,6 +183,7 @@ export default class SoloController {
             originY
         );
 
+        sprite.harvestTime = 0;
         sprite.setAlpha(0.4);
         sprite.isReserved = true;
         sprite.hoverEnabled = true;
@@ -280,6 +281,24 @@ export default class SoloController {
             this.scene.gameVariables.sprites.filter(s => s !== sprite);
 
         sprite.destroy();
+    }
+
+    clearSoil(sprite) {
+
+        if (!sprite) return;
+
+        this.scene.growthController.cancelGrowth(sprite)
+        sprite.nome = "solo_preparado";
+        sprite.tipo = "solo_preparado";
+        sprite.planta_cultivada = null;
+        sprite.growthStages = null;
+        sprite.preco_venda = 0;
+        sprite.tempoColheita = null;
+        sprite.img_pronta = null;
+        sprite.growthStage = null;
+        sprite.harvestReady = false;
+        sprite.preco_colheita = null;
+        sprite.setTexture("solo.png");
     }
 
 }
