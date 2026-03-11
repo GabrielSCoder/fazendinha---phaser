@@ -108,8 +108,10 @@ export default class PlantaController {
         sprite.plantado = true;
         sprite.planta_cultivada = semente.nome;
         sprite.preco_venda = semente.preco_venda;
+        sprite.preco_compra = semente.preco_compra;
         sprite.regrow = false;
         sprite.harvestTime = solo.harvestTime;
+        sprite.xp = semente.xp;
 
         if (!this.scene.gameVariables.sprites) this.scene.gameVariables.sprites = [];
         this.scene.gameVariables.sprites.push(sprite);
@@ -117,6 +119,13 @@ export default class PlantaController {
 
         this.gridUtils.markOccupied(sprite, startX, startY, w, h);
         this.gridUtils.recalculateDepthAround(sprite);
+
+        this.uiEvents.emit("action:reward", {
+            xp: 1,
+            gold: -sprite.preco_compra ?? 0,
+            x: sprite.x,
+            y: sprite.y
+        })
 
         this.uiEvents.emit("action:FreeSoil");
     }

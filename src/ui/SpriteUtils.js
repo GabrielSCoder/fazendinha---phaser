@@ -22,6 +22,7 @@ export default class SpriteUtils {
         sprite.nome = data.nome;
         sprite.tipo = data.tipo;
         sprite.preco_venda = data.preco_venda;
+        sprite.preco_compra = data.preco_compra;
         sprite.xp = data.xp;
         sprite.xpYeld = false;
 
@@ -78,7 +79,6 @@ export default class SpriteUtils {
                 this.scene.gameVariables.planting &&
                 this.scene.gameVariables.selectedSeed
             ) {
-                console.log("aqui")
                 this.scene.gameVariables.selectedSprite = sprite;
             }
         });
@@ -117,8 +117,6 @@ export default class SpriteUtils {
             this.scene.gameVariables.hoveredSprite = null;
             this.scene.hoverText.setVisible(false);
         });
-
-        console.log(sprite);
 
         return sprite;
     }

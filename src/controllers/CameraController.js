@@ -22,7 +22,6 @@ export default class CameraController {
         const cam = this.mainCamera;
         const newZoom = 1.599999999
         cam.setZoom(newZoom);
-        // this.mainCamera.centerOn(0, 0);
         const center = this.scene.gridUtils.isoToScreen(this.scene.gameVariables.gridWidth, this.scene.gameVariables.gridHeight);
 
         this.mainCamera.centerOn(center.x, center.y);

@@ -3,6 +3,20 @@ export default class GameEventsController {
         this.scene = scene;
         this.gridUtils = scene.gridUtils;
         this.uiEvents = config.uiEvents;
+
+        this.uiEvents.on("action:reward", (data) => {
+
+            if (data.xp) {
+                this.uiEvents.emit("action:addXP", data.xp);
+            }
+
+            if (data.gold) {
+                this.uiEvents.emit("action:setGold", data.gold);
+            }
+
+            this.uiEvents.emit("floating:rewards", data);
+
+        });
     }
 
     colocarCercasCheck() {
@@ -37,7 +51,7 @@ export default class GameEventsController {
             this.uiEvents.emit("interact:ActivateAll");
 
             if (this.scene.gameVariables.buyItemTmp) {
-                console.log(this.scene.gameVariables.buyItemTmp);
+                // console.log(this.scene.gameVariables.buyItemTmp);
                 this.scene.events.emit("itemPurchased", this.scene.gameVariables.buyItemTmp);
             }
         }
@@ -146,6 +160,35 @@ export default class GameEventsController {
             return;
         }
 
+        if (sprite.xp && !sprite.xpYeld) {
+
+            let res = false;
+
+            this.uiEvents.emit("action:buyItem", {
+                type: "gold",
+                price: sprite.preco_compra,
+                level: 1
+            }, (result) => {
+
+                if (!result) {
+                    res = false;
+                    return;
+                    
+                }
+                this.uiEvents.emit("action:reward", {
+                    xp: sprite.xp ?? 0,
+                    gold: -sprite.preco_compra,
+                    x: sprite.x,
+                    y: sprite.y
+                });
+
+                sprite.xpYeld = true;
+                res = true
+            });
+
+            if (!res) return;
+        }
+
         sprite.gridX = Math.round(iso.x);
         sprite.gridY = Math.round(iso.y);
 
@@ -180,21 +223,8 @@ export default class GameEventsController {
             }
         }
 
-        if (sprite.xp && !sprite.xpYeld) {
-
-            this.uiEvents.emit("ui:floatingText", {
-                text: `${sprite.xp}`,
-                x: sprite.x,
-                y: sprite.y,
-                color: "#ffff66",
-                icon: "star"
-            });
-            
-            sprite.xpYeld = true;
-        }
-
         if (this.scene.gameVariables.buyItemTmp) {
-            console.log(this.scene.gameVariables.buyItemTmp);
+            // console.log(this.scene.gameVariables.buyItemTmp);
             this.scene.events.emit("itemPurchased", this.scene.gameVariables.buyItemTmp);
         }
     }
@@ -208,6 +238,23 @@ export default class GameEventsController {
 
         if (!this.scene.gameVariables.planting) return done();
         if (!this.scene.gameVariables.selectedSeed) return done();
+
+        const price = this.scene.gameVariables.selectedSeed.preco_compra;
+        let HaveMoney = false;
+
+        this.uiEvents.emit("action:buyItem", {
+            type: "gold",
+            price: price,
+            level: 1
+        }, (result) => {
+            HaveMoney = result;
+        })
+
+        if (!HaveMoney) {
+            this.uiEvents.emit("queue:cancelAll");
+            return done();
+        }
+
 
         const startX = solo.x - 100 / 2;
         const startY = solo.y - solo.displayHeight / 2;
@@ -266,11 +313,11 @@ export default class GameEventsController {
 
             action: (done) => {
 
-                console.log("executando solo");
+                // console.log("executando solo");
 
                 progressBar = this.scene.soilControl.executePlowingSoil(reserva, () => {
 
-                    console.log("solo terminou");
+                    // console.log("solo terminou");
 
                     done();
 

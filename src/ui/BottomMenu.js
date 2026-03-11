@@ -295,7 +295,7 @@ export default class BottomMenu {
         });
 
         this.btnPlusGold.on("pointerup", () => {
-            this.uiEvents.emit("action:setGold", 10)
+            this.uiEvents.emit("action:setGold", {amount : 10})
         })
 
         this.btnPlusMoney.on("pointerup", () => {

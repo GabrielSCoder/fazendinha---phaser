@@ -1,7 +1,8 @@
 export default class HarvestController {
 
-    constructor(scene) {
+    constructor(scene, control = {}) {
         this.scene = scene;
+        this.uiEvents = control.uiEvents;
     }
 
     tryHarvest(sprite) {
@@ -43,16 +44,21 @@ export default class HarvestController {
     harvestPlant(sprite) {
 
         if (sprite.harvestTime == undefined) return;
-        // const semente = sprite.sementeData;
-
-        // this.scene.inventory.add(semente.planta_colheita);
-
-        // this.scene.player.addXP(semente.xp);
-
-        // sprite.destroy();
+  
         sprite.harvestTime += 1;
+        const preco_venda = sprite.preco_venda;
+        const xp = sprite.xp;
 
-        this.scene.soilControl.clearSoil(sprite);
+        const confirm = this.scene.soilControl.clearSoil(sprite);
+
+        if (confirm) {
+            this.uiEvents.emit("action:reward", {
+                xp: xp ?? 0,
+                gold: preco_venda ?? 0,
+                x: sprite.x,
+                y: sprite.y
+            });
+        }
 
     }
 
@@ -61,6 +67,13 @@ export default class HarvestController {
         const data = sprite;
 
         sprite.harvestReady = false;
+
+        this.uiEvents.emit("action:reward", {
+            xp: sprite.xp ?? 0,
+            gold: sprite.preco_venda ?? 0,
+            x: sprite.x,
+            y: sprite.y
+        });
 
         this.scene.growthController.startGrowth(
             sprite,

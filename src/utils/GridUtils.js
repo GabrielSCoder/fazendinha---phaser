@@ -18,7 +18,7 @@ export default class GridUtils {
         const g = this.scene.gridGraphics;
         g.clear();
 
-        const fillColor = 0xcfe317;
+        const fillColor = 0x28b032;
         const fillAlpha = 0.15;
 
         for (let x = 0; x < this.gridWidth * 2; x++) {
@@ -39,7 +39,7 @@ export default class GridUtils {
                 g.fillStyle(fillColor, fillAlpha);
                 g.fillPath();
 
-                g.lineStyle(1, 0x39FF14, 0.3);
+                g.lineStyle(1, 0x39FF14, 0.5);
                 g.strokePath();
             }
         }

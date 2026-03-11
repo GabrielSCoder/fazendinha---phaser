@@ -24,31 +24,28 @@ export default class ProfileController {
 
     classEvents() {
 
+        this.uiEvents.on("action:buyItem", (data, test) => {
+            this.buyItem(data, test)
+        })
+
         this.uiEvents.on("action:getLevel", () => {
             this.getLevel()
-
         })
 
         this.uiEvents.on("action:getGold", () => {
             this.getGold()
         })
 
-        this.uiEvents.on("action:setGold", (amount) => {
-            console.log("modificando ouro")
-            this.setGold(amount)
-
-            this.uiEvents.emit("update:profile", this.getData());
+        this.uiEvents.on("action:setGold", (data) => {
+            this.setGold(data)
         })
 
         this.uiEvents.on("action:getMoney", () => {
             this.getExperience()
         })
 
-        this.uiEvents.on("action:setMoney", (amount) => {
-            console.log("modificando grana")
-            this.setMoney(amount)
-
-            this.uiEvents.emit("update:profile", this.getData());
+        this.uiEvents.on("action:setMoney", (data) => {
+            this.setMoney(data)
         })
 
         this.uiEvents.on("action:GetAllProfileData", (callback) => {
@@ -69,14 +66,30 @@ export default class ProfileController {
         }
     }
 
-
     getGold() {
         return this.gold;
     }
 
-    setGold(valor) {
-        if ((this.gold + valor) < 0) return;
-        this.gold += valor;
+    setGold(data) {
+
+        const gold = data.amount || data
+
+        if ((this.gold + gold) < 0) return;
+        this.gold += gold;
+
+        if (data.x !== undefined) {
+
+            this.uiEvents.emit("ui:floatingText", {
+                text: `${data.amount}`,
+                x: data.x,
+                y: data.y,
+                color: "#ffff66",
+                icon: "gold_icon"
+            });
+
+        }
+
+        this.uiEvents.emit("update:profile", this.getData());
     }
 
     getMoney() {
@@ -86,6 +99,40 @@ export default class ProfileController {
     setMoney(valor) {
         if ((this.money + valor) < 0) return;
         this.money += valor;
+    }
+
+    buyItem(data, callback) {
+
+        if (data.price < 0 || !data.level || !data.type) {
+            callback(false);
+            return;
+        }
+
+        if (data.type === "gold") {
+
+            if ((this.gold - data.price) >= 0) {
+                callback(true);
+            } else {
+                
+                callback(false);
+            }
+
+            return;
+        }
+
+        if (data.type === "money") {
+
+            if ((this.money - data.price) >= 0) {
+                callback(true);
+            } else {
+                
+                callback(false);
+            }
+
+            return;
+        }
+
+        callback(false);
     }
 
 }

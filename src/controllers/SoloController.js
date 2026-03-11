@@ -319,6 +319,7 @@ export default class SoloController {
         sprite.planta_cultivada = null;
         sprite.growthStages = null;
         sprite.preco_venda = 0;
+        sprite.xp = 0;
         sprite.tempoColheita = null;
         sprite.img_pronta = null;
         sprite.growthStage = null;
@@ -327,6 +328,8 @@ export default class SoloController {
         sprite.setTexture("solo.png");
         sprite.setAlpha(1);
         sprite.setInteractive({ pixelPerfect: true, alphaTolerance: 1, useHandCursor: true });
+
+        return true;
     }
 
 }

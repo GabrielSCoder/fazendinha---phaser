@@ -197,7 +197,7 @@ export class Start extends Phaser.Scene {
 
         const xpTable = this.parseCSV(raw);
 
-        this.gridUtils.drawGridBorder();
+        this.gridUtils.gridStart();
         this.xpController = new XPController(this, xpTable, this.gameVariables.eventsCenter);
         this.growthController = new GrowthController(this);
         this.barController = new ControlBar(this);
@@ -225,7 +225,7 @@ export class Start extends Phaser.Scene {
         this.collisionDataTemp = this.gameVariables.collisionDataTemp;
         this.toolSprite = this.gameVariables.toolSprite;
         this.spriteUtils = new SpriteUtils(this);
-        this.harvestController = new HarvestController(this);
+        this.harvestController = new HarvestController(this, { uiEvents: this.gameVariables.eventsCenter });
 
         //this.bonecoController = new BonecoController(this);
 
@@ -260,7 +260,7 @@ export class Start extends Phaser.Scene {
             2000,
             2000,
             'grama'
-        ).setOrigin(0.5).setDepth(-9999).setScrollFactor(1);;
+        ).setOrigin(0.5).setDepth(-9999).setScrollFactor(1).setVisible(false);
 
         this.cameraController.ignoreInUICamera([
             this.itemMenuUI.itemMenu,
@@ -281,9 +281,6 @@ export class Start extends Phaser.Scene {
             this.shopMenu.container,
             this.fpsText
         ]);
-
-
-
 
         this.input.setDraggable(this.gameVariables.sprites);
 
@@ -339,7 +336,7 @@ export class Start extends Phaser.Scene {
 
         this.spriteController.updateFence();
 
-        this.soilControl.updatePlowing(1, 1);
+        this.soilControl.updatePlowing(2, 2);
 
         //this.bonecoController.update();
         //this.getSpriteByPointerPosition();
@@ -389,8 +386,6 @@ export class Start extends Phaser.Scene {
         const sprite = this.gameVariables.hoveredSprite;
 
         if (!sprite) return;
-
-        console.log(sprite)
 
         this.updateHoverText(sprite);
 

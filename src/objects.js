@@ -855,7 +855,7 @@ export const decoracoes = [
     {
         "id": "trator",
         "nome": "Trator",
-        "preco_compra": 0,
+        "preco_compra": 1,
         "preco_compra_grana": 38,
         "preco_venda": 0,
         "tempo_colheita_horas": 0,

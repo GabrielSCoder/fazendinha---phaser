@@ -25,8 +25,6 @@ export default class ShopMenu {
 
             this.playerLevel = data.level;
 
-            console.log(this.playerLevel)
-
         });
     }
 
@@ -45,7 +43,6 @@ export default class ShopMenu {
         const { scene, width, height } = this;
         scene.input.setDefaultCursor('pointer');
 
-        // === OVERLAY ===
         this.overlay = scene.add.rectangle(0, 0, scene.scale.width, scene.scale.height, 0x000000, 0.4)
             .setOrigin(0)
             .setScrollFactor(0)

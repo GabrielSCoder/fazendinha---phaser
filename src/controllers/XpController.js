@@ -17,21 +17,18 @@ export default class XPController {
 
     gameEvents() {
 
-        // this.uiEvents.on("action:addXP", (amount) => {
-        //     this.addXP(amount);
-        // });
-
         this.uiEvents.on("action:addXP", (data) => {
 
-            this.addXP(data.amount);
+            this.addXP(data.amount || data);
 
             if (data.x !== undefined) {
 
                 this.uiEvents.emit("ui:floatingText", {
-                    text: `+${data.amount} XP`,
+                    text: `${data.amount} XP`,
                     x: data.x,
                     y: data.y,
-                    color: "#ffff66"
+                    color: "#ffff66",
+                    icon: "star"
                 });
 
             }
