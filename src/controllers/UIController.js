@@ -11,6 +11,9 @@ export default class UINotificationController {
         this.bgFullHeight = 500;
         this.bgMediumHeight = 200;
 
+        this.queue = [];
+        this.isShowing = false;
+
 
         this.overlay = scene.add.rectangle(0, 0, scene.scale.width, scene.scale.height, 0x000000, 0.4)
             .setOrigin(0)
@@ -38,6 +41,26 @@ export default class UINotificationController {
     }
 
     notify(data) {
+
+        this.queue.push(data);
+        this.processQueue();
+
+    }
+
+    processQueue() {
+
+        if (this.isShowing) return;
+        if (this.queue.length === 0) return;
+
+        const data = this.queue.shift();
+
+        this.isShowing = true;
+
+        this.showPopup(data);
+
+    }
+
+    showPopup(data) {
 
         this.levelContainer.setVisible(false);
         this.missionContainer.setVisible(false);
@@ -230,6 +253,10 @@ export default class UINotificationController {
 
                 this.container.setVisible(false);
                 this.overlay.setVisible(false);
+
+                this.isShowing = false;
+
+                this.processQueue();
 
             }
         });

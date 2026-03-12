@@ -173,7 +173,7 @@ export default class GameEventsController {
                 if (!result) {
                     res = false;
                     return;
-                    
+
                 }
                 this.uiEvents.emit("action:reward", {
                     xp: sprite.xp ?? 0,
@@ -186,7 +186,12 @@ export default class GameEventsController {
                 res = true
             });
 
-            if (!res) return;
+            if (!res) {
+                this.uiEvents.emit("ui:notify", { type: "" });
+                this.scene.gameVariables.freeClick = true;
+                return;
+            }
+
         }
 
         sprite.gridX = Math.round(iso.x);

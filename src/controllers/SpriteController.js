@@ -28,6 +28,8 @@ export default class SpriteController {
             const pointer = this.scene.input.activePointer;
             // this.uiEvents.emit('ui:desativarBottonMenu');
 
+            if (this.scene.bannerController.isOpen()) return;
+
             if (this.scene.gameVariables.middleButtonDown) return;
 
             if (this.scene.gameVariables.freeClick) return;

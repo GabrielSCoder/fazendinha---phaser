@@ -160,7 +160,7 @@ export default class AcoesUtils {
         let originX = 0.5;
         let originY = 0.5;
         let tipo = "normal";
-
+        
         if (itemData.origem) {
             originX = itemData.origem[0];
             originY = itemData.origem[1];

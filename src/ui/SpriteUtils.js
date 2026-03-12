@@ -92,6 +92,7 @@ export default class SpriteUtils {
 
             if (sprite.isReserved) return;
             if (sprite.isQueued) return;
+            if (sprite.isMoving) return;
 
             sprite.setTint(0xf2d602);
 

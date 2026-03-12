@@ -131,7 +131,7 @@ export default class XPController {
         });
 
         this.uiEvents.emit("action:setMoney", 1);
-        this.uiEvents.emit("ui:notify", { type: "", level : level });
+        this.uiEvents.emit("ui:notify", { type: "levelUp", level : level });
     }
 
     emitUpdate() {
