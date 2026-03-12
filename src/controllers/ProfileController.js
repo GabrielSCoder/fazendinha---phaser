@@ -97,8 +97,11 @@ export default class ProfileController {
     }
 
     setMoney(valor) {
+        
         if ((this.money + valor) < 0) return;
         this.money += valor;
+
+        this.uiEvents.emit("update:profile", this.getData());
     }
 
     buyItem(data, callback) {

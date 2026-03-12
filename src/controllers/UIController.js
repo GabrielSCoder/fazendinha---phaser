@@ -7,22 +7,20 @@ export default class UINotificationController {
 
         const cam = scene.cameras.main;
 
-        this.bgWidth = 500;
-        this.bgHeight = 500;
+        this.bgFullWidth = 500;
+        this.bgFullHeight = 500;
+        this.bgMediumHeight = 200;
 
-        this.overlay = scene.add.rectangle(
-            cam.centerX,
-            cam.centerY,
-            cam.width,
-            cam.height,
-            0x000000,
-            0.5
-        )
-            .setDepth(9000)
-            .setVisible(false);
+
+        this.overlay = scene.add.rectangle(0, 0, scene.scale.width, scene.scale.height, 0x000000, 0.4)
+            .setOrigin(0)
+            .setScrollFactor(0)
+            .setDepth(9998)
+            .setVisible(false)
+            .setInteractive();
 
         this.container = scene.add.container(cam.centerX, cam.centerY)
-            .setDepth(9001)
+            .setDepth(9999)
             .setVisible(false)
             .setScrollFactor(0);
 
@@ -70,14 +68,14 @@ export default class UINotificationController {
         const bg = this.scene.add.image(0, 0, "fundo_madeira").setDisplaySize(500, 400);
 
         let resume = [];
-        
+
         this.uiEvents.emit("catalog:getLevelResume", data.level, res => {
             resume = res.join(", ");
         });
 
         const title = this.scene.add.text(
             0,
-            -this.bgHeight / 2 + 80,
+            -this.bgFullHeight / 2 + 80,
             "Parabéns", {
             fontSize: '30px',
             fontStyle: 'bold',
@@ -106,7 +104,7 @@ export default class UINotificationController {
             {
                 fontSize: "18px", color: "#ffffff", fontFamily: 'LuckiestGuy-Regular', lineSpacing: 2,
                 wordWrap: {
-                    width: this.bgWidth * 0.8
+                    width: this.bgFullWidth * 0.8
                 }
             }
         ).setOrigin(0.5).setStroke('#000', 4);
@@ -118,9 +116,9 @@ export default class UINotificationController {
         this.levelContainer.add([bg, title, body, footer, sub, confirm]);
     }
 
-    createMissionPopup() {
+    createMissionPopup(data) {
 
-        const bg = this.scene.add.image(0, 0, "fundo_madeira_medio");
+        const bg = this.scene.add.image(0, 0, "fundo_madeira_branco").setDisplaySize(500, 400);
 
         const text = this.scene.add.text(
             0,
@@ -130,38 +128,58 @@ export default class UINotificationController {
         ).setOrigin(0.5);
 
         const confirm = this.createConfirmButton();
-        const close = this.createCloseButton();
+        const close = this.createCloseButton(data.type);
 
         this.missionContainer.add([bg, text, confirm, close]);
     }
 
-    createGenericPopup() {
+    createGenericPopup(data) {
 
-        const bg = this.scene.add.image(0, 0, "fundo_madeira_branco");
+        const bg = this.scene.add.image(0, 0, "fundo_madeira_medio").setDisplaySize(500, 200);
 
-        const text = this.scene.add.text(
+        const body = this.scene.add.text(
             0,
             0,
-            "Mensagem",
-            { fontSize: "24px", color: "#000" }
-        ).setOrigin(0.5);
+            `Você não tem fundos suficiente`,
+            {
+                fontSize: "22px", color: "#ffffff", fontFamily: 'LuckiestGuy-Regular', lineSpacing: 2, wordWrap: {
+                    width: this.bgFullWidth * 0.9
+                }
+            }
+        ).setOrigin(0.5).setStroke('#000', 4);
 
-        const confirm = this.createConfirmButton();
-        const close = this.createCloseButton();
+        // const confirm = this.createConfirmButton();
+        const close = this.createCloseButton(data.type);
 
-        this.genericContainer.add([bg, text, confirm, close]);
+        this.genericContainer.add([bg, body, close]);
     }
 
-    createCloseButton() {
+    createCloseButton(type) {
+
+        let offsetWidth = 0;
+        let offsetHeight = 0;
+
+        switch (type) {
+            case "level up":
+                offsetWidth = this.bgFullWidth / 2 - 40;
+                offsetHeight = -this.bgFullHeight / 2 + 40;
+                break;
+            default:
+                offsetWidth = this.bgFullWidth / 2 - 10;
+                offsetHeight = -this.bgMediumHeight / 2 + 20;
+                break;
+        }
 
         const close = this.scene.add.image(
-            this.bgWidth / 2 - 40,
-            -this.bgHeight / 2 + 40,
+            offsetWidth,
+            offsetHeight,
             "close_button"
         ).setScale(0.2)
             .setInteractive({ useHandCursor: true });
 
         close.on("pointerup", () => this.close());
+        close.on("pointerover", () => close.setScale(0.25))
+        close.on("pointerout", () => close.setScale(0.2))
 
         return close;
     }
@@ -218,4 +236,7 @@ export default class UINotificationController {
 
     }
 
+    isOpen() {
+        return this.container.visible;
+    }
 }
