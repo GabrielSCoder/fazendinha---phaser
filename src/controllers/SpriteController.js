@@ -1,3 +1,5 @@
+import { colher, plantar_solo, vender } from "../msgs.js";
+
 export default class SpriteController {
 
     constructor(scene, config = {}) {
@@ -8,10 +10,26 @@ export default class SpriteController {
         this.offsetX = scene.gameVariables.offsetX;
         this.offsetY = scene.gameVariables.offsetY;
         this.logicFactor = scene.gameVariables.logicFactor;
+        this.gameVariables = scene.gameVariables;
         this.gridUtils = scene.gridUtils;
         this.uiEvents = config.uiEvents;
         this.classEvents();
         this.growingSprites = ["semente", "arvore", "solo_plantado_simples", "animal"];
+
+        this.hoverText = this.scene.add.text(0, 0, "", {
+            fontSize: "14px",
+            color: "#ffff00",
+            stroke: "#000000",
+            strokeThickness: 4
+        });
+
+        this.hoverText
+            .setBackgroundColor("rgba(0,0,0,0.6)")
+            .setPadding(1, 1)
+            .setDepth(9999)
+            .setVisible(false);
+
+        this.scene.cameraController.ignoreInUICamera(this.hoverText)
     }
 
     classEvents() {
@@ -111,24 +129,6 @@ export default class SpriteController {
         }
     }
 
-    updateHoverPlantPercent() {
-
-        const sprite = this.gameVariables.hoveredSprite;
-
-        if (!sprite) return;
-        if (sprite.tipo != "solo_plantado_simples") return;
-
-        let percent = this.growthController.getGrowthPercent(sprite);
-        percent = Math.floor(percent * 100);
-
-        let text = sprite.plata_cultivada + " " + percent + "%";
-
-        if (sprite.harvestReady)
-            text = sprite.plata_cultivada + "\n" + colher
-
-        this.hoverText.setText(text);
-
-    }
 
     spriteHover(sprite) {
 
@@ -161,5 +161,49 @@ export default class SpriteController {
 
             this.scene.hoverText.setVisible(true);
         }
+    }
+
+    updateHoverText(sprite) {
+
+        if (!sprite) return;
+
+        let text = "";
+
+        if (sprite.tipo == "decoracao") {
+            text = sprite.nome;
+        }
+
+        else if (sprite.tipo == "solo_preparado") {
+            text = plantar_solo;
+        }
+
+        else if (sprite.tipo == "solo_plantado_simples" || sprite.tipo == "animal" || sprite.tipo == "arvore") {
+
+            let percent = this.scene.growthController.getGrowthPercent(sprite);
+            percent = Math.floor(percent * 100);
+
+            text = sprite.nome + " " + percent + "%";
+
+            if (sprite.harvestReady) {
+                text = sprite.nome + "\n" + colher;
+            }
+        }
+
+        if (this.gameVariables.selling) {
+            text = vender;
+        }
+
+        this.hoverText.setText(text);
+
+    }
+
+    updateHoverPlantPercent() {
+
+        const sprite = this.gameVariables.hoveredSprite;
+
+        if (!sprite) return;
+
+        this.updateHoverText(sprite);
+
     }
 }

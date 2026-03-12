@@ -68,7 +68,6 @@ export default class ControlBar {
                             barra.destroy();
                             progresso.destroy();
 
-                            this.scene.gameVariables.plantingBar = false;
 
                             if (typeof funcao === "function" && !cancelled) {
                                 funcao();

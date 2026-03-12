@@ -1,5 +1,3 @@
-import { solos } from "../objects.js"
-
 export default class AcoesUtils {
     constructor(scene, config = {}) {
         this.scene = scene;
@@ -20,7 +18,7 @@ export default class AcoesUtils {
         this.scene.gameVariables.hoverEnabled = enabled;
 
         if (!enabled) {
-            this.scene.hoverText.setVisible(false);
+            this.scene.spriteController.hoverText.setVisible(false);
             this.scene.input.manager.canvas.style.cursor = "default";
         }
     }
@@ -160,7 +158,7 @@ export default class AcoesUtils {
         let originX = 0.5;
         let originY = 0.5;
         let tipo = "normal";
-        
+
         if (itemData.origem) {
             originX = itemData.origem[0];
             originY = itemData.origem[1];
@@ -175,7 +173,7 @@ export default class AcoesUtils {
         const sprite = this.scene.spriteUtils.addGameSprite(itemData, this.scale / 2, this.scale / 2, scale, originX, originY);
 
         if (itemData.area) {
-            sprite.footprint = itemData.area; 
+            sprite.footprint = itemData.area;
         }
 
         sprite.setAlpha(0.7);
@@ -222,6 +220,24 @@ export default class AcoesUtils {
 
     }
 
+    parseCSV(csv) {
 
+        const lines = csv.trim().split("\n");
+        const headers = lines.shift().split(",");
 
+        return lines.map(line => {
+
+            const values = line.split(",");
+
+            const obj = {};
+
+            headers.forEach((h, i) => {
+                obj[h.trim()] = Number(values[i]);
+            });
+
+            return obj;
+
+        });
+
+    }
 }

@@ -110,7 +110,7 @@ export default class VendaController {
 
         this.gridUtils.clearOccupied(item);
 
-        this.scene.hoverText.setVisible(false);
+        this.scene.spriteController.hoverText.setVisible(false);
         const sprite_del = item;
         sprite_del.destroy();
         this.scene.gameVariables.sprites = this.scene.gameVariables.sprites.filter(s => s && s !== sprite_del && !s.destroyed);

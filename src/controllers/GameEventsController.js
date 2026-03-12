@@ -312,10 +312,36 @@ export default class GameEventsController {
         if (!this.scene.gameVariables.previewOccupiedtiles?.length) return;
         if (this.scene.queue.isFull()) return;
 
+        const resp = this.canPlow();
+
         const reserva = this.scene.soilControl.createReserveSoil();
         if (!reserva?.length) return;
 
-        reserva.forEach(tile => {
+        if (!resp) {
+            this.uiEvents.emit("queue:cancelAll");
+            this.uiEvents.emit("action:StopPlowing");
+            this.scene.soilControl.cancelReserve(reserva);
+            this.uiEvents.emit("ui:notify", { type: "" });
+            return;
+        }
+
+        let validReserva = reserva;
+
+        if (this.scene.gameVariables.actionTileX != 1 || this.scene.gameVariables.actionTileY != 1) {
+            const maxTiles = this.scene.soilControl.getAffordableTiles();
+
+            if (!maxTiles) {
+                this.scene.soilControl.cancelReserve(reserva);
+                return;
+            }
+
+            validReserva = reserva.slice(0, maxTiles);
+            const restReserva = reserva.slice(maxTiles);
+
+            this.scene.soilControl.cancelReserve(restReserva);
+        }
+
+        validReserva.forEach(tile => {
             tile.sprite.setAlpha(0.4);
         });
 
@@ -325,11 +351,7 @@ export default class GameEventsController {
 
             action: (done) => {
 
-                // console.log("executando solo");
-
-                progressBar = this.scene.soilControl.executePlowingSoil(reserva, () => {
-
-                    // console.log("solo terminou");
+                progressBar = this.scene.soilControl.executePlowingSoil(validReserva, () => {
 
                     done();
 
@@ -350,6 +372,27 @@ export default class GameEventsController {
 
         });
 
+    }
+
+    canPlow() {
+
+        const price = this.scene.gameVariables.plowingCost;
+
+        let HaveMoney = false;
+
+        this.uiEvents.emit("action:buyItem", {
+            type: "gold",
+            price: price,
+            level: 1
+        }, (result) => {
+            HaveMoney = result;
+        })
+
+        if (!HaveMoney) {
+            return false;
+        }
+
+        return true;
     }
 
     controlePlantar() {

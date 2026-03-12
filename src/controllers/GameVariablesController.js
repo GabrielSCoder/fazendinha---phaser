@@ -29,9 +29,11 @@ export default class GameVariablesController {
         this.tileSize = this.gridSize;
         this.hoveredSprite = null;
         this.canInteract = true;
-        this.ActiveBar = false;
+        this.activeBar = false;
         this.creativeMode = false;
 
+        this.actionTileX = 1;
+        this.actionTileY = 1;
         this.plowing = false;
         this.buyItemTmp = null;
         this.planting = false;
@@ -44,6 +46,11 @@ export default class GameVariablesController {
 
         this.collisionDataTemp = null;
         this.toolSprite = null;
+
+        this.plowingCost = 30;
+        this.prepareSoilCost = 10;
+        this.plowingExperience = 1;
+        this.prepareSoilExperience = 1;
 
         this.actionQueue = [];
         this.isProcessingAction = false;

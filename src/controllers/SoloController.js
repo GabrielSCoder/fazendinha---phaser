@@ -36,9 +36,11 @@ export default class SoloController {
     updatePlowing(blocksWide = 1, blocksHigh = 1) {
 
         if (this.scene.gameVariables.middleButtonDown) return;
+        if (this.scene.gameVariables.activeBar) return;
         if (!this.scene.gameVariables.plowing) return;
         if (this.scene.gameVariables.selling) this.scene.sellControl.stopSelling();
         if (this.scene.gameVariables.planting) this.scene.plantControl.stopSeeding();
+
 
         const pointer = this.scene.input.activePointer;
         const cam = this.scene.cameras.main;
@@ -62,10 +64,11 @@ export default class SoloController {
         ];
         const outerCornersScreen = outerCornersIso.map(c => this.gridUtils.isoToScreen(c.x, c.y));
         const outerPoints = [];
+
         for (const c of outerCornersScreen) outerPoints.push(c.x, c.y);
 
-        // === Desenhar os sub-blocos individualmente ===
-        this.scene.gameVariables.previewOccupiedtiles = []; // limpa antes de preencher
+        this.scene.gameVariables.previewOccupiedtiles = [];
+
         for (let bx = 0; bx < blocksWide; bx++) {
             for (let by = 0; by < blocksHigh; by++) {
 
@@ -127,9 +130,9 @@ export default class SoloController {
 
     stopPlowing() {
         if (!this.scene.gameVariables.plowing) return;
-
-        this.scene.gameVariables.plowing = false;
         this.AcoesUtils.clearPreviewTiles();
+        this.AcoesUtils.clearPreviewOccupiedTiles();
+        this.scene.gameVariables.plowing = false;
         this.uiEvents.emit("interact:ActivateAll");
     }
 
@@ -153,7 +156,6 @@ export default class SoloController {
 
         const blockSize = 4;
 
-        // PASSO 1: verificar quais podem ser usados
         this.scene.gameVariables.previewOccupiedtiles.forEach(tile => {
 
             const startX = tile.startX ?? tile.x;
@@ -260,11 +262,26 @@ export default class SoloController {
 
         this.gridUtils.recalculateDepthAround(sprite);
 
+        this.uiEvents.emit("action:reward", {
+            xp: 1,
+            gold: -this.scene.gameVariables.plowingCost ?? 0,
+            x: sprite.x,
+            y: sprite.y
+        })
     }
 
     executePlowingSoil(reserva, done) {
 
         const first = reserva[0];
+
+        const resp = this.canPlow();
+
+        if (!resp) {
+            this.uiEvents.emit("queue:cancelAll");
+            this.uiEvents.emit("action:StopPlowing");
+            this.uiEvents.emit("ui:notify", { type: "" });
+            return;
+        }
 
         const bar = this.scene.barController.criarBarraProgresso(
             first.screenX,
@@ -275,6 +292,7 @@ export default class SoloController {
             () => {
 
                 reserva.forEach(tile => {
+
                     this.confirmSoil(tile.sprite);
                 });
 
@@ -284,6 +302,19 @@ export default class SoloController {
         );
 
         return bar;
+    }
+
+    getAffordableTiles() {
+
+        const price = this.scene.gameVariables.plowingCost;
+        let gold = null;
+
+        this.uiEvents.emit("action:getGold", (result) => {
+            gold = result;
+            console.log(gold)
+        })
+
+        return Math.floor(gold / price);
     }
 
     cancelReserve(reserva) {
@@ -307,6 +338,27 @@ export default class SoloController {
 
         });
 
+    }
+
+    canPlow() {
+
+        const price = this.scene.gameVariables.plowingCost;
+
+        let HaveMoney = false;
+
+        this.uiEvents.emit("action:buyItem", {
+            type: "gold",
+            price: price,
+            level: 1
+        }, (result) => {
+            HaveMoney = result;
+        })
+
+        if (!HaveMoney) {
+            return false;
+        }
+
+        return true;
     }
 
     clearSoil(sprite) {

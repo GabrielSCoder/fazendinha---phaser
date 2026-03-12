@@ -202,16 +202,18 @@ export class Start extends Phaser.Scene {
 
         const raw = this.cache.text.get("xpTable");
 
-        const xpTable = this.parseCSV(raw);
 
+        this.cameraController = new CameraController(this);
+        this.growthController = new GrowthController(this);
+        this.spriteUtils = new SpriteUtils(this);
+        this.acoesUtils = new AcoesUtils(this, { uiEvents: this.gameVariables.eventsCenter });
+        const xpTable = this.acoesUtils.parseCSV(raw);
         this.gridUtils.gridStart();
         // this.gridUtils.drawGridBorder();
         this.xpController = new XPController(this, xpTable, this.gameVariables.eventsCenter);
         this.catalogUtils = new CatalogUtils(this, { uiEvents: this.gameVariables.eventsCenter });
-        this.growthController = new GrowthController(this);
         this.barController = new ControlBar(this);
         this.profileController = new ProfileController(this, { uiEvents: this.gameVariables.eventsCenter })
-        this.acoesUtils = new AcoesUtils(this, { uiEvents: this.gameVariables.eventsCenter });
         this.spriteController = new SpriteController(this, { uiEvents: this.gameVariables.eventsCenter });
         this.queue = new ActionQueue(this, { uiEvents: this.gameVariables.eventsCenter });
         this.gameEvents = new GameEventsController(this, { uiEvents: this.gameVariables.eventsCenter });
@@ -221,9 +223,8 @@ export class Start extends Phaser.Scene {
         this.plantControl = new PlantaController(this, { uiEvents: this.gameVariables.eventsCenter });
         this.sellControl = new VendaController(this, { uiEvents: this.gameVariables.eventsCenter });
 
-        this.cameraController = new CameraController(this);
         this.shopMenu = new ShopMenu(this, { uiEvents: this.gameVariables.eventsCenter });
-        this.bannerController = new UINotificationController(this, {uiEvents: this.gameVariables.eventsCenter});
+        this.bannerController = new UINotificationController(this, { uiEvents: this.gameVariables.eventsCenter });
         this.bottomMenu = new BottomMenu(this, { shopMenu: this.shopMenu, uiEvents: this.gameVariables.eventsCenter });
         this.topUI = new TopUI(this, { uiEvents: this.gameVariables.eventsCenter });
         this.xpController.emitUpdate();
@@ -234,7 +235,6 @@ export class Start extends Phaser.Scene {
         this.selectedSeed = this.gameVariables.selectedSeed;
         this.collisionDataTemp = this.gameVariables.collisionDataTemp;
         this.toolSprite = this.gameVariables.toolSprite;
-        this.spriteUtils = new SpriteUtils(this);
         this.harvestController = new HarvestController(this, { uiEvents: this.gameVariables.eventsCenter });
 
         //this.bonecoController = new BonecoController(this);
@@ -242,27 +242,14 @@ export class Start extends Phaser.Scene {
         this.time.addEvent({
             delay: 200,
             loop: true,
-            callback: this.updateHoverPlantPercent,
-            callbackScope: this
+            callback: this.spriteController.updateHoverPlantPercent,
+            callbackScope: this.spriteController
         });
 
         this.fpsText = this.add.text(10, 10, '', {
             font: '16px Arial',
             fill: '#00ff00'
         });
-
-        this.hoverText = this.add.text(0, 0, "", {
-            fontSize: "14px",
-            color: "#ffff00",
-            stroke: "#000000",
-            strokeThickness: 4
-        });
-
-        this.hoverText
-            .setBackgroundColor("rgba(0,0,0,0.6)")
-            .setPadding(1, 1)
-            .setDepth(9999)
-            .setVisible(false);
 
         this.ground = this.add.tileSprite(
             0,
@@ -279,7 +266,6 @@ export class Start extends Phaser.Scene {
             this.footprintGraphics,
             //this.bonecoController.boneco,
             this.gameVariables.previewTiles,
-            this.hoverText,
             this.ground
         ]);
 
@@ -347,7 +333,7 @@ export class Start extends Phaser.Scene {
 
         this.spriteController.updateFence();
 
-        this.soilControl.updatePlowing(1, 1);
+        this.soilControl.updatePlowing(this.gameVariables.actionTileX, this.gameVariables.actionTileY);
 
         //this.bonecoController.update();
         //this.getSpriteByPointerPosition();
@@ -358,70 +344,6 @@ export class Start extends Phaser.Scene {
 
     }
 
-    updateHoverText(sprite) {
-
-        if (!sprite) return;
-
-        let text = "";
-
-        if (sprite.tipo == "decoracao") {
-            text = sprite.nome;
-        }
-
-        else if (sprite.tipo == "solo_preparado") {
-            text = plantar_solo;
-        }
-
-        else if (sprite.tipo == "solo_plantado_simples" || sprite.tipo == "animal" || sprite.tipo == "arvore") {
-
-            let percent = this.growthController.getGrowthPercent(sprite);
-            percent = Math.floor(percent * 100);
-
-            text = sprite.nome + " " + percent + "%";
-
-            if (sprite.harvestReady) {
-                text = sprite.nome + "\n" + colher;
-            }
-        }
-
-        if (this.gameVariables.selling) {
-            text = vender;
-        }
-
-        this.hoverText.setText(text);
-
-    }
-
-    updateHoverPlantPercent() {
-
-        const sprite = this.gameVariables.hoveredSprite;
-
-        if (!sprite) return;
-
-        this.updateHoverText(sprite);
-
-    }
-
-    parseCSV(csv) {
-
-        const lines = csv.trim().split("\n");
-        const headers = lines.shift().split(",");
-
-        return lines.map(line => {
-
-            const values = line.split(",");
-
-            const obj = {};
-
-            headers.forEach((h, i) => {
-                obj[h.trim()] = Number(values[i]);
-            });
-
-            return obj;
-
-        });
-
-    }
-
+   
 
 }

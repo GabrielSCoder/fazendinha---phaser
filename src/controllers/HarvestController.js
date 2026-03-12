@@ -13,7 +13,7 @@ export default class HarvestController {
         sprite.disableInteractive();
         sprite.clearTint();
         this.scene.gameVariables.hoveredSprite = null;
-        this.scene.hoverText.setVisible(false);
+        this.scene.spriteController.hoverText.setVisible(false);
 
         this.scene.queue.add({
 

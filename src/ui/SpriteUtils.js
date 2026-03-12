@@ -100,14 +100,14 @@ export default class SpriteUtils {
 
             if (!sprite.isMoving) {
 
-                this.scene.updateHoverText(sprite);
+                this.scene.spriteController.updateHoverText(sprite);
 
-                this.scene.hoverText.setPosition(
-                    sprite.x - this.scene.hoverText.width / 2,
+                this.scene.spriteController.hoverText.setPosition(
+                    sprite.x - this.scene.spriteController.hoverText.width / 2,
                     sprite.y - sprite.displayHeight / 2
                 );
 
-                this.scene.hoverText.setVisible(true);
+                this.scene.spriteController.hoverText.setVisible(true);
             }
 
         });
@@ -116,7 +116,7 @@ export default class SpriteUtils {
             sprite.clearTint();
             // sprite.setScale(sprite.originalScale);
             this.scene.gameVariables.hoveredSprite = null;
-            this.scene.hoverText.setVisible(false);
+            this.scene.spriteController.hoverText.setVisible(false);
         });
 
         return sprite;

@@ -32,8 +32,8 @@ export default class ProfileController {
             this.getLevel()
         })
 
-        this.uiEvents.on("action:getGold", () => {
-            this.getGold()
+        this.uiEvents.on("action:getGold", (callback) => {
+            callback(this.getGold())
         })
 
         this.uiEvents.on("action:setGold", (data) => {
