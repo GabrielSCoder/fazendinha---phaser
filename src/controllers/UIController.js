@@ -256,8 +256,9 @@ export default class UINotificationController {
 
                 this.isShowing = false;
 
+                this.scene.gameVariables.freeClick = true;
                 this.processQueue();
-
+                
             }
         });
 

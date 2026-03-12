@@ -85,7 +85,7 @@ export default class GameEventsController {
         } else if (this.scene.shopMenu.isOpen() && this.scene.gameVariables.selling) {
             this.scene.acoesUtils.stopSell();
         } else if (this.scene.shopMenu.isOpen() && this.scene.gameVariables.plowing) {
-            this.scene.acoesUtils.cancelArar();
+            this.uiEvents.emit("action:StopPlowing")
         }
 
         if (
@@ -187,8 +187,13 @@ export default class GameEventsController {
             });
 
             if (!res) {
+
                 this.uiEvents.emit("ui:notify", { type: "" });
                 this.scene.gameVariables.freeClick = true;
+                const sprite = this.scene.gameVariables.selectedSprite;
+
+                this.scene.spriteUtils.destroySprite(sprite);
+
                 return;
             }
 
@@ -256,7 +261,9 @@ export default class GameEventsController {
         })
 
         if (!HaveMoney) {
+            this.uiEvents.emit("action:StopSeeding")
             this.uiEvents.emit("queue:cancelAll");
+            this.uiEvents.emit("ui:notify", { type: "" });
             return done();
         }
 

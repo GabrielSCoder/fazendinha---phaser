@@ -205,6 +205,7 @@ export class Start extends Phaser.Scene {
         const xpTable = this.parseCSV(raw);
 
         this.gridUtils.gridStart();
+        // this.gridUtils.drawGridBorder();
         this.xpController = new XPController(this, xpTable, this.gameVariables.eventsCenter);
         this.catalogUtils = new CatalogUtils(this, { uiEvents: this.gameVariables.eventsCenter });
         this.growthController = new GrowthController(this);
@@ -220,13 +221,13 @@ export class Start extends Phaser.Scene {
         this.plantControl = new PlantaController(this, { uiEvents: this.gameVariables.eventsCenter });
         this.sellControl = new VendaController(this, { uiEvents: this.gameVariables.eventsCenter });
 
+        this.cameraController = new CameraController(this);
         this.shopMenu = new ShopMenu(this, { uiEvents: this.gameVariables.eventsCenter });
         this.bannerController = new UINotificationController(this, {uiEvents: this.gameVariables.eventsCenter});
         this.bottomMenu = new BottomMenu(this, { shopMenu: this.shopMenu, uiEvents: this.gameVariables.eventsCenter });
         this.topUI = new TopUI(this, { uiEvents: this.gameVariables.eventsCenter });
         this.xpController.emitUpdate();
         this.floatingController = new FloatingTextController(this, { uiEvents: this.gameVariables.eventsCenter });
-        this.cameraController = new CameraController(this);
         this.itemMenuUI = new ItemMenuUI(this, { uiEvents: this.gameVariables.eventsCenter });
 
         this.selectedSprite = this.gameVariables.selectedSprite;

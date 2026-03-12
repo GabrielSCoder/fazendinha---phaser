@@ -156,6 +156,7 @@ export default class ShopMenu {
         this.nextBtn = this.createPageButton(scene, 'proximo_button', width - arrowOffset + 10, arrowY, () => this.changePage(1));
 
         this.container.add([this.prevBtn, this.nextBtn]);
+
     }
 
     open() {

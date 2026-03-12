@@ -121,4 +121,30 @@ export default class SpriteUtils {
 
         return sprite;
     }
+
+    destroySprite(sprite) {
+
+        sprite.isMoving = false;
+        this.scene.gameVariables.buyItemTmp = null;
+        sprite.destroy();
+
+        this.scene.gameVariables.sprites = this.scene.gameVariables.sprites.filter(
+            (s) => s && s !== sprite && !s.destroyed
+        );
+
+        this.scene.gridUtils.recalculateDepthAround(sprite);
+        this.scene.gameVariables.selectedSprite = null;
+
+        this.scene.gameVariables.sprites.forEach((s) => {
+            if (s && !s.destroyed) {
+                s.setInteractive({
+                    pixelPerfect: true,
+                    alphaTolerance: 1,
+                    useHandCursor: true,
+                });
+            }
+        });
+
+        this.scene.gridUtils.drawFootprints();
+    }
 }
