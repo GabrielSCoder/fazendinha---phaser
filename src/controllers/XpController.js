@@ -130,6 +130,7 @@ export default class XPController {
             level: level
         });
 
+        this.uiEvents.emit("ui:notify", { type: "levelUp", level : level });
     }
 
     emitUpdate() {

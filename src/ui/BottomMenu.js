@@ -283,7 +283,8 @@ export default class BottomMenu {
         })
 
         this.btnMinusGold.on("pointerup", () => {
-            this.uiEvents.emit("action:setGold", -10)
+            // this.uiEvents.emit("action:setGold", -10)
+            this.uiEvents.emit("ui:notify", {type: "levelUp"});
         })
 
         this.btnMinusMoney.on("pointerup", () => {
@@ -295,7 +296,7 @@ export default class BottomMenu {
         });
 
         this.btnPlusGold.on("pointerup", () => {
-            this.uiEvents.emit("action:setGold", {amount : 10})
+            this.uiEvents.emit("action:setGold", { amount: 10 })
         })
 
         this.btnPlusMoney.on("pointerup", () => {
@@ -303,7 +304,7 @@ export default class BottomMenu {
         })
 
         this.btnPlusXp.on("pointerup", () => {
-            this.uiEvents.emit("action:addXP", {amount : 100});
+            this.uiEvents.emit("action:addXP", { amount: 100 });
         });
 
         this.CheatMenu.add([this.btnPlusGold, this.btnPlusMoney, this.btnPlusXp]);

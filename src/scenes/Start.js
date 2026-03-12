@@ -22,6 +22,8 @@ import HarvestController from '../controllers/HarvestController.js';
 import ProfileController from '../controllers/ProfileController.js';
 import XPController from '../controllers/XpController.js';
 import FloatingTextController from '../controllers/FloatingTextController.js';
+import UINotificationController from '../controllers/UIController.js';
+import CatalogUtils from '../utils/CatalogUtils.js';
 
 export class Start extends Phaser.Scene {
     constructor() {
@@ -107,6 +109,7 @@ export class Start extends Phaser.Scene {
         this.load.image('cash_icon', 'assets/ui/cash.png');
         this.load.image('clock_icon', 'assets/ui/clock2.png');
         this.load.image('close_button', 'assets/ui/close.png');
+        this.load.image('confirm_button', 'assets/ui/confirm.png');
         this.load.image('proximo_button', 'assets/ui/proximo.png');
         this.load.image('anterior_button', 'assets/ui/anterior.png');
         this.load.image('enxada', 'assets/ui/enxada.png');
@@ -114,6 +117,10 @@ export class Start extends Phaser.Scene {
         this.load.image('star', 'assets/ui/star.png');
         this.load.image('energy', 'assets/ui/energy.png');
         this.load.image('grama', 'assets/fundo/grama_tile.png');
+
+        this.load.image('fundo_madeira', 'assets/ui/fundo_madeira_escuro_2.png');
+        this.load.image('fundo_madeira_medio', 'assets/ui/banner_medio.png');
+        this.load.image('fundo_madeira_branco', 'assets/ui/fundo_madeira_escuro_medio_fundo_branco.png');
 
         this.load.image('macieira', 'assets/arvore/macieira.png');
         this.load.image('pereira', 'assets/arvore/pereira.png');
@@ -199,6 +206,7 @@ export class Start extends Phaser.Scene {
 
         this.gridUtils.gridStart();
         this.xpController = new XPController(this, xpTable, this.gameVariables.eventsCenter);
+        this.catalogUtils = new CatalogUtils(this, { uiEvents: this.gameVariables.eventsCenter });
         this.growthController = new GrowthController(this);
         this.barController = new ControlBar(this);
         this.profileController = new ProfileController(this, { uiEvents: this.gameVariables.eventsCenter })
@@ -213,6 +221,7 @@ export class Start extends Phaser.Scene {
         this.sellControl = new VendaController(this, { uiEvents: this.gameVariables.eventsCenter });
 
         this.shopMenu = new ShopMenu(this, { uiEvents: this.gameVariables.eventsCenter });
+        this.bannerController = new UINotificationController(this, {uiEvents: this.gameVariables.eventsCenter});
         this.bottomMenu = new BottomMenu(this, { shopMenu: this.shopMenu, uiEvents: this.gameVariables.eventsCenter });
         this.topUI = new TopUI(this, { uiEvents: this.gameVariables.eventsCenter });
         this.xpController.emitUpdate();
@@ -279,6 +288,7 @@ export class Start extends Phaser.Scene {
             this.matrixGraphics,
             this.matrixLabel,
             this.shopMenu.container,
+            this.bannerController.container,
             this.fpsText
         ]);
 
@@ -336,7 +346,7 @@ export class Start extends Phaser.Scene {
 
         this.spriteController.updateFence();
 
-        this.soilControl.updatePlowing(2, 2);
+        this.soilControl.updatePlowing(1, 1);
 
         //this.bonecoController.update();
         //this.getSpriteByPointerPosition();

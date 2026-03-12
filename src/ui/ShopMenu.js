@@ -38,7 +38,6 @@ export default class ShopMenu {
 
     }
 
-
     create() {
         const { scene, width, height } = this;
         scene.input.setDefaultCursor('pointer');
@@ -226,7 +225,6 @@ export default class ShopMenu {
         this.itemsContainer.removeAll(true);
         this.shopItems = [];
 
-        // const items = this.itemsData[this.activeCategory] || [];
         const items = (this.itemsData[this.activeCategory] || [])
             .slice()
             .sort((a, b) => a.nivel_requerido - b.nivel_requerido);
