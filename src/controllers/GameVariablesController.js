@@ -32,6 +32,7 @@ export default class GameVariablesController {
         this.activeBar = false;
         this.creativeMode = false;
         this.staticMode = false;
+        this.noExperienceMode = false;
 
         this.actionTileX = 1;
         this.actionTileY = 1;

@@ -3,10 +3,16 @@ export default class GameEventsController {
         this.scene = scene;
         this.gridUtils = scene.gridUtils;
         this.uiEvents = config.uiEvents;
+        this.creativeMode = scene.gameVariables.creativeMode;
+        this.noExperienceMode = scene.gameVariables.noExperienceMode;
+        this.staticMode = scene.gameVariables.staticMode;
 
         this.uiEvents.on("action:reward", (data) => {
 
+            if (this.creativeMode) return;
+
             if (data.xp) {
+                if (this.noExperienceMode) return;
                 this.uiEvents.emit("action:addXP", data.xp);
             }
 
@@ -298,7 +304,7 @@ export default class GameEventsController {
 
         if (sprite.tipo == "arvore" || sprite.tipo == "animal") {
 
-            if (!sprite.harvestReady && !sprite.growthStart) {
+            if (!sprite.harvestReady && !sprite.growthStart && !this.staticMode) {
 
                 const stages = [
                     { percent: 1, texture: sprite.texture.key }

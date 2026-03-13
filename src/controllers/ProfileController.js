@@ -13,7 +13,7 @@ export default class ProfileController {
         this.uiEvents = config.uiEvents;
         this.AcoesUtils = scene.acoesUtils;
         this.interact = scene.interactController;
-
+        this.creativeMode = scene.gameVariables.creativeMode;
 
         this.gold = preset.gold ?? 2000;
         this.money = preset.money ?? 6;
@@ -97,7 +97,7 @@ export default class ProfileController {
     }
 
     setMoney(valor) {
-        
+
         if ((this.money + valor) < 0) return;
         this.money += valor;
 
@@ -105,6 +105,11 @@ export default class ProfileController {
     }
 
     buyItem(data, callback) {
+
+        if (this.creativeMode) {
+            callback(true)
+            return;
+        }
 
         if (data.price < 0 || !data.level || !data.type) {
             callback(false);
@@ -116,7 +121,7 @@ export default class ProfileController {
             if ((this.gold - data.price) >= 0) {
                 callback(true);
             } else {
-                
+
                 callback(false);
             }
 
@@ -128,7 +133,7 @@ export default class ProfileController {
             if ((this.money - data.price) >= 0) {
                 callback(true);
             } else {
-                
+
                 callback(false);
             }
 

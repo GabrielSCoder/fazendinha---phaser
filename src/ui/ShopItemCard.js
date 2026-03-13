@@ -9,6 +9,8 @@ export default class ShopItemCard {
         this.container = container;
         this.data = data;
         this.requiredLevel = data.nivel_requerido || 1;
+        this.creativeMode = scene.gameVariables.creativeMode;
+        this.noExperienceMode = scene.gameVariables.noExperienceMode;
 
         this.x = x;
         this.y = y;
@@ -47,7 +49,7 @@ export default class ShopItemCard {
 
         elements.push(img);
 
-        if (locked) {
+        if (locked && !this.creativeMode && !this.noExperienceMode) {
 
             const bloqueado = s.add.tileSprite(20, 100, 140, 90, 'item_bloqueado')
                 .setOrigin(0)
