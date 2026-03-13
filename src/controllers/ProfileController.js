@@ -15,7 +15,7 @@ export default class ProfileController {
         this.interact = scene.interactController;
 
 
-        this.gold = preset.gold ?? 600;
+        this.gold = preset.gold ?? 2000;
         this.money = preset.money ?? 6;
 
         this.classEvents();

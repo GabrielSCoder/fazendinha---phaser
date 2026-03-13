@@ -423,10 +423,10 @@ export const arvores = [
     {
         "id": "arvore_abrico",
         "nome": "Abricó",
-        "preco_compra": 380,
+        "preco_compra": 100,
         "preco_compra_grana": 0,
         "preco_venda": 25,
-        "tempo_colheita_horas": 0.05,
+        "tempo_colheita_horas": 2,
         "xp": 2,
         "nivel_requerido": 1,
         "img": "cerejeira",
@@ -463,8 +463,7 @@ export const arvores = [
         "escala": 0.4,
         "area": [1, 1],
         "origem": [0.5, 0.85],
-        "tipo": "arvore",
-        "noStopBuy": true
+        "tipo": "arvore"
     },
     {
         "id": "arvore_pessego",
@@ -590,14 +589,15 @@ export const decoracoes = [
         "escala": 1.1,
         "area": [3, 3],
         "origem": [0.5, 0.8],
-        "tipo": "decoracao"
+        "tipo": "decoracao",
+        "noStopBuy" : false
     },
     {
         "id": "cerca_branca",
         "nome": "Cerca branca",
         "tipo": "cerca",
-        "preco_compra": 0,
-        "preco_compra_grana": 18,
+        "preco_compra": 1,
+        "preco_compra_grana": 0,
         "preco_venda": 0,
         "tempo_colheita_horas": 0,
         "xp": 490,
@@ -605,8 +605,7 @@ export const decoracoes = [
         "img": "cerca_branca",
         "escala": 0.4,
         "area": [5, 1],
-        "origem": [0.5, 0.5],
-        "noStopBuy": true,
+        "origem": [0.5, 0.5]
     },
     {
         "id": "cabana_de_descanso",

@@ -282,6 +282,7 @@ export class Start extends Phaser.Scene {
         this.input.setDraggable(this.gameVariables.sprites);
 
         this.input.on("pointerup", () => {
+            if (this.bannerController.isOpen()) return;
             this.gameEvents.colocarCercasCheck();
         });
 
@@ -289,7 +290,8 @@ export class Start extends Phaser.Scene {
             this.gameEvents.abrirLojaCheck();
         });
 
-        this.input.on('pointerup', (pointer, objs, event) => {
+        this.input.on('pointerup', () => {
+            if (this.bannerController.isOpen()) return;
             this.gameEvents.fixarObjetoCheck();
         });
 
@@ -344,6 +346,6 @@ export class Start extends Phaser.Scene {
 
     }
 
-   
+
 
 }

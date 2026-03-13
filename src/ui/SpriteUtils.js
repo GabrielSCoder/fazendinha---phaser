@@ -61,7 +61,7 @@ export default class SpriteUtils {
             if (this.scene.gameVariables.middleButtonDown) return;
 
             if (this.scene.gameVariables.selling) {
-                this.scene.gameVariables.selectedSprite = sprite;
+                this.scene.gameVariables.selectedSpriteDelete = sprite;
                 this.uiEvents.emit("ui:notify", {type : "sell", nome : sprite.nome, preco : sprite.preco_venda, action : "action:SellItem"});
             } else if (!sprite.isMoving && sprite.tipo !== "solo_plantado_simples" && sprite.tipo !== "solo_preparado" && sprite.nome !== "solo_seco") {
                 this.scene.gameVariables.selectedSprite = sprite;

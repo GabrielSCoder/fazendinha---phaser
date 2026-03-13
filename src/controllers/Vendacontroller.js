@@ -29,10 +29,16 @@ export default class VendaController {
         this.uiEvents.on("action:SellItem", () => {
             this.sellItem();
         })
+
+        this.uiEvents.on("action:SellItemUI", () => {
+            this.sellItemUi();
+        })
     }
 
     startSelling() {
         if (this.scene.gameVariables.selling) return;
+
+        this.scene.gameVariables.selectedSpriteDelete = null;
 
         if (this.scene.gameVariables.plowing) this.uiEvents.emit("action:StopPlowing");
         if (this.scene.gameVariables.planting) this.uiEvents.emit("action:StopSeeding");
@@ -84,7 +90,7 @@ export default class VendaController {
         this.scene.gameVariables.toolSprite = null;
         this.scene.gameVariables.selling = false;
         this.scene.gameVariables.selectedSprite = null;
-
+        this.scene.gameVariables.selectedSpriteDelete = null;
     }
 
     updateSelling() {
@@ -99,11 +105,23 @@ export default class VendaController {
     }
 
     sellItem() {
-        if (!this.scene.gameVariables.selectedSprite) return;
+        if (!this.scene.gameVariables.selectedSpriteDelete) return;
         if (!this.scene.gameVariables.selling) return;
         if (!this.scene.gameVariables.toolSprite) return;
 
-        const item = this.scene.gameVariables.selectedSprite;
+        this.completeSell();
+    }
+
+    sellItemUi() {
+
+        if (!this.scene.gameVariables.selectedSpriteDelete) return;
+
+        this.completeSell();
+    }
+
+    completeSell() {
+
+        const item = this.scene.gameVariables.selectedSpriteDelete;
 
         if (item.growthStart && !item.harvestReady) {
             this.scene.growthController.cancelGrowth(item);
@@ -117,6 +135,7 @@ export default class VendaController {
         this.scene.gameVariables.sprites = this.scene.gameVariables.sprites.filter(s => s && s !== sprite_del && !s.destroyed);
 
         this.scene.gameVariables.selectedSprite = null;
+        this.scene.gameVariables.selectedSpriteDelete = null;
         this.scene.gameVariables.hoveredSprite = null;
 
         this.gridUtils.drawFootprints();

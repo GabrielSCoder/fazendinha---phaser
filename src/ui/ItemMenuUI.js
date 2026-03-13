@@ -2,7 +2,7 @@ export default class ItemMenuUI {
     constructor(scene, config = {}) {
         this.scene = scene;
         this.gridUtils = scene.gridUtils;
-         this.uiEvents = config.uiEvents;
+        this.uiEvents = config.uiEvents;
 
         this.itemMenu = scene.add.container(0, 0)
             .setDepth(2000)
@@ -12,9 +12,10 @@ export default class ItemMenuUI {
         bgx.setStrokeStyle(1, 0xffffff, 0.5);
 
         const btnMove = this.createButton('Mover', 40, 15);
+        const btnSell = this.createButton('Vender', 40, 40);
         const btnRotate = this.createButton('Girar', 40, 65);
 
-        this.itemMenu.add([bgx, btnMove, btnRotate]);
+        this.itemMenu.add([bgx, btnMove, btnSell, btnRotate]);
 
         this.selectedSprite = null;
         this.storedItemsContainer = scene.add.container(50, 50).setDepth(500);
@@ -23,12 +24,28 @@ export default class ItemMenuUI {
             this.onMoveClick(pointer, localX, localY, event);
         });
 
+        btnSell.on("pointerup", () => {
+            this.scene.gameVariables.selectedSpriteDelete = this.scene.gameVariables.selectedSprite;
+            this.uiEvents.emit("ui:notify", {
+                type: "sell", nome: this.scene.gameVariables.selectedSpriteDelete.nome,
+                preco: this.scene.gameVariables.selectedSpriteDelete.preco_venda,
+                action: "action:SellItemUI"
+            });
+        })
+
         btnRotate.on('pointerup', () => this.onRotateClick());
 
         scene.input.on('pointerup', (pointer, objs) => {
             if (!objs.length) this.hide();
         });
 
+        this.gameEvents();
+    }
+
+    gameEvents() {
+        this.uiEvents.on("ui:closeMenuSprite", () => {
+            this.hide();
+        })
     }
 
     createButton(text, x, y) {
@@ -76,15 +93,14 @@ export default class ItemMenuUI {
         for (let other of this.scene.gameVariables.sprites) {
             if (other !== sprite) other.disableInteractive();
         }
-
     }
 
     onRotateClick() {
+
         const sprite = this.scene.gameVariables.selectedSprite;
         if (!sprite || !sprite.footprint) return;
         this.hide();
 
-        // Salva footprint original na primeira rotação
         if (!sprite.originalFootprint) {
             if (Array.isArray(sprite.footprint)) {
                 sprite.originalFootprint = [...sprite.footprint];
@@ -94,7 +110,6 @@ export default class ItemMenuUI {
             }
         }
 
-        // Alterna entre girado e normal
         if (sprite.isRotated) {
             sprite.flipX = false;
             sprite.isRotated = false;
@@ -120,33 +135,13 @@ export default class ItemMenuUI {
             if (other !== sprite) other.disableInteractive();
         }
 
-        // const ocupado = this.gridUtils.checkOccupiedGrid(startX, startY, startX + w - 1, startY + h - 1, sprite);
-        sprite.isMoving = true;
-        sprite.setDepth(2000);
-        // this.scene.gameVariables.selectedSprite = sprite;
-        
-        // if (ocupado) {
-        //     console.log("❌ Tile ocupado — revertendo sprite.");
-        //     return;
-        // }
 
-        // const snapped = this.gridUtils.isoToScreen(Math.floor(iso.x) + 0.5, Math.floor(iso.y) + 0.5);
+        if (sprite.tipo == "cerca") {
+            sprite.isMoving = true;
+            this.scene.gameVariables.freeClick = true;
+            sprite.setDepth(2000);
+        }
 
-        // sprite.x = snapped.x;
-        // sprite.y = snapped.y + this.scene.gridSize * 0.12;
-
-        // this.gridUtils.clearOccupied(sprite);
-        // this.gridUtils.markOccupied(sprite, startX, startY, w, h);
-
-        // sprite.lastFreePos = { startX, startY };
-        // sprite.clearTint();
-        // this.gridUtils.recalculateDepthAround(sprite);
-
-        // for (let other of this.scene.sprites) {
-        //     other.setInteractive({ pixelPerfect: true, alphaTolerance: 1, useHandCursor: true });
-        // }
-
-        // this.gridUtils.drawFootprints();
     }
 
 }

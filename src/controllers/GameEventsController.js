@@ -40,6 +40,61 @@ export default class GameEventsController {
             sprite.gridX = Math.round(iso.x);
             sprite.gridY = Math.round(iso.y);
 
+            if (sprite.xp && !sprite.xpYeld) {
+
+                let res = false;
+
+                const tipo_compra = sprite.preco_compra > sprite.preco_compra_grana || !sprite.preco_compra_grana ? "gold" : "money"
+
+                this.uiEvents.emit("action:buyItem", {
+                    type: tipo_compra,
+                    price: tipo_compra == "gold" ? sprite.preco_compra : sprite.preco_compra_grana,
+                    level: 1
+                }, (result) => {
+
+                    if (!result) {
+                        res = false;
+                        return;
+                    }
+
+                    let dados = {}
+
+                    if (tipo_compra == "gold") {
+
+                        dados = {
+                            xp: sprite.xp ?? 0,
+                            gold: -sprite.preco_compra,
+                            x: sprite.x,
+                            y: sprite.y
+                        }
+                    } else {
+                        dados = {
+                            xp: sprite.xp ?? 0,
+                            money: -sprite.preco_compra_grana,
+                            x: sprite.x,
+                            y: sprite.y
+                        }
+                    }
+
+                    this.uiEvents.emit("action:reward", dados);
+
+                    sprite.xpYeld = true;
+                    res = true
+                });
+
+                if (!res) {
+
+                    this.uiEvents.emit("ui:notify", { type: "" });
+                    this.scene.gameVariables.freeClick = true;
+                    const sprite = this.scene.gameVariables.selectedSprite;
+
+                    this.scene.spriteUtils.destroySprite(sprite);
+
+                    return;
+                }
+
+            }
+
             this.gridUtils.clearOccupied(sprite);
             this.gridUtils.markOccupied(sprite, startX, startY, w, h);
             sprite.setAlpha(1);
@@ -254,7 +309,6 @@ export default class GameEventsController {
         }
 
         if (this.scene.gameVariables.buyItemTmp) {
-            // console.log(this.scene.gameVariables.buyItemTmp);
             this.scene.events.emit("itemPurchased", this.scene.gameVariables.buyItemTmp);
         }
     }

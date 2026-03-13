@@ -31,6 +31,7 @@ export default class GameVariablesController {
         this.canInteract = true;
         this.activeBar = false;
         this.creativeMode = false;
+        this.staticMode = false;
 
         this.actionTileX = 1;
         this.actionTileY = 1;
@@ -42,6 +43,7 @@ export default class GameVariablesController {
         this.matrixVisible = false;
 
         this.selectedSprite = null;
+        this.selectedSpriteDelete = null;
         this.selectedSeed = null;
 
         this.collisionDataTemp = null;

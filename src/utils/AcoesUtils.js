@@ -168,7 +168,8 @@ export default class AcoesUtils {
             itemData.tipo = tipo;
         }
 
-        if (itemData.noStopBuy) this.scene.gameVariables.buyItemTmp = itemData;
+        // if (itemData.noStopBuy) this.scene.gameVariables.buyItemTmp = itemData;
+        this.scene.gameVariables.buyItemTmp = itemData;
 
         const sprite = this.scene.spriteUtils.addGameSprite(itemData, this.scale / 2, this.scale / 2, scale, originX, originY);
 

@@ -43,7 +43,7 @@ export default class UINotificationController {
     }
 
     notify(data) {
-
+        this.uiEvents.emit("ui:closeMenuSprite")
         this.queue.push(data);
         this.processQueue();
 
@@ -254,8 +254,11 @@ export default class UINotificationController {
         const btn = this.scene.add.image(0, offsetHeight, "confirm_button")
             .setScale(0.7)
             .setInteractive({ useHandCursor: true });
+            
 
-        btn.on("pointerup", () => { this.uiEvents.emit(data.action, data); this.close()});
+        console.log(data)
+
+        btn.on("pointerup", () => { this.uiEvents.emit(data.action, data); this.close() });
         btn.on("pointerover", () => btn.setScale(0.8))
         btn.on("pointerout", () => btn.setScale(0.7))
 

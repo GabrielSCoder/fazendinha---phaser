@@ -40,7 +40,6 @@ export default class SpriteController {
 
         if (this.scene.gameVariables.planting) return;
 
-
         if (this.scene.gameVariables.selectedSprite && this.scene.gameVariables.selectedSprite.isMoving) {
             const sprite = this.scene.gameVariables.selectedSprite;
             const pointer = this.scene.input.activePointer;
@@ -136,7 +135,7 @@ export default class SpriteController {
 
         let text = "";
 
-        if (sprite.tipo == "decoracao") {
+        if (sprite.tipo == "decoracao" || sprite.tipo == "cerca") {
             text = sprite.nome;
         }
 
