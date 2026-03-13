@@ -426,7 +426,7 @@ export const arvores = [
         "preco_compra": 100,
         "preco_compra_grana": 0,
         "preco_venda": 25,
-        "tempo_colheita_horas": 2,
+        "tempo_colheita_horas": 0.02,
         "xp": 2,
         "nivel_requerido": 1,
         "img": "cerejeira",

@@ -8,6 +8,8 @@ export default class HarvestController {
     tryHarvest(sprite) {
 
         if (!sprite.harvestReady) return;
+        if (this.scene.queue.isFull()) return;
+
 
         sprite.setAlpha(0.7);
         sprite.disableInteractive();
