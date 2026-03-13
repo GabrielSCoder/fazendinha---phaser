@@ -1,4 +1,4 @@
-import { colher, plantar_solo, vender } from "../msgs.js";
+import { arar_solo, colher, plantar_solo, vender } from "../msgs.js";
 
 export default class SpriteController {
 
@@ -130,42 +130,11 @@ export default class SpriteController {
     }
 
 
-    spriteHover(sprite) {
-
-        if (sprite.isReserved) return;
-        if (sprite.isQueued) return;
-
-        sprite.setTint(0xf2d602);
-
-        this.scene.gameVariables.hoveredSprite = sprite;
-
-        if (!sprite.isMoving) {
-
-            let text = "";
-
-            if (sprite.tipo == "decoracao") {
-                text = sprite.nome;
-            } else if (sprite.tipo == "solo_preparado") {
-                text = plantar_solo;
-            }
-
-            if (this.scene.gameVariables.selling)
-                text = vender;
-
-            this.scene.hoverText.setText(text);
-
-            this.scene.hoverText.setPosition(
-                sprite.x - this.scene.hoverText.width / 2,
-                sprite.y - sprite.displayHeight / 2
-            );
-
-            this.scene.hoverText.setVisible(true);
-        }
-    }
-
     updateHoverText(sprite) {
 
         if (!sprite) return;
+
+        console.log(sprite)
 
         let text = "";
 
@@ -175,6 +144,8 @@ export default class SpriteController {
 
         else if (sprite.tipo == "solo_preparado") {
             text = plantar_solo;
+        } else if (sprite.tipo == "solo_seco") {
+            text = arar_solo
         }
 
         else if (sprite.tipo == "solo_plantado_simples" || sprite.tipo == "animal" || sprite.tipo == "arvore") {

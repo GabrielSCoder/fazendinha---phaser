@@ -61,7 +61,7 @@ export default class SpriteUtils {
             if (this.scene.gameVariables.selling) {
                 this.scene.gameVariables.selectedSprite = sprite;
                 this.scene.gameVariables.eventsCenter.emit("action:SellItem");
-            } else if (!sprite.isMoving && sprite.tipo !== "solo_plantado_simples" && sprite.tipo !== "solo_preparado") {
+            } else if (!sprite.isMoving && sprite.tipo !== "solo_plantado_simples" && sprite.tipo !== "solo_preparado" && sprite.nome !== "solo_seco") {
                 this.scene.gameVariables.selectedSprite = sprite;
                 this.scene.itemMenuUI.show(
                     this.scene.gameVariables.selectedSprite.x,
@@ -74,6 +74,8 @@ export default class SpriteUtils {
             ) {
                 this.scene.shopMenu.activeCategory = 'Sementes';
                 this.scene.shopMenu.open();
+            } else if (sprite.nome === "solo_seco" ) {
+                this.scene.soilControl.renewDrySoil(sprite)
             } else if (
                 sprite.nome === "solo_preparado" &&
                 this.scene.gameVariables.planting &&

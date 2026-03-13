@@ -361,13 +361,79 @@ export default class SoloController {
         return true;
     }
 
+    renewDrySoil(sprite) {
+
+        if (this.scene.queue.isFull()) return;
+
+        let progressBar = null;
+
+        sprite.setAlpha(0.7);
+        sprite.disableInteractive();
+        sprite.clearTint();
+        this.scene.gameVariables.hoveredSprite = null;
+        this.scene.spriteController.hoverText.setVisible(false);
+
+        this.scene.queue.add({
+
+            action: (done) => {
+
+                progressBar = this.scene.soilControl.executeRenewSoil(sprite, () => {
+
+                    done();
+
+                });
+
+            },
+
+            onCancel: () => {
+
+                if (progressBar) {
+                    progressBar.cancel();
+                    progressBar = null;
+                }
+
+                sprite.setAlpha(1)
+                sprite.setInteractive({ pixelPerfect: true, alphaTolerance: 1, useHandCursor: true });
+
+            }
+
+        });
+
+    }
+
+    executeRenewSoil(sprite, done) {
+
+        const bar = this.scene.barController.criarBarraProgresso(
+            sprite.x,
+            sprite.y,
+            50,
+            10,
+            1.8,
+            () => {
+
+                sprite.nome = "solo_preparado";
+                sprite.tipo = "solo_preparado";
+
+                sprite.setTexture("solo.png");
+                sprite.setAlpha(1)
+
+                sprite.setInteractive({ pixelPerfect: true, alphaTolerance: 1, useHandCursor: true });
+
+                done();
+
+            }
+        );
+
+        return bar;
+    }
+
     clearSoil(sprite) {
 
         if (!sprite) return;
 
         this.scene.growthController.cancelGrowth(sprite)
-        sprite.nome = "solo_preparado";
-        sprite.tipo = "solo_preparado";
+        sprite.nome = "solo_seco";
+        sprite.tipo = "solo_seco";
         sprite.planta_cultivada = null;
         sprite.growthStages = null;
         sprite.preco_venda = 0;
@@ -377,7 +443,7 @@ export default class SoloController {
         sprite.growthStage = null;
         sprite.harvestReady = false;
         sprite.preco_colheita = null;
-        sprite.setTexture("solo.png");
+        sprite.setTexture("solo_seco");
         sprite.setAlpha(1);
         sprite.setInteractive({ pixelPerfect: true, alphaTolerance: 1, useHandCursor: true });
 

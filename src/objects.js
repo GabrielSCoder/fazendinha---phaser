@@ -578,6 +578,15 @@ export const decoracoes = [
         "tipo": "decoracao"
     },
     {
+        "nome": "solo_seco",
+        "img": "solo_seco",
+        "escala": 0.73,
+        "area": [4, 4],
+        "origem": [0.5, 0.58],
+        "tipo": "decoracao",
+        "noStopBuy": false
+    },
+    {
         "id": "gazebo",
         "nome": "Gazebo",
         "preco_compra": 0,
@@ -920,6 +929,15 @@ export const solos = [
         "area": [4, 4],
         "origem": [0.5, 0.58],
         "tipo": "solo_preparado",
+        "noStopBuy": false
+    },
+    {
+        "nome": "solo_seco",
+        "img": "solo_seco",
+        "escala": 0.73,
+        "area": [4, 4],
+        "origem": [0.5, 0.58],
+        "tipo": "solo_seco",
         "noStopBuy": false
     },
     {

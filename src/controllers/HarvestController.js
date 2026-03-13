@@ -15,11 +15,13 @@ export default class HarvestController {
         this.scene.gameVariables.hoveredSprite = null;
         this.scene.spriteController.hoverText.setVisible(false);
 
+        let bar = null
+
         this.scene.queue.add({
 
             action: (done) => {
 
-                this.scene.barController.criarBarraProgresso(
+                bar = this.scene.barController.criarBarraProgresso(
                     sprite.x,
                     sprite.y + 10,
                     50,
@@ -36,6 +38,18 @@ export default class HarvestController {
                         done();
                     }
                 );
+            },
+
+            onCancel: () => {
+
+                if (bar) {
+                    bar.cancel();
+                    bar = null;
+                }
+
+                sprite.setAlpha(1);
+                sprite.setInteractive({ pixelPerfect: true, alphaTolerance: 1, useHandCursor: true });
+
             }
         });
     }
@@ -44,7 +58,7 @@ export default class HarvestController {
     harvestPlant(sprite) {
 
         if (sprite.harvestTime == undefined) return;
-  
+
         sprite.harvestTime += 1;
         const preco_venda = sprite.preco_venda;
         const xp = sprite.xp;
