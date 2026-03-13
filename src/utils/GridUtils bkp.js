@@ -1,6 +1,7 @@
 export default class GridUtils {
     constructor(scene) {
         this.scene = scene;
+        this.controllers = this.controllers;
     }
 
     snapToGrid(sprite) {
@@ -313,8 +314,8 @@ export default class GridUtils {
 
             this.pathDebugTiles.push(tile);
 
-            if (this.scene.cameraController?.ignoreInUICamera)
-                this.scene.cameraController.ignoreInUICamera([tile]);
+            if (this.controllers.camera?.ignoreInUICamera)
+                this.controllers.camera.ignoreInUICamera([tile]);
         }
     }
 

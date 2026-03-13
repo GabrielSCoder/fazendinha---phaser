@@ -1,6 +1,7 @@
 export default class ProfileController {
     constructor(scene, config = {}, preset = {}) {
         this.scene = scene;
+        this.controllers = scene.controllers;
         this.gridSize = scene.gameVariables.gridSize;
         this.gridWidth = scene.gameVariables.gridWidth;
         this.gridHeight = scene.gameVariables.gridHeight;
@@ -9,7 +10,7 @@ export default class ProfileController {
         this.logicFactor = scene.gameVariables.logicFactor;
         this.input = scene.input;
         this.itemMenuUI = scene.itemMenuUI;
-        this.gridUtils = scene.gridUtils;
+        this.gridUtils = scene.controllers.gridUtils;
         this.uiEvents = config.uiEvents;
         this.AcoesUtils = scene.acoesUtils;
         this.interact = scene.interactController;
@@ -18,18 +19,23 @@ export default class ProfileController {
         this.gold = preset.gold ?? 2000;
         this.money = preset.money ?? 6;
 
+    }
+
+    init() {
         this.classEvents();
 
+        this.checkMissions()
+    }
+
+    checkMissions() {
+        const data = this.controllers.xp.getData()
+        this.controllers.missions.checkLevelUnlocks(data.level)
     }
 
     classEvents() {
 
         this.uiEvents.on("action:buyItem", (data, test) => {
             this.buyItem(data, test)
-        })
-
-        this.uiEvents.on("action:getLevel", () => {
-            this.getLevel()
         })
 
         this.uiEvents.on("action:getGold", (callback) => {

@@ -1,7 +1,7 @@
 export default class ItemMenuUI {
     constructor(scene, config = {}) {
         this.scene = scene;
-        this.gridUtils = scene.gridUtils;
+        this.gridUtils = scene.controllers.gridUtils;
         this.uiEvents = config.uiEvents;
 
         this.itemMenu = scene.add.container(0, 0)

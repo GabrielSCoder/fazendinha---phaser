@@ -14,6 +14,10 @@ export default class TopUI {
         this.xpAtual = 0;
         this.xpObjetivo = 0;
 
+    }
+
+    init() {
+
         this.createUI();
 
         this.uiEvents.emit("action:GetAllProfileData", (result) => {
@@ -43,6 +47,19 @@ export default class TopUI {
             this.updateXP(
                 data.xpAtual,
                 data.xpObjetivo
+            );
+
+            this.updateUI();
+
+        });
+
+        this.uiEvents.emit("action:GetXPData", (result) => {
+
+            this.level = result.level;
+
+            this.updateXP(
+                result.xpAtual,
+                result.xpObjetivo
             );
 
             this.updateUI();

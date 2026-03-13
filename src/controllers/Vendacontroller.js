@@ -10,11 +10,12 @@ export default class VendaController {
         this.logicFactor = scene.gameVariables.logicFactor;
         this.input = scene.input;
         this.itemMenuUI = scene.itemMenuUI;
-        this.gridUtils = scene.gridUtils;
+        this.gridUtils = scene.controllers.gridUtils;
         this.uiEvents = config.uiEvents;
         this.plantingController = scene.plantControl;
         this.soilController = scene.soilControl;
-        this.classEvents();
+        this.controllers = scene.controllers;
+
     }
 
     classEvents() {
@@ -35,6 +36,10 @@ export default class VendaController {
         })
     }
 
+    init() {
+        this.classEvents();
+    }
+
     startSelling() {
         if (this.scene.gameVariables.selling) return;
 
@@ -48,7 +53,7 @@ export default class VendaController {
         let scale = 0.2;
         let itemData = { img: "pa" };
 
-        const sprite = this.scene.spriteUtils.addGameSprite(
+        const sprite = this.controllers.spriteUtils.addGameSprite(
             itemData,
             this.scene.scale / 2,
             this.scene.scale / 2,
@@ -69,7 +74,7 @@ export default class VendaController {
 
         this.scene.gameVariables.sprites.push(sprite);
 
-        this.scene.cameraController.ignoreInUICamera([
+        this.controllers.camera.ignoreInUICamera([
             ...this.scene.gameVariables.sprites
         ]);
 
@@ -124,12 +129,12 @@ export default class VendaController {
         const item = this.scene.gameVariables.selectedSpriteDelete;
 
         if (item.growthStart && !item.harvestReady) {
-            this.scene.growthController.cancelGrowth(item);
+            this.controllers.growth.cancelGrowth(item);
         }
 
         this.gridUtils.clearOccupied(item);
 
-        this.scene.spriteController.hoverText.setVisible(false);
+        this.controllers.sprite.hoverText.setVisible(false);
         const sprite_del = item;
         sprite_del.destroy();
         this.scene.gameVariables.sprites = this.scene.gameVariables.sprites.filter(s => s && s !== sprite_del && !s.destroyed);

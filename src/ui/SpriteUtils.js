@@ -3,6 +3,7 @@ import { plantar_solo, vender } from "../msgs.js";
 export default class SpriteUtils {
     constructor(scene, configs = {}) {
         this.scene = scene;
+        this.controllers = scene.controllers;
         this.uiEvents = configs.uiEvents;
     }
 
@@ -33,7 +34,7 @@ export default class SpriteUtils {
             sprite.regrow = false;
         }
 
-        const canGrow = this.scene.spriteController.growingSprites.find(c => c == data.tipo);
+        const canGrow = this.controllers.sprite.growingSprites.find(c => c == data.tipo);
 
         if (canGrow) {
             sprite.tempoColheita = data.tempo_colheita_horas;
@@ -62,10 +63,10 @@ export default class SpriteUtils {
 
             if (this.scene.gameVariables.selling) {
                 this.scene.gameVariables.selectedSpriteDelete = sprite;
-                this.uiEvents.emit("ui:notify", {type : "sell", nome : sprite.nome, preco : sprite.preco_venda, action : "action:SellItem"});
+                this.uiEvents.emit("ui:notify", { type: "sell", nome: sprite.nome, preco: sprite.preco_venda, action: "action:SellItem" });
             } else if (!sprite.isMoving && sprite.tipo !== "solo_plantado_simples" && sprite.tipo !== "solo_preparado" && sprite.nome !== "solo_seco") {
                 this.scene.gameVariables.selectedSprite = sprite;
-                this.scene.itemMenuUI.show(
+                this.controllers.itemMenu.show(
                     this.scene.gameVariables.selectedSprite.x,
                     this.scene.gameVariables.selectedSprite.y,
                     this.scene.gameVariables.selectedSprite
@@ -74,10 +75,10 @@ export default class SpriteUtils {
                 sprite.nome === "solo_preparado" &&
                 !this.scene.gameVariables.planting
             ) {
-                this.scene.shopMenu.activeCategory = 'Sementes';
-                this.scene.shopMenu.open();
+                this.controllers.shopMenu.activeCategory = 'Sementes';
+                this.controllers.shopMenu.open();
             } else if (sprite.nome === "solo_seco") {
-                this.scene.soilControl.renewDrySoil(sprite)
+                this.controllers.soil.renewDrySoil(sprite)
             } else if (
                 sprite.nome === "solo_preparado" &&
                 this.scene.gameVariables.planting &&
@@ -88,7 +89,7 @@ export default class SpriteUtils {
         });
 
         sprite.on("pointerup", () => {
-            this.scene.harvestController.tryHarvest(sprite)
+            this.controllers.harvest.tryHarvest(sprite)
         })
 
         sprite.on("pointerover", () => {
@@ -104,14 +105,14 @@ export default class SpriteUtils {
 
             if (!sprite.isMoving) {
 
-                this.scene.spriteController.updateHoverText(sprite);
+                this.controllers.sprite.updateHoverText(sprite);
 
-                this.scene.spriteController.hoverText.setPosition(
-                    sprite.x - this.scene.spriteController.hoverText.width / 2,
+                this.controllers.sprite.hoverText.setPosition(
+                    sprite.x - this.controllers.sprite.hoverText.width / 2,
                     sprite.y - sprite.displayHeight / 2
                 );
 
-                this.scene.spriteController.hoverText.setVisible(true);
+                this.controllers.sprite.hoverText.setVisible(true);
             }
 
         });
@@ -120,7 +121,7 @@ export default class SpriteUtils {
             sprite.clearTint();
             // sprite.setScale(sprite.originalScale);
             this.scene.gameVariables.hoveredSprite = null;
-            this.scene.spriteController.hoverText.setVisible(false);
+            this.controllers.sprite.hoverText.setVisible(false);
         });
 
         return sprite;
@@ -136,7 +137,7 @@ export default class SpriteUtils {
             (s) => s && s !== sprite && !s.destroyed
         );
 
-        this.scene.gridUtils.recalculateDepthAround(sprite);
+        this.controllers.gridUtils.recalculateDepthAround(sprite);
         this.scene.gameVariables.selectedSprite = null;
 
         this.scene.gameVariables.sprites.forEach((s) => {
@@ -149,6 +150,6 @@ export default class SpriteUtils {
             }
         });
 
-        this.scene.gridUtils.drawFootprints();
+        this.controllers.gridUtils.drawFootprints();
     }
 }

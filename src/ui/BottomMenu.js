@@ -2,16 +2,15 @@
 export default class BottomMenu {
     constructor(scene, config = {}) {
         this.scene = scene;
+        this.controllers = scene.controllers;
         this.shopMenu = config.shopMenu || null;
         this.itemMenu = config.itemMenu || null;
         this.uiEvents = config.uiEvents;
-        this.soilControl = scene.soilControl;
-        this.sellControl = scene.sellControl;
+        this.soilControl = scene.controllers.soil;
+        this.sellControl = scene.controllers.sell;
         this.buttons = {};
         this.createUI();
         this.registerEvents();
-
-
     }
 
     createButton({ text, x, y, onClick }) {
@@ -205,7 +204,7 @@ export default class BottomMenu {
 
         this.btnZoomIn.on('pointerup', () => {
             this.scene.gameVariables.freeClick = true;
-            this.scene.itemMenuUI.hide()
+            this.controllers.itemMenu.hide()
             const cam = this.scene.cameras.main;
             const zoomChange = 0.15;
             const newZoom = Phaser.Math.Clamp(cam.zoom + zoomChange, 0.5, 2);
@@ -214,7 +213,7 @@ export default class BottomMenu {
 
         this.btnZoomOut.on('pointerup', () => {
             this.scene.gameVariables.freeClick = true;
-            this.scene.itemMenuUI.hide()
+            this.controllers.itemMenu.hide()
             const cam = this.scene.cameras.main;
             const zoomChange = -0.15;
             const newZoom = Phaser.Math.Clamp(cam.zoom + zoomChange, 0.7, 2);
@@ -284,7 +283,7 @@ export default class BottomMenu {
 
         this.btnMinusGold.on("pointerup", () => {
             // this.uiEvents.emit("action:setGold", -10)
-            this.uiEvents.emit("ui:notify", {type: "levelUp"});
+            this.uiEvents.emit("ui:notify", {type: "mission"});
         })
 
         this.btnMinusMoney.on("pointerup", () => {

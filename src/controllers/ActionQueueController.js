@@ -11,6 +11,9 @@ export default class ActionQueue {
         this.current = null;
         this.cancelToken = 0;
 
+    }
+
+    init() {
         this.uiEvents.on("queue:cancelAll", () => {
             this.cancelAll();
         });

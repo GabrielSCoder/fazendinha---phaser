@@ -1,7 +1,7 @@
 export default class GridUtils {
     constructor(scene) {
         this.scene = scene;
-
+        this.controllers = this.controllers;
         this.gridSize = scene.gameVariables.gridSize;
         this.gridWidth = scene.gameVariables.gridWidth;
         this.gridHeight = scene.gameVariables.gridHeight;
@@ -9,7 +9,7 @@ export default class GridUtils {
         this.offsetY = scene.gameVariables.offsetY;
         this.logicFactor = scene.gameVariables.logicFactor;
         this.input = scene.input;
-        this.itemMenuUI = scene.itemMenuUI;
+        this.itemMenuUI = scene.controllers.itemMenu;
         this.gridUtils = scene.gridUtils;
     }
 
@@ -599,8 +599,8 @@ export default class GridUtils {
 
             this.pathDebugTiles.push(tile);
 
-            if (this.scene.cameraController?.ignoreInUICamera)
-                this.scene.cameraController.ignoreInUICamera([tile]);
+            if (this.controllers.cameras?.ignoreInUICamera)
+                this.controllers.cameras.ignoreInUICamera([tile]);
         }
     }
 

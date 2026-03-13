@@ -4,7 +4,11 @@ export default class FloatingTextController {
 
         this.scene = scene;
         this.uiEvents = config.uiEvents;
+        this.controllers = scene.controllers;
 
+    }
+
+    init() {
         this.listenEvents();
     }
 
@@ -81,7 +85,7 @@ export default class FloatingTextController {
             }
         });
 
-        this.scene.cameraController.ignoreInUICamera([container]);
+        this.controllers.camera.ignoreInUICamera([container]);
     }
 
     showRewards(data) {
@@ -147,7 +151,7 @@ export default class FloatingTextController {
             onComplete: () => container.destroy()
         });
 
-        this.scene.cameraController.ignoreInUICamera([container]);
+        this.controllers.camera.ignoreInUICamera([container]);
     }
 
 }

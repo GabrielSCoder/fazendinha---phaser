@@ -1,7 +1,7 @@
 export default class AcoesUtils {
     constructor(scene, config = {}) {
         this.scene = scene;
-
+        this.controllers = scene.controllers;
         this.gridSize = scene.gameVariables.gridSize;
         this.gridWidth = scene.gameVariables.gridWidth;
         this.gridHeight = scene.gameVariables.gridHeight;
@@ -10,7 +10,7 @@ export default class AcoesUtils {
         this.logicFactor = scene.gameVariables.logicFactor;
         this.input = scene.input;
         this.itemMenuUI = scene.itemMenuUI;
-        this.gridUtils = scene.gridUtils;
+        this.gridUtils = scene.controllers.gridUtils;
         this.uiEvents = config.uiEvents;
     }
 
@@ -18,7 +18,7 @@ export default class AcoesUtils {
         this.scene.gameVariables.hoverEnabled = enabled;
 
         if (!enabled) {
-            this.scene.spriteController.hoverText.setVisible(false);
+            this.controllers.sprite.hoverText.setVisible(false);
             this.scene.input.manager.canvas.style.cursor = "default";
         }
     }
@@ -144,7 +144,7 @@ export default class AcoesUtils {
 
         if (this.scene.gameVariables.middleButtonDown) return false;
 
-        if (this.scene.itemMenuUI.itemMenu.visible) return false;
+        if (this.controllers.itemMenu.itemMenu.visible) return false;
 
         if (!this.scene.gameVariables.scene.gameVariables.selectedSprite || !this.scene.gameVariables.scene.gameVariables.selectedSprite.isMoving) return false;
 
@@ -169,9 +169,10 @@ export default class AcoesUtils {
         }
 
         // if (itemData.noStopBuy) this.scene.gameVariables.buyItemTmp = itemData;
-        this.scene.gameVariables.buyItemTmp = itemData;
+        if (itemData.tipo !== "semente")
+            this.scene.gameVariables.buyItemTmp = itemData;
 
-        const sprite = this.scene.spriteUtils.addGameSprite(itemData, this.scale / 2, this.scale / 2, scale, originX, originY);
+        const sprite = this.controllers.spriteUtils.addGameSprite(itemData, this.scale / 2, this.scale / 2, scale, originX, originY);
 
         if (itemData.area) {
             sprite.footprint = itemData.area;
@@ -217,7 +218,7 @@ export default class AcoesUtils {
         if (!this.scene.gameVariables.sprites) this.scene.gameVariables.sprites = [];
         this.scene.gameVariables.sprites.push(sprite);
 
-        this.scene.cameraController.ignoreInUICamera([...this.scene.gameVariables.sprites])
+        this.controllers.camera.ignoreInUICamera([...this.scene.gameVariables.sprites])
 
     }
 

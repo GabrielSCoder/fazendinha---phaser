@@ -1,12 +1,15 @@
 export default class GameEventsController {
     constructor(scene, config = {}) {
         this.scene = scene;
-        this.gridUtils = scene.gridUtils;
+        this.controllers = scene.controllers;
+        this.gridUtils = scene.controllers.gridUtils;
         this.uiEvents = config.uiEvents;
         this.creativeMode = scene.gameVariables.creativeMode;
         this.noExperienceMode = scene.gameVariables.noExperienceMode;
         this.staticMode = scene.gameVariables.staticMode;
+    }
 
+    init() {
         this.uiEvents.on("action:reward", (data) => {
 
             if (this.creativeMode) return;
@@ -94,7 +97,7 @@ export default class GameEventsController {
                     this.scene.gameVariables.freeClick = true;
                     const sprite = this.scene.gameVariables.selectedSprite;
 
-                    this.scene.spriteUtils.destroySprite(sprite);
+                    this.controllers.spriteUtils.destroySprite(sprite);
 
                     return;
                 }
@@ -123,7 +126,7 @@ export default class GameEventsController {
     }
 
     abrirLojaCheck() {
-        if (this.scene.shopMenu.isOpen() && this.scene.gameVariables.planting) {
+        if (this.controllers.shopMenu.isOpen() && this.scene.gameVariables.planting) {
             const sprite = this.scene.gameVariables.selectedSeed;
 
             if (sprite)
@@ -147,14 +150,14 @@ export default class GameEventsController {
 
             this.scene.gameVariables.planting = false;
 
-        } else if (this.scene.shopMenu.isOpen() && this.scene.gameVariables.selling) {
+        } else if (this.controllers.shopMenu.isOpen() && this.scene.gameVariables.selling) {
             this.scene.acoesUtils.stopSell();
-        } else if (this.scene.shopMenu.isOpen() && this.scene.gameVariables.plowing) {
+        } else if (this.controllers.shopMenu.isOpen() && this.scene.gameVariables.plowing) {
             this.uiEvents.emit("action:StopPlowing")
         }
 
         if (
-            this.scene.shopMenu.isOpen() &&
+            this.controllers.shopMenu.isOpen() &&
             this.scene.gameVariables.selectedSprite &&
             this.scene.gameVariables.selectedSprite.isMoving
         ) {
@@ -205,7 +208,7 @@ export default class GameEventsController {
             return;
         }
 
-        const resp = this.scene.acoesUtils.breakConditions();
+        const resp = this.controllers.acoesUtils.breakConditions();
         if (!resp) return;
 
         const sprite = this.scene.gameVariables.selectedSprite;
@@ -273,7 +276,7 @@ export default class GameEventsController {
                 this.scene.gameVariables.freeClick = true;
                 const sprite = this.scene.gameVariables.selectedSprite;
 
-                this.scene.spriteUtils.destroySprite(sprite);
+                this.controllers.spriteUtils.destroySprite(sprite);
 
                 return;
             }
@@ -310,7 +313,7 @@ export default class GameEventsController {
                     { percent: 1, texture: sprite.texture.key }
                 ];
 
-                this.scene.growthController.startGrowth(sprite, sprite.tempoColheita * 60 * 1000, stages)
+                this.controllers.growth.startGrowth(sprite, sprite.tempoColheita * 60 * 1000, stages)
             }
         }
 
@@ -321,10 +324,10 @@ export default class GameEventsController {
 
     plantarSementeCheck(solo, done) {
 
-        const token = this.scene.queue.cancelToken;
+        const token = this.controllers.queue.cancelToken;
 
         if (solo.cancelled) return done();
-        if (token !== this.scene.queue.cancelToken) return done();
+        if (token !== this.controllers.queue.cancelToken) return done();
 
         if (!this.scene.gameVariables.planting) return done();
         if (!this.scene.gameVariables.selectedSeed) return done();
@@ -352,16 +355,16 @@ export default class GameEventsController {
         const startY = solo.y - solo.displayHeight / 2;
 
         if (solo.progressBar) return;
-        solo.progressBar = this.scene.barController.criarBarraProgresso(
+        solo.progressBar = this.controllers.bar.criarBarraProgresso(
             startX,
             startY,
             50,
             10,
-            1.8,
+            0.5,
             () => {
 
                 if (solo.cancelled) return;
-                if (token !== this.scene.queue.cancelToken) return;
+                if (token !== this.controllers.queue.cancelToken) return;
 
                 this.uiEvents.emit("action:Seed", solo);
 
@@ -390,17 +393,17 @@ export default class GameEventsController {
 
         if (!this.scene.gameVariables.plowing) return;
         if (!this.scene.gameVariables.previewOccupiedtiles?.length) return;
-        if (this.scene.queue.isFull()) return;
+        if (this.controllers.queue.isFull()) return;
 
         const resp = this.canPlow();
 
-        const reserva = this.scene.soilControl.createReserveSoil();
+        const reserva = this.controllers.soil.createReserveSoil();
         if (!reserva?.length) return;
 
         if (!resp) {
             this.uiEvents.emit("queue:cancelAll");
             this.uiEvents.emit("action:StopPlowing");
-            this.scene.soilControl.cancelReserve(reserva);
+            this.controllers.soil.cancelReserve(reserva);
             this.uiEvents.emit("ui:notify", { type: "" });
             return;
         }
@@ -408,17 +411,17 @@ export default class GameEventsController {
         let validReserva = reserva;
 
         if (this.scene.gameVariables.actionTileX != 1 || this.scene.gameVariables.actionTileY != 1) {
-            const maxTiles = this.scene.soilControl.getAffordableTiles();
+            const maxTiles = this.controllers.soil.getAffordableTiles();
 
             if (!maxTiles) {
-                this.scene.soilControl.cancelReserve(reserva);
+                this.controllers.soil.cancelReserve(reserva);
                 return;
             }
 
             validReserva = reserva.slice(0, maxTiles);
             const restReserva = reserva.slice(maxTiles);
 
-            this.scene.soilControl.cancelReserve(restReserva);
+            this.controllers.soil.cancelReserve(restReserva);
         }
 
         validReserva.forEach(tile => {
@@ -427,11 +430,11 @@ export default class GameEventsController {
 
         let progressBar = null;
 
-        this.scene.queue.add({
+        this.controllers.queue.add({
 
             action: (done) => {
 
-                progressBar = this.scene.soilControl.executePlowingSoil(validReserva, () => {
+                progressBar = this.controllers.soil.executePlowingSoil(validReserva, () => {
 
                     done();
 
@@ -446,7 +449,7 @@ export default class GameEventsController {
                     progressBar = null;
                 }
 
-                this.scene.soilControl.cancelReserve(reserva);
+                this.controllers.soil.cancelReserve(reserva);
 
             }
 
@@ -479,7 +482,7 @@ export default class GameEventsController {
 
         const solo = this.scene.gameVariables.selectedSprite;
 
-        if (this.scene.queue.isFull()) return;
+        if (this.controllers.queue.isFull()) return;
 
         if (!solo) return;
 
@@ -497,7 +500,7 @@ export default class GameEventsController {
         solo.cancelled = false;
         solo.hoverEnabled = false;
 
-        this.scene.queue.add({
+        this.controllers.queue.add({
 
             action: (done) => {
                 this.plantarSementeCheck(solo, done);

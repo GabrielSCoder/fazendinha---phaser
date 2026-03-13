@@ -1,6 +1,7 @@
 export default class CameraController {
     constructor(scene) {
         this.scene = scene;
+        this.controllers = scene.controllers;
         this.mainCamera = scene.cameras.main;
         this.uiCamera = scene.cameras.add(0, 0, scene.scale.width, scene.scale.height);
 
@@ -22,7 +23,7 @@ export default class CameraController {
         const cam = this.mainCamera;
         const newZoom = 1.599999999
         cam.setZoom(newZoom);
-        const center = this.scene.gridUtils.isoToScreen(this.scene.gameVariables.gridWidth, this.scene.gameVariables.gridHeight);
+        const center = this.controllers.gridUtils.isoToScreen(this.scene.gameVariables.gridWidth, this.scene.gameVariables.gridHeight);
 
         this.mainCamera.centerOn(center.x, center.y);
     }
@@ -39,8 +40,8 @@ export default class CameraController {
         const { input } = this.scene;
 
         input.on('pointerdown', (pointer) => {
-            if (this.scene.shopMenu.isOpen()) return;
-            if (this.scene.bannerController.isOpen()) return;
+            if (this.controllers.shopMenu.isOpen()) return;
+            if (this.controllers.banner.isOpen()) return;
 
             if (pointer.middleButtonDown()) {
                 this.dragging = true;

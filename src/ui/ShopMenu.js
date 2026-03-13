@@ -268,7 +268,6 @@ export default class ShopMenu {
             .setInteractive({ useHandCursor: true });
 
         btn.canClick = true;
-        console.log(btn)
 
         const debouncedClick = this.debounce(() => {
             if (btn.canClick) onClick();

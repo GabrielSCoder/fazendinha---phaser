@@ -3,27 +3,28 @@ export default class HarvestController {
     constructor(scene, control = {}) {
         this.scene = scene;
         this.uiEvents = control.uiEvents;
+        this.controllers = scene.controllers;
     }
 
     tryHarvest(sprite) {
 
         if (!sprite.harvestReady) return;
-        if (this.scene.queue.isFull()) return;
+        if (this.controllers.queue.isFull()) return;
 
 
         sprite.setAlpha(0.7);
         sprite.disableInteractive();
         sprite.clearTint();
         this.scene.gameVariables.hoveredSprite = null;
-        this.scene.spriteController.hoverText.setVisible(false);
+        this.controllers.sprite.hoverText.setVisible(false);
 
         let bar = null
 
-        this.scene.queue.add({
+        this.controllers.queue.add({
 
             action: (done) => {
 
-                bar = this.scene.barController.criarBarraProgresso(
+                bar = this.controllers.bar.criarBarraProgresso(
                     sprite.x,
                     sprite.y + 10,
                     50,
@@ -65,7 +66,7 @@ export default class HarvestController {
         const preco_venda = sprite.preco_venda;
         const xp = sprite.xp;
 
-        const confirm = this.scene.soilControl.clearSoil(sprite);
+        const confirm = this.controllers.soil.clearSoil(sprite);
 
         if (confirm) {
             this.uiEvents.emit("action:reward", {
@@ -91,7 +92,7 @@ export default class HarvestController {
             y: sprite.y
         });
 
-        this.scene.growthController.startGrowth(
+        this.controllers.growth.startGrowth(
             sprite,
             sprite.growthDuration,
             data.stages

@@ -5,14 +5,16 @@ export default class GrowthController {
         this.scene = scene;
 
         this.growingSprites = [];
+        this.controllers = scene.controllers;
 
-        scene.time.addEvent({
+    }
+
+    init() {
+        this.scene.time.addEvent({
             delay: 1000,
             loop: true,
             callback: () => this.updateStages()
         });
-
-    
     }
 
     startGrowth(sprite, duration, stages = []) {

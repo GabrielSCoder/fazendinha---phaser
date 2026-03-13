@@ -2,6 +2,7 @@ export default class ControlBar {
 
     constructor(scene) {
         this.scene = scene;
+        this.controllers = scene.controllers;
     }
 
     criarBarraProgresso(x, y, largura, altura, duracaoSegundos, funcao) {
@@ -19,7 +20,7 @@ export default class ControlBar {
         barra.setDepth(1999);
         progresso.setDepth(1999);
 
-        this.scene.cameraController.ignoreInUICamera([progresso, barra]);
+        this.controllers.camera.ignoreInUICamera([progresso, barra]);
 
         const fadeIn = this.scene.tweens.add({
             targets: [barra, progresso],

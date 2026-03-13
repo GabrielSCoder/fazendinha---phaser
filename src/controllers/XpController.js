@@ -1,16 +1,19 @@
 export default class XPController {
 
-    constructor(scene, xpTable, uiEvents) {
+    constructor(scene, xpTable, uiEvents, playerSave) {
 
         this.scene = scene;
+        this.controllers = scene.controllers;
         this.uiEvents = uiEvents;
-
         this.table = xpTable;
 
-        this.totalXP = 0;
-        this.level = 1;
-
+        this.totalXP = playerSave.xp ?? 0;
+        this.level = playerSave.level ?? 1;
         this.maxLevel = xpTable[xpTable.length - 1].level;
+
+    }
+
+    init() {
 
         this.gameEvents()
     }
@@ -40,6 +43,17 @@ export default class XPController {
             callback(this.level);
 
         });
+
+        this.uiEvents.on("action:GetXPData", (callback) => {
+
+            callback({
+                level: this.level,
+                xpAtual: this.totalXP,
+                xpObjetivo: this.getNextLevelTotalXP()
+            });
+
+        });
+
     }
 
     addXP(amount) {
@@ -131,7 +145,7 @@ export default class XPController {
         });
 
         this.uiEvents.emit("action:setMoney", 1);
-        this.uiEvents.emit("ui:notify", { type: "levelUp", level : level, action : "" });
+        this.uiEvents.emit("ui:notify", { type: "levelUp", level: level, action: "" });
     }
 
     emitUpdate() {

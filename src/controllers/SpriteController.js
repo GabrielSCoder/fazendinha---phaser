@@ -4,6 +4,7 @@ export default class SpriteController {
 
     constructor(scene, config = {}) {
         this.scene = scene;
+        this.controllers = scene.controllers;
         this.gridSize = scene.gameVariables.gridSize;
         this.gridWidth = scene.gameVariables.gridWidth;
         this.gridHeight = scene.gameVariables.gridHeight;
@@ -11,11 +12,14 @@ export default class SpriteController {
         this.offsetY = scene.gameVariables.offsetY;
         this.logicFactor = scene.gameVariables.logicFactor;
         this.gameVariables = scene.gameVariables;
-        this.gridUtils = scene.gridUtils;
+        this.gridUtils = scene.controllers.gridUtils;
         this.uiEvents = config.uiEvents;
-        this.classEvents();
         this.growingSprites = ["semente", "arvore", "solo_plantado_simples", "animal"];
 
+
+    }
+
+    init() {
         this.hoverText = this.scene.add.text(0, 0, "", {
             fontSize: "14px",
             color: "#ffff00",
@@ -29,11 +33,7 @@ export default class SpriteController {
             .setDepth(9999)
             .setVisible(false);
 
-        this.scene.cameraController.ignoreInUICamera(this.hoverText)
-    }
-
-    classEvents() {
-
+        this.controllers.camera.ignoreInUICamera(this.hoverText)
     }
 
     updateSprite() {
@@ -45,7 +45,7 @@ export default class SpriteController {
             const pointer = this.scene.input.activePointer;
             // this.uiEvents.emit('ui:desativarBottonMenu');
 
-            if (this.scene.bannerController.isOpen()) return;
+            if (this.controllers.banner.isOpen()) return;
 
             if (this.scene.gameVariables.middleButtonDown) return;
 
@@ -58,7 +58,7 @@ export default class SpriteController {
             iso.x = Phaser.Math.Clamp(iso.x - (w / 2 - 0.5), 0, this.gridWidth * this.logicFactor - w) + (w / 2 - 0.5);
             iso.y = Phaser.Math.Clamp(iso.y - (h / 2 - 0.5), 0, this.gridHeight * this.logicFactor - h) + (h / 2 - 0.5);
 
-            this.scene.acoesUtils.convert(iso, sprite)
+            this.controllers.acoesUtils.convert(iso, sprite)
 
             const startX = Math.round(iso.x - (w / 2 - 0.5));
             const startY = Math.round(iso.y - (h / 2 - 0.5));
@@ -147,10 +147,12 @@ export default class SpriteController {
 
         else if (sprite.tipo == "solo_plantado_simples" || sprite.tipo == "animal" || sprite.tipo == "arvore") {
 
-            let percent = this.scene.growthController.getGrowthPercent(sprite);
+            let percent = this.controllers.growth.getGrowthPercent(sprite);
             percent = Math.floor(percent * 100);
 
             text = sprite.nome + " " + percent + "%";
+
+            console.log(percent)
 
             if (sprite.harvestReady) {
                 text = sprite.nome + "\n" + colher;
@@ -174,4 +176,44 @@ export default class SpriteController {
         this.updateHoverText(sprite);
 
     }
+
+    initialGraphics() {
+
+        this.scene.matrixGraphics = this.scene.add.graphics();
+        this.scene.matrixGraphics.setVisible(false);
+
+        this.scene.gridGraphics = this.scene.add.graphics();
+        this.scene.gridGraphics.setDepth(1);
+
+        this.scene.footprintGraphics = this.scene.add.graphics();
+
+        this.scene.matrixOffsetX =  this.gameVariables.offsetX - 500;
+
+        this.scene.matrixLabel = this.scene.add.text(
+            this.scene.matrixOffsetX,
+            this.offsetY - 20,
+            'Matriz de ocupação',
+            { fontSize: '14px', color: '#ffffff' }
+        ).setVisible(false);
+
+
+        this.fpsText = this.scene.add.text(10, 10, '', {
+            font: '16px Arial',
+            fill: '#00ff00'
+        });
+
+        this.ground = this.scene.add.tileSprite(
+            0,
+            0,
+            2000,
+            2000,
+            'grama'
+        ).setOrigin(0.5).setDepth(-9999).setScrollFactor(1).setVisible(false);
+
+
+        this.controllers.camera.ignoreInMainCamera([this.fpsText, this.scene.matrixLabel, this.scene.matrixGraphics])
+
+        this.controllers.camera.ignoreInUICamera([this.scene.gridGraphics, this.scene.footprintGraphics, this.ground])
+    }
+
 }

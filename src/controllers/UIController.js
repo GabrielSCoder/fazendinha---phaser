@@ -4,8 +4,7 @@ export default class UINotificationController {
 
         this.scene = scene;
         this.uiEvents = configs.uiEvents;
-
-        const cam = scene.cameras.main;
+        this.controllers = scene.controllers;
 
         this.bgFullWidth = 500;
         this.bgFullHeight = 500;
@@ -14,23 +13,28 @@ export default class UINotificationController {
         this.queue = [];
         this.isShowing = false;
 
+    }
 
-        this.overlay = scene.add.rectangle(0, 0, scene.scale.width, scene.scale.height, 0x000000, 0.4)
+    init() {
+
+        const cam = this.scene.cameras.main;
+
+        this.overlay = this.scene.add.rectangle(0, 0, this.scene.scale.width, this.scene.scale.height, 0x000000, 0.4)
             .setOrigin(0)
             .setScrollFactor(0)
             .setDepth(9998)
             .setVisible(false)
             .setInteractive();
 
-        this.container = scene.add.container(cam.centerX, cam.centerY)
+        this.container = this.scene.add.container(cam.centerX, cam.centerY)
             .setDepth(9999)
             .setVisible(false)
             .setScrollFactor(0);
 
-        this.levelContainer = scene.add.container(0, 0).setVisible(false);
-        this.missionContainer = scene.add.container(0, 0).setVisible(false);
-        this.genericContainer = scene.add.container(0, 0).setVisible(false);
-        this.sellContainer = scene.add.container(0, 0).setVisible(false);
+        this.levelContainer = this.scene.add.container(0, 0).setVisible(false);
+        this.missionContainer = this.scene.add.container(0, 0).setVisible(false);
+        this.genericContainer = this.scene.add.container(0, 0).setVisible(false);
+        this.sellContainer = this.scene.add.container(0, 0).setVisible(false);
 
         this.container.add([
             this.levelContainer,
@@ -160,7 +164,7 @@ export default class UINotificationController {
             { fontSize: "26px", color: "#ffffff" }
         ).setOrigin(0.5);
 
-        const confirm = this.createConfirmButton();
+        const confirm = this.createConfirmButton(data.type);
         const close = this.createCloseButton(data.type);
 
         this.missionContainer.add([bg, text, confirm, close]);
@@ -254,7 +258,7 @@ export default class UINotificationController {
         const btn = this.scene.add.image(0, offsetHeight, "confirm_button")
             .setScale(0.7)
             .setInteractive({ useHandCursor: true });
-            
+
 
         console.log(data)
 

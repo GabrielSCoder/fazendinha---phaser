@@ -3,6 +3,10 @@ export default class InteractController {
     constructor(scene, config = {}) {
         this.scene = scene;
         this.uiEvents = config.uiEvents;
+        this.controllers = scene.controllers;
+    }
+
+    init() {
         this.classEvents();
     }
 

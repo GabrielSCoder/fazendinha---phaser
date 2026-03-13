@@ -6,6 +6,7 @@ export default class ShopItemCard {
         if (!container) throw new Error("ShopItemCard: container não foi passado!");
 
         this.scene = scene;
+        this.controllers = scene.controllers;
         this.container = container;
         this.data = data;
         this.requiredLevel = data.nivel_requerido || 1;
@@ -129,7 +130,7 @@ export default class ShopItemCard {
 
             const debouncedComprar = this.debounce(() => {
 
-                this.scene.shopMenu.close();
+                this.controllers.shopMenu.close();
 
                 this.scene.events.emit('itemPurchased', this.data);
 

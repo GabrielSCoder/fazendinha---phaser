@@ -3,7 +3,7 @@ import { solos } from "../objects.js"
 export default class PlantaController {
     constructor(scene, config = {}) {
         this.scene = scene;
-
+        this.controllers = scene.controllers;
         this.gridSize = scene.gameVariables.gridSize;
         this.gridWidth = scene.gameVariables.gridWidth;
         this.gridHeight = scene.gameVariables.gridHeight;
@@ -12,17 +12,25 @@ export default class PlantaController {
         this.logicFactor = scene.gameVariables.logicFactor;
         this.input = scene.input;
         this.itemMenuUI = scene.itemMenuUI;
-        this.gridUtils = scene.gridUtils;
+        this.gridUtils = scene.controllers.gridUtils;
         this.uiEvents = config.uiEvents;
+
+    }
+
+    init() {
         this.classEvents();
     }
 
     classEvents() {
+
+        console.log("Ligando listeners....")
+        
         this.uiEvents.on("action:StopSeeding", () => {
             this.stopSeeding();
         })
 
         this.uiEvents.on("action:Seed", (solo) => {
+            console.log("-----")
             this.plantSeed(solo);
         })
     }
@@ -63,7 +71,10 @@ export default class PlantaController {
 
     plantSeed(solo) {
 
+        console.log("Vindo aqui")
+
         if (!this.scene.gameVariables.selectedSeed || !solo || solo.nome != "solo_preparado") return;
+
         const semente = this.scene.gameVariables.selectedSeed;
         const tipo_plantacao = semente.tipo_plantacao;
 
@@ -83,7 +94,7 @@ export default class PlantaController {
             { percent: 1, texture: semente.img_pronta }
         ];
 
-        this.scene.growthController.startGrowth(sprite, semente.tempoColheita * 60 * 1000, stages);
+        this.controllers.growth.startGrowth(sprite, semente.tempoColheita * 60 * 1000, stages);
 
         sprite.tipo = tipo;
         sprite.isMoving = false;

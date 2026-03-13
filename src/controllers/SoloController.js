@@ -3,7 +3,7 @@ import { solos } from "../objects.js"
 export default class SoloController {
     constructor(scene, config = {}) {
         this.scene = scene;
-
+        this.controllers = scene.controllers;
         this.gridSize = scene.gameVariables.gridSize;
         this.gridWidth = scene.gameVariables.gridWidth;
         this.gridHeight = scene.gameVariables.gridHeight;
@@ -12,14 +12,19 @@ export default class SoloController {
         this.logicFactor = scene.gameVariables.logicFactor;
         this.input = scene.input;
         this.itemMenuUI = scene.itemMenuUI;
-        this.gridUtils = scene.gridUtils;
+        this.gridUtils = scene.controllers.gridUtils;
         this.uiEvents = config.uiEvents;
         this.AcoesUtils = scene.acoesUtils;
         this.interact = scene.interactController;
+
+    }
+
+    init() {
         this.classEvents();
     }
 
     classEvents() {
+
         this.uiEvents.on("action:StartPlowing", () => {
             this.startPlowing();
         })
@@ -38,19 +43,19 @@ export default class SoloController {
         if (this.scene.gameVariables.middleButtonDown) return;
         if (this.scene.gameVariables.activeBar) return;
         if (!this.scene.gameVariables.plowing) return;
-        if (this.scene.gameVariables.selling) this.scene.sellControl.stopSelling();
-        if (this.scene.gameVariables.planting) this.scene.plantControl.stopSeeding();
+        if (this.scene.gameVariables.selling) this.controllers.sell.stopSelling();
+        if (this.scene.gameVariables.planting) this.controllers.plant.stopSeeding();
 
 
         const pointer = this.scene.input.activePointer;
         const cam = this.scene.cameras.main;
         const worldPoint = cam.getWorldPoint(pointer.x, pointer.y);
 
-        const iso = this.gridUtils.screenToIso(worldPoint.x, worldPoint.y);
+        const iso = this.controllers.gridUtils.screenToIso(worldPoint.x, worldPoint.y);
         const startX = Math.floor(iso.x);
         const startY = Math.floor(iso.y);
 
-        this.AcoesUtils.clearPreviewTiles();
+        this.controllers.acoesUtils.clearPreviewTiles();
 
         const blockSize = 4; // tamanho fixo de um "solo"
         const totalWidth = blockSize * blocksWide;
@@ -102,7 +107,7 @@ export default class SoloController {
                     .setDepth(9999);
 
                 this.scene.gameVariables.previewTiles.push(tile);
-                this.scene.cameraController.ignoreInUICamera([tile]);
+                this.controllers.camera.ignoreInUICamera([tile]);
 
                 this.scene.gameVariables.previewOccupiedtiles.push({ x: sx, y: sy, w: blockSize, h: blockSize, occupied: isOccupied });
             }
@@ -114,7 +119,7 @@ export default class SoloController {
             .setOrigin(0, 0);
 
         this.scene.gameVariables.previewTiles.push(outerBorder);
-        this.scene.cameraController.ignoreInUICamera([outerBorder]);
+        this.controllers.camera.ignoreInUICamera([outerBorder]);
     }
 
 
@@ -130,8 +135,8 @@ export default class SoloController {
 
     stopPlowing() {
         if (!this.scene.gameVariables.plowing) return;
-        this.AcoesUtils.clearPreviewTiles();
-        this.AcoesUtils.clearPreviewOccupiedTiles();
+        this.controllers.acoesUtils.clearPreviewTiles();
+        this.controllers.acoesUtils.clearPreviewOccupiedTiles();
         this.scene.gameVariables.plowing = false;
         this.uiEvents.emit("interact:ActivateAll");
     }
@@ -190,7 +195,7 @@ export default class SoloController {
 
             const screenPos = this.gridUtils.isoToScreen(centerX, centerY);
 
-            const sprite = this.scene.spriteUtils.addGameSprite(
+            const sprite = this.scene.controllers.spriteUtils.addGameSprite(
                 itemData,
                 screenPos.x,
                 screenPos.y,
@@ -219,7 +224,7 @@ export default class SoloController {
 
             this.scene.gameVariables.sprites.push(sprite);
 
-            this.scene.cameraController.ignoreInUICamera([sprite]);
+            this.controllers.camera.ignoreInUICamera([sprite]);
 
             tiles.push({
                 sprite,
@@ -284,12 +289,12 @@ export default class SoloController {
             return;
         }
 
-        const bar = this.scene.barController.criarBarraProgresso(
+        const bar = this.controllers.bar.criarBarraProgresso(
             first.screenX,
             first.screenY,
             50,
             10,
-            1.8,
+            0.5,
             () => {
 
                 reserva.forEach(tile => {
@@ -364,7 +369,7 @@ export default class SoloController {
 
     renewDrySoil(sprite) {
 
-        if (this.scene.queue.isFull()) return;
+        if (this.controllers.queue.isFull()) return;
 
         let progressBar = null;
 
@@ -372,15 +377,15 @@ export default class SoloController {
         sprite.disableInteractive();
         sprite.clearTint();
         this.scene.gameVariables.hoveredSprite = null;
-        this.scene.spriteController.hoverText.setVisible(false);
+        this.controllers.sprite.hoverText.setVisible(false);
 
         this.canPlow(true)
 
-        this.scene.queue.add({
+        this.controllers.queue.add({
 
             action: (done) => {
 
-                progressBar = this.scene.soilControl.executeRenewSoil(sprite, () => {
+                progressBar = this.controllers.soil.executeRenewSoil(sprite, () => {
 
                     done();
 
@@ -406,7 +411,7 @@ export default class SoloController {
 
     executeRenewSoil(sprite, done) {
 
-        const bar = this.scene.barController.criarBarraProgresso(
+        const bar = this.controllers.bar.criarBarraProgresso(
             sprite.x,
             sprite.y,
             50,
@@ -441,7 +446,7 @@ export default class SoloController {
 
         if (!sprite) return;
 
-        this.scene.growthController.cancelGrowth(sprite)
+        this.controllers.growth.cancelGrowth(sprite)
         sprite.nome = "solo_seco";
         sprite.tipo = "solo_seco";
         sprite.planta_cultivada = null;
