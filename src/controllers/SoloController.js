@@ -340,9 +340,9 @@ export default class SoloController {
 
     }
 
-    canPlow() {
+    canPlow(reney = false) {
 
-        const price = this.scene.gameVariables.plowingCost;
+        const price = !reney ? this.scene.gameVariables.plowingCost : this.scene.gameVariables.prepareSoilCost;
 
         let HaveMoney = false;
 
@@ -372,6 +372,8 @@ export default class SoloController {
         sprite.clearTint();
         this.scene.gameVariables.hoveredSprite = null;
         this.scene.spriteController.hoverText.setVisible(false);
+
+        this.canPlow(true)
 
         this.scene.queue.add({
 
@@ -418,6 +420,13 @@ export default class SoloController {
                 sprite.setAlpha(1)
 
                 sprite.setInteractive({ pixelPerfect: true, alphaTolerance: 1, useHandCursor: true });
+
+                this.uiEvents.emit("action:reward", {
+                    xp: 1,
+                    gold: -this.scene.gameVariables.prepareSoilCost ?? 0,
+                    x: sprite.x,
+                    y: sprite.y
+                })
 
                 done();
 
