@@ -578,15 +578,6 @@ export const decoracoes = [
         "tipo": "decoracao"
     },
     {
-        "nome": "solo_seco",
-        "img": "solo_seco",
-        "escala": 0.73,
-        "area": [4, 4],
-        "origem": [0.5, 0.58],
-        "tipo": "decoracao",
-        "noStopBuy": false
-    },
-    {
         "id": "gazebo",
         "nome": "Gazebo",
         "preco_compra": 0,
@@ -929,7 +920,8 @@ export const solos = [
         "area": [4, 4],
         "origem": [0.5, 0.58],
         "tipo": "solo_preparado",
-        "noStopBuy": false
+        "noStopBuy": false,
+        "preco_venda": 1
     },
     {
         "nome": "solo_seco",
@@ -938,7 +930,8 @@ export const solos = [
         "area": [4, 4],
         "origem": [0.5, 0.58],
         "tipo": "solo_seco",
-        "noStopBuy": false
+        "noStopBuy": false,
+        "preco_venda": 1
     },
     {
         "nome": "solo_plantado_simples",
@@ -947,6 +940,7 @@ export const solos = [
         "area": [4, 4],
         "origem": [0.5, 0.58],
         "tipo": "solo_plantado_simples",
-        "noStopBuy": false
+        "noStopBuy": false,
+        "preco_venda": 1
     }
 ]

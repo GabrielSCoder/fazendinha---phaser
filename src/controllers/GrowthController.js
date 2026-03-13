@@ -65,7 +65,7 @@ export default class GrowthController {
 
             const nextStage = sprite.growthStages[sprite.growthStageIndex];
 
-            console.log(percent);
+            //console.log(percent);
 
             if (!nextStage) return;
 

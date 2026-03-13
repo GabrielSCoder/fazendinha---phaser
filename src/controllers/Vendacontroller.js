@@ -83,6 +83,7 @@ export default class VendaController {
 
         this.scene.gameVariables.toolSprite = null;
         this.scene.gameVariables.selling = false;
+        this.scene.gameVariables.selectedSprite = null;
 
     }
 
@@ -120,6 +121,13 @@ export default class VendaController {
 
         this.gridUtils.drawFootprints();
         this.gridUtils.drawMatrix();
+
+        this.uiEvents.emit("action:reward", {
+            xp: 0,
+            gold: item.preco_venda,
+            x: item.x,
+            y: item.y
+        });
     }
 
 

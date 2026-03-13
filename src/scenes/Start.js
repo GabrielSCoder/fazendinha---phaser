@@ -205,7 +205,7 @@ export class Start extends Phaser.Scene {
 
         this.cameraController = new CameraController(this);
         this.growthController = new GrowthController(this);
-        this.spriteUtils = new SpriteUtils(this);
+        this.spriteUtils = new SpriteUtils(this, { uiEvents: this.gameVariables.eventsCenter });
         this.acoesUtils = new AcoesUtils(this, { uiEvents: this.gameVariables.eventsCenter });
         const xpTable = this.acoesUtils.parseCSV(raw);
         this.gridUtils.gridStart();

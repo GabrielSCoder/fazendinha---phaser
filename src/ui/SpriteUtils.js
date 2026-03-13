@@ -1,8 +1,9 @@
 import { plantar_solo, vender } from "../msgs.js";
 
 export default class SpriteUtils {
-    constructor(scene) {
+    constructor(scene, configs = {}) {
         this.scene = scene;
+        this.uiEvents = configs.uiEvents;
     }
 
     addGameSprite(data, x, y, scale = 0.5, originX, originY) {
@@ -23,6 +24,7 @@ export default class SpriteUtils {
         sprite.tipo = data.tipo;
         sprite.preco_venda = data.preco_venda;
         sprite.preco_compra = data.preco_compra;
+        sprite.preco_compra_grana = data.preco_compra_grana;
         sprite.xp = data.xp;
         sprite.xpYeld = false;
 
@@ -60,7 +62,7 @@ export default class SpriteUtils {
 
             if (this.scene.gameVariables.selling) {
                 this.scene.gameVariables.selectedSprite = sprite;
-                this.scene.gameVariables.eventsCenter.emit("action:SellItem");
+                this.uiEvents.emit("ui:notify", {type : "sell", nome : sprite.nome, preco : sprite.preco_venda, action : "action:SellItem"});
             } else if (!sprite.isMoving && sprite.tipo !== "solo_plantado_simples" && sprite.tipo !== "solo_preparado" && sprite.nome !== "solo_seco") {
                 this.scene.gameVariables.selectedSprite = sprite;
                 this.scene.itemMenuUI.show(
@@ -74,7 +76,7 @@ export default class SpriteUtils {
             ) {
                 this.scene.shopMenu.activeCategory = 'Sementes';
                 this.scene.shopMenu.open();
-            } else if (sprite.nome === "solo_seco" ) {
+            } else if (sprite.nome === "solo_seco") {
                 this.scene.soilControl.renewDrySoil(sprite)
             } else if (
                 sprite.nome === "solo_preparado" &&

@@ -30,11 +30,13 @@ export default class UINotificationController {
         this.levelContainer = scene.add.container(0, 0).setVisible(false);
         this.missionContainer = scene.add.container(0, 0).setVisible(false);
         this.genericContainer = scene.add.container(0, 0).setVisible(false);
+        this.sellContainer = scene.add.container(0, 0).setVisible(false);
 
         this.container.add([
             this.levelContainer,
             this.missionContainer,
-            this.genericContainer
+            this.genericContainer,
+            this.sellContainer
         ]);
 
         this.uiEvents.on("ui:notify", this.notify, this);
@@ -65,6 +67,9 @@ export default class UINotificationController {
         this.levelContainer.setVisible(false);
         this.missionContainer.setVisible(false);
         this.genericContainer.setVisible(false);
+        this.sellContainer.setVisible(false);
+
+        //console.log(data)
 
         switch (data.type) {
 
@@ -76,6 +81,11 @@ export default class UINotificationController {
             case "mission":
                 this.createMissionPopup(data);
                 this.missionContainer.setVisible(true);
+                break;
+
+            case "sell":
+                this.createSellPopup(data);
+                this.sellContainer.setVisible(true);
                 break;
 
             default:
@@ -132,7 +142,7 @@ export default class UINotificationController {
             }
         ).setOrigin(0.5).setStroke('#000', 4);
 
-        const confirm = this.createConfirmButton();
+        const confirm = this.createConfirmButton(data);
 
         // const close = this.createCloseButton();
 
@@ -177,13 +187,34 @@ export default class UINotificationController {
         this.genericContainer.add([bg, body, close]);
     }
 
+    createSellPopup(data) {
+
+        const bg = this.scene.add.image(0, 0, "fundo_madeira_medio").setDisplaySize(500, 200);
+
+        const body = this.scene.add.text(
+            0,
+            0,
+            `Tem certeza que deseja vender ${data.nome} por ${data.preco} ouros ?`,
+            {
+                fontSize: "20px", color: "#ffffff", fontFamily: 'LuckiestGuy-Regular', lineSpacing: 2, wordWrap: {
+                    width: this.bgFullWidth * 0.8
+                }
+            }
+        ).setOrigin(0.5).setStroke('#000', 4);
+
+        const confirm = this.createConfirmButton(data);
+        const close = this.createCloseButton(data.type);
+
+        this.sellContainer.add([bg, body, confirm, close]);
+    }
+
     createCloseButton(type) {
 
         let offsetWidth = 0;
         let offsetHeight = 0;
 
         switch (type) {
-            case "level up":
+            case "levelUp":
                 offsetWidth = this.bgFullWidth / 2 - 40;
                 offsetHeight = -this.bgFullHeight / 2 + 40;
                 break;
@@ -207,13 +238,24 @@ export default class UINotificationController {
         return close;
     }
 
-    createConfirmButton() {
+    createConfirmButton(data) {
 
-        const btn = this.scene.add.image(0, 170, "confirm_button")
+        let offsetHeight = 0;
+
+        switch (data.type) {
+            case "levelUp":
+                offsetHeight = 170;
+                break;
+            default:
+                offsetHeight = 80;
+                break;
+        }
+
+        const btn = this.scene.add.image(0, offsetHeight, "confirm_button")
             .setScale(0.7)
             .setInteractive({ useHandCursor: true });
 
-        btn.on("pointerup", () => this.close());
+        btn.on("pointerup", () => { this.uiEvents.emit(data.action, data); this.close()});
         btn.on("pointerover", () => btn.setScale(0.8))
         btn.on("pointerout", () => btn.setScale(0.7))
 
@@ -258,7 +300,7 @@ export default class UINotificationController {
 
                 this.scene.gameVariables.freeClick = true;
                 this.processQueue();
-                
+
             }
         });
 

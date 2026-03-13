@@ -169,7 +169,7 @@ export default class BottomMenu {
         this.btnContainer.on('pointerup', () => {
 
             if (this.scene.gameVariables.selectedSprite && this.scene.gameVariables.selectedSprite.isMoving) {
-                console.log(this.scene.gameVariables.selectedSprite)
+                //console.log(this.scene.gameVariables.selectedSprite)
                 this.scene.gameVariables.freeClick = true;
                 return;
             }

@@ -124,14 +124,14 @@ export default class XPController {
 
     onLevelUp(level) {
 
-        console.log("LEVEL UP:", level);
+        // //console.log("LEVEL UP:", level);
 
         this.uiEvents.emit("profile:levelUp", {
             level: level
         });
 
         this.uiEvents.emit("action:setMoney", 1);
-        this.uiEvents.emit("ui:notify", { type: "levelUp", level : level });
+        this.uiEvents.emit("ui:notify", { type: "levelUp", level : level, action : "" });
     }
 
     emitUpdate() {

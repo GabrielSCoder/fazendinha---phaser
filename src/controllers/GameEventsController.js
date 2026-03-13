@@ -14,6 +14,10 @@ export default class GameEventsController {
                 this.uiEvents.emit("action:setGold", data.gold);
             }
 
+            if (data.money) {
+                this.uiEvents.emit("action:setMoney", data.money);
+            }
+
             this.uiEvents.emit("floating:rewards", data);
 
         });
@@ -164,23 +168,39 @@ export default class GameEventsController {
 
             let res = false;
 
+            const tipo_compra = sprite.preco_compra > sprite.preco_compra_grana || !sprite.preco_compra_grana ? "gold" : "money"
+
             this.uiEvents.emit("action:buyItem", {
-                type: "gold",
-                price: sprite.preco_compra,
+                type: tipo_compra,
+                price: tipo_compra == "gold" ? sprite.preco_compra : sprite.preco_compra_grana,
                 level: 1
             }, (result) => {
 
                 if (!result) {
                     res = false;
                     return;
-
                 }
-                this.uiEvents.emit("action:reward", {
-                    xp: sprite.xp ?? 0,
-                    gold: -sprite.preco_compra,
-                    x: sprite.x,
-                    y: sprite.y
-                });
+
+                let dados = {}
+
+                if (tipo_compra == "gold") {
+
+                    dados = {
+                        xp: sprite.xp ?? 0,
+                        gold: -sprite.preco_compra,
+                        x: sprite.x,
+                        y: sprite.y
+                    }
+                } else {
+                    dados = {
+                        xp: sprite.xp ?? 0,
+                        money: -sprite.preco_compra_grana,
+                        x: sprite.x,
+                        y: sprite.y
+                    }
+                }
+
+                this.uiEvents.emit("action:reward", dados);
 
                 sprite.xpYeld = true;
                 res = true
@@ -407,6 +427,7 @@ export default class GameEventsController {
 
         if (solo.isQueued) return;
         if (solo.isReserved) return;
+        if (this.scene.gameVariables.selling) return;
 
         solo.isQueued = true;
 

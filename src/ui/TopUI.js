@@ -30,6 +30,8 @@ export default class TopUI {
             this.gold = data.gold;
             this.money = data.money;
 
+            console.log(data)
+
             this.updateUI();
 
         });

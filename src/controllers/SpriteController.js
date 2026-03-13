@@ -123,7 +123,7 @@ export default class SpriteController {
             this.scene.gameVariables.fenceSnapTarget = possibleSnaps.map(s => s.cell);
             this.scene.gameVariables.collisionDataTemp = possibleSnaps.map(s => s.data);
         } else {
-            console.log("nenhum encontrado")
+            //console.log("nenhum encontrado")
             sprite.setTint(0xffaaaa);
             this.scene.gameVariables.fenceSnapTarget = null;
         }
@@ -133,8 +133,6 @@ export default class SpriteController {
     updateHoverText(sprite) {
 
         if (!sprite) return;
-
-        console.log(sprite)
 
         let text = "";
 

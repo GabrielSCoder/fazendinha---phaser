@@ -16,7 +16,7 @@ export default class ProfileController {
 
 
         this.gold = preset.gold ?? 600;
-        this.money = preset.money ?? 600;
+        this.money = preset.money ?? 6;
 
         this.classEvents();
 

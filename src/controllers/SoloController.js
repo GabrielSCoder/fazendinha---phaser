@@ -208,6 +208,7 @@ export default class SoloController {
             sprite.blockSize = blockSize;
             sprite.nome = "solo_preparado";
             sprite.tipo = tipo;
+            sprite.preco_venda = itemData.preco_venda;
             sprite.disableInteractive();
 
             // agora reserva
@@ -311,7 +312,7 @@ export default class SoloController {
 
         this.uiEvents.emit("action:getGold", (result) => {
             gold = result;
-            console.log(gold)
+            //console.log(gold)
         })
 
         return Math.floor(gold / price);
@@ -445,7 +446,7 @@ export default class SoloController {
         sprite.tipo = "solo_seco";
         sprite.planta_cultivada = null;
         sprite.growthStages = null;
-        sprite.preco_venda = 0;
+        sprite.preco_venda = 1;
         sprite.xp = 0;
         sprite.tempoColheita = null;
         sprite.img_pronta = null;

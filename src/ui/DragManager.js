@@ -23,11 +23,11 @@ export default class DragMenuManager {
             if (this.selectedSprite) this.enableDrag(this.selectedSprite);
         });
         btnSell.on('pointerup', () => {
-            console.log("Vendeu", this.selectedSprite.texture.key);
+            //console.log("Vendeu", this.selectedSprite.texture.key);
             this.hideMenu();
         });
         btnStore.on('pointerup', () => {
-            console.log("Guardou", this.selectedSprite.texture.key);
+            //console.log("Guardou", this.selectedSprite.texture.key);
             this.hideMenu();
         });
 

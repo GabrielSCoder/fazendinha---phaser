@@ -104,6 +104,14 @@ export default class FloatingTextController {
             });
         }
 
+        if (data.money) {
+            rewards.push({
+                icon: "cash_icon",
+                value: data.money,
+                color: "#ffd700"
+            });
+        }
+
         this.createFloatingRow(data.x, data.y, rewards);
     }
 

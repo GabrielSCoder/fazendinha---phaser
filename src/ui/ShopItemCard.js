@@ -26,6 +26,8 @@ export default class ShopItemCard {
 
         const locked = this.requiredLevel > this.playerLevel;
 
+        const tipo_compra = this.data.preco_compra > this.data.preco_compra_grana || !this.data.preco_compra_grana ? "gold" : "money"
+
         const elements = [];
 
         const bg = s.add.tileSprite(0, 0, this.width, this.height, 'item_bg').setOrigin(0);
@@ -86,12 +88,21 @@ export default class ShopItemCard {
                 fontFamily: 'LuckiestGuy-Regular'
             });
 
-            const gold = s.add.image(this.width / 2 - 6, 165, 'gold_icon')
-                .setOrigin(0.5)
-                .setDisplaySize(20, 20);
+            let monetary = ""
+
+
+            if (tipo_compra == "gold") {
+                monetary = s.add.image(this.width / 2 - 6, 165, 'gold_icon')
+                    .setOrigin(0.5)
+                    .setDisplaySize(20, 20);
+            } else {
+                monetary = s.add.image(this.width / 2 - 6, 165, 'cash_icon')
+                    .setOrigin(0.5)
+                    .setDisplaySize(20, 20);
+            }
 
             const compraText = s.add.text(this.width / 2 + 5, 165,
-                this.data.preco_compra, {
+                tipo_compra == "gold" ? this.data.preco_compra : this.data.preco_compra_grana, {
                 fontSize: '14px',
                 color: '#000',
                 fontFamily: 'LuckiestGuy-Regular'
@@ -137,7 +148,7 @@ export default class ShopItemCard {
                 clockIcon,
                 tempoText,
                 vendaText,
-                gold,
+                monetary,
                 compraText,
                 comprarBtn
             );
