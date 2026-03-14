@@ -25,6 +25,7 @@ import CatalogUtils from '../utils/CatalogUtils.js';
 import { AssetLoader } from '../utils/AssetLoader.js';
 import { MissionController } from '../controllers/MissionController.js';
 import { intro_missions } from '../static/missionsDB.js';
+import SidesUi from '../ui/SidesUi.js';
 
 export class Start extends Phaser.Scene {
     constructor() {
@@ -103,7 +104,6 @@ export class Start extends Phaser.Scene {
         this.controllers.sprite.initialGraphics();
         this.controllers.gridUtils.drawMatrix();
         this.controllers.gridUtils.gridStart();
-        // this.controllers.gridUtils.drawGridBorder();
 
         //this.bonecoController = new BonecoController(this);
 
@@ -113,14 +113,6 @@ export class Start extends Phaser.Scene {
             callback: this.controllers.sprite.updateHoverPlantPercent,
             callbackScope: this.controllers.sprite
         });
-
-        this.time.addEvent({
-            delay: 500,
-            loop: true,
-            callback: () => {console.log(this.gameVariables.buyItemTmp)},
-            callbackScope: this
-        });
-
 
         this.controllers.camera.ignoreInUICamera([
             this.controllers.itemMenu.itemMenu,
@@ -211,12 +203,14 @@ export class Start extends Phaser.Scene {
 
         const xpTable = this.parseCSV(raw)
 
-        this.controllers.gridUtils = new GridUtils(this);
+        this.controllers.gridUtils = new GridUtils(this, { uiEvents: events });
+        this.controllers.banner = new UINotificationController(this, { uiEvents: events })
 
         this.controllers.missions = new MissionController(this, intro_missions, saveData.missions, events)
         this.controllers.camera = new CameraController(this)
         this.controllers.growth = new GrowthController(this)
 
+        this.controllers.sideUi = new SidesUi(this, { uiEvents: events });
         this.controllers.spriteUtils = new SpriteUtils(this, { uiEvents: events })
         this.controllers.acoesUtils = new AcoesUtils(this, { uiEvents: events })
 
@@ -237,7 +231,6 @@ export class Start extends Phaser.Scene {
         this.controllers.sell = new VendaController(this, { uiEvents: events })
 
         this.controllers.shopMenu = new ShopMenu(this, { uiEvents: events })
-        this.controllers.banner = new UINotificationController(this, { uiEvents: events })
 
         this.controllers.bottomMenu = new BottomMenu(this, {
             shopMenu: this.controllers.shopMenu,

@@ -32,11 +32,13 @@ export default class UINotificationController {
             .setScrollFactor(0);
 
         this.levelContainer = this.scene.add.container(0, 0).setVisible(false);
+        this.newMissionContainer = this.scene.add.container(0, 0).setVisible(false);
         this.missionContainer = this.scene.add.container(0, 0).setVisible(false);
         this.genericContainer = this.scene.add.container(0, 0).setVisible(false);
         this.sellContainer = this.scene.add.container(0, 0).setVisible(false);
 
         this.container.add([
+            this.newMissionContainer,
             this.levelContainer,
             this.missionContainer,
             this.genericContainer,
@@ -70,16 +72,20 @@ export default class UINotificationController {
 
         this.levelContainer.setVisible(false);
         this.missionContainer.setVisible(false);
+        this.newMissionContainer.setVisible(false);
         this.genericContainer.setVisible(false);
         this.sellContainer.setVisible(false);
-
-        //console.log(data)
 
         switch (data.type) {
 
             case "levelUp":
                 this.createLevelPopup(data);
                 this.levelContainer.setVisible(true);
+                break;
+
+            case "newMission":
+                this.createNewMissionPopup(data);
+                this.newMissionContainer.setVisible(true);
                 break;
 
             case "mission":
@@ -153,21 +159,209 @@ export default class UINotificationController {
         this.levelContainer.add([bg, title, body, footer, sub, confirm]);
     }
 
+    // createMissionPopup(data) {
+
+
+    //     const mission = data.mission
+    //     console.log(mission)
+
+    //     const bg = this.scene.add.image(0, 0, "fundo_madeira_branco").setDisplaySize(600, 600);
+
+    //     const title = this.scene.add.text(
+    //         0,
+    //         -this.bgFullHeight / 2 + 70,
+    //         mission.title,
+    //         { fontSize: "28px", color: "#fbff00", fontFamily: 'LuckiestGuy-Regular' }
+    //     ).setOrigin(0.5).setStroke('#000', 4);
+
+    //     const body = this.scene.add.text(
+    //         0,
+    //         -this.bgFullHeight / 2 + 10,
+    //         `${mission.description}`,
+    //         {
+    //             fontSize: "20px", color: "#ffffff", fontFamily: 'LuckiestGuy-Regular', lineSpacing: 2, wordWrap: {
+    //                 width: 600 * 0.8
+    //             }
+    //         }
+    //     ).setOrigin(0.5).setStroke('#000', 4);
+
+    //     const objectivesTexts = mission.objectives.map((element, index) => {
+
+    //         return this.scene.add.text(
+    //             0,
+    //             -this.bgFullHeight / 2 + (index * 30),
+    //             element.text,
+    //             { fontSize: "18px", color: "#ffffff", fontFamily: 'LuckiestGuy-Regular' }
+    //         )
+    //             .setOrigin(0.5)
+    //             .setStroke('#000', 4);
+
+    //     });
+
+    //     const objectivesContainer = this.scene.add.container(-180, 120)
+    //     objectivesContainer.add(objectivesTexts)
+
+
+    //     const confirm = this.createConfirmButton(data.type);
+    //     // const close = this.createCloseButton(data.type);
+
+    //     this.missionContainer.add([bg, title, body, objectivesContainer, confirm]);
+    // }
+
     createMissionPopup(data) {
+
+        const width = 500;
+        const height = 500;
+
+        const mission = data.mission
+
+        console.log(mission)
+        
+        const root = this.scene.add.container(
+            this.scene.scale.width / 2,
+            this.scene.scale.height / 2
+        );
+
+        const bg = this.scene.add.image(0, 0, "fundo_madeira_branco").setDisplaySize(width, height)
+
+        root.add(bg);
+
+        let y = -height / 2 + 60;
+
+        // descrição
+        const description = this.scene.add.text(
+            0,
+            y,
+            mission.description,
+            { fontSize: "16px", color: "#ffffff", align: "center", fontFamily: 'LuckiestGuy-Regular', wordWrap: { width: 420 } }
+        ).setOrigin(0.5).setStroke('#000', 4);
+
+        root.add(description);
+
+        y += description.height + 20;
+
+        // titulo
+        const title = this.scene.add.text(
+            0,
+            y,
+            mission.title,
+            { fontSize: "28px", color: "#fbff00", fontFamily: 'LuckiestGuy-Regular' }
+        ).setOrigin(0.5).setStroke('#000', 4);
+
+        root.add(title);
+
+        y += 80;
+
+        // container de objetivos
+        const objectivesContainer = this.scene.add.container(0, y);
+
+        root.add(objectivesContainer);
+
+        let rowY = 0;
+
+        mission.objectives.forEach((obj, index) => {
+
+            const row = this.createObjectiveRow(obj, width - 100, index === mission.objectives.length - 1);
+
+            row.y = rowY;
+
+            objectivesContainer.add(row);
+
+            rowY += 50;
+
+        });
+
+        const confirm = this.createConfirmButton(data.type);
+
+        this.missionContainer.add([bg, title, description, objectivesContainer, confirm]);
+
+    }
+
+    createObjectiveRow(objective, width, isLast) {
+
+        const row = this.scene.add.container(0, 0);
+
+        const padding = 10;
+        const height = 60;
+
+        // icone
+        const icon = this.scene.add.image(
+            -width / 2 + 25,
+            0,
+            objective.icon || "semente_mirtilo"
+        ).setScale(0.15);
+
+        // texto
+        const text = this.scene.add.text(
+            -width / 2 + 50,
+            0,
+            objective.text,
+            {
+                fontSize: "16px",
+                color: "#ffffff",
+                wordWrap: { width: width * 0.55 },
+                fontFamily: "LuckiestGuy-Regular"
+            }
+        )
+            .setOrigin(0, 0.5)
+            .setStroke("#000", 3);
+
+        // progresso
+        const progress = this.scene.add.text(
+            width / 2 - padding - 20,
+            0,
+            `${objective.progress} / ${objective.required}`,
+            {
+                fontSize: "20px",
+                color: "#ffffff",
+                fontFamily: "LuckiestGuy-Regular"
+            }
+        )
+            .setOrigin(1, 0.5)
+            .setStroke("#000", 4);
+
+        row.add([icon, text, progress]);
+
+        if (!isLast) {
+
+            const line = this.scene.add.rectangle(
+                0,
+                height / 2,
+                width * 0.9,
+                2,
+                0x000,
+                0.25
+            ).setOrigin(0.5);
+
+            row.add(line);
+
+        }
+
+        return row;
+    }
+
+    createNewMissionPopup(data) {
 
         const bg = this.scene.add.image(0, 0, "fundo_madeira_branco").setDisplaySize(500, 400);
 
-        const text = this.scene.add.text(
+        const title = this.scene.add.text(
             0,
-            0,
+            -this.bgFullHeight / 2 + 120,
             "Nova Missão!",
-            { fontSize: "26px", color: "#ffffff" }
-        ).setOrigin(0.5);
+            { fontSize: "28px", color: "#000", fontFamily: 'LuckiestGuy-Regular' }
+        ).setOrigin(0.5).setStroke('#fff', 4);
+
+        const body = this.scene.add.text(
+            0,
+            0,
+            `${data.text}`,
+            { fontSize: "28px", color: "#ffffff", fontFamily: 'LuckiestGuy-Regular', lineSpacing: 2 }
+        ).setOrigin(0.5).setStroke('#000', 4);
 
         const confirm = this.createConfirmButton(data.type);
-        const close = this.createCloseButton(data.type);
+        // const close = this.createCloseButton(data.type);
 
-        this.missionContainer.add([bg, text, confirm, close]);
+        this.newMissionContainer.add([bg, title, body, confirm]);
     }
 
     createGenericPopup(data) {
@@ -246,9 +440,12 @@ export default class UINotificationController {
 
         let offsetHeight = 0;
 
-        switch (data.type) {
+        switch (data) {
             case "levelUp":
                 offsetHeight = 170;
+                break;
+            case "mission":
+                offsetHeight = 220;
                 break;
             default:
                 offsetHeight = 80;

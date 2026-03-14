@@ -23,6 +23,11 @@ export class MissionController {
             this.loadSave(this.saveData)
         }
 
+        this.uiEvents.on("ui:showMission", (result) => {
+            console.log("chegando")
+            this.uiEvents.emit("ui:notify", { type: "mission", mission: this.getMissionUIData(result.id) })
+        })
+
         this.uiEvents.on("game_action", data => {
             this.onAction(data)
         })
@@ -80,7 +85,48 @@ export class MissionController {
 
         }
 
-        this.uiEvents.emit("ui:notify", { type: "mission" })
+        // this.uiEvents.emit("ui:notify", { type: "newMission", text: mission.title })
+    }
+
+    getMissionUIData(id) {
+
+        if (!id) return null;
+
+        const mission = this.missionsDB.find(m => m.id == id);
+        const status = this.activeMissions[id];
+
+        if (!mission || !status) return null;
+
+        const currentState = status.state ?? 0;
+
+        const stateData = mission.states[currentState];
+        const progressData = status.objectives ?? [];
+
+        const objectives = stateData.objectives.map((obj, index) => {
+
+            const progress = progressData[index] ?? {};
+
+            return {
+                text: obj.text,
+                target: obj.target,
+                action: obj.action,
+                icon : obj.icon,
+                required: obj.amount,
+                progress: progress.progress ?? 0,
+                done: progress.done ?? false
+            };
+
+        });
+
+        return {
+            id: mission.id,
+            title: mission.title,
+            description: mission.description,
+            state: currentState,
+            objectives,
+            reward: mission.final_reward
+        };
+
     }
 
     onAction(data) {

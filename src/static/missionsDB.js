@@ -16,8 +16,9 @@ export const intro_missions = [
                         action: "plow",
                         amount: 4,
                         text: "Are 4 solos",
-                        target: "solo_preparado"
-                    }
+                        target: "solo_preparado",
+                        icon : "enxada"
+                    },
                 ]
             }
         ],

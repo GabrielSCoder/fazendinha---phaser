@@ -1,5 +1,5 @@
 export default class GridUtils {
-    constructor(scene) {
+    constructor(scene, configs = {}) {
         this.scene = scene;
         this.controllers = this.controllers;
         this.gridSize = scene.gameVariables.gridSize;
@@ -11,6 +11,25 @@ export default class GridUtils {
         this.input = scene.input;
         this.itemMenuUI = scene.controllers.itemMenu;
         this.gridUtils = scene.gridUtils;
+        this.uiEvents = configs.uiEvents;
+        this.gridMode = "full";
+    }
+
+    init() {
+        this.uiEvents.on("changeGrid", () => {
+            this.toggleGridMode();
+        });
+    }
+
+    toggleGridMode() {
+
+        if (this.gridMode === "full") {
+            this.gridMode = "border";
+            this.drawGridBorder();
+        } else {
+            this.gridMode = "full";
+            this.gridStart();
+        }
     }
 
     gridStart() {

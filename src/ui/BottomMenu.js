@@ -108,6 +108,16 @@ export default class BottomMenu {
             .setOrigin(0.5)
             .setInteractive({ useHandCursor: true });
 
+        this.btnMode = this.scene.add.text(menuWidth - 20, menuHeight / 2 - 40, "M", {
+            fontSize: '20px',
+            fontFamily: 'LuckiestGuy-Regular',
+            color: 'white',
+            backgroundColor: '#3675bc',
+            padding: { left: 8, right: 8, top: 4, bottom: 4 }
+        })
+            .setOrigin(0.5)
+            .setInteractive({ useHandCursor: true });
+
         this.btnContainer = this.scene.add.container(menuWidth - 100, menuHeight / 2);
 
         this.btnBg = this.scene.add.rectangle(0, 0, 50, 50, 0x54c848, 1)
@@ -140,7 +150,7 @@ export default class BottomMenu {
         this.btnContainerPa.setSize(50, 50);
         this.btnContainerPa.setInteractive({ useHandCursor: true });
 
-        this.upperMenu.add([this.btnMatriz, this.btnZoomIn, this.btnZoomOut, this.btnCancelar])
+        this.upperMenu.add([this.btnMatriz, this.btnZoomIn, this.btnZoomOut, this.btnCancelar, this.btnMode])
         this.bottomMenu.add([this.btnLoja, this.btnContainer, this.btnContainerPa]);
 
         this.buttons['arar'] = this.btnContainer;
@@ -219,6 +229,10 @@ export default class BottomMenu {
             const newZoom = Phaser.Math.Clamp(cam.zoom + zoomChange, 0.7, 2);
             cam.setZoom(newZoom);
         });
+
+        this.btnMode.on("pointerup", () => {
+            this.uiEvents.emit("changeGrid");
+        })
     }
 
     createCheatMenu() {
@@ -283,7 +297,7 @@ export default class BottomMenu {
 
         this.btnMinusGold.on("pointerup", () => {
             // this.uiEvents.emit("action:setGold", -10)
-            this.uiEvents.emit("ui:notify", {type: "mission"});
+            this.uiEvents.emit("ui:notify", { type: "mission" });
         })
 
         this.btnMinusMoney.on("pointerup", () => {
