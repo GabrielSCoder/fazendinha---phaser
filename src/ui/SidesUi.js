@@ -12,31 +12,55 @@ export default class SidesUi {
         this.circleSize = 64;
         this.spacing = 20;
 
-        this.eastSideContainer = scene.add.container(this.width - 90, this.height / 2 - 90);
+        this.eastSideContainer = scene.add.container(this.width - 90, this.height / 2 - 200);
         this.westSideContainer = scene.add.container(90, this.height / 2);
 
         this.eastSideContainer.setDepth(9997);
         this.westSideContainer.setDepth(9997);
 
-        this.createEastButtons();
-        this.createWestButtons();
     }
 
     init() {
 
-        this.show();
+        this.uiEvents.on("data:missions", (result) => {
+            this.start(result)
+        })
 
     }
 
-    createEastButtons() {
+    start(data) {
+        this.createEastButtons(data);
+        this.createWestButtons();
 
-        const btn1 = this.createCircleButton(0);
-        // const btn2 = this.createCircleButton(this.circleSize + this.spacing);
+        this.show();
+    }
 
-        this.eastSideContainer.add(btn1);
-        // this.eastSideContainer.add(btn2);
+    createEastButtons(data) {
 
-        this.controllers.camera.ignoreInMainCamera([this.eastSideContainer, this.eastSideContainer])
+        console.log(data)
+
+        Object.entries(data).forEach(([index, key]) => {
+
+            const offset = index * (this.circleSize + this.spacing);
+
+            const btn = this.createCircleButton(key, offset);
+
+            const label = this.createLabel(key, offset, "east");
+
+            btn.on("pointerover", () => {
+                console.log("hdashdjkasdh")
+                label.setVisible(true);
+            });
+
+            btn.on("pointerout", () => {
+                label.setVisible(false);
+            });
+
+            this.eastSideContainer.add([btn, label]);
+
+        });
+
+        this.controllers.camera.ignoreInMainCamera([this.eastSideContainer]);
 
     }
 
@@ -47,32 +71,69 @@ export default class SidesUi {
 
     }
 
-    createCircleButton(offsetY) {
+    createLabel(key, offsetY, side) {
+
+        const offsetX = side === "east" ? -40 : 60;
+
+        const container = this.scene.add.container(offsetX, offsetY);
+
+        const bg = this.scene.add.rectangle(0, 0, 140, 28, 0x000000, 1);
+
+        const text = this.scene.add.text(0, 0, key.title, {
+            fontSize: "14px",
+            color: "#ffffff",
+            fontFamily: 'LuckiestGuy-Regular'
+        });
+
+        if (side === "east") {
+
+            bg.setOrigin(1, 0.5);
+            text.setOrigin(1, 0.5);
+            text.x = -10;
+
+        } else {
+
+            bg.setOrigin(0, 0.5);
+            text.setOrigin(0, 0.5);
+            text.x = 10;
+
+        }
+
+        container.add([bg, text]);
+
+        container.setVisible(false);
+
+        return container;
+    }
+
+    createCircleButton(key, offsetY) {
 
         const radius = this.circleSize / 2;
 
         const container = this.scene.add.container(0, offsetY);
 
-        const bg = this.scene.add.circle(0, 0, radius, 0xfffff, 0.8)
+        const bg = this.scene.add.circle(0, 0, radius, 0xfffff, 1)
             .setStrokeStyle(2, 0xffffff);
 
-        const icon = this.scene.add.image(0, 0, 'enxada')
+        const icon = this.scene.add.image(0, 0, key.icon)
             .setScale(0.2);
 
-        bg.setInteractive({ useHandCursor: true });
 
-        bg.on("pointerover", () => {
-            bg.setScale(1.05);
+        container.setSize(this.circleSize, this.circleSize);
+        container.setInteractive({ useHandCursor: true });
+
+        container.on("pointerover", () => {
+            container.setScale(1.05);
         });
 
-        bg.on("pointerout", () => {
-            bg.setScale(1);
+        container.on("pointerout", () => {
+            container.setScale(1);
         });
 
-        bg.on("pointerup", () => {
+        container.on("pointerup", () => {
 
             if (this.uiEvents) {
-                this.uiEvents.emit("ui:showMission", {id : 1 })
+                this.uiEvents.emit("ui:showMission", { id: key.id })
             }
 
         });

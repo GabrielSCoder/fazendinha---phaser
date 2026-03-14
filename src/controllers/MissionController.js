@@ -8,6 +8,12 @@ export class MissionController {
 
         this.activeMissions = {}
 
+        this.missionsById = {}
+
+        missions.forEach(m => {
+            this.missionsById[m.id] = m
+        })
+
         this.completedMissions = []
 
         this.uiEvents = uiEvents
@@ -24,7 +30,6 @@ export class MissionController {
         }
 
         this.uiEvents.on("ui:showMission", (result) => {
-            console.log("chegando")
             this.uiEvents.emit("ui:notify", { type: "mission", mission: this.getMissionUIData(result.id) })
         })
 
@@ -43,6 +48,28 @@ export class MissionController {
         this.uiEvents.on("plow", data => {
             this.onAction({ action: "plow", ...data })
         })
+    }
+
+    getMissions() {
+
+        return Object.keys(this.activeMissions).map(id => {
+
+            const missionDB = this.missionsById[id];
+            const missionState = this.activeMissions[id];
+
+            if (!missionDB) return null;
+
+            return {
+                id: missionDB.id,
+                title: missionDB.title,
+                icon: missionDB.icon,
+                state: missionState.state,
+                completed: missionState.completed,
+                objectives: missionState.objectives
+            };
+
+        }).filter(Boolean);
+
     }
 
     getSaveData() {
@@ -97,7 +124,7 @@ export class MissionController {
 
         if (!mission || !status) return null;
 
-        const currentState = status.state ?? 0;
+        const currentState = Math.min(status.state ?? 0, mission.states.length - 1);
 
         const stateData = mission.states[currentState];
         const progressData = status.objectives ?? [];
@@ -110,7 +137,7 @@ export class MissionController {
                 text: obj.text,
                 target: obj.target,
                 action: obj.action,
-                icon : obj.icon,
+                icon: obj.icon,
                 required: obj.amount,
                 progress: progress.progress ?? 0,
                 done: progress.done ?? false
@@ -133,29 +160,29 @@ export class MissionController {
 
         for (const missionId in this.activeMissions) {
 
-            const mission = this.missionsDB.find(m => m.id == missionId)
+            const mission = this.missionsById[missionId];
 
-            const progress = this.activeMissions[missionId]
+            const progress = this.activeMissions[missionId];
 
-            if (progress.completed) continue
+            if (!mission || progress.completed) continue;
 
-            const state = mission.states[progress.state]
+            const state = mission.states[progress.state];
 
             state.objectives.forEach((obj, i) => {
 
                 if (this.matches(obj, data)) {
 
-                    progress.objectives[i].progress++
+                    progress.objectives[i].progress++;
 
                     if (progress.objectives[i].progress >= progress.objectives[i].amount) {
-                        progress.objectives[i].done = true
+                        progress.objectives[i].done = true;
                     }
 
                 }
 
-            })
+            });
 
-            this.checkStateCompletion(mission)
+            this.checkStateCompletion(mission);
 
         }
 
@@ -165,8 +192,7 @@ export class MissionController {
 
         this.missionsDB.forEach(mission => {
 
-            if (!mission.level_requirement) return
-
+            if (!mission.level_requirement) retulikuitrern
             if (mission.level_requirement > playerLevel) return
 
             if (this.activeMissions[mission.id]) return
@@ -177,8 +203,7 @@ export class MissionController {
 
         })
 
-        console.log(this.activeMissions)
-
+        this.uiEvents.emit("data:missions", this.getMissions());
     }
 
     matches(obj, data) {
@@ -249,11 +274,13 @@ export class MissionController {
 
         const progress = this.activeMissions[mission.id]
 
+        const complete_mission = this.getMissionUIData(mission.id)
+
         progress.completed = true
 
         this.completedMissions.push(mission.id)
 
-        this.giveReward(mission.final_reward)
+        this.giveReward(complete_mission)
 
         delete this.activeMissions[mission.id]
 
@@ -267,13 +294,28 @@ export class MissionController {
 
     }
 
-    giveReward(reward) {
 
-        if (reward.gold)
-            this.scene.player.gold += reward.gold
+    giveReward(data) {
 
-        if (reward.xp)
-            this.scene.player.xp += reward.xp
+        if (data.reward) {
+
+            this.uiEvents.emit("action:reward", {
+                xp: data.reward.xp,
+                gold: data.reward.gold,
+            })
+
+            this.uiEvents.emit("ui:notify", {
+                type: "conclusion_mission",
+                data: data
+            })
+
+        } else {
+            this.uiEvents.emit("action:reward", {
+                xp: data.xp,
+                gold: data.gold
+            })
+
+        }
 
     }
 

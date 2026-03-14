@@ -274,6 +274,8 @@ export default class SoloController {
             x: sprite.x,
             y: sprite.y
         })
+
+        this.uiEvents.emit("plow", {target : "solo_preparado"});
     }
 
     executePlowingSoil(reserva, done) {

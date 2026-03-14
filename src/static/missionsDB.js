@@ -5,7 +5,7 @@ export const intro_missions = [
         unlocks: [2],
         level_requirement: 1,
         auto_start: true,
-
+        icon: "enxada",
 
         description: "Primeiro passo para cultivar é preparando o terreno",
 
@@ -17,27 +17,26 @@ export const intro_missions = [
                         amount: 4,
                         text: "Are 4 solos",
                         target: "solo_preparado",
-                        icon : "enxada"
+                        icon: "enxada"
                     },
                 ]
             }
         ],
 
         final_reward: {
-            gold: 100,
             xp: 10
         },
 
         duration: null,
         expires: false
     },
-
     {
         id: 2,
         title: "Experimentação",
         unlocks: null,
-        level_requirement: null,
+        level_requirement: 2,
         auto_start: true,
+        icon: "semente_abacaxi",
 
         description: "Hora de conhecer as sementes",
 

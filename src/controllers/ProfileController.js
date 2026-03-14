@@ -23,8 +23,6 @@ export default class ProfileController {
 
     init() {
         this.classEvents();
-
-        this.checkMissions()
     }
 
     checkMissions() {
@@ -63,6 +61,8 @@ export default class ProfileController {
 
             callback(data)
         })
+
+        this.checkMissions();
     }
 
     getData() {
