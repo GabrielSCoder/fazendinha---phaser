@@ -204,6 +204,7 @@ export class Start extends Phaser.Scene {
         const xpTable = this.parseCSV(raw)
 
         this.controllers.gridUtils = new GridUtils(this, { uiEvents: events });
+        this.controllers.catalog = new CatalogUtils(this, { uiEvents: events })
         this.controllers.banner = new UINotificationController(this, { uiEvents: events })
 
         this.controllers.missions = new MissionController(this, intro_missions, saveData.missions, events)
@@ -216,7 +217,6 @@ export class Start extends Phaser.Scene {
 
         this.controllers.xp = new XPController(this, xpTable, events, saveData.player)
 
-        this.controllers.catalog = new CatalogUtils(this, { uiEvents: events })
         this.controllers.bar = new ControlBar(this)
         this.controllers.profile = new ProfileController(this, { uiEvents: events }, saveData.player)
 

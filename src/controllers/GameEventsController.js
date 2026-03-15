@@ -27,6 +27,10 @@ export default class GameEventsController {
                 this.uiEvents.emit("action:setMoney", data.money);
             }
 
+            if (data.id) {
+                this.receberItem(data);
+            }
+
             this.uiEvents.emit("floating:rewards", data);
 
         });
@@ -49,7 +53,8 @@ export default class GameEventsController {
             sprite.gridX = Math.round(iso.x);
             sprite.gridY = Math.round(iso.y);
 
-            if (sprite.xp && !sprite.xpYeld) {
+
+            if (sprite.xp && !sprite.xpYeld && !sprite.gift) {
 
                 let res = false;
 
@@ -228,7 +233,9 @@ export default class GameEventsController {
             return;
         }
 
-        if (sprite.xp && !sprite.xpYeld) {
+        console.log(sprite)
+
+        if (sprite.xp && !sprite.xpYeld && !sprite.gift) {
 
             let res = false;
 
@@ -265,6 +272,7 @@ export default class GameEventsController {
                 }
 
                 this.uiEvents.emit("action:reward", dados);
+                this.uiEvents.emit("place", { target: sprite.tipo, nome: sprite.nome.toLowerCase() });
 
                 sprite.xpYeld = true;
                 res = true
@@ -525,6 +533,20 @@ export default class GameEventsController {
 
         });
 
+
+    }
+
+    receberItem(data) {
+
+        if (!data) return;
+        const itemData = this.controllers.catalog.findItem(data);
+
+        if (!itemData) return;
+        itemData.gift = true;
+
+        console.log(itemData)
+
+        this.scene.events.emit("itemPurchased", itemData);
 
     }
 }

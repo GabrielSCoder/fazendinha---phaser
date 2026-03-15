@@ -392,7 +392,7 @@ export default class UINotificationController {
             `${objective.progress} / ${objective.required}`,
             {
                 fontSize: "20px",
-                color: "#ffffff",
+                color: !objective.done ? "#ffffff" : "#2bfc01cc",
                 fontFamily: "LuckiestGuy-Regular"
             }
         )

@@ -12,6 +12,8 @@ export default class SidesUi {
         this.circleSize = 64;
         this.spacing = 20;
 
+        this.missionButtons = {};
+
         this.eastSideContainer = scene.add.container(this.width - 90, this.height / 2 - 200);
         this.westSideContainer = scene.add.container(90, this.height / 2);
 
@@ -26,6 +28,14 @@ export default class SidesUi {
             this.start(result)
         })
 
+        this.uiEvents.on("ui:deleteMissionBanner", (result) => {
+            this.refreshEastButtons(result)
+        })
+
+        this.uiEvents.on("ui:updateMission", (result) => {
+            this.showAlert(result)
+        })
+
     }
 
     start(data) {
@@ -37,8 +47,6 @@ export default class SidesUi {
 
     createEastButtons(data) {
 
-        console.log(data)
-
         Object.entries(data).forEach(([index, key]) => {
 
             const offset = index * (this.circleSize + this.spacing);
@@ -47,8 +55,10 @@ export default class SidesUi {
 
             const label = this.createLabel(key, offset, "east");
 
+            // guardar referência
+            this.missionButtons[key.id] = btn;
+
             btn.on("pointerover", () => {
-                console.log("hdashdjkasdh")
                 label.setVisible(true);
             });
 
@@ -118,6 +128,17 @@ export default class SidesUi {
         const icon = this.scene.add.image(0, 0, key.icon)
             .setScale(0.2);
 
+        // indicador !
+        const alert = this.scene.add.text(radius - 8, -radius + 8, "!", {
+            fontSize: "20px",
+            color: "#ff0000",
+            fontStyle: "bold",
+            fontFamily: 'LuckiestGuy-Regular'
+        }).setOrigin(0.5);
+
+        alert.setVisible(false);
+
+        container.alert = alert;
 
         container.setSize(this.circleSize, this.circleSize);
         container.setInteractive({ useHandCursor: true });
@@ -132,18 +153,47 @@ export default class SidesUi {
 
         container.on("pointerup", () => {
 
+            if (container.alert) {
+                container.alert.setVisible(false);
+            }
+
             if (this.uiEvents) {
                 this.uiEvents.emit("ui:showMission", { id: key.id })
             }
 
         });
 
-        container.add([bg, icon]);
+        container.add([bg, icon, alert]);
 
         return container;
 
     }
 
+    refreshEastButtons(data) {
+
+        this.eastSideContainer.removeAll(true);
+
+        this.createEastButtons(data);
+
+    }
+
+    showAlert(data) {
+
+        const btn = this.missionButtons[data.missionId];
+
+        if (!btn || !btn.alert) return;
+
+        btn.alert.setVisible(true);
+
+        this.scene.tweens.add({
+            targets: btn.alert,
+            scale: { from: 1, to: 1.3 },
+            duration: 400,
+            yoyo: true,
+            repeat: -1
+        });
+
+    }
     show() {
 
         this.eastSideContainer.setVisible(true);

@@ -18,6 +18,7 @@ export default class SpriteUtils {
             useHandCursor: true
         }).setOrigin(originX, originY);
 
+        sprite.id = data.id;
         sprite.originalScale = sprite.scaleX;
         sprite.isMoving = false;
         sprite.isDraggable = true;

@@ -62,6 +62,7 @@ export default class HarvestController {
 
         if (sprite.harvestTime == undefined) return;
 
+        const sprite_nome = sprite.nome;
         sprite.harvestTime += 1;
         const preco_venda = sprite.preco_venda;
         const xp = sprite.xp;
@@ -75,6 +76,7 @@ export default class HarvestController {
                 x: sprite.x,
                 y: sprite.y
             });
+            this.uiEvents.emit("harvest", { target: "solo_plantado_simples", seed: sprite_nome.toLowerCase() });
         }
 
     }
@@ -98,6 +100,9 @@ export default class HarvestController {
             data.stages
         );
 
+        console.log(data)
+
+        this.uiEvents.emit("harvest", { target: data.tipo, name : data.id });
         sprite.setInteractive({ pixelPerfect: true, alphaTolerance: 1, useHandCursor: true });
         sprite.setAlpha(1);
     }

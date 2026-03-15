@@ -38,10 +38,17 @@ export class MissionController {
         })
 
         this.uiEvents.on("plant", data => {
+            console.log(data)
             this.onAction({ action: "plant", ...data })
         })
 
+        this.uiEvents.on("place", data => {
+            console.log(data)
+            this.onAction({ action: "place", ...data })
+        })
+
         this.uiEvents.on("harvest", data => {
+            console.log(data)
             this.onAction({ action: "harvest", ...data })
         })
 
@@ -112,7 +119,7 @@ export class MissionController {
 
         }
 
-        // this.uiEvents.emit("ui:notify", { type: "newMission", text: mission.title })
+        this.uiEvents.emit("ui:notify", { type: "newMission", text: mission.title })
     }
 
     getMissionUIData(id) {
@@ -161,7 +168,6 @@ export class MissionController {
         for (const missionId in this.activeMissions) {
 
             const mission = this.missionsById[missionId];
-
             const progress = this.activeMissions[missionId];
 
             if (!mission || progress.completed) continue;
@@ -170,12 +176,21 @@ export class MissionController {
 
             state.objectives.forEach((obj, i) => {
 
+                const objProgress = progress.objectives[i];
+
+                if (objProgress.done) return;
+
                 if (this.matches(obj, data)) {
 
-                    progress.objectives[i].progress++;
+                    objProgress.progress++;
 
-                    if (progress.objectives[i].progress >= progress.objectives[i].amount) {
-                        progress.objectives[i].done = true;
+                    if (objProgress.progress >= objProgress.amount) {
+                        objProgress.progress = objProgress.amount;
+                        objProgress.done = true;
+
+                        this.uiEvents.emit("ui:updateMission", {
+                            missionId: mission.id
+                        });
                     }
 
                 }
@@ -192,7 +207,7 @@ export class MissionController {
 
         this.missionsDB.forEach(mission => {
 
-            if (!mission.level_requirement) retulikuitrern
+            if (!mission.level_requirement) return;
             if (mission.level_requirement > playerLevel) return
 
             if (this.activeMissions[mission.id]) return
@@ -268,6 +283,10 @@ export class MissionController {
             done: false
         }))
 
+        this.uiEvents.emit("ui:updateMission", {
+            missionId: mission.id
+        });
+
     }
 
     completeMission(mission) {
@@ -284,6 +303,7 @@ export class MissionController {
 
         delete this.activeMissions[mission.id]
 
+
         if (mission.unlocks) {
 
             mission.unlocks.forEach(id => {
@@ -292,6 +312,7 @@ export class MissionController {
 
         }
 
+        this.uiEvents.emit("ui:deleteMissionBanner", this.getMissions());
     }
 
 

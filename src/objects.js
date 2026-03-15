@@ -471,7 +471,7 @@ export const arvores = [
         "preco_compra": 420,
         "preco_compra_grana": 0,
         "preco_venda": 60,
-        "tempo_colheita_horas": 48,
+        "tempo_colheita_horas": 0.05,
         "xp": 2,
         "nivel_requerido": 10,
         "tipo": "arvore",

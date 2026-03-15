@@ -34,7 +34,7 @@ export const intro_missions = [
         id: 2,
         title: "Experimentação",
         unlocks: null,
-        level_requirement: 2,
+        level_requirement: null,
         auto_start: true,
         icon: "semente_abacaxi",
 
@@ -87,6 +87,43 @@ export const intro_missions = [
         final_reward: {
             xp: 50,
             gold: 100
+        }
+    },
+    {
+        id: 3,
+        title: "Reflorestamento",
+        unlocks: null,
+        level_requirement: 5,
+        auto_start: true,
+        icon: "abrico",
+
+        description: "Arborize sua fazenda",
+
+        states: [
+            {
+                objectives: [
+                    {
+                        action: "place",
+                        amount: 10,
+                        text: "Plante 10 árvores",
+                        target : "arvore",
+                        icon: "abrico"
+                    },
+                    {
+                        action: "harvest",
+                        amount: 10,
+                        text: "colha 10 árvores de abricó",
+                        target: "arvore",
+                        filters : { name : "arvore_abrico"},
+                        icon: "abrico"
+                    }
+                ],
+            }
+        ],
+
+        final_reward: {
+            xp: 200,
+            gold: 300
         }
     }
 ]

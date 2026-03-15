@@ -146,6 +146,7 @@ export default class XPController {
 
         this.uiEvents.emit("action:setMoney", 1);
         this.uiEvents.emit("ui:notify", { type: "levelUp", level: level, action: "" });
+        this.controllers.missions.checkLevelUnlocks(level)
     }
 
     emitUpdate() {

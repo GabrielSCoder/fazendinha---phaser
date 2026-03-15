@@ -24,7 +24,7 @@ export default class PlantaController {
     classEvents() {
 
         console.log("Ligando listeners....")
-        
+
         this.uiEvents.on("action:StopSeeding", () => {
             this.stopSeeding();
         })
@@ -119,6 +119,8 @@ export default class PlantaController {
             x: sprite.x,
             y: sprite.y
         })
+
+        this.uiEvents.emit("plant", { target: "solo_plantado_simples", seed: sprite.nome.toLowerCase() });
 
         this.uiEvents.emit("action:FreeSoil");
     }

@@ -301,7 +301,8 @@ export default class BottomMenu {
         })
 
         this.btnMinusMoney.on("pointerup", () => {
-            this.uiEvents.emit("action:setMoney", -10)
+            // this.uiEvents.emit("action:setMoney", -10)
+            this.uiEvents.emit("action:reward", {type : "tree" , id : "arvore_abrico"} )
         })
 
         this.btnMinusXp.on("pointerup", () => {

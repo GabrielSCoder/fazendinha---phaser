@@ -169,10 +169,14 @@ export default class AcoesUtils {
         }
 
         // if (itemData.noStopBuy) this.scene.gameVariables.buyItemTmp = itemData;
-        if (itemData.tipo !== "semente")
-            this.scene.gameVariables.buyItemTmp = itemData;
 
         const sprite = this.controllers.spriteUtils.addGameSprite(itemData, this.scale / 2, this.scale / 2, scale, originX, originY);
+
+        if (itemData.gift)
+            sprite.gift = true;
+
+        if (itemData.tipo !== "semente" && !sprite.gift)
+            this.scene.gameVariables.buyItemTmp = itemData;
 
         if (itemData.area) {
             sprite.footprint = itemData.area;
