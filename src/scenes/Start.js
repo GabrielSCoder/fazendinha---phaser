@@ -26,6 +26,9 @@ import { AssetLoader } from '../utils/AssetLoader.js';
 import { MissionController } from '../controllers/MissionController.js';
 import { intro_missions } from '../static/missionsDB.js';
 import SidesUi from '../ui/SidesUi.js';
+import PresentsControler from '../controllers/PresentsController.js';
+import PresentsMenuUI from '../ui/PresentsMenuUI.js';
+import PaginationUtils from '../utils/PaginationUtils.js';
 
 export class Start extends Phaser.Scene {
     constructor() {
@@ -112,6 +115,13 @@ export class Start extends Phaser.Scene {
             loop: true,
             callback: this.controllers.sprite.updateHoverPlantPercent,
             callbackScope: this.controllers.sprite
+        });
+
+        this.time.addEvent({
+            delay: 200,
+            loop: true,
+            callback: () => console.log(this.gameVariables.selectedSprite),
+            callbackScope: this
         });
 
         this.controllers.camera.ignoreInUICamera([
@@ -203,6 +213,8 @@ export class Start extends Phaser.Scene {
 
         const xpTable = this.parseCSV(raw)
 
+        this.controllers.presents = new PresentsControler(this,  {uiEvents : events});
+
         this.controllers.gridUtils = new GridUtils(this, { uiEvents: events });
         this.controllers.catalog = new CatalogUtils(this, { uiEvents: events })
         this.controllers.banner = new UINotificationController(this, { uiEvents: events })
@@ -225,6 +237,8 @@ export class Start extends Phaser.Scene {
 
         this.controllers.gameEvents = new GameEventsController(this, { uiEvents: events })
         this.controllers.interact = new InteractController(this, { uiEvents: events })
+
+        this.controllers.presentsUI = new PresentsMenuUI(this, {uiEvents : events})
 
         this.controllers.soil = new SoloController(this, { uiEvents: events })
         this.controllers.plant = new PlantaController(this, { uiEvents: events })

@@ -1,17 +1,16 @@
-/**
- * Cria uma função debounced
- * @param {Function} func - Função que será chamada
- * @param {number} wait - Tempo em ms para aguardar após o último clique
- * @returns {Function}
- */
-export function debounce(func, wait) {
-    let timeout;
-    return function(...args) {
-        const context = this;
+export function debounce(func, delay) {
+    let timeout; // This variable will hold the timeout ID
 
-        clearTimeout(timeout); // cancela qualquer execução anterior
+    return function (...args) {
+        const context = this; // Store the 'this' context for later use
+
+        // Clear any existing timeout to prevent the previous function call from executing
+        clearTimeout(timeout);
+
+        // Set a new timeout
         timeout = setTimeout(() => {
-            func.apply(context, args); // executa somente após o tempo definido
-        }, wait);
+            // Execute the original function after the delay, preserving 'this' context and arguments
+            func.apply(context, args);
+        }, delay);
     };
 }

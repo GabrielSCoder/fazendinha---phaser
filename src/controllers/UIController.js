@@ -36,6 +36,7 @@ export default class UINotificationController {
         this.missionContainer = this.scene.add.container(0, 0).setVisible(false);
         this.genericContainer = this.scene.add.container(0, 0).setVisible(false);
         this.sellContainer = this.scene.add.container(0, 0).setVisible(false);
+        this.itemContainer = this.scene.add.container(0, 0).setVisible(false);
         this.concludedContainer = this.scene.add.container(0, 0).setVisible(false);
 
         this.container.add([
@@ -44,7 +45,8 @@ export default class UINotificationController {
             this.missionContainer,
             this.genericContainer,
             this.sellContainer,
-            this.concludedContainer
+            this.concludedContainer,
+            this.itemContainer
         ]);
 
         this.uiEvents.on("ui:notify", this.notify, this);
@@ -81,6 +83,7 @@ export default class UINotificationController {
         this.genericContainer.setVisible(false);
         this.sellContainer.setVisible(false);
         this.concludedContainer.setVisible(false);
+        this.itemContainer.setVisible(false);
 
         switch (data.type) {
 
@@ -97,6 +100,11 @@ export default class UINotificationController {
             case "mission":
                 this.createMissionPopup(data);
                 this.missionContainer.setVisible(true);
+                break;
+
+            case "item":
+                this.createItemPopup(data);
+                this.itemContainer.setVisible(true);
                 break;
 
             case "conclusion_mission":
@@ -168,6 +176,50 @@ export default class UINotificationController {
         // const close = this.createCloseButton();
 
         this.levelContainer.add([bg, title, body, footer, sub, confirm]);
+    }
+
+    createItemPopup(data) {
+
+        const bg = this.scene.add.image(0, 0, "fundo_madeira").setDisplaySize(500, 400);
+
+        const itemData = data.data
+
+        const amount = data.amount ?? 1;
+
+        const title = this.scene.add.text(
+            0,
+            -this.bgFullHeight / 2 + 80,
+            "Parabéns", {
+            fontSize: '30px',
+            fontStyle: 'bold',
+            color: '#fff',
+            fontFamily: 'LuckiestGuy-Regular'
+        }).setStroke('#000', 4).setOrigin(0.5);
+
+
+        const body = this.scene.add.text(
+            0,
+            -this.bgFullHeight / 2 + 180,
+            "Você recebeu: ",
+            { fontSize: "20px", color: "#fbff00", fontFamily: 'LuckiestGuy-Regular' }
+        ).setOrigin(0.5).setStroke('#000', 4);
+
+        const description = this.scene.add.text(
+            0,
+            60,
+            `${itemData.nome} x${amount}`,
+            { fontSize: "20px", color: "#ffffff", align: "center", fontFamily: 'LuckiestGuy-Regular', wordWrap: { width: 420 } }
+        ).setOrigin(0.5).setStroke('#000', 4);
+
+
+        const item = this.scene.add
+            .image(0, 0, itemData.img)
+            .setDisplaySize(100, 100);
+
+
+        const confirm = this.createConfirmButton(data);
+
+        this.itemContainer.add([bg, title, body, description, item, confirm]);
     }
 
 
@@ -521,6 +573,9 @@ export default class UINotificationController {
 
         switch (data.type) {
             case "levelUp":
+                offsetHeight = 180;
+                break;
+            case "item":
                 offsetHeight = 180;
                 break;
             case "newMission":

@@ -172,6 +172,8 @@ export default class AcoesUtils {
 
         const sprite = this.controllers.spriteUtils.addGameSprite(itemData, this.scale / 2, this.scale / 2, scale, originX, originY);
 
+        console.log(sprite)
+
         if (itemData.gift)
             sprite.gift = true;
 

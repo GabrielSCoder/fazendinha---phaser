@@ -302,11 +302,12 @@ export default class BottomMenu {
 
         this.btnMinusMoney.on("pointerup", () => {
             // this.uiEvents.emit("action:setMoney", -10)
-            this.uiEvents.emit("action:reward", {type : "tree" , id : "arvore_abrico"} )
+            this.uiEvents.emit("action:reward", { type: "decoration", id: "gazebo" })
+            this.scene.gameVariables.freeClick = true;
         })
 
         this.btnMinusXp.on("pointerup", () => {
-            this.uiEvents.emit("action:addXP", -10);
+            this.uiEvents.emit("ui:showPresents")
         });
 
         this.btnPlusGold.on("pointerup", () => {

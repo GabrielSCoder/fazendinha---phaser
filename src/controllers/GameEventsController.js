@@ -233,7 +233,6 @@ export default class GameEventsController {
             return;
         }
 
-        console.log(sprite)
 
         if (sprite.xp && !sprite.xpYeld && !sprite.gift) {
 
@@ -325,9 +324,12 @@ export default class GameEventsController {
             }
         }
 
-        if (this.scene.gameVariables.buyItemTmp) {
-            this.scene.events.emit("itemPurchased", this.scene.gameVariables.buyItemTmp);
-        }
+        console.log(sprite)
+        this.scene.gameVariables.selectedSprite = null;
+
+        // if (this.scene.gameVariables.buyItemTmp) {
+        //     this.scene.events.emit("itemPurchased", this.scene.gameVariables.buyItemTmp);
+        // }
     }
 
     plantarSementeCheck(solo, done) {
@@ -539,6 +541,7 @@ export default class GameEventsController {
     receberItem(data) {
 
         if (!data) return;
+        if (this.scene.gameVariables.selectedSprite && this.scene.gameVariables.selectedSprite.isMoving) return;
         const itemData = this.controllers.catalog.findItem(data);
 
         if (!itemData) return;
@@ -546,7 +549,7 @@ export default class GameEventsController {
 
         console.log(itemData)
 
-        this.scene.events.emit("itemPurchased", itemData);
-
+        // this.scene.events.emit("itemPurchased", itemData);
+        this.uiEvents.emit("ui:notify", {type : "item", data : itemData, amount : 1});
     }
 }
