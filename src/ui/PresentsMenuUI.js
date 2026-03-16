@@ -260,4 +260,8 @@ export default class PresentsMenuUI {
 
         return text
     }
+
+    isOpen() {
+        return this.menuContainer.visible;
+    }
 }
