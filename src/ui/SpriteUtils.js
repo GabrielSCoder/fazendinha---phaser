@@ -1,9 +1,8 @@
-import { plantar_solo, vender } from "../msgs.js";
-
 export default class SpriteUtils {
     constructor(scene, configs = {}) {
         this.scene = scene;
         this.controllers = scene.controllers;
+        this.gridUtils = scene.controllers.gridUtils;
         this.uiEvents = configs.uiEvents;
     }
 
@@ -64,7 +63,10 @@ export default class SpriteUtils {
 
             if (this.scene.gameVariables.selling) {
                 this.scene.gameVariables.selectedSpriteDelete = sprite;
-                this.uiEvents.emit("ui:notify", { type: "sell", nome: sprite.nome, preco: sprite.preco_venda, action: "action:SellItem" });
+                this.uiEvents.emit("ui:notify", {
+                    type: "sell", nome: this.scene.gameVariables.selectedSpriteDelete.nome,
+                    preco: this.scene.gameVariables.selectedSpriteDelete.preco_venda, action: "action:SellItem"
+                });
             } else if (!sprite.isMoving && sprite.tipo !== "solo_plantado_simples" && sprite.tipo !== "solo_preparado" && sprite.nome !== "solo_seco") {
                 this.scene.gameVariables.selectedSprite = sprite;
                 this.controllers.itemMenu.show(
@@ -126,6 +128,58 @@ export default class SpriteUtils {
         });
 
         return sprite;
+    }
+
+    onRotateClick() {
+
+        const sprite = this.scene.gameVariables.selectedSprite;
+        if (!sprite || !sprite.footprint) return;
+        this.controllers.itemMenu.hide();
+
+        if (!sprite.originalFootprint) {
+            if (Array.isArray(sprite.footprint)) {
+                sprite.originalFootprint = [...sprite.footprint];
+            } else {
+                const { w, h } = sprite.footprint;
+                sprite.originalFootprint = [w, h];
+            }
+        }
+
+        if (sprite.isRotated) {
+            sprite.flipX = false;
+            sprite.isRotated = false;
+            sprite.footprint = [...sprite.originalFootprint];
+        } else {
+            sprite.flipX = true;
+            sprite.isRotated = true;
+            const [origW, origH] = sprite.originalFootprint;
+            sprite.footprint = [origH, origW];
+        }
+
+        const iso = this.gridUtils.screenToIso(sprite.x, sprite.y);
+        const [w, h] = sprite.footprint;
+        const startX = Math.round(iso.x - (w / 2 - 0.5));
+        const startY = Math.round(iso.y - (h / 2 - 0.5));
+
+        sprite.gridX = Math.round(iso.x);
+        sprite.gridY = Math.round(iso.y);
+
+        sprite.lastFreePos = { startX, startY };
+
+        for (let other of this.scene.gameVariables.sprites) {
+            if (other !== sprite) other.disableInteractive();
+        }
+
+
+        // if (sprite.tipo == "cerca") {
+        sprite.isMoving = true;
+        this.scene.gameVariables.freeClick = true;
+        sprite.setDepth(2000);
+        // }
+
+        this.gridUtils.drawFootprints();
+
+
     }
 
     destroySprite(sprite) {

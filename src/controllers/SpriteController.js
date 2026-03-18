@@ -51,7 +51,6 @@ export default class SpriteController {
 
             if (this.scene.gameVariables.freeClick) return;
 
-            // converte para iso usando pointer
             let iso = this.gridUtils.screenToIso(pointer.worldX, pointer.worldY);
             const { w, h } = this.gridUtils.getSpriteFootprint(sprite);
 
@@ -66,7 +65,9 @@ export default class SpriteController {
 
 
             const occupied = this.gridUtils.checkOccupiedGrid(startX, startY, startX + w - 1, startY + h - 1, sprite);
-            // sprite.setTint(occupied ? 0xff8888 : 0x88ff88);
+
+            if (sprite.tipo != "cerca")
+                sprite.setTint(occupied ? 0xff8888 : 0x88ff88);
 
             this.gridUtils.drawSpriteFootprint(sprite);
         }
@@ -76,7 +77,7 @@ export default class SpriteController {
         const sprite = this.scene.gameVariables.selectedSprite;
         if (!sprite || sprite.tipo !== "cerca") return;
 
-        sprite.setTint(0xffffff);
+        // sprite.setTint(0xffffff);
 
         const { w, h } = this.gridUtils.getSpriteFootprint(sprite);
 
@@ -187,7 +188,7 @@ export default class SpriteController {
 
         this.scene.footprintGraphics = this.scene.add.graphics();
 
-        this.scene.matrixOffsetX =  this.gameVariables.offsetX - 500;
+        this.scene.matrixOffsetX = this.gameVariables.offsetX - 500;
 
         this.scene.matrixLabel = this.scene.add.text(
             this.scene.matrixOffsetX,

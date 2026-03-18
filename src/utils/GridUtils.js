@@ -8,6 +8,7 @@ export default class GridUtils {
         this.offsetX = scene.gameVariables.offsetX;
         this.offsetY = scene.gameVariables.offsetY;
         this.logicFactor = scene.gameVariables.logicFactor;
+        this.noFootprints = scene.gameVariables.noFootprints;
         this.input = scene.input;
         this.itemMenuUI = scene.controllers.itemMenu;
         this.gridUtils = scene.gridUtils;
@@ -260,6 +261,7 @@ export default class GridUtils {
     }
 
     drawFootprints() {
+        if (this.noFootprints) return;
         this.scene.footprintGraphics.clear();
         for (let sprite of this.scene.gameVariables.sprites) {
             if (sprite.nome === "tool") continue;
@@ -289,7 +291,7 @@ export default class GridUtils {
     }
 
     drawSpriteFootprint(sprite) {
-
+        if (this.noFootprints) return;
         if (!sprite) return;
         const g = this.scene.footprintGraphics;
         g.clear();

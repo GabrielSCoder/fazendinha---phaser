@@ -42,7 +42,7 @@ export default class CameraController {
         input.on('pointerdown', (pointer) => {
             if (this.controllers.shopMenu.isOpen()) return;
             if (this.controllers.banner.isOpen()) return;
-            if (this.controllers.presentsUI.isOpen()) return;
+            // if (this.controllers.presentsUI.isOpen()) return;
 
             if (pointer.middleButtonDown()) {
                 this.dragging = true;

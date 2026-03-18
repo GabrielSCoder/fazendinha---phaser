@@ -110,6 +110,9 @@ export default class VendaController {
     }
 
     sellItem() {
+
+        console.log("entrando em vender")
+
         if (!this.scene.gameVariables.selectedSpriteDelete) return;
         if (!this.scene.gameVariables.selling) return;
         if (!this.scene.gameVariables.toolSprite) return;
@@ -125,6 +128,8 @@ export default class VendaController {
     }
 
     completeSell() {
+
+        console.log("entrando em complete")
 
         const item = this.scene.gameVariables.selectedSpriteDelete;
 

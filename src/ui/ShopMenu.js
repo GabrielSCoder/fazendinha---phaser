@@ -1,10 +1,10 @@
 import ShopItemCard from './ShopItemCard.js';
-import { sementes, arvores, animais, decoracoes } from '../objects.js';
 
 export default class ShopMenu {
     constructor(scene, config = {}) {
         if (!scene) throw new Error("ShopMenu: scene não foi passada!");
         this.scene = scene;
+        this.controllers = scene.controllers;
         this.width = 850;
         this.height = 550;
         this.activeCategory = 'Sementes';
@@ -13,10 +13,26 @@ export default class ShopMenu {
         this.shopItems = [];
         this.playerLevel = 1;
         this.uiEvents = config.uiEvents;
+        this.itemsData = null;
+    }
+
+    init() {
         this.requestLevel();
         this.listenEvents();
-
+        this.getItems();
         this.create();
+    }
+
+    getItems() {
+        const data = this.controllers.catalog.getCatalog()
+
+        this.itemsData = {
+            'Sementes': data.seed,
+            'Árvores': data.tree,
+            'Animais': data.animal,
+            'Decorações': data.decoration
+        };
+
     }
 
     listenEvents() {
@@ -140,14 +156,6 @@ export default class ShopMenu {
 
         this.itemsContainer = scene.add.container(0, 0);
         this.container.add(this.itemsContainer);
-
-        this.itemsData = {
-            'Sementes': sementes,
-            'Árvores': arvores,
-            'Animais': animais,
-            'Decorações': decoracoes
-        };
-
 
         const arrowY = height / 2 + 55;
         const arrowOffset = 30;

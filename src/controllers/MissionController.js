@@ -119,7 +119,7 @@ export class MissionController {
 
         }
 
-        this.uiEvents.emit("ui:notify", { type: "newMission", text: mission.title })
+        // this.uiEvents.emit("ui:notify", { type: "newMission", text: mission.title })
     }
 
     getMissionUIData(id) {

@@ -50,83 +50,11 @@ export default class GameEventsController {
             const startX = Math.round(iso.x - (w / 2 - 0.5));
             const startY = Math.round(iso.y - (h / 2 - 0.5));
 
-            sprite.gridX = Math.round(iso.x);
-            sprite.gridY = Math.round(iso.y);
+            const resolved = this.checkMonetaryItem(sprite);
 
+            if (!resolved) return;
 
-            if (sprite.xp && !sprite.xpYeld && !sprite.gift) {
-
-                let res = false;
-
-                const tipo_compra = sprite.preco_compra > sprite.preco_compra_grana || !sprite.preco_compra_grana ? "gold" : "money"
-
-                this.uiEvents.emit("action:buyItem", {
-                    type: tipo_compra,
-                    price: tipo_compra == "gold" ? sprite.preco_compra : sprite.preco_compra_grana,
-                    level: 1
-                }, (result) => {
-
-                    if (!result) {
-                        res = false;
-                        return;
-                    }
-
-                    let dados = {}
-
-                    if (tipo_compra == "gold") {
-
-                        dados = {
-                            xp: sprite.xp ?? 0,
-                            gold: -sprite.preco_compra,
-                            x: sprite.x,
-                            y: sprite.y
-                        }
-                    } else {
-                        dados = {
-                            xp: sprite.xp ?? 0,
-                            money: -sprite.preco_compra_grana,
-                            x: sprite.x,
-                            y: sprite.y
-                        }
-                    }
-
-                    this.uiEvents.emit("action:reward", dados);
-
-                    sprite.xpYeld = true;
-                    res = true
-                });
-
-                if (!res) {
-
-                    this.uiEvents.emit("ui:notify", { type: "" });
-                    this.scene.gameVariables.freeClick = true;
-                    const sprite = this.scene.gameVariables.selectedSprite;
-
-                    this.controllers.spriteUtils.destroySprite(sprite);
-
-                    return;
-                }
-
-            }
-
-            this.gridUtils.clearOccupied(sprite);
-            this.gridUtils.markOccupied(sprite, startX, startY, w, h);
-            sprite.setAlpha(1);
-
-            sprite.lastFreePos = { startX, startY };
-
-            sprite.clearTint();
-            sprite.isMoving = false;
-            this.gridUtils.recalculateDepthAround(sprite);
-            this.scene.gameVariables.selectedSprite = null;
-            this.gridUtils.drawFootprints();
-
-            this.uiEvents.emit("interact:ActivateAll");
-
-            if (this.scene.gameVariables.buyItemTmp) {
-                // console.log(this.scene.gameVariables.buyItemTmp);
-                this.scene.events.emit("itemPurchased", this.scene.gameVariables.buyItemTmp);
-            }
+            this.fixObject({ sprite, iso, w, h, startX, startY });
         }
     }
 
@@ -203,36 +131,7 @@ export default class GameEventsController {
         }
     }
 
-    fixarObjetoCheck() {
-        if (
-            this.scene.gameVariables.fenceSnapTarget &&
-            this.scene.gameVariables.collisionDataTemp
-        ) {
-            this.scene.gameVariables.fenceSnapTarget = null;
-            this.scene.gameVariables.collisionDataTemp = null;
-            return;
-        }
-
-        const resp = this.controllers.acoesUtils.breakConditions();
-        if (!resp) return;
-
-        const sprite = this.scene.gameVariables.selectedSprite;
-
-        const { w, h } = this.gridUtils.getSpriteFootprint(sprite);
-
-        const iso = this.gridUtils.screenToIso(sprite.x, sprite.y);
-        const startX = Math.round(iso.x - (w / 2 - 0.5));
-        const startY = Math.round(iso.y - (h / 2 - 0.5));
-        const endX = startX + w - 1;
-        const endY = startY + h - 1;
-
-        const ocupado = this.gridUtils.checkOccupiedGrid(startX, startY, endX, endY, sprite);
-
-        if (ocupado) {
-            console.log("❌ Tile ocupado — revertendo sprite.");
-            return;
-        }
-
+    checkMonetaryItem(sprite) {
 
         if (sprite.xp && !sprite.xpYeld && !sprite.gift) {
 
@@ -248,7 +147,7 @@ export default class GameEventsController {
 
                 if (!result) {
                     res = false;
-                    return;
+                    return false;
                 }
 
                 let dados = {}
@@ -285,10 +184,53 @@ export default class GameEventsController {
 
                 this.controllers.spriteUtils.destroySprite(sprite);
 
-                return;
+                return false;
             }
-
         }
+
+        return true;
+    }
+
+    fixarObjetoCheck() {
+        if (
+            this.scene.gameVariables.fenceSnapTarget &&
+            this.scene.gameVariables.collisionDataTemp
+        ) {
+            this.scene.gameVariables.fenceSnapTarget = null;
+            this.scene.gameVariables.collisionDataTemp = null;
+            return;
+        }
+
+        const resp = this.controllers.acoesUtils.breakConditions();
+        if (!resp) return;
+
+        const sprite = this.scene.gameVariables.selectedSprite;
+
+        const { w, h } = this.gridUtils.getSpriteFootprint(sprite);
+
+        const iso = this.gridUtils.screenToIso(sprite.x, sprite.y);
+        const startX = Math.round(iso.x - (w / 2 - 0.5));
+        const startY = Math.round(iso.y - (h / 2 - 0.5));
+        const endX = startX + w - 1;
+        const endY = startY + h - 1;
+
+        const ocupado = this.gridUtils.checkOccupiedGrid(startX, startY, endX, endY, sprite);
+
+        if (ocupado) {
+            console.log("❌ Tile ocupado — revertendo sprite.");
+            return;
+        }
+
+        const resolved = this.checkMonetaryItem(sprite);
+
+        if (!resolved) return;
+
+        this.fixObject({ sprite, iso, w, h, startX, startY });
+    }
+
+    fixObject(data) {
+
+        const { sprite, iso, w, h, startX, startY } = data
 
         sprite.gridX = Math.round(iso.x);
         sprite.gridY = Math.round(iso.y);
@@ -547,9 +489,8 @@ export default class GameEventsController {
         if (!itemData) return;
         itemData.gift = true;
 
-        console.log(itemData)
-
+        this.uiEvents.emit("data:addItemStorage", itemData);
         // this.scene.events.emit("itemPurchased", itemData);
-        this.uiEvents.emit("ui:notify", {type : "item", data : itemData, amount : 1});
+        this.uiEvents.emit("ui:notify", { type: "item", data: itemData, amount: 1 });
     }
 }

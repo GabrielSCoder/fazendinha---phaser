@@ -30,10 +30,10 @@ export default class GameVariablesController {
         this.hoveredSprite = null;
         this.canInteract = true;
         this.activeBar = false;
-        this.creativeMode = false;
-        this.staticMode = false;
-        this.noExperienceMode = false;
-
+        this.creativeMode = true;
+        this.staticMode = true;
+        this.noExperienceMode = true;
+        this.noFootprints = true;
         this.actionTileX = 1;
         this.actionTileY = 1;
         this.plowing = false;

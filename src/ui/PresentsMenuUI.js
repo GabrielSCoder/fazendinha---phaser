@@ -44,6 +44,10 @@ export default class PresentsMenuUI {
             this.createMenuUI(data)
         })
 
+        this.uiEvents.on("data:storageChange", (data) => {
+            this.createMenuUI(data)
+        })
+
         this.uiEvents.on("ui:showPresents", () => {
             this.show()
         })

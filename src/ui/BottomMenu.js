@@ -30,7 +30,7 @@ export default class BottomMenu {
 
     createUI() {
         const { width, height } = this.scene.scale;
-        const menuWidth = 185;
+        const menuWidth = 240;
         const menuHeight = 60;
 
         const upperMenuWidth = 40
@@ -45,7 +45,7 @@ export default class BottomMenu {
         )
 
         this.bottomMenu = this.scene.add.container(
-            width - menuWidth - 90,
+            width - menuWidth - 30,
             height - menuHeight - 20
         );
 
@@ -62,7 +62,7 @@ export default class BottomMenu {
             fontFamily: 'LuckiestGuy-Regular',
             color: '#fff',
             backgroundColor: '#444',
-            padding: { left: 8, right: 8, top: 4, bottom: 4 }
+            padding: { left: 8, right: 8, top: 8, bottom: 8 }
         })
             .setOrigin(0.5)
             .setInteractive({ useHandCursor: true });
@@ -118,7 +118,7 @@ export default class BottomMenu {
             .setOrigin(0.5)
             .setInteractive({ useHandCursor: true });
 
-        this.btnContainer = this.scene.add.container(menuWidth - 100, menuHeight / 2);
+        this.btnContainer = this.scene.add.container(menuWidth - 155, menuHeight / 2);
 
         this.btnBg = this.scene.add.rectangle(0, 0, 50, 50, 0x54c848, 1)
             .setOrigin(0.5)
@@ -134,11 +134,12 @@ export default class BottomMenu {
         this.btnContainer.setSize(50, 50);
         this.btnContainer.setInteractive({ useHandCursor: true });
 
-        this.btnContainerPa = this.scene.add.container(menuWidth - 155, menuHeight / 2);
+        this.btnContainerPa = this.scene.add.container(menuWidth - 210, menuHeight / 2);
 
         this.btnBgPa = this.scene.add.rectangle(0, 0, 50, 50, 0xfa0202, 1)
             .setOrigin(0.5)
             .setStrokeStyle(2, 0x000000);
+
         this.btnContainerPa.add(this.btnBgPa);
 
         this.btnCavar = this.scene.add.image(0, 0, "pa")
@@ -150,8 +151,26 @@ export default class BottomMenu {
         this.btnContainerPa.setSize(50, 50);
         this.btnContainerPa.setInteractive({ useHandCursor: true });
 
+        this.btnContainerGift = this.scene.add.container(menuWidth - 100, menuHeight / 2).setSize(50, 50)
+
+        this.btnGift = this.scene.add.rectangle(0, 0, 50, 50, 0xf7e300, 1)
+            .setOrigin(0.5)
+            .setStrokeStyle(2, 0x000000)
+
+        this.imgGift = this.scene.add.image(0, 0, "gift")
+            .setOrigin(0.5)
+            .setDisplaySize(40, 40);
+
+        this.btnContainerGift.add([this.btnGift, this.imgGift])
+
+        this.btnContainerGift.setInteractive({ useHandCursor: true });
+
+        this.btnContainerGift.on("pointerdown", () => {
+            this.uiEvents.emit("ui:showPresents")
+        })
+
         this.upperMenu.add([this.btnMatriz, this.btnZoomIn, this.btnZoomOut, this.btnCancelar, this.btnMode])
-        this.bottomMenu.add([this.btnLoja, this.btnContainer, this.btnContainerPa]);
+        this.bottomMenu.add([this.btnLoja, this.btnContainer, this.btnContainerPa, this.btnContainerGift]);
 
         this.buttons['arar'] = this.btnContainer;
         this.buttons['loja'] = this.btnLoja;
@@ -173,7 +192,6 @@ export default class BottomMenu {
             this.scene.matrixLabel.setVisible(!visible)
             this.scene.gameVariables.matrixVisible = !visible;
         })
-
 
         this.btnContainer.on('pointerup', () => {
 
@@ -302,7 +320,8 @@ export default class BottomMenu {
 
         this.btnMinusMoney.on("pointerup", () => {
             // this.uiEvents.emit("action:setMoney", -10)
-            this.uiEvents.emit("action:reward", { type: "decoration", id: "gazebo" })
+            
+            this.uiEvents.emit("action:reward", { type: "decoration", id: "estabulo" })
             this.scene.gameVariables.freeClick = true;
         })
 

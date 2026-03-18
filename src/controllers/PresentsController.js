@@ -66,12 +66,18 @@ export default class PresentsControler {
 
     init() {
 
-        this.dataTest.forEach(element => {
-            this.addItemStorage(element)
-        });
+        // this.dataTest.forEach(element => {
+        //     this.addItemStorage(element)
+        // });
 
         this.uiEvents.on("data:getPresents", (callback) => {
             callback(this.getListData());
+        })
+
+        this.uiEvents.on("data:addItemStorage", (data) => {
+            const resp = this.addItemStorage(data)
+
+            if (resp) this.uiEvents.emit("data:storageChange", this.getListData());
         })
     }
 
@@ -79,7 +85,7 @@ export default class PresentsControler {
 
         if (this.limitStorageAmount <= this.actualStorageAmount) {
             console.log("inventario cheio");
-            return;
+            return false;
         }
 
         const exists = this.presentList.find(item => item.id === data.id);
@@ -105,6 +111,7 @@ export default class PresentsControler {
 
         this.actualStorageAmount += 1;
 
+        return true;
     }
 
     removeItemStorage(data) {

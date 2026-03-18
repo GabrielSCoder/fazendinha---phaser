@@ -56,6 +56,7 @@ export class Start extends Phaser.Scene {
         this.load.image('pa', 'assets/ui/pazinha.png');
         this.load.image('star', 'assets/ui/star.png');
         this.load.image('energy', 'assets/ui/energy.png');
+        this.load.image('gift', 'assets/ui/gift2.png');
         this.load.image('grama', 'assets/fundo/grama_tile.png');
 
         this.load.image('fundo_madeira', 'assets/ui/fundo_madeira_escuro_2.png');
@@ -117,12 +118,12 @@ export class Start extends Phaser.Scene {
             callbackScope: this.controllers.sprite
         });
 
-        this.time.addEvent({
-            delay: 200,
-            loop: true,
-            callback: () => console.log(this.gameVariables.selectedSprite),
-            callbackScope: this
-        });
+        // this.time.addEvent({
+        //     delay: 200,
+        //     loop: true,
+        //     callback: () => console.log(this.gameVariables.selectedSpriteDelete),
+        //     callbackScope: this
+        // });
 
         this.controllers.camera.ignoreInUICamera([
             this.controllers.itemMenu.itemMenu,

@@ -24,6 +24,15 @@ export default class CatalogUtils {
         })
     }
 
+    getCatalog() {
+        return {
+            animal: this.animals,
+            tree: this.trees,
+            decoration: this.decoration,
+            seed: this.seeds
+        }
+    }
+
     findItem(data) {
 
         const id = data.id;
@@ -41,7 +50,7 @@ export default class CatalogUtils {
                 item = this.animals.find(item => item.id == id)
                 break;
             case "tree":
-                item = this.trees.find(item => item.id ===id)
+                item = this.trees.find(item => item.id === id)
                 break;
             case "decoration":
                 item = this.decoration.find(item => item.id == id)
@@ -50,7 +59,7 @@ export default class CatalogUtils {
                 break;
         }
 
-        return item ?? null;
+        return item ? structuredClone(item) : null;
     }
 
     getUnlockedItensListByLevel(level) {
