@@ -256,17 +256,12 @@ export default class GameEventsController {
 
         if (sprite.tipo == "arvore" || sprite.tipo == "animal") {
 
-            if (!sprite.harvestReady && !sprite.growthStart && !this.staticMode) {
+            if (sprite.stages && !sprite.harvestReady && !sprite.growthStart && !this.staticMode) {
 
-                const stages = [
-                    { percent: 1, texture: sprite.texture.key }
-                ];
-
-                this.controllers.growth.startGrowth(sprite, sprite.tempoColheita * 60 * 1000, stages)
+                this.controllers.growth.startGrowth(sprite, sprite.tempoColheita * 60 * 1000, sprite.stages)
             }
         }
 
-        console.log(sprite)
         this.scene.gameVariables.selectedSprite = null;
 
         // if (this.scene.gameVariables.buyItemTmp) {

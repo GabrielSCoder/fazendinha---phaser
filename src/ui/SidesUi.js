@@ -14,7 +14,7 @@ export default class SidesUi {
 
         this.missionButtons = {};
 
-        this.eastSideContainer = scene.add.container(this.width - 90, this.height / 2 - 200);
+        this.eastSideContainer = scene.add.container(this.width - 60, this.height / 2 - 200);
         this.westSideContainer = scene.add.container(90, this.height / 2);
 
         this.eastSideContainer.setDepth(9997);

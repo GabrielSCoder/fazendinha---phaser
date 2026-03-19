@@ -87,6 +87,8 @@ export default class HarvestController {
 
         sprite.harvestReady = false;
 
+        sprite.setTexture(sprite.original_sprite);
+
         this.uiEvents.emit("action:reward", {
             xp: sprite.xp ?? 0,
             gold: sprite.preco_venda ?? 0,
@@ -99,8 +101,6 @@ export default class HarvestController {
             sprite.growthDuration,
             data.stages
         );
-
-        console.log(data)
 
         this.uiEvents.emit("harvest", { target: data.tipo, name : data.id });
         sprite.setInteractive({ pixelPerfect: true, alphaTolerance: 1, useHandCursor: true });

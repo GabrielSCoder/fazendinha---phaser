@@ -28,6 +28,7 @@ export default class SpriteUtils {
         sprite.preco_compra_grana = data.preco_compra_grana;
         sprite.xp = data.xp;
         sprite.xpYeld = false;
+        sprite.original_sprite = data.img;
 
         if (is_semente) {
             this.scene.gameVariables.planting = true;
@@ -43,6 +44,14 @@ export default class SpriteUtils {
             sprite.harvestReady = false;
             sprite.preco_colheita = data.preco_venda;
             sprite.canGrow = true;
+
+            const stages = [
+                { percent: 1, texture: sprite.texture.key },
+                { percent: 100, texture: sprite.img_pronta ?? sprite.texture.key }
+            ];
+
+            sprite.stages = stages;
+
             if (!is_semente) sprite.regrow = true;
         }
 

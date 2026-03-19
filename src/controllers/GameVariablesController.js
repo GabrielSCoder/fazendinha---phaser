@@ -31,9 +31,9 @@ export default class GameVariablesController {
         this.canInteract = true;
         this.activeBar = false;
         this.creativeMode = true;
-        this.staticMode = true;
+        this.staticMode = false;
         this.noExperienceMode = true;
-        this.noFootprints = true;
+        this.noFootprints = false;
         this.actionTileX = 1;
         this.actionTileY = 1;
         this.plowing = false;

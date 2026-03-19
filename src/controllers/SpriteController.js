@@ -66,7 +66,7 @@ export default class SpriteController {
 
             const occupied = this.gridUtils.checkOccupiedGrid(startX, startY, startX + w - 1, startY + h - 1, sprite);
 
-            if (sprite.tipo != "cerca")
+            // if (sprite.tipo != "cerca")
                 sprite.setTint(occupied ? 0xff8888 : 0x88ff88);
 
             this.gridUtils.drawSpriteFootprint(sprite);
@@ -76,6 +76,7 @@ export default class SpriteController {
     updateFence() {
         const sprite = this.scene.gameVariables.selectedSprite;
         if (!sprite || sprite.tipo !== "cerca") return;
+        if (!sprite.isMoving) return;
 
         // sprite.setTint(0xffffff);
 
