@@ -897,7 +897,7 @@ export const decoracoes = [
         "img": "balanco",
         "escala": 0.4,
         "area": [2, 3],
-        "origem": [0.55, 0.5]
+        "origem": [0.55, 0.52]
     },
     {
         "id": "flamingo",
