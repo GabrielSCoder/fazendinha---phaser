@@ -1,0 +1,32 @@
+{
+    "version": "0.0.1",
+    "user": {
+        "id": 1,
+        "uuid": "111-111",
+        "name": "gabriel",
+        "gold": 1001,
+        "money": 7,
+        "xp": 0,
+        "level": 1,
+        "energy": 0,
+        "energyMax": 50,
+        "lastEnergyUpdate": 0,
+        "lastUpdate": 0,
+        "options": {
+            "musicDisabled": false
+        }
+    },
+    "storage": [],
+    "gift": [],
+    "mission": {
+        "activeMissions": {},
+        "completedMissions": []
+    },
+    "world": {
+        "id": 1,
+        "sizeX": 10,
+        "sizeY": 10,
+        "lastUpdate": 0,
+        "objects": []
+    }
+}

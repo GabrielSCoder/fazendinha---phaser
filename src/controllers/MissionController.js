@@ -1,12 +1,10 @@
 export class MissionController {
 
-    constructor(scene, missions, saveData = null, uiEvents) {
+    constructor(scene, missions, saveController = null, uiEvents) {
 
         this.scene = scene
 
         this.missionsDB = missions
-
-        this.activeMissions = {}
 
         this.missionsById = {}
 
@@ -14,20 +12,16 @@ export class MissionController {
             this.missionsById[m.id] = m
         })
 
-        this.completedMissions = []
-
         this.uiEvents = uiEvents
 
-        this.saveData = saveData
+        this.saveController = saveController
 
         this.controllers = scene.controllers;
 
     }
 
     init() {
-        if (this.saveData) {
-            this.loadSave(this.saveData)
-        }
+        this.initMissions()
 
         this.uiEvents.on("ui:showMission", (result) => {
             this.uiEvents.emit("ui:notify", { type: "mission", mission: this.getMissionUIData(result.id) })
@@ -55,14 +49,67 @@ export class MissionController {
         this.uiEvents.on("plow", data => {
             this.onAction({ action: "plow", ...data })
         })
+
+        this.uiEvents.on("save:mission:update", () => {
+            this.uiEvents.emit("data:missions", this.getMissions());
+        });
     }
+
+    getActiveMissions() {
+        return this.saveController.getMissions().activeMissions;
+    }
+
+    getCompletedMissions() {
+        return this.saveController.getMissions().completedMissions;
+    }
+
+    initMissions() {
+
+        const savedMissions = this.saveController.getMissions();
+
+        const activeMissions = this.getActiveMissions();
+
+        Object.values(savedMissions.activeMissions).forEach(saveData => {
+
+            const config = this.missionsById[saveData.id];
+            if (!config) return;
+
+            if (!activeMissions[saveData.id]) {
+                activeMissions[saveData.id] = {
+                    ...saveData,
+                    config
+                };
+            } else {
+                activeMissions[saveData.id].config = config;
+            }
+
+        });
+
+        const completed = this.getCompletedMissions();
+
+        if (completed.length && typeof completed[0] === "number") {
+            this.saveController.changeMissions({
+                activeMissions: this.getActiveMissions(),
+                completedMissions: completed.map(id => ({
+                    id,
+                    completedAt: Date.now()
+                }))
+            });
+        }
+
+        this.saveController.changeMissions({
+            activeMissions: this.getActiveMissions(),
+            completedMissions: this.getCompletedMissions()
+        });
+    }
+
 
     getMissions() {
 
-        return Object.keys(this.activeMissions).map(id => {
+        return Object.keys(this.getActiveMissions()).map(id => {
 
             const missionDB = this.missionsById[id];
-            const missionState = this.activeMissions[id];
+            const missionState = this.getActiveMissions()[id];
 
             if (!missionDB) return null;
 
@@ -83,29 +130,25 @@ export class MissionController {
 
         return {
 
-            activeMissions: this.activeMissions,
+            activeMissions: this.getActiveMissions(),
 
-            completedMissions: this.completedMissions
+            completedMissions: this.getCompletedMissions()
 
         }
 
     }
 
-    loadSave(saveData) {
-
-        this.activeMissions = saveData.activeMissions || {}
-
-        this.completedMissions = saveData.completedMissions || []
-
-    }
-
     assignMission(missionId) {
+
+        const activeMissions = this.getActiveMissions();
 
         const mission = this.missionsDB.find(m => m.id === missionId)
 
         if (!mission) return
 
-        this.activeMissions[missionId] = {
+        if (activeMissions[missionId]) return;
+
+        activeMissions[missionId] = {
 
             state: 0,
 
@@ -115,11 +158,18 @@ export class MissionController {
                 done: false
             })),
 
-            completed: false
+            completed: false,
+
+            startedAt: Date.now()
 
         }
 
-        // this.uiEvents.emit("ui:notify", { type: "newMission", text: mission.title })
+        this.saveController.changeMissions({
+            activeMissions: activeMissions,
+            completedMissions: this.getCompletedMissions()
+        });
+
+        this.uiEvents.emit("ui:notify", { type: "newMission", text: mission.title })
     }
 
     getMissionUIData(id) {
@@ -127,7 +177,7 @@ export class MissionController {
         if (!id) return null;
 
         const mission = this.missionsDB.find(m => m.id == id);
-        const status = this.activeMissions[id];
+        const status = this.getActiveMissions()[id];
 
         if (!mission || !status) return null;
 
@@ -165,18 +215,22 @@ export class MissionController {
 
     onAction(data) {
 
-        for (const missionId in this.activeMissions) {
+        for (const missionId in this.getActiveMissions()) {
 
             const mission = this.missionsById[missionId];
-            const progress = this.activeMissions[missionId];
+            const progress = this.getActiveMissions()[missionId];
 
             if (!mission || progress.completed) continue;
 
             const state = mission.states[progress.state];
 
+            if (!state) return;
+
             state.objectives.forEach((obj, i) => {
 
                 const objProgress = progress.objectives[i];
+
+                if (!objProgress) return;
 
                 if (objProgress.done) return;
 
@@ -201,6 +255,11 @@ export class MissionController {
 
         }
 
+        this.saveController.changeMissions({
+            activeMissions: this.getActiveMissions(),
+            completedMissions: this.getCompletedMissions()
+        });
+
     }
 
     checkLevelUnlocks(playerLevel) {
@@ -210,9 +269,9 @@ export class MissionController {
             if (!mission.level_requirement) return;
             if (mission.level_requirement > playerLevel) return
 
-            if (this.activeMissions[mission.id]) return
+            if (this.getActiveMissions()[mission.id]) return
 
-            if (this.completedMissions.includes(mission.id)) return
+            if (this.getCompletedMissions().some(m => m.id === mission.id)) return
 
             this.assignMission(mission.id)
 
@@ -244,7 +303,7 @@ export class MissionController {
 
     checkStateCompletion(mission) {
 
-        const progress = this.activeMissions[mission.id]
+        const progress = this.getActiveMissions()[mission.id]
 
         const allDone = progress.objectives.every(o => o.done)
 
@@ -256,7 +315,7 @@ export class MissionController {
 
     completeState(mission) {
 
-        const progress = this.activeMissions[mission.id]
+        const progress = this.getActiveMissions()[mission.id]
 
         const stateIndex = progress.state
 
@@ -287,21 +346,33 @@ export class MissionController {
             missionId: mission.id
         });
 
+        this.saveController.changeMissions({
+            activeMissions: this.getActiveMissions(),
+            completedMissions: this.getCompletedMissions()
+        });
+
     }
 
     completeMission(mission) {
 
-        const progress = this.activeMissions[mission.id]
+        const progress = this.getActiveMissions()[mission.id]
 
         const complete_mission = this.getMissionUIData(mission.id)
 
         progress.completed = true
 
-        this.completedMissions.push(mission.id)
+        const completedMissions = this.getCompletedMissions();
+
+        if (!completedMissions.find(m => m.id === mission.id)) {
+            completedMissions.push({
+                id: mission.id,
+                completedAt: Date.now()
+            });
+        }
 
         this.giveReward(complete_mission)
 
-        delete this.activeMissions[mission.id]
+        delete this.getActiveMissions()[mission.id]
 
 
         if (mission.unlocks) {
@@ -311,6 +382,12 @@ export class MissionController {
             })
 
         }
+
+
+        this.saveController.changeMissions({
+            activeMissions: this.getActiveMissions(),
+            completedMissions: this.getCompletedMissions()
+        });
 
         this.uiEvents.emit("ui:deleteMissionBanner", this.getMissions());
     }

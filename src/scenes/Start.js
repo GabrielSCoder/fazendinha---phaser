@@ -29,6 +29,7 @@ import SidesUi from '../ui/SidesUi.js';
 import PresentsControler from '../controllers/PresentsController.js';
 import PresentsMenuUI from '../ui/PresentsMenuUI.js';
 import PaginationUtils from '../utils/PaginationUtils.js';
+import SaveLoadController from '../controllers/SaveLoadController.js';
 
 export class Start extends Phaser.Scene {
     constructor() {
@@ -82,7 +83,7 @@ export class Start extends Phaser.Scene {
         this.load.image('solo_alagado', 'assets/solo/solo_alagado.png');
         this.load.image('solo_alagado_2', 'assets/solo/solo_alagado_2.png');
 
-        this.load.json('saveData', 'src/static/player_mission_progress.json')
+        this.load.json('saveData', 'src/static/player_save.json')
 
         AssetLoader.load(this)
         this.gameVariables = new GameVariablesController(this);
@@ -214,13 +215,15 @@ export class Start extends Phaser.Scene {
 
         const xpTable = this.parseCSV(raw)
 
-        this.controllers.presents = new PresentsControler(this,  {uiEvents : events});
+        this.controllers.save = new SaveLoadController(this, saveData, { uiEvents: events });
+
+        this.controllers.presents = new PresentsControler(this, this.controllers.save, { uiEvents: events });
 
         this.controllers.gridUtils = new GridUtils(this, { uiEvents: events });
         this.controllers.catalog = new CatalogUtils(this, { uiEvents: events })
         this.controllers.banner = new UINotificationController(this, { uiEvents: events })
 
-        this.controllers.missions = new MissionController(this, intro_missions, saveData.missions, events)
+        this.controllers.missions = new MissionController(this, intro_missions, this.controllers.save, events)
         this.controllers.camera = new CameraController(this)
         this.controllers.growth = new GrowthController(this)
 
@@ -228,10 +231,10 @@ export class Start extends Phaser.Scene {
         this.controllers.spriteUtils = new SpriteUtils(this, { uiEvents: events })
         this.controllers.acoesUtils = new AcoesUtils(this, { uiEvents: events })
 
-        this.controllers.xp = new XPController(this, xpTable, events, saveData.player)
+        this.controllers.xp = new XPController(this, xpTable, events, this.controllers.save)
 
         this.controllers.bar = new ControlBar(this)
-        this.controllers.profile = new ProfileController(this, { uiEvents: events }, saveData.player)
+        this.controllers.profile = new ProfileController(this, { uiEvents: events }, this.controllers.save)
 
         this.controllers.sprite = new SpriteController(this, { uiEvents: events })
         this.controllers.queue = new ActionQueue(this, { uiEvents: events })
@@ -239,7 +242,7 @@ export class Start extends Phaser.Scene {
         this.controllers.gameEvents = new GameEventsController(this, { uiEvents: events })
         this.controllers.interact = new InteractController(this, { uiEvents: events })
 
-        this.controllers.presentsUI = new PresentsMenuUI(this, {uiEvents : events})
+        this.controllers.presentsUI = new PresentsMenuUI(this, { uiEvents: events })
 
         this.controllers.soil = new SoloController(this, { uiEvents: events })
         this.controllers.plant = new PlantaController(this, { uiEvents: events })

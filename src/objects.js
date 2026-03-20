@@ -639,6 +639,21 @@ export const animais = [
         "area": [1, 2],
         "origem": [0.62, 0.55],
         "tipo": "animal"
+    },
+    {
+        "id": "animal_galinha",
+        "nome": "Galinha",
+        "preco_compra": 550,
+        "preco_compra_grana": 0,
+        "preco_venda": 30,
+        "tempo_colheita_horas": 36,
+        "xp": 150,
+        "nivel_requerido": 7,
+        "img": "galinha",
+        "escala": 0.15,
+        "area": [1, 1],
+        "origem": [0.4, 0.6],
+        "tipo": "animal"
     }
 ]
 
@@ -932,7 +947,7 @@ export const decoracoes = [
     {
         "id": "cabana_rosa",
         "nome": "Cabana rosa",
-        "tipo": "cerca",
+        "tipo": "decoracao",
         "preco_compra": 0,
         "preco_compra_grana": 0,
         "preco_venda": 0,

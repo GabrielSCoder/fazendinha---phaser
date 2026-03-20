@@ -320,8 +320,7 @@ export default class BottomMenu {
 
         this.btnMinusMoney.on("pointerup", () => {
             // this.uiEvents.emit("action:setMoney", -10)
-            
-            this.uiEvents.emit("action:reward", { type: "decoration", id: "estabulo" })
+            this.uiEvents.emit("action:reward", { type: "decoracao", id: "cabana_rosa" })
             this.scene.gameVariables.freeClick = true;
         })
 

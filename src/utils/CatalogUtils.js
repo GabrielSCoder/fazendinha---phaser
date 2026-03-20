@@ -52,7 +52,7 @@ export default class CatalogUtils {
             case "tree":
                 item = this.trees.find(item => item.id === id)
                 break;
-            case "decoration":
+            case "decoracao":
                 item = this.decoration.find(item => item.id == id)
                 break;
             default:

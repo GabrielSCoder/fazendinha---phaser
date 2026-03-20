@@ -485,7 +485,7 @@ export default class GameEventsController {
         itemData.gift = true;
 
         this.uiEvents.emit("data:addItemStorage", itemData);
-        // this.scene.events.emit("itemPurchased", itemData);
+
         this.uiEvents.emit("ui:notify", { type: "item", data: itemData, amount: 1 });
     }
 }

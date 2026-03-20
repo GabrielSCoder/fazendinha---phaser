@@ -48,7 +48,7 @@ export const assetsConfig = {
 
     animais: {
         path: "assets/animal/",
-        files: ["vaca", "galo", "ovelha", "porco"]
+        files: ["vaca", "galo", "ovelha", "porco", "galinha"]
     },
 
     decoracoes: {

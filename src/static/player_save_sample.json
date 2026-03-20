@@ -1,0 +1,62 @@
+{
+    "version": "0.0.1",
+    "user": {
+        "id": 1,
+        "uuid": "111-111",
+        "name": "gabriel",
+        "gold": 0,
+        "cash": 0,
+        "xp": 0,
+        "energy": 0,
+        "energyMax": 50,
+        "lastEnergyUpdate": 1710700000,
+        "options": {
+            "musicDisabled": false
+        }
+    },
+    "storage": [
+        {
+            "id": "semente_mirtilo",
+            "amount": 5,
+            "storedAt": 232312
+        }
+    ],
+    "gift": [
+        {
+            "id": "flamingo",
+            "type" : "decoracao",
+            "amount": 3,
+            "lastReceivedAt": 232312
+        }
+    ],
+    "mission": [
+        {
+            "id": 1,
+            "progress": [
+                1,
+                2,
+                0
+            ],
+            "startedAt": 123123
+        }
+    ],
+    "world": {
+        "id": 1,
+        "sizeX": 10,
+        "sizeY": 10,
+        "lastUpdate": 1710700000,
+        "objects": [
+            {
+                "uuid": "obj-1",
+                "type": "soil",
+                "state": "plowed",
+                "itemId": "semente_mirtilo",
+                "position": {
+                    "x": 2,
+                    "y": 4
+                },
+                "plantTime": 2892128
+            }
+        ]
+    }
+}

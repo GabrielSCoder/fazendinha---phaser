@@ -1,5 +1,5 @@
 export default class ProfileController {
-    constructor(scene, config = {}, preset = {}) {
+    constructor(scene, config = {}, saveController) {
         this.scene = scene;
         this.controllers = scene.controllers;
         this.gridSize = scene.gameVariables.gridSize;
@@ -15,10 +15,7 @@ export default class ProfileController {
         this.AcoesUtils = scene.acoesUtils;
         this.interact = scene.interactController;
         this.creativeMode = scene.gameVariables.creativeMode;
-
-        this.gold = preset.gold ?? 2000;
-        this.money = preset.money ?? 6;
-
+        this.saveController = saveController;
     }
 
     init() {
@@ -44,44 +41,53 @@ export default class ProfileController {
             this.setGold(data)
         })
 
-        this.uiEvents.on("action:getMoney", () => {
-            this.getExperience()
+        this.uiEvents.on("action:getMoney", (callback) => {
+            callback(this.getMoney())
         })
 
         this.uiEvents.on("action:setMoney", (data) => {
             this.setMoney(data)
         })
 
+        this.uiEvents.on("save:user:gold", () => {
+            this.uiEvents.emit("update:profile", this.getData());
+        });
+
+        this.uiEvents.on("save:user:money", () => {
+            this.uiEvents.emit("update:profile", this.getData());
+        });
+
         this.uiEvents.on("action:GetAllProfileData", (callback) => {
 
-            const data = {
-                "gold": this.gold,
-                "money": this.money
-            }
-
-            callback(data)
+            callback(this.getData())
         })
 
         this.checkMissions();
     }
 
     getData() {
+
         return {
-            gold: this.gold,
-            money: this.money,
+            gold: this.saveController.getUser().gold,
+            money: this.saveController.getUser().money,
         }
     }
 
     getGold() {
-        return this.gold;
+        return this.saveController.getUser().gold;
+    }
+
+    getMoney() {
+        return this.saveController.getUser().money;
     }
 
     setGold(data) {
 
         const gold = data.amount || data
 
-        if ((this.gold + gold) < 0) return;
-        this.gold += gold;
+        if ((this.getGold() + gold) < 0) return;
+
+        this.saveController.addUser("gold", gold);
 
         if (data.x !== undefined) {
 
@@ -92,22 +98,16 @@ export default class ProfileController {
                 color: "#ffff66",
                 icon: "gold_icon"
             });
-
         }
-
-        this.uiEvents.emit("update:profile", this.getData());
     }
 
-    getMoney() {
-        return this.money;
-    }
+    setMoney(data) {
 
-    setMoney(valor) {
+        const money = data.amount || data
 
-        if ((this.money + valor) < 0) return;
-        this.money += valor;
+        if ((this.getMoney() + money) < 0) return;
 
-        this.uiEvents.emit("update:profile", this.getData());
+        this.saveController.addUser("money", money);
     }
 
     buyItem(data, callback) {
@@ -124,7 +124,7 @@ export default class ProfileController {
 
         if (data.type === "gold") {
 
-            if ((this.gold - data.price) >= 0) {
+            if ((this.getGold() - data.price) >= 0) {
                 callback(true);
             } else {
 
@@ -136,7 +136,7 @@ export default class ProfileController {
 
         if (data.type === "money") {
 
-            if ((this.money - data.price) >= 0) {
+            if ((this.getMoney() - data.price) >= 0) {
                 callback(true);
             } else {
 

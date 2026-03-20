@@ -1,16 +1,15 @@
 export default class PresentsControler {
 
-    constructor(scene, config = {}) {
+    constructor(scene, saveController, config = {}) {
         this.scene = scene;
         this.controllers = scene.controllers;
         this.uiEvents = config.uiEvents;
+        this.saveController = saveController;
 
         this.creativeMode = scene.gameVariables.creativeMode;
 
         this.limitStorageAmount = 30;
         this.actualStorageAmount = 0;
-
-        this.presentList = [];
 
         this.dataTest = [
             {
@@ -66,19 +65,19 @@ export default class PresentsControler {
 
     init() {
 
-        // this.dataTest.forEach(element => {
-        //     this.addItemStorage(element)
-        // });
+        this.presentList = this.saveController.getGift() || [];
+
+        this.actualStorageAmount = this.presentList.reduce((acc, item) => acc + item.amount, 0);
 
         this.uiEvents.on("data:getPresents", (callback) => {
             callback(this.getListData());
-        })
+        });
 
         this.uiEvents.on("data:addItemStorage", (data) => {
-            const resp = this.addItemStorage(data)
+            const resp = this.addItemStorage(data);
 
             if (resp) this.uiEvents.emit("data:storageChange", this.getListData());
-        })
+        });
     }
 
     addItemStorage(data) {
@@ -88,37 +87,38 @@ export default class PresentsControler {
             return false;
         }
 
-        const exists = this.presentList.find(item => item.id === data.id);
+        const list = this.presentList;
+
+        const exists = list.find(item => item.id === data.id);
 
         if (exists) {
 
             exists.amount += 1;
+            exists.lastReceivedAt = Date.now();
 
         } else {
 
-            const newItem = {
+            list.push({
                 id: data.id,
-                type: data.type,
-                nome: data.nome,
-                preco_venda: data.preco_venda,
-                img: data.img,
-                amount: data.amount ?? 1
-            };
-
-            this.presentList.push(newItem);
+                type: data.tipo,
+                amount: 1,
+                lastReceivedAt: Date.now()
+            });
 
         }
 
         this.actualStorageAmount += 1;
+
+        this.saveController.changeGift(list);
 
         return true;
     }
 
     removeItemStorage(data) {
 
-        if (this.presentList.length <= 0) return;
+        const list = this.presentList;
 
-        const exists = this.presentList.find(item => item.id === data.id);
+        const exists = list.find(item => item.id === data.id);
 
         if (!exists) return;
 
@@ -128,22 +128,40 @@ export default class PresentsControler {
 
         } else {
 
-            this.presentList = this.presentList.filter(item => item.id !== data.id);
+            this.presentList = list.filter(item => item.id !== data.id);
 
         }
 
         this.actualStorageAmount -= 1;
 
+        this.saveController.changeGift(this.presentList);
     }
 
     getListData() {
 
+        const list = this.presentList.map(item => {
+
+            console.log(item)
+
+            const catalogItem = this.controllers.catalog.findItem({
+                id: item.id,
+                type: item.type
+            });
+
+            return {
+                ...item,
+                nome: catalogItem?.nome,
+                img: catalogItem?.img,
+                preco_venda: catalogItem?.preco_venda
+            };
+
+        });
+
         return {
-            list: this.presentList,
+            list,
             amount: this.actualStorageAmount,
             limit: this.limitStorageAmount
         };
-
     }
 
 }

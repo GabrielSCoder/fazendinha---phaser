@@ -1,20 +1,18 @@
 export default class XPController {
 
-    constructor(scene, xpTable, uiEvents, playerSave) {
+    constructor(scene, xpTable, uiEvents, saveController) {
 
         this.scene = scene;
         this.controllers = scene.controllers;
         this.uiEvents = uiEvents;
         this.table = xpTable;
-
-        this.totalXP = playerSave.xp ?? 0;
-        this.level = playerSave.level ?? 1;
+        this.saveController = saveController;
         this.maxLevel = xpTable[xpTable.length - 1].level;
-
     }
 
-    init() {
 
+
+    init() {
         this.gameEvents()
     }
 
@@ -24,10 +22,12 @@ export default class XPController {
 
             this.addXP(data.amount || data);
 
+            const amount = data.amount || data;
+
             if (data.x !== undefined) {
 
                 this.uiEvents.emit("ui:floatingText", {
-                    text: `${data.amount} XP`,
+                    text: `${amount} XP`,
                     x: data.x,
                     y: data.y,
                     color: "#ffff66",
@@ -40,37 +40,47 @@ export default class XPController {
 
         this.uiEvents.on("xp:getLevel", (callback) => {
 
-            callback(this.level);
+            callback(this.getLevel());
 
         });
 
         this.uiEvents.on("action:GetXPData", (callback) => {
 
             callback({
-                level: this.level,
-                xpAtual: this.totalXP,
+                level: this.getLevel(),
+                xpAtual: this.getTotalXP(),
                 xpObjetivo: this.getNextLevelTotalXP()
             });
-
         });
 
+    }
+
+    getTotalXP() {
+        return this.saveController.getUser().xp;
+    }
+
+    getLevel() {
+        return this.saveController.getUser().level;
     }
 
     addXP(amount) {
 
         if (amount <= 0) return;
 
-        this.totalXP += amount;
+        const currentXP = this.getTotalXP();
+        const newXP = currentXP + amount;
 
-        const newLevel = this.getLevelFromXP(this.totalXP);
+        this.saveController.changeUser("xp", newXP);
 
-        if (newLevel > this.level) {
+        const newLevel = this.getLevelFromXP(this.getTotalXP());
 
-            for (let lvl = this.level + 1; lvl <= newLevel; lvl++) {
+        if (newLevel > this.getLevel()) {
+
+            for (let lvl = this.getLevel() + 1; lvl <= newLevel; lvl++) {
                 this.onLevelUp(lvl);
             }
 
-            this.level = newLevel;
+            this.saveController.changeUser("level", newLevel);
         }
 
         this.emitUpdate();
@@ -101,27 +111,27 @@ export default class XPController {
 
     getXPIntoLevel() {
 
-        const current = this.table[this.level - 1];
+        const current = this.table[this.getLevel() - 1];
 
-        return this.totalXP - current.xp_cumulative;
+        return this.getTotalXP() - current.xp_cumulative;
 
     }
 
     getXPToNextLevel() {
 
-        if (this.level >= this.maxLevel) return 0;
+        if (this.getLevel() >= this.maxLevel) return 0;
 
-        return this.table[this.level - 1].xp_to_next;
+        return this.table[this.getLevel() - 1].xp_to_next;
 
     }
 
     getNextLevelTotalXP() {
 
-        if (this.level >= this.maxLevel) {
-            return this.totalXP;
+        if (this.getLevel() >= this.maxLevel) {
+            return this.getTotalXP();
         }
 
-        return this.table[this.level].xp_cumulative;
+        return this.table[this.getLevel()].xp_cumulative;
 
     }
 
@@ -138,8 +148,6 @@ export default class XPController {
 
     onLevelUp(level) {
 
-        // //console.log("LEVEL UP:", level);
-
         this.uiEvents.emit("profile:levelUp", {
             level: level
         });
@@ -153,10 +161,9 @@ export default class XPController {
 
         this.uiEvents.emit("profile:xpUpdated", {
 
-            level: this.level,
-            xpAtual: this.totalXP,
+            level: this.getLevel(),
+            xpAtual: this.getTotalXP(),
             xpObjetivo: this.getNextLevelTotalXP()
-
         });
 
     }
@@ -164,19 +171,9 @@ export default class XPController {
     getData() {
 
         return {
-            level: this.level,
-            totalXP: this.totalXP
+            level: this.saveController.getUser().level,
+            totalXP: this.saveController.getUser().xp
         };
 
     }
-
-    loadData(data) {
-
-        this.totalXP = data.totalXP || 0;
-        this.level = this.getLevelFromXP(this.totalXP);
-
-        this.emitUpdate();
-
-    }
-
 }
