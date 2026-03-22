@@ -23,8 +23,13 @@ export default class SaveLoadController {
     }
 
     gameEvents() {
+
         this.uiEvents.on("save:user:gold", (value) => {
-            console.log("Gold atualizado:", value);
+            //console.log("Gold atualizado:", value);
+        });
+
+        this.uiEvents.on("debug:downloadSave", () => {
+            this.downloadSaveFile();
         });
     }
 
@@ -46,6 +51,8 @@ export default class SaveLoadController {
 
     saveData() {
 
+        // if (!this.dirty) return;
+
         const data = this.getSaveData();
 
         try {
@@ -53,6 +60,9 @@ export default class SaveLoadController {
         } catch (e) {
             console.error("Erro ao salvar:", e);
         }
+
+        this.dirty = false;
+
     }
 
     changeMissions(data) {
@@ -90,7 +100,7 @@ export default class SaveLoadController {
             storage: this.storage,
             gift: this.gift,
             mission: this.mission,
-            world: this.world
+            world: this.getWorldSaveFormat()
         }
     }
 
@@ -137,9 +147,11 @@ export default class SaveLoadController {
     }
 
     changeWorld(world) {
-        this.world = world;
 
-        this.uiEvents.emit("save:world:update", this.world);
+        this.world = world;
+        this.dirty = true;
+
+        this.uiEvents.emit("save:world:update", world);
 
         this.saveDebounced();
     }
@@ -182,5 +194,66 @@ export default class SaveLoadController {
         this.world.lastUpdate = Date.now();
 
         this.saveData();
+    }
+
+    changeWorld(world) {
+        this.world = world;
+        this.dirty = true;
+
+        this.uiEvents.emit("save:world:update", world);
+
+        this.saveDebounced();
+    }
+
+    getWorldSaveFormat() {
+        return {
+            ...this.world,
+            objects: Object.values(this.world.objects)
+        };
+    }
+
+    downloadSaveFile() {
+
+        const raw = localStorage.getItem("game_save");
+
+        if (!raw) {
+            console.warn("Nenhum save encontrado");
+            return;
+        }
+
+        const parsed = JSON.parse(raw);
+
+        const formatted = JSON.stringify(parsed, null, 2);
+
+        const blob = new Blob([formatted], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+
+        const date = new Date().toISOString().replace(/[:.]/g, "-");
+
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `save-${date}.json`;
+        a.click();
+
+        URL.revokeObjectURL(url);
+    }
+
+    loadWorld(worldData) {
+
+        if (!worldData) return;
+
+        this.world = {
+            ...worldData,
+            objects: {}
+        };
+
+        worldData.objects.forEach(obj => {
+
+            const key = `${obj.position.x}_${obj.position.y}`;
+
+            this.world.objects[key] = obj;
+
+        });
+
     }
 }

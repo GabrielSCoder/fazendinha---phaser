@@ -12,6 +12,8 @@ export default class SidesUi {
         this.circleSize = 64;
         this.spacing = 20;
 
+        this.onceCreated = false;
+
         this.missionButtons = {};
 
         this.eastSideContainer = scene.add.container(this.width - 60, this.height / 2 - 200);
@@ -28,21 +30,75 @@ export default class SidesUi {
             this.start(result)
         })
 
-        this.uiEvents.on("ui:deleteMissionBanner", (result) => {
-            this.refreshEastButtons(result)
+        this.uiEvents.on("ui:showAlert", (data) => {
+            console.log("mostrar")
+            this.showAlert(data)
         })
-
-        this.uiEvents.on("ui:updateMission", (result) => {
-            this.showAlert(result)
-        })
-
     }
 
     start(data) {
-        this.createEastButtons(data);
-        this.createWestButtons();
+        this.syncMissions(data);
+    }
+
+    syncMissions(data) {
+
+        const currentIds = new Set(Object.keys(this.missionButtons));
+        const newIds = new Set(data.map(m => String(m.id)));
+
+
+        currentIds.forEach(id => {
+            if (!newIds.has(id)) {
+                const btn = this.missionButtons[id];
+
+                if (btn) {
+                    btn.destroy();
+                }
+
+                delete this.missionButtons[id];
+            }
+        });
+
+
+        data.forEach((mission, index) => {
+
+            if (!this.missionButtons[mission.id]) {
+
+                const offset = index * (this.circleSize + this.spacing);
+
+                const btn = this.createCircleButton(mission, offset);
+                const label = this.createLabel(mission, offset, "east");
+
+                btn.on("pointerover", () => label.setVisible(true));
+                btn.on("pointerout", () => label.setVisible(false));
+
+                this.eastSideContainer.add([btn, label]);
+
+                this.missionButtons[mission.id] = btn;
+            }
+
+        });
+
+
+        this.repositionButtons(data);
 
         this.show();
+    }
+
+    repositionButtons(data) {
+
+        data.forEach((mission, index) => {
+
+            const btn = this.missionButtons[mission.id];
+
+            if (!btn) return;
+
+            const offset = index * (this.circleSize + this.spacing);
+
+            btn.y = offset;
+
+
+        });
+
     }
 
     createEastButtons(data) {
@@ -55,8 +111,10 @@ export default class SidesUi {
 
             const label = this.createLabel(key, offset, "east");
 
-            // guardar referência
-            this.missionButtons[key.id] = btn;
+            this.missionButtons[mission.id] = {
+                btn,
+                label
+            };
 
             btn.on("pointerover", () => {
                 label.setVisible(true);
@@ -76,8 +134,6 @@ export default class SidesUi {
 
     createWestButtons() {
 
-        // reservado para futuro
-        // pode colocar notificações, atalhos etc
 
     }
 
@@ -185,13 +241,13 @@ export default class SidesUi {
 
         btn.alert.setVisible(true);
 
-        this.scene.tweens.add({
-            targets: btn.alert,
-            scale: { from: 1, to: 1.3 },
-            duration: 400,
-            yoyo: true,
-            repeat: -1
-        });
+        // this.scene.tweens.add({
+        //     targets: btn.alert,
+        //     scale: { from: 1, to: 1.3 },
+        //     duration: 400,
+        //     yoyo: true,
+        //     repeat: -1
+        // });
 
     }
     show() {

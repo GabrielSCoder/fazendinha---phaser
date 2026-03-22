@@ -30,6 +30,7 @@ import PresentsControler from '../controllers/PresentsController.js';
 import PresentsMenuUI from '../ui/PresentsMenuUI.js';
 import PaginationUtils from '../utils/PaginationUtils.js';
 import SaveLoadController from '../controllers/SaveLoadController.js';
+import { WorldController } from '../controllers/WorldController.js';
 
 export class Start extends Phaser.Scene {
     constructor() {
@@ -216,6 +217,8 @@ export class Start extends Phaser.Scene {
         const xpTable = this.parseCSV(raw)
 
         this.controllers.save = new SaveLoadController(this, saveData, { uiEvents: events });
+
+        this.controllers.world = new WorldController(this, this.controllers.save, events );
 
         this.controllers.presents = new PresentsControler(this, this.controllers.save, { uiEvents: events });
 

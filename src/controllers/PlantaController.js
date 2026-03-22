@@ -23,14 +23,14 @@ export default class PlantaController {
 
     classEvents() {
 
-        console.log("Ligando listeners....")
+        //console.log("Ligando listeners....")
 
         this.uiEvents.on("action:StopSeeding", () => {
             this.stopSeeding();
         })
 
         this.uiEvents.on("action:Seed", (solo) => {
-            console.log("-----")
+            //console.log("-----")
             this.plantSeed(solo);
         })
     }
@@ -71,7 +71,7 @@ export default class PlantaController {
 
     plantSeed(solo) {
 
-        console.log("Vindo aqui")
+        //console.log("Vindo aqui")
 
         if (!this.scene.gameVariables.selectedSeed || !solo || solo.nome != "solo_preparado") return;
 
@@ -100,7 +100,7 @@ export default class PlantaController {
         sprite.isMoving = false;
         sprite.nome = semente.nome;
         sprite.plantado = true;
-        sprite.planta_cultivada = semente.nome;
+        sprite.planta_cultivada = semente.id;
         sprite.preco_venda = semente.preco_venda;
         sprite.preco_compra = semente.preco_compra;
         sprite.regrow = false;
@@ -120,7 +120,7 @@ export default class PlantaController {
             y: sprite.y
         })
 
-        this.uiEvents.emit("plant", { target: "solo_plantado_simples", seed: sprite.nome.toLowerCase() });
+        this.uiEvents.emit("plant", { target: "solo_plantado_simples", seed: sprite.nome.toLowerCase(), sprite : sprite });
 
         this.uiEvents.emit("action:FreeSoil");
     }

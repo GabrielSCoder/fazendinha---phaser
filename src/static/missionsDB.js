@@ -34,7 +34,6 @@ export const intro_missions = [
         id: 2,
         title: "Experimentação",
         unlocks: null,
-        level_requirement: null,
         auto_start: true,
         icon: "semente_abacaxi",
 

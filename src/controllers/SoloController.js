@@ -208,8 +208,8 @@ export default class SoloController {
             sprite.setAlpha(0.4);
             sprite.isReserved = true;
             sprite.hoverEnabled = true;
-            sprite.gridStartX = startX;
-            sprite.gridStartY = startY;
+            sprite.gridX = startX;
+            sprite.gridY = startY;
             sprite.blockSize = blockSize;
             sprite.nome = "solo_preparado";
             sprite.tipo = tipo;
@@ -242,31 +242,33 @@ export default class SoloController {
         sprite.setAlpha(1);
         sprite.isReserved = false;
 
-        const { gridStartX, gridStartY, blockSize } = sprite;
+        const { gridX, gridY, blockSize } = sprite;
 
         this.gridUtils.clearTemporaryReserved(
-            gridStartX,
-            gridStartY,
+            gridX,
+            gridY,
             blockSize,
             blockSize
         );
 
         this.gridUtils.markGround(
-            gridStartX,
-            gridStartY,
+            gridX,
+            gridY,
             blockSize,
             blockSize
         );
 
         this.gridUtils.markOccupied(
             sprite,
-            gridStartX,
-            gridStartY,
+            gridX,
+            gridY,
             blockSize,
             blockSize
         );
 
         this.gridUtils.recalculateDepthAround(sprite);
+
+        sprite.uuid = `${sprite.gridX}-${sprite.gridY}`
 
         this.uiEvents.emit("action:reward", {
             xp: 1,
@@ -275,7 +277,7 @@ export default class SoloController {
             y: sprite.y
         })
 
-        this.uiEvents.emit("plow", {target : "solo_preparado"});
+        this.uiEvents.emit("plow", { target: "solo_preparado", sprite: sprite });
     }
 
     executePlowingSoil(reserva, done) {
@@ -435,6 +437,8 @@ export default class SoloController {
                     x: sprite.x,
                     y: sprite.y
                 })
+
+                this.uiEvents.emit("renewSoil", { target: "solo_preparado", sprite: sprite });
 
                 done();
 

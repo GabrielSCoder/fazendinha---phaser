@@ -229,8 +229,6 @@ export default class UINotificationController {
 
         const mission = data.mission
 
-        console.log(mission)
-
         const root = this.scene.add.container(
             this.scene.scale.width / 2,
             this.scene.scale.height / 2
@@ -595,7 +593,6 @@ export default class UINotificationController {
             .setScale(0.7)
             .setInteractive({ useHandCursor: true });
 
-        console.log(data)
 
         btn.on("pointerup", () => { this.uiEvents.emit(data.action, data); this.close() });
         btn.on("pointerover", () => btn.setScale(0.8))

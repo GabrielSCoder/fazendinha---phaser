@@ -32,17 +32,17 @@ export class MissionController {
         })
 
         this.uiEvents.on("plant", data => {
-            console.log(data)
+            //console.log(data)
             this.onAction({ action: "plant", ...data })
         })
 
         this.uiEvents.on("place", data => {
-            console.log(data)
+            //console.log(data)
             this.onAction({ action: "place", ...data })
         })
 
         this.uiEvents.on("harvest", data => {
-            console.log(data)
+            //console.log(data)
             this.onAction({ action: "harvest", ...data })
         })
 
@@ -51,8 +51,10 @@ export class MissionController {
         })
 
         this.uiEvents.on("save:mission:update", () => {
+            //console.log("missão mudada")
             this.uiEvents.emit("data:missions", this.getMissions());
         });
+
     }
 
     getActiveMissions() {
@@ -102,7 +104,6 @@ export class MissionController {
             completedMissions: this.getCompletedMissions()
         });
     }
-
 
     getMissions() {
 
@@ -215,6 +216,8 @@ export class MissionController {
 
     onAction(data) {
 
+        let changed = false;
+
         for (const missionId in this.getActiveMissions()) {
 
             const mission = this.missionsById[missionId];
@@ -223,16 +226,12 @@ export class MissionController {
             if (!mission || progress.completed) continue;
 
             const state = mission.states[progress.state];
-
             if (!state) return;
 
             state.objectives.forEach((obj, i) => {
 
                 const objProgress = progress.objectives[i];
-
-                if (!objProgress) return;
-
-                if (objProgress.done) return;
+                if (!objProgress || objProgress.done) return;
 
                 if (this.matches(obj, data)) {
 
@@ -240,26 +239,29 @@ export class MissionController {
 
                     if (objProgress.progress >= objProgress.amount) {
                         objProgress.progress = objProgress.amount;
-                        objProgress.done = true;
 
-                        this.uiEvents.emit("ui:updateMission", {
-                            missionId: mission.id
+                        objProgress.done = true;
+                        this.uiEvents.emit("ui:showAlert", {
+                            missionId: missionId
                         });
+
                     }
 
+                    changed = true;
                 }
 
             });
 
             this.checkStateCompletion(mission);
-
         }
 
-        this.saveController.changeMissions({
-            activeMissions: this.getActiveMissions(),
-            completedMissions: this.getCompletedMissions()
-        });
+        if (changed) {
+            this.saveController.changeMissions({
+                activeMissions: this.getActiveMissions(),
+                completedMissions: this.getCompletedMissions()
+            });
 
+        }
     }
 
     checkLevelUnlocks(playerLevel) {
@@ -277,7 +279,6 @@ export class MissionController {
 
         })
 
-        this.uiEvents.emit("data:missions", this.getMissions());
     }
 
     matches(obj, data) {
@@ -342,7 +343,7 @@ export class MissionController {
             done: false
         }))
 
-        this.uiEvents.emit("ui:updateMission", {
+        this.uiEvents.emit("ui:showAlert", {
             missionId: mission.id
         });
 
@@ -389,7 +390,6 @@ export class MissionController {
             completedMissions: this.getCompletedMissions()
         });
 
-        this.uiEvents.emit("ui:deleteMissionBanner", this.getMissions());
     }
 
 

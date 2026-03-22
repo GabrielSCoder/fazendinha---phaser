@@ -111,7 +111,7 @@ export default class VendaController {
 
     sellItem() {
 
-        console.log("entrando em vender")
+        //console.log("entrando em vender")
 
         if (!this.scene.gameVariables.selectedSpriteDelete) return;
         if (!this.scene.gameVariables.selling) return;
@@ -129,7 +129,7 @@ export default class VendaController {
 
     completeSell() {
 
-        console.log("entrando em complete")
+        //console.log("entrando em complete")
 
         const item = this.scene.gameVariables.selectedSpriteDelete;
 
@@ -150,6 +150,8 @@ export default class VendaController {
 
         this.gridUtils.drawFootprints();
         this.gridUtils.drawMatrix();
+
+        this.uiEvents.emit("sell", { target: "item", sprite: item });
 
         this.uiEvents.emit("action:reward", {
             xp: 0,

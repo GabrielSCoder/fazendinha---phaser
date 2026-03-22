@@ -29,6 +29,7 @@ export default class SpriteUtils {
         sprite.xp = data.xp;
         sprite.xpYeld = false;
         sprite.original_sprite = data.img;
+        sprite.isRotated = false;
 
         if (is_semente) {
             this.scene.gameVariables.planting = true;
@@ -44,6 +45,7 @@ export default class SpriteUtils {
             sprite.harvestReady = false;
             sprite.preco_colheita = data.preco_venda;
             sprite.canGrow = true;
+            sprite.harvestTime = 0;
 
             const stages = [
                 { percent: 1, texture: sprite.texture.key },
