@@ -8,14 +8,13 @@ export class WorldController {
 
     init() {
 
-        this.world = this.saveController.getWorld();
-
         this.uiEvents.on("plow", data => this.onPlow(data));
         this.uiEvents.on("renewSoil", data => this.onRenew(data));
         this.uiEvents.on("plant", data => this.onPlant(data));
         this.uiEvents.on("harvest", data => this.onHarvest(data));
         this.uiEvents.on("move", data => this.onMove(data));
         this.uiEvents.on("sell", data => this.onDelete(data));
+        this.uiEvents.on("listObjects", () => this.mountMap());
     }
 
     onPlow(data) {
@@ -24,16 +23,22 @@ export class WorldController {
 
         const key = sprite.uuid;
 
+        const map = this.saveController.getWorld().objects;
+
+
         if (!key) {
             console.log("Sem uuid")
             return;
         }
 
-        this.world.objects[key] = {
+        map[key] = {
             uuid: key,
+            id: sprite.nome,
             type: "soil",
             state: "plowed",
-            position: { x: sprite.gridX, y: sprite.gridY }
+            position: { x: sprite.gridX, y: sprite.gridY },
+            x: sprite.x,
+            y: sprite.y
         };
 
         this.save();
@@ -45,17 +50,26 @@ export class WorldController {
 
         const key = sprite.uuid;
 
+        const map = this.saveController.getWorld().objects;
+
+        console.log(map)
+
+        console.log(map[key])
+
         if (!key) {
             console.log("Sem uuid")
             return;
         }
 
-        this.world.objects[key] = {
+        map[key] = {
+            id: "solo_preparado",
             uuid: key,
             type: "soil",
             state: "plowed",
             harvestTimes: sprite.harvestTime,
-            position: { x: sprite.gridX, y: sprite.gridY }
+            position: { x: sprite.gridX, y: sprite.gridY },
+            x: sprite.x,
+            y: sprite.y
         };
 
         this.save();
@@ -66,15 +80,21 @@ export class WorldController {
         const sprite = data.sprite;
 
         const key = sprite.uuid;
-        const obj = this.world.objects[key];
+        const obj = this.saveController.getWorld().objects[key];
+
 
         if (!key) {
             console.log("Sem uuid")
             return;
         }
 
-        if (!obj || obj.state !== "plowed") return;
+        if (!obj || obj.state != "plowed") {
+            console.log("não achou")
+            return;
+        };
 
+        obj.id = sprite.tipo
+        obj.nome = sprite.tipo
         obj.state = "planted";
         obj.item = sprite.planta_cultivada;
         obj.plantTime = sprite.growthStart;
@@ -86,23 +106,26 @@ export class WorldController {
 
         const sprite = data.sprite;
 
-        console.log(sprite)
-
         const key = sprite.uuid;
-        const obj = this.world.objects[key];
+        const obj = this.saveController.getWorld().objects[key];
 
         if (!key) {
             console.log("Sem uuid")
             return;
         }
 
-        if (!obj) return;
+        if (!obj) {
+            console.log("não achou")
+            return;
+        };
 
         let save = {
             uuid: obj.uuid,
             id: obj.id,
             harvestTimes: sprite.harvestTime,
             position: obj.position,
+            x: obj.x,
+            y: obj.y
         }
 
         if (sprite.tipo == "animal" || sprite.tipo == "arvore") {
@@ -114,12 +137,13 @@ export class WorldController {
         } else {
             save = {
                 ...save,
+                id: "solo_seco",
                 type: "soil",
                 state: "dry",
             }
         }
 
-        this.world.objects[key] = save;
+        this.saveController.getWorld().objects[key] = save;
 
         this.save();
     }
@@ -140,7 +164,9 @@ export class WorldController {
             type: sprite.tipo,
             state: "placed",
             isRotated: sprite.isRotated,
-            position: { x: sprite.gridX, y: sprite.gridY }
+            position: { x: sprite.lastFreePos.startX, y: sprite.lastFreePos.startY },
+            x: sprite.x,
+            y: sprite.y
         };
 
         if (sprite.tipo == "animal" || sprite.tipo == "arvore") {
@@ -150,10 +176,10 @@ export class WorldController {
                 plantTime: sprite.growthStart,
                 harvestTimes: sprite.harvestTime,
             }
-
         }
 
-        this.world.objects[key] = save;
+
+        this.saveController.getWorld().objects[key] = save;
 
         this.save();
     }
@@ -162,29 +188,106 @@ export class WorldController {
 
         const sprite = data.sprite;
         const key = sprite.uuid;
+        const obj = this.saveController.getWorld().objects[key];
 
         if (!key) {
             console.log("Sem uuid");
             return;
         }
 
-        if (!this.world.objects[key]) {
+        if (!obj) {
             console.log("Objeto não existe no world");
             return;
         }
 
-        delete this.world.objects[key];
+        delete this.saveController.getWorld().objects[key];
 
         this.save();
 
     }
 
-    save() {
+    mountMap() {
 
-        this.world.lastUpdate = Date.now();
+        const map = this.saveController.getWorld().objects;
 
-        this.saveController.changeWorld(this.world);
+        if (!map) return;
+
+        console.log(map)
+
+        let objects = [];
+
+        Object.values(map).forEach(element => {
+
+            let seed = null
+            let item = null
+
+            if (element.state == "dry") {
+
+                item = this.scene.controllers.catalog.findItem({
+                    id: "solo_seco",
+                    type: "soil"
+                });
+
+            } else {
+
+                item = this.scene.controllers.catalog.findItem({
+                    id: element.id,
+                    type: element.type
+                });
+
+                if (this.scene.controllers.catalog.isCultivableSoil(element.id)) {
+
+                    seed = this.scene.controllers.catalog.findItem({
+                        id: element.item,
+                        type: "seed"
+                    });
+
+                    item.nome = seed.nome
+                    seed.img = seed.tipo_plantacao
+                    seed.tipo = element.id
+
+                }
+            }
+
+            objects.push({ ...element, ...seed, ...item });
+
+        });
+
+        objects.forEach(first => {
+
+            const sprite = this.scene.controllers.spriteUtils.addGameSprite(first, first.x, first.y, first.escala, first.origem[0], first.origem[1], first.isRotated, true);
+
+            const { w, h } = this.scene.controllers.gridUtils.getSpriteFootprint(sprite);
+
+            this.scene.controllers.gridUtils.markOccupied(sprite, first.position.x, first.position.y, w, h);
+
+            if (this.scene.controllers.catalog.isCultivableSoil(sprite.tipo)) {
+
+
+                sprite.regrow = false;
+
+                const stages = [
+                    { percent: 1, texture: first.img_pronta }
+                ];
+
+                this.scene.controllers.growth.startGrowth(sprite, first.tempo_colheita_horas * 60 * 1000, stages);
+            }
+        })
+
+        this.scene.controllers.camera.ignoreInUICamera([...this.scene.gameVariables.sprites])
+
+        this.scene.controllers.gridUtils.recalculateAllDepths();
+
+        this.scene.controllers.gridUtils.drawFootprints();
+
     }
 
+    save() {
+        const world = this.saveController.getWorld();
+
+        world.lastUpdate = Date.now();
+
+        this.saveController.changeWorld(world);
+    }
 
 }

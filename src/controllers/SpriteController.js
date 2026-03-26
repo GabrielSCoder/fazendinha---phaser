@@ -14,7 +14,7 @@ export default class SpriteController {
         this.gameVariables = scene.gameVariables;
         this.gridUtils = scene.controllers.gridUtils;
         this.uiEvents = config.uiEvents;
-        this.growingSprites = ["semente", "arvore", "solo_plantado_simples", "animal"];
+        this.growingSprites = ["semente", "arvore", "solo_plantado_simples", "solo_plantado_alagado", "animal"];
 
 
     }
@@ -147,7 +147,7 @@ export default class SpriteController {
             text = arar_solo
         }
 
-        else if (sprite.tipo == "solo_plantado_simples" || sprite.tipo == "animal" || sprite.tipo == "arvore") {
+        else if (this.growingSprites.includes(sprite.tipo)) {
 
             let percent = this.controllers.growth.getGrowthPercent(sprite);
             percent = Math.floor(percent * 100);
@@ -210,7 +210,7 @@ export default class SpriteController {
             2000,
             2000,
             'grama'
-        ).setOrigin(0.5).setDepth(-9999).setScrollFactor(1).setVisible(false);
+        ).setOrigin(0.5).setDepth(-9999).setScrollFactor(1).setVisible(true);
 
 
         this.controllers.camera.ignoreInMainCamera([this.fpsText, this.scene.matrixLabel, this.scene.matrixGraphics])

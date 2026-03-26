@@ -33,6 +33,10 @@ export default class CatalogUtils {
         }
     }
 
+    isCultivableSoil(type) {
+        return type == "solo_plantado_alagado" || type == "solo_plantado_simples"
+    }
+
     findItem(data) {
 
         const id = data.id;
@@ -43,16 +47,22 @@ export default class CatalogUtils {
         let item = null;
 
         switch (type) {
+            case "soil":
+                item = this.soils.find(item => item.nome == id)
+                break;
             case "seed":
                 item = this.seeds.find(item => item.id == id)
                 break;
             case "animal":
                 item = this.animals.find(item => item.id == id)
                 break;
-            case "tree":
+            case "arvore":
                 item = this.trees.find(item => item.id === id)
                 break;
             case "decoracao":
+                item = this.decoration.find(item => item.id == id)
+                break;
+            case "cerca":
                 item = this.decoration.find(item => item.id == id)
                 break;
             default:

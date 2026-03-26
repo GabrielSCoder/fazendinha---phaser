@@ -178,9 +178,6 @@ export default class AcoesUtils {
         if (itemData.tipo !== "semente" && !sprite.gift)
             this.scene.gameVariables.buyItemTmp = itemData;
 
-        if (itemData.area) {
-            sprite.footprint = itemData.area;
-        }
 
         sprite.setAlpha(0.7);
         sprite.isMoving = true;

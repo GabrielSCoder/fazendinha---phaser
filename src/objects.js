@@ -133,7 +133,7 @@ export const sementes = [
         "nome": "Arroz",
         "preco_compra": 140,
         "preco_venda": 400,
-        "tempo_colheita_horas": 72,
+        "tempo_colheita_horas": 0.05,
         "xp": 2,
         "nivel_requerido": 4,
         "img": "semente_arroz",
@@ -142,7 +142,7 @@ export const sementes = [
         "escala": 0.78,
         "area": [4, 4],
         "noStopBuy": false,
-        "tipo_plantacao": "solo_alagado_2"
+        "tipo_plantacao": "solo_plantado_alagado"
     },
     {
         "id": "semente_rabanete",
@@ -1718,7 +1718,7 @@ export const decoracoes = [
 export const solos = [
     {
         "nome": "solo_preparado",
-        "img": "solo.png",
+        "img": "solo",
         "escala": 0.73,
         "area": [4, 4],
         "origem": [0.5, 0.58],
@@ -1738,11 +1738,21 @@ export const solos = [
     },
     {
         "nome": "solo_plantado_simples",
-        "img": "solo_plantado_simples.png",
+        "img": "solo_plantado_simples",
         "escala": 0.73,
         "area": [4, 4],
         "origem": [0.5, 0.58],
         "tipo": "solo_plantado_simples",
+        "noStopBuy": false,
+        "preco_venda": 1
+    },
+    {
+        "nome": "solo_plantado_alagado",
+        "img": "solo_plantado_alagado",
+        "escala": 0.73,
+        "area": [4, 4],
+        "origem": [0.5, 0.58],
+        "tipo": "solo_plantado_alagado",
         "noStopBuy": false,
         "preco_venda": 1
     }

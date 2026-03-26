@@ -38,7 +38,7 @@ export default class SaveLoadController {
         this.storage = structuredClone(this.saveArchive.storage);
         this.gift = structuredClone(this.saveArchive.gift);
         this.mission = structuredClone(this.saveArchive.mission);
-        this.world = structuredClone(this.saveArchive.world);
+        this.loadWorld(this.saveArchive.world);
     }
 
     static loadFromStorage() {
@@ -146,35 +146,26 @@ export default class SaveLoadController {
         this.saveDebounced();
     }
 
-    changeWorld(world) {
-
-        this.world = world;
-        this.dirty = true;
-
-        this.uiEvents.emit("save:world:update", world);
-
-        this.saveDebounced();
-    }
 
     changeObjectWorld(object) {
 
         if (!object.uuid) return;
 
-        const objectList = this.world.objects;
+        const key = object.uuid;
 
-        const item_exists = objectList.find(x => x.uuid === object.uuid);
+        const existing = this.world.objects[key];
 
-        if (item_exists) {
+        if (existing) {
 
-            item_exists.state = object.state;
-            item_exists.position = object.position;
-            item_exists.isRotated = object.isRotated;
-            item_exists.updatedAt = Date.now();
+            existing.state = object.state;
+            existing.position = object.position;
+            existing.isRotated = object.isRotated;
+            existing.updatedAt = Date.now();
 
         } else {
 
             let new_item = {
-                uuid: object.uuid,
+                uuid: key,
                 type: object.type,
                 position: object.position,
                 createdAt: Date.now()
@@ -188,7 +179,7 @@ export default class SaveLoadController {
                 new_item.itemId = object.itemId;
             }
 
-            objectList.push(new_item);
+            this.world.objects[key] = new_item;
         }
 
         this.world.lastUpdate = Date.now();

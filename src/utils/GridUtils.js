@@ -205,6 +205,8 @@ export default class GridUtils {
                 this.scene.gameVariables.gridMap[x][y] = sprite;
             }
         }
+
+        // console.log(this.scene.gameVariables.gridMap)
         this.drawMatrix();
     }
 
@@ -448,7 +450,7 @@ export default class GridUtils {
 
     recalculateAllDepths() {
         this.scene.gameVariables.sprites.forEach(s => {
-            const iso = this.gridUtils.screenToIso(s.x, s.y);
+            const iso = this.screenToIso(s.x, s.y);
             s.setDepth(iso.x + iso.y * 10);
         });
     }

@@ -83,7 +83,7 @@ export default class PresentsControler {
     addItemStorage(data) {
 
         if (this.limitStorageAmount <= this.actualStorageAmount) {
-            console.log("inventario cheio");
+            //console.log("inventario cheio");
             return false;
         }
 
@@ -141,7 +141,7 @@ export default class PresentsControler {
 
         const list = this.presentList.map(item => {
 
-            console.log(item)
+            //console.log(item)
 
             const catalogItem = this.controllers.catalog.findItem({
                 id: item.id,

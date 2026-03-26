@@ -71,8 +71,6 @@ export default class PlantaController {
 
     plantSeed(solo) {
 
-        //console.log("Vindo aqui")
-
         if (!this.scene.gameVariables.selectedSeed || !solo || solo.nome != "solo_preparado") return;
 
         const semente = this.scene.gameVariables.selectedSeed;
@@ -86,8 +84,6 @@ export default class PlantaController {
 
         if (!itemData) return;
 
-        const tipo = "solo_plantado_simples";
-
         sprite.setTexture(itemData.img)
 
         const stages = [
@@ -96,7 +92,7 @@ export default class PlantaController {
 
         this.controllers.growth.startGrowth(sprite, semente.tempoColheita * 60 * 1000, stages);
 
-        sprite.tipo = tipo;
+        sprite.tipo = semente.tipo_plantacao;
         sprite.isMoving = false;
         sprite.nome = semente.nome;
         sprite.plantado = true;

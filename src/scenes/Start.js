@@ -78,11 +78,11 @@ export class Start extends Phaser.Scene {
         this.load.image('back_frame2', 'assets/anim/back/frame_2.png');
         this.load.image('back_frame3', 'assets/anim/back/frame_3.png');
 
-        this.load.image('solo.png', 'assets/solo/solo_preparado.png');
-        this.load.image('solo_plantado_simples.png', 'assets/solo/solo_plantado_simples.png');
+        this.load.image('solo', 'assets/solo/solo_preparado.png');
+        this.load.image('solo_plantado_simples', 'assets/solo/solo_plantado_simples.png');
         this.load.image('solo_seco', 'assets/solo/solo_seco.png');
         this.load.image('solo_alagado', 'assets/solo/solo_alagado.png');
-        this.load.image('solo_alagado_2', 'assets/solo/solo_alagado_2.png');
+        this.load.image('solo_plantado_alagado', 'assets/solo/solo_alagado_2.png');
 
         this.load.json('saveData', 'src/static/player_save.json')
 
@@ -224,7 +224,7 @@ export class Start extends Phaser.Scene {
 
         this.controllers.gridUtils = new GridUtils(this, { uiEvents: events });
         this.controllers.catalog = new CatalogUtils(this, { uiEvents: events })
-        this.controllers.banner = new UINotificationController(this, { uiEvents: events })
+        this.controllers.banner = new UINotificationController(this, { uiEvents: events });
 
         this.controllers.missions = new MissionController(this, intro_missions, this.controllers.save, events)
         this.controllers.camera = new CameraController(this)

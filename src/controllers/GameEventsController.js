@@ -263,15 +263,16 @@ export default class GameEventsController {
         }
 
         if (!sprite.uuid) {
-            sprite.uuid = `${sprite.gridX}-${sprite.gridY}`
+            sprite.uuid = `${sprite.gridX}_${sprite.gridY}`
         }
 
         this.scene.gameVariables.selectedSprite = null;
 
         this.uiEvents.emit("move", { target: sprite.tipo, sprite: sprite });
-        // if (this.scene.gameVariables.buyItemTmp) {
-        //     this.scene.events.emit("itemPurchased", this.scene.gameVariables.buyItemTmp);
-        // }
+        
+        if (this.scene.gameVariables.buyItemTmp) {
+            this.scene.events.emit("itemPurchased", this.scene.gameVariables.buyItemTmp);
+        }
     }
 
     plantarSementeCheck(solo, done) {

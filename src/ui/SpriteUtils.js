@@ -6,7 +6,7 @@ export default class SpriteUtils {
         this.uiEvents = configs.uiEvents;
     }
 
-    addGameSprite(data, x, y, scale = 0.5, originX, originY) {
+    addGameSprite(data, x, y, scale = 0.5, originX, originY, isRotated = false, rebuild = false) {
 
         const is_semente = data.tipo === "semente";
         const custom_scale = data.tipo === "semente" ? 0.2 : scale;
@@ -27,9 +27,19 @@ export default class SpriteUtils {
         sprite.preco_compra = data.preco_compra;
         sprite.preco_compra_grana = data.preco_compra_grana;
         sprite.xp = data.xp;
-        sprite.xpYeld = false;
+        sprite.xpYeld = rebuild;
         sprite.original_sprite = data.img;
-        sprite.isRotated = false;
+        sprite.isRotated = isRotated;
+        sprite.footprint = data.area;
+        sprite.originalFootprint = data.area;
+
+        rebuild ? sprite.uuid = data.uuid : false
+
+        if (isRotated) {
+            const [w, h] = data.area;
+            sprite.footprint = [ h, w ]
+            sprite.flipX = isRotated;
+        }
 
         if (is_semente) {
             this.scene.gameVariables.planting = true;

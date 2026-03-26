@@ -268,7 +268,7 @@ export default class SoloController {
 
         this.gridUtils.recalculateDepthAround(sprite);
 
-        sprite.uuid = `${sprite.gridX}-${sprite.gridY}`
+        sprite.uuid = `${sprite.gridX}_${sprite.gridY}`
 
         this.uiEvents.emit("action:reward", {
             xp: 1,
@@ -426,7 +426,7 @@ export default class SoloController {
                 sprite.nome = "solo_preparado";
                 sprite.tipo = "solo_preparado";
 
-                sprite.setTexture("solo.png");
+                sprite.setTexture("solo");
                 sprite.setAlpha(1)
 
                 sprite.setInteractive({ pixelPerfect: true, alphaTolerance: 1, useHandCursor: true });
