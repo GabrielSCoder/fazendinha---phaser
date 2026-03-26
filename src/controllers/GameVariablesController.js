@@ -42,6 +42,7 @@ export default class GameVariablesController {
         this.selling = false;
         this.hoverEnabled = true;
         this.matrixVisible = false;
+        this.debugBarVisible = false;
 
         this.selectedSprite = null;
         this.selectedSpriteDelete = null;

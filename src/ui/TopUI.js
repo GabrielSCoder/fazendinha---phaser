@@ -85,6 +85,10 @@ export default class TopUI {
         this.barraXp.width = this.barraWidth * ratio;
 
         this.xpText.setText(`${xpAtual}/${xpObjetivo}`);
+
+        const padding = 30;
+
+        this.xpText.x = this.barraXp.x + this.barraXp.width - this.xpText.width - padding;
     }
 
 
@@ -99,11 +103,28 @@ export default class TopUI {
         const leftY = 20;
 
         this.uiLeftContainer = this.scene.add.container(leftX, leftY);
-        this.containerUI.add(this.uiLeftContainer);
+        this.uiRightContainer = this.scene.add.container(width - 120, leftY)
+        this.containerUI.add(this.uiLeftContainer, this.uiRightContainer);
 
+        const leftBg = this.scene.add.rectangle(0, 0, 250, 60, 0x222222, 0.7).setOrigin(0, 0);
+        const rightBg = this.scene.add.rectangle(0, 0, 100, 60, 0x222222, 0.7).setOrigin(0, 0);
 
-        const leftBg = this.scene.add.rectangle(0, 0, 250, 60, 0x222222, 0.3).setOrigin(0, 0);
         this.uiLeftContainer.add(leftBg);
+        this.uiRightContainer.add(rightBg)
+
+        this.salvarBtn = this.scene.add.text(8, 15, "Salvar", {
+            fontSize: '20px',
+            fontFamily: 'LuckiestGuy-Regular',
+            color: 'white',
+            backgroundColor: '#3675bc',
+            padding: { left: 8, right: 8, top: 4, bottom: 4 }
+        })
+            .setOrigin(0)
+            .setInteractive({ useHandCursor: true });
+
+        this.salvarBtn.on("pointerup", () => {
+            this.uiEvents.emit("debug:downloadSave")
+        })
 
         this.barraWidth = 180;
         this.barraHeight = 20;
@@ -140,13 +161,13 @@ export default class TopUI {
         }).setOrigin(0, 0.5).setStroke('black', 5);
 
         this.uiLeftContainer.add([this.barraBg, this.barraXp, this.xpText, this.farmNameText, this.levelText]);
-
+        this.uiRightContainer.add(this.salvarBtn);
 
         const centerY = 20;
         this.uiCenterContainer = this.scene.add.container(width / 2, centerY);
         this.containerUI.add(this.uiCenterContainer);
 
-        const centerBg = this.scene.add.rectangle(0, 0, 200, 40, 0xffffff, 0.3).setOrigin(0.5, 0);
+        const centerBg = this.scene.add.rectangle(0, 0, 200, 40, 0x222222, 0.7).setOrigin(0.5, 0);
         this.uiCenterContainer.add(centerBg);
 
 

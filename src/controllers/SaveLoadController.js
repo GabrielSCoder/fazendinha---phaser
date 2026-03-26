@@ -24,13 +24,10 @@ export default class SaveLoadController {
 
     gameEvents() {
 
-        this.uiEvents.on("save:user:gold", (value) => {
-            //console.log("Gold atualizado:", value);
-        });
-
         this.uiEvents.on("debug:downloadSave", () => {
             this.downloadSaveFile();
         });
+
     }
 
     loadSaveData() {
@@ -144,47 +141,6 @@ export default class SaveLoadController {
         this.uiEvents.emit(`save:user:${type}`, this.user[type]);
 
         this.saveDebounced();
-    }
-
-
-    changeObjectWorld(object) {
-
-        if (!object.uuid) return;
-
-        const key = object.uuid;
-
-        const existing = this.world.objects[key];
-
-        if (existing) {
-
-            existing.state = object.state;
-            existing.position = object.position;
-            existing.isRotated = object.isRotated;
-            existing.updatedAt = Date.now();
-
-        } else {
-
-            let new_item = {
-                uuid: key,
-                type: object.type,
-                position: object.position,
-                createdAt: Date.now()
-            };
-
-            if (object.canGrow) {
-                new_item.plantTime = object.growStart;
-            }
-
-            if (object.itemId) {
-                new_item.itemId = object.itemId;
-            }
-
-            this.world.objects[key] = new_item;
-        }
-
-        this.world.lastUpdate = Date.now();
-
-        this.saveData();
     }
 
     changeWorld(world) {

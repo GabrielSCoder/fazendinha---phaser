@@ -272,11 +272,14 @@ export class WorldController {
 
                 this.scene.controllers.growth.startGrowth(sprite, first.tempo_colheita_horas * 60 * 1000, stages);
             }
+
+            this.scene.controllers.gridUtils.recalculateDepthAround(sprite);
+
         })
 
         this.scene.controllers.camera.ignoreInUICamera([...this.scene.gameVariables.sprites])
 
-        this.scene.controllers.gridUtils.recalculateAllDepths();
+        // this.scene.controllers.gridUtils.recalculateAllDepths();
 
         this.scene.controllers.gridUtils.drawFootprints();
 

@@ -31,9 +31,10 @@ export default class SidesUi {
         })
 
         this.uiEvents.on("ui:showAlert", (data) => {
-            console.log("mostrar")
             this.showAlert(data)
         })
+
+        this.start(this.controllers.missions.getMissions())
     }
 
     start(data) {

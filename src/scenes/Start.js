@@ -111,6 +111,8 @@ export class Start extends Phaser.Scene {
         this.controllers.gridUtils.drawMatrix();
         this.controllers.gridUtils.gridStart();
 
+        this.controllers.world.mountMap()
+
         //this.bonecoController = new BonecoController(this);
 
         this.time.addEvent({
@@ -264,7 +266,6 @@ export class Start extends Phaser.Scene {
         this.controllers.itemMenu = new ItemMenuUI(this, { uiEvents: events })
 
         this.controllers.harvest = new HarvestController(this, { uiEvents: events })
-
     }
 
     initControllers() {

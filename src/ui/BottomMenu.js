@@ -8,6 +8,7 @@ export default class BottomMenu {
         this.uiEvents = config.uiEvents;
         this.soilControl = scene.controllers.soil;
         this.sellControl = scene.controllers.sell;
+        this.variables = scene.gameVariables;
         this.buttons = {};
         this.createUI();
         this.registerEvents();
@@ -261,12 +262,12 @@ export default class BottomMenu {
         this.CheatMenu = this.scene.add.container(
             50,
             height - menuHeight - 20
-        );
+        ).setVisible(this.variables.debugBarVisible);
 
         this.CheatMenuUpper = this.scene.add.container(
             50,
             height - menuHeight - 60
-        );
+        ).setVisible(this.variables.debugBarVisible);
 
         const bg = this.scene.add.rectangle(0, 0, menuWidth, menuHeight, 0x222222, 0.85)
             .setOrigin(0);
