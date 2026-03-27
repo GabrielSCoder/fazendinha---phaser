@@ -1,0 +1,207 @@
+{
+  "user": {
+    "id": 1,
+    "uuid": "111-111",
+    "name": "gabriel",
+    "gold": 1000,
+    "money": 6,
+    "level": 1,
+    "xp": 0,
+    "energy": 0,
+    "energyMax": 50,
+    "lastEnergyUpdate": 0,
+    "options": {
+      "musicDisabled": false
+    }
+  },
+  "storage": [],
+  "gift": [],
+  "mission": {
+    "activeMissions": {
+      "1": {
+        "state": 0,
+        "objectives": [
+          {
+            "progress": 0,
+            "amount": 4,
+            "done": false
+          }
+        ],
+        "completed": false,
+        "startedAt": 1774552268824
+      }
+    },
+    "completedMissions": []
+  },
+  "world": {
+    "id": 1,
+    "sizeX": 10,
+    "sizeY": 10,
+    "lastUpdate": 1774648283428,
+    "objects": [
+      {
+        "uuid": "1_16",
+        "id": "arvore_abrico",
+        "type": "arvore",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 1,
+          "y": 16
+        },
+        "x": -240,
+        "y": 56,
+        "plantTime": 7798.300000071526,
+        "harvestTimes": 0
+      },
+      {
+        "uuid": "1_13",
+        "id": "arvore_maca",
+        "type": "arvore",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 1,
+          "y": 13
+        },
+        "x": -192,
+        "y": 32,
+        "plantTime": 10860.600000023842,
+        "harvestTimes": 0
+      },
+      {
+        "uuid": "1_10",
+        "id": "arvore_banana",
+        "type": "arvore",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 1,
+          "y": 10
+        },
+        "x": -144,
+        "y": 8,
+        "plantTime": 14155,
+        "harvestTimes": 0
+      },
+      {
+        "uuid": "1_8",
+        "id": "arvore_atemoia",
+        "harvestTimes": 2,
+        "position": {
+          "x": 1,
+          "y": 6
+        },
+        "x": -80,
+        "y": -24,
+        "type": "arvore",
+        "state": "placed"
+      },
+      {
+        "uuid": "1_3",
+        "id": "arvore_pessego",
+        "type": "arvore",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 1,
+          "y": 3
+        },
+        "x": -32,
+        "y": -48,
+        "plantTime": 22426.200000047684,
+        "harvestTimes": 0
+      },
+      {
+        "uuid": "6_16",
+        "id": "arvore_nectarina",
+        "type": "arvore",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 6,
+          "y": 16
+        },
+        "x": -160,
+        "y": 96,
+        "plantTime": 46074.90000009537,
+        "harvestTimes": 0
+      },
+      {
+        "uuid": "10_17",
+        "id": "arvore_coqueiro",
+        "type": "arvore",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 10,
+          "y": 17
+        },
+        "x": -112,
+        "y": 136,
+        "plantTime": 52960.40000009537,
+        "harvestTimes": 0
+      },
+      {
+        "uuid": "7_9",
+        "id": "arvore_cerejeira",
+        "type": "arvore",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 7,
+          "y": 9
+        },
+        "x": -32,
+        "y": 48,
+        "plantTime": 58451.200000047684,
+        "harvestTimes": 0
+      },
+      {
+        "uuid": "6_4",
+        "id": "arvore_mangueira",
+        "type": "arvore",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 6,
+          "y": 4
+        },
+        "x": 32,
+        "y": 0,
+        "plantTime": 62332.800000071526,
+        "harvestTimes": 0
+      },
+      {
+        "uuid": "12_15",
+        "id": "arvore_pereira",
+        "type": "arvore",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 12,
+          "y": 15
+        },
+        "x": -48,
+        "y": 136,
+        "plantTime": 67001.20000004768,
+        "harvestTimes": 0
+      },
+      {
+        "uuid": "12_11",
+        "id": "arvore_laranjeira",
+        "type": "arvore",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 12,
+          "y": 11
+        },
+        "x": 16,
+        "y": 104,
+        "plantTime": 71056.80000007153,
+        "harvestTimes": 0
+      }
+    ]
+  }
+}

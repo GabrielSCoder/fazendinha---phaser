@@ -4,59 +4,41 @@
         "id": 1,
         "uuid": "111-111",
         "name": "gabriel",
-        "gold": 0,
-        "cash": 0,
+        "gold": 1000,
+        "money": 6,
+        "level": 1,
         "xp": 0,
         "energy": 0,
         "energyMax": 50,
-        "lastEnergyUpdate": 1710700000,
+        "lastEnergyUpdate": 0,
         "options": {
             "musicDisabled": false
         }
     },
-    "storage": [
-        {
-            "id": "semente_mirtilo",
-            "amount": 5,
-            "storedAt": 232312
-        }
-    ],
-    "gift": [
-        {
-            "id": "flamingo",
-            "type" : "decoracao",
-            "amount": 3,
-            "lastReceivedAt": 232312
-        }
-    ],
-    "mission": [
-        {
-            "id": 1,
-            "progress": [
-                1,
-                2,
-                0
-            ],
-            "startedAt": 123123
-        }
-    ],
+    "storage": [],
+    "gift": [],
+    "mission": {
+        "activeMissions": {
+            "1": {
+                "state": 0,
+                "objectives": [
+                    {
+                        "progress": 0,
+                        "amount": 4,
+                        "done": false
+                    }
+                ],
+                "completed": false,
+                "startedAt": 1774552268824
+            }
+        },
+        "completedMissions": []
+    },
     "world": {
         "id": 1,
         "sizeX": 10,
         "sizeY": 10,
-        "lastUpdate": 1710700000,
-        "objects": [
-            {
-                "uuid": "obj-1",
-                "type": "soil",
-                "state": "plowed",
-                "itemId": "semente_mirtilo",
-                "position": {
-                    "x": 2,
-                    "y": 4
-                },
-                "plantTime": 2892128
-            }
-        ]
+        "lastUpdate": 0,
+        "objects": []
     }
 }

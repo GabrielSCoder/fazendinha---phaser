@@ -1,0 +1,941 @@
+{
+  "user": {
+    "id": 1,
+    "uuid": "111-111",
+    "name": "gabriel",
+    "gold": 1000,
+    "money": 6,
+    "level": 1,
+    "xp": 0,
+    "energy": 0,
+    "energyMax": 50,
+    "lastEnergyUpdate": 0,
+    "options": {
+      "musicDisabled": false
+    }
+  },
+  "storage": [],
+  "gift": [],
+  "mission": {
+    "activeMissions": {
+      "1": {
+        "state": 0,
+        "objectives": [
+          {
+            "progress": 0,
+            "amount": 4,
+            "done": false
+          }
+        ],
+        "completed": false,
+        "startedAt": 1774552268824
+      }
+    },
+    "completedMissions": []
+  },
+  "world": {
+    "id": 1,
+    "sizeX": 16,
+    "sizeY": 16,
+    "lastUpdate": 1774649090044,
+    "objects": [
+      {
+        "uuid": "3_29",
+        "id": "gazebo",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 2,
+          "y": 28
+        },
+        "x": -416,
+        "y": 120
+      },
+      {
+        "uuid": "5_29",
+        "id": "feno",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 5,
+          "y": 29
+        },
+        "x": -384,
+        "y": 144
+      },
+      {
+        "uuid": "7_29",
+        "id": "feno_vermelho",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 7,
+          "y": 29
+        },
+        "x": -352,
+        "y": 160
+      },
+      {
+        "uuid": "9_29",
+        "id": "feno_rosa",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 9,
+          "y": 29
+        },
+        "x": -320,
+        "y": 176
+      },
+      {
+        "uuid": "11_29",
+        "id": "feno_preto",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 11,
+          "y": 29
+        },
+        "x": -288,
+        "y": 192
+      },
+      {
+        "uuid": "13_29",
+        "id": "feno_azul",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 13,
+          "y": 29
+        },
+        "x": -256,
+        "y": 208
+      },
+      {
+        "uuid": "15_29",
+        "id": "feno_anil",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 15,
+          "y": 29
+        },
+        "x": -224,
+        "y": 224
+      },
+      {
+        "uuid": "17_29",
+        "id": "feno_branco",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 17,
+          "y": 29
+        },
+        "x": -192,
+        "y": 240
+      },
+      {
+        "uuid": "19_29",
+        "id": "feno_verde",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 19,
+          "y": 29
+        },
+        "x": -160,
+        "y": 256
+      },
+      {
+        "uuid": "23_29",
+        "id": "cerca_madeira",
+        "type": "cerca",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 21,
+          "y": 29
+        },
+        "x": -96,
+        "y": 281.6
+      },
+      {
+        "uuid": "29_29",
+        "id": "cerca_branca",
+        "type": "cerca",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 27,
+          "y": 29
+        },
+        "x": 0,
+        "y": 329.6
+      },
+      {
+        "uuid": "29_26",
+        "id": "cerca_preta",
+        "type": "cerca",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 27,
+          "y": 26
+        },
+        "x": 48,
+        "y": 305.6
+      },
+      {
+        "uuid": "23_26",
+        "id": "cerca_rosa",
+        "type": "cerca",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 21,
+          "y": 26
+        },
+        "x": -48,
+        "y": 257.6
+      },
+      {
+        "uuid": "17_26",
+        "id": "cerca_azul",
+        "type": "cerca",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 15,
+          "y": 26
+        },
+        "x": -144,
+        "y": 209.6
+      },
+      {
+        "uuid": "11_26",
+        "id": "cerca_verde",
+        "type": "cerca",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 9,
+          "y": 26
+        },
+        "x": -240,
+        "y": 161.6
+      },
+      {
+        "uuid": "5_25",
+        "id": "celeiro_vermelho",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 3,
+          "y": 23
+        },
+        "x": -312,
+        "y": 108
+      },
+      {
+        "uuid": "29_21",
+        "id": "celerio_rosa",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 27,
+          "y": 19
+        },
+        "x": 136,
+        "y": 268
+      },
+      {
+        "uuid": "22_21",
+        "id": "celeiro_azul",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 20,
+          "y": 19
+        },
+        "x": 24,
+        "y": 212
+      },
+      {
+        "uuid": "17_20",
+        "id": "celeiro",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 14,
+          "y": 17
+        },
+        "x": -48,
+        "y": 160
+      },
+      {
+        "uuid": "11_21",
+        "id": "pilao",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 11,
+          "y": 21
+        },
+        "x": -160,
+        "y": 128
+      },
+      {
+        "uuid": "8_21",
+        "id": "rede_praia",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 7,
+          "y": 20
+        },
+        "x": -200,
+        "y": 100
+      },
+      {
+        "uuid": "1_16",
+        "id": "tora",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 0,
+          "y": 15
+        },
+        "x": -248,
+        "y": 4
+      },
+      {
+        "uuid": "3_17",
+        "id": "anao_jardim",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 3,
+          "y": 17
+        },
+        "x": -224,
+        "y": 32
+      },
+      {
+        "uuid": "1_13",
+        "id": "banco_branco",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 1,
+          "y": 13
+        },
+        "x": -192,
+        "y": -16
+      },
+      {
+        "uuid": "3_14",
+        "id": "banco_marrom",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 3,
+          "y": 14
+        },
+        "x": -176,
+        "y": 8
+      },
+      {
+        "uuid": "6_15",
+        "id": "caixa_correio",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 6,
+          "y": 15
+        },
+        "x": -144,
+        "y": 40
+      },
+      {
+        "uuid": "1_11",
+        "id": "banheiro",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 0,
+          "y": 10
+        },
+        "x": -160,
+        "y": -40
+      },
+      {
+        "uuid": "3_11",
+        "id": "caixote",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 3,
+          "y": 11
+        },
+        "x": -128,
+        "y": -16
+      },
+      {
+        "uuid": "5_11",
+        "id": "barril",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 5,
+          "y": 11
+        },
+        "x": -96,
+        "y": 0
+      },
+      {
+        "uuid": "1_8",
+        "id": "cabana",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 0,
+          "y": 7
+        },
+        "x": -112,
+        "y": -64
+      },
+      {
+        "uuid": "4_8",
+        "id": "carrossel",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 3,
+          "y": 7
+        },
+        "x": -64,
+        "y": -40
+      },
+      {
+        "uuid": "7_8",
+        "id": "carrocao",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 6,
+          "y": 7
+        },
+        "x": -16,
+        "y": -8
+      },
+      {
+        "uuid": "7_11",
+        "id": "casa_passarinho",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 7,
+          "y": 11
+        },
+        "x": -64,
+        "y": 16
+      },
+      {
+        "uuid": "8_15",
+        "id": "cortador_grama_vermelho",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 8,
+          "y": 15
+        },
+        "x": -112,
+        "y": 56
+      },
+      {
+        "uuid": "12_9",
+        "id": "trator_amarelo",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 10,
+          "y": 7
+        },
+        "x": 48,
+        "y": 32
+      },
+      {
+        "uuid": "15_9",
+        "id": "trator_azul",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 14,
+          "y": 7
+        },
+        "x": 104,
+        "y": 60
+      },
+      {
+        "uuid": "19_10",
+        "id": "trator_verde",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 17,
+          "y": 8
+        },
+        "x": 144,
+        "y": 96
+      },
+      {
+        "uuid": "22_10",
+        "id": "trator_vermelho",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 21,
+          "y": 8
+        },
+        "x": 200,
+        "y": 124
+      },
+      {
+        "uuid": "31_15",
+        "id": "estabulo",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 30,
+          "y": 13
+        },
+        "x": 248,
+        "y": 236
+      },
+      {
+        "uuid": "20_15",
+        "id": "trator_verde",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 18,
+          "y": 13
+        },
+        "x": 80,
+        "y": 144
+      },
+      {
+        "uuid": "26_13",
+        "id": "balanco",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 25,
+          "y": 12
+        },
+        "x": 200,
+        "y": 180
+      },
+      {
+        "uuid": "25_11",
+        "id": "balanco2",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 25,
+          "y": 10
+        },
+        "x": 232,
+        "y": 156
+      },
+      {
+        "uuid": "2_4",
+        "id": "barraca_frutas",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 0,
+          "y": 3
+        },
+        "x": -40,
+        "y": -84
+      },
+      {
+        "uuid": "1_2",
+        "id": "bebedouro",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 0,
+          "y": 2
+        },
+        "x": -16,
+        "y": -104
+      },
+      {
+        "uuid": "1_1",
+        "id": "bebedouro2",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 0,
+          "y": 1
+        },
+        "x": 0,
+        "y": -112
+      },
+      {
+        "uuid": "6_5",
+        "id": "caixa_areia",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 5,
+          "y": 4
+        },
+        "x": 16,
+        "y": -48
+      },
+      {
+        "uuid": "6_2",
+        "id": "canteiro",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 5,
+          "y": 2
+        },
+        "x": 56,
+        "y": -68
+      },
+      {
+        "uuid": "5_0",
+        "id": "carrinho_mao",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 4,
+          "y": 0
+        },
+        "x": 80,
+        "y": -88
+      },
+      {
+        "uuid": "9_2",
+        "id": "carro_amarelo",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 8,
+          "y": 1
+        },
+        "x": 104,
+        "y": -44
+      },
+      {
+        "uuid": "9_11",
+        "id": "escorregador",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 9,
+          "y": 10
+        },
+        "x": -24,
+        "y": 28
+      },
+      {
+        "uuid": "12_2",
+        "id": "estufa",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 10,
+          "y": 0
+        },
+        "x": 152,
+        "y": -20
+      },
+      {
+        "uuid": "10_17",
+        "id": "fusca_vermelho",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 9,
+          "y": 16
+        },
+        "x": -120,
+        "y": 84
+      },
+      {
+        "uuid": "4_16",
+        "id": "grelha",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 4,
+          "y": 16
+        },
+        "x": -192,
+        "y": 32
+      },
+      {
+        "uuid": "10_24",
+        "id": "lenha_machado",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 9,
+          "y": 23
+        },
+        "x": -224,
+        "y": 136
+      },
+      {
+        "uuid": "17_2",
+        "id": "mini_fabrica",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 15,
+          "y": 0
+        },
+        "x": 232,
+        "y": 20
+      },
+      {
+        "uuid": "8_13",
+        "id": "poste_branco",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 8,
+          "y": 13
+        },
+        "x": -80,
+        "y": 40
+      },
+      {
+        "uuid": "14_26",
+        "id": "poste_preto",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 14,
+          "y": 26
+        },
+        "x": -192,
+        "y": 192
+      },
+      {
+        "uuid": "14_23",
+        "id": "roda_quebrada",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 13,
+          "y": 23
+        },
+        "x": -152,
+        "y": 164
+      },
+      {
+        "uuid": "22_3",
+        "id": "templo",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 19,
+          "y": 1
+        },
+        "x": 312,
+        "y": 68
+      },
+      {
+        "uuid": "7_18",
+        "id": "trepa",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 7,
+          "y": 17
+        },
+        "x": -168,
+        "y": 68
+      },
+      {
+        "uuid": "20_26",
+        "id": "flamingo",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 20,
+          "y": 26
+        },
+        "x": -96,
+        "y": 240
+      },
+      {
+        "uuid": "25_24",
+        "id": "relogio_sol",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 24,
+          "y": 23
+        },
+        "x": 16,
+        "y": 256
+      },
+      {
+        "uuid": "28_12",
+        "id": "poco",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 27,
+          "y": 11
+        },
+        "x": 256,
+        "y": 184
+      },
+      {
+        "uuid": "26_9",
+        "id": "cabana_rosa",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 25,
+          "y": 8
+        },
+        "x": 272,
+        "y": 144
+      },
+      {
+        "uuid": "28_9",
+        "id": "silo_de_graos",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 27,
+          "y": 8
+        },
+        "x": 304,
+        "y": 160
+      },
+      {
+        "uuid": "31_10",
+        "id": "oficina",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 30,
+          "y": 9
+        },
+        "x": 328,
+        "y": 196
+      },
+      {
+        "uuid": "20_6",
+        "id": "moinho_de_vento",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 19,
+          "y": 5
+        },
+        "x": 224,
+        "y": 80
+      },
+      {
+        "uuid": "29_3",
+        "id": "casarao_vermelho",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 26,
+          "y": 0
+        },
+        "x": 416,
+        "y": 120
+      },
+      {
+        "uuid": "30_7",
+        "id": "cavalinho",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 30,
+          "y": 7
+        },
+        "x": 368,
+        "y": 168
+      }
+    ]
+  }
+}

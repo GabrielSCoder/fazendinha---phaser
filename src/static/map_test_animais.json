@@ -1,0 +1,156 @@
+{
+  "user": {
+    "id": 1,
+    "uuid": "111-111",
+    "name": "gabriel",
+    "gold": 1000,
+    "money": 6,
+    "level": 1,
+    "xp": 0,
+    "energy": 0,
+    "energyMax": 50,
+    "lastEnergyUpdate": 0,
+    "options": {
+      "musicDisabled": false
+    }
+  },
+  "storage": [],
+  "gift": [],
+  "mission": {
+    "activeMissions": {
+      "1": {
+        "state": 0,
+        "objectives": [
+          {
+            "progress": 0,
+            "amount": 4,
+            "done": false
+          }
+        ],
+        "completed": false,
+        "startedAt": 1774552268824
+      }
+    },
+    "completedMissions": []
+  },
+  "world": {
+    "id": 1,
+    "sizeX": 10,
+    "sizeY": 10,
+    "lastUpdate": 1774648586129,
+    "objects": [
+      {
+        "uuid": "2_12",
+        "id": "animal_vaca",
+        "type": "animal",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 2,
+          "y": 11
+        },
+        "x": -152,
+        "y": 28,
+        "plantTime": 136848.79999995232,
+        "harvestTimes": 0
+      },
+      {
+        "uuid": "4_12",
+        "id": "animal_ovelha",
+        "type": "animal",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 4,
+          "y": 11
+        },
+        "x": -120,
+        "y": 44,
+        "plantTime": 139935.19999992847,
+        "harvestTimes": 0
+      },
+      {
+        "uuid": "6_12",
+        "id": "animal_galinha",
+        "type": "animal",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 6,
+          "y": 12
+        },
+        "x": -96,
+        "y": 64,
+        "plantTime": 142851.89999997616,
+        "harvestTimes": 0
+      },
+      {
+        "uuid": "8_12",
+        "id": "animal_porco",
+        "type": "animal",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 8,
+          "y": 11
+        },
+        "x": -56,
+        "y": 76,
+        "plantTime": 145770.09999990463,
+        "harvestTimes": 0
+      },
+      {
+        "uuid": "4_5",
+        "id": "animal_vaca",
+        "harvestTimes": 2,
+        "position": {
+          "x": 3,
+          "y": 5
+        },
+        "x": -24,
+        "y": -12,
+        "type": "animal",
+        "state": "placed"
+      },
+      {
+        "uuid": "7_6",
+        "id": "animal_ovelha",
+        "harvestTimes": 2,
+        "position": {
+          "x": 3,
+          "y": 2
+        },
+        "x": 24,
+        "y": -36,
+        "type": "animal",
+        "state": "placed"
+      },
+      {
+        "uuid": "9_6",
+        "id": "animal_galinha",
+        "harvestTimes": 2,
+        "position": {
+          "x": 7,
+          "y": 6
+        },
+        "x": 16,
+        "y": 24,
+        "type": "animal",
+        "state": "placed"
+      },
+      {
+        "uuid": "11_6",
+        "id": "animal_porco",
+        "harvestTimes": 2,
+        "position": {
+          "x": 7,
+          "y": 3
+        },
+        "x": 72,
+        "y": 4,
+        "type": "animal",
+        "state": "placed"
+      }
+    ]
+  }
+}

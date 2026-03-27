@@ -86,9 +86,9 @@ export default class TopUI {
 
         this.xpText.setText(`${xpAtual}/${xpObjetivo}`);
 
-        const padding = 30;
+        const padding = 2;
 
-        this.xpText.x = this.barraXp.x + this.barraXp.width - this.xpText.width - padding;
+        // this.xpText.x = this.barraXp.x + this.barraXp.width - this.xpText.width - padding;
     }
 
 

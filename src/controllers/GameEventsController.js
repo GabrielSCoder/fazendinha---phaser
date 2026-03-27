@@ -258,7 +258,9 @@ export default class GameEventsController {
 
             if (sprite.stages && !sprite.harvestReady && !sprite.growthStart && !this.staticMode) {
 
-                this.controllers.growth.startGrowth(sprite, sprite.tempoColheita * 60 * 1000, sprite.stages)
+                let plantCalc = this.scene.gameVariables.fastHarvestMode ? this.scene.gameVariables.debugHaverstTime : semente.tempoColheita;
+
+                this.controllers.growth.startGrowth(sprite, plantCalc * 60 * 1000, sprite.stages)
             }
         }
 
@@ -269,7 +271,7 @@ export default class GameEventsController {
         this.scene.gameVariables.selectedSprite = null;
 
         this.uiEvents.emit("move", { target: sprite.tipo, sprite: sprite });
-        
+
         if (this.scene.gameVariables.buyItemTmp) {
             this.scene.events.emit("itemPurchased", this.scene.gameVariables.buyItemTmp);
         }

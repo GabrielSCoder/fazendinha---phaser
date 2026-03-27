@@ -13,7 +13,7 @@ export default class GridUtils {
         this.itemMenuUI = scene.controllers.itemMenu;
         this.gridUtils = scene.gridUtils;
         this.uiEvents = configs.uiEvents;
-        this.gridMode = "full";
+        this.gridMode = "border";
     }
 
     init() {

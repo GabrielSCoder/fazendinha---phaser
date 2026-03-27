@@ -30,12 +30,12 @@ export default class GameVariablesController {
         this.hoveredSprite = null;
         this.canInteract = true;
         this.activeBar = false;
-        this.creativeMode = false;
+        this.creativeMode = true;
         this.staticMode = false;
-        this.noExperienceMode = false;
+        this.noExperienceMode = true;
         this.noFootprints = false;
-        this.actionTileX = 1;
-        this.actionTileY = 1;
+        this.actionTileX = 3;
+        this.actionTileY = 3;
         this.plowing = false;
         this.buyItemTmp = null;
         this.planting = false;
@@ -43,6 +43,8 @@ export default class GameVariablesController {
         this.hoverEnabled = true;
         this.matrixVisible = false;
         this.debugBarVisible = false;
+        this.fastHarvestMode = true;
+        this.debugHaverstTime = 0.02;
 
         this.selectedSprite = null;
         this.selectedSpriteDelete = null;

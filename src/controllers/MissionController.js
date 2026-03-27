@@ -23,6 +23,8 @@ export class MissionController {
     init() {
         this.initMissions()
 
+        if (this.scene.gameVariables.creativeMode) return;
+
         this.uiEvents.on("ui:showMission", (result) => {
             this.uiEvents.emit("ui:notify", { type: "mission", mission: this.getMissionUIData(result.id) })
         })

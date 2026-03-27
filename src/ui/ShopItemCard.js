@@ -46,7 +46,7 @@ export default class ShopItemCard {
 
         const img = s.add.image(this.width / 2, 70, this.data.img)
             .setOrigin(0.5)
-            .setDisplaySize(70, 70);
+            .setDisplaySize(60, 60);
 
         elements.push(img);
 
@@ -67,11 +67,11 @@ export default class ShopItemCard {
 
         } else {
 
-            const xpText = s.add.text(60, 100, `XP: ${this.data.xp}`, {
+            const xpText = s.add.text(75, 110, `XP: ${this.data.xp}`, {
                 fontSize: '14px',
                 color: '#000',
                 fontFamily: 'LuckiestGuy-Regular'
-            });
+            }).setOrigin(0.5);
 
             const clockIcon = s.add.image(50, 125, 'clock_icon')
                 .setOrigin(0.5)

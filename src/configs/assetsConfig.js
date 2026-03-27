@@ -17,7 +17,7 @@ export const assetsConfig = {
     },
 
     plantasProntas: {
-        path: "assets/solo/solo_pronto/",
+        path: "assets/solo/solo_pronto512/",
         prefix: "pronto_",
 
         files: [
@@ -26,7 +26,7 @@ export const assetsConfig = {
             "cebola", "cafe", "couve_flor", "girassol", "melancia",
             "milho", "mirtilo", "morango", "nabo", "pimenta",
             "pimentao", "rabanete", "trigo", "cenoura", "soja",
-            "tomate", "alcachofra", "espinafre", "aloe_vera"
+            "tomate", "alcachofra", "espinafre", "aloe_vera", "uva"
         ],
 
         getFile: name => {
@@ -41,14 +41,18 @@ export const assetsConfig = {
     arvores: {
         path: "assets/arvore/",
         files: [
-            "macieira_vazia", "pereira", "abrico", "cerejeira_vazia","cerejeira_cheia", "pereira_vazia", "pereira_cheia",
-             "nectarina", "pessegueiro", "laranjeira", "abrico2", "atemoia", "coqueiro_vazio", "coqueiro_cheio", "mangueira_vazia", "mangueira_cheia"
+            "macieira_vazia", "macieira_cheia", "abrico_cheio", "abrico_vazio", "cerejeira_vazia", "cerejeira_cheia", "pereira_vazia", "pereira_cheia",
+            "nectarina_vazia", "nectarina_cheia", "pessegueiro_vazio", "pessegueiro_cheio", "laranjeira_cheia", "laranjeira_vazia", "atemoia_vazia", "atemoia_cheia", "coqueiro_vazio", "coqueiro_cheio",
+            "mangueira_vazia", "mangueira_cheia", "bananeira_vazia", "bananeira_cheia"
         ]
     },
 
     animais: {
         path: "assets/animal/",
-        files: ["vaca", "galo", "ovelha", "porco", "galinha"]
+        files: ["vaca", "galo", "ovelha", "porco", "galinha", "bufalo", "cisne", "coelho",
+            "coelho2", "elefante", "galinha2", "galinha3", "galinha5", "galinha6", "girafa",
+            "leao", 'leoa', "panda", "patinho", "pato_branco", "pato_feio", "pato_real", "zebra"
+        ]
     },
 
     decoracoes: {
@@ -56,16 +60,16 @@ export const assetsConfig = {
         files: ["anao_jardim", "banco_branco", "banco_marrom", "banheiro", "barril", "caixa_correio",
             "cerca_azul256", "carro", "cerca_verde", "cerca_madeira256", "toras", "cabana_rosa",
             "galinheiro", "estufa", "moinho", "super_armazem", "rede_praia", "feno_preto", "feno_verde",
-            "armazem", "estabulo", "bangalo", "banco_branco", "banco_marrom", "feno_rosa", "feno_anil", 
+            "armazem", "estabulo", "bangalo", "banco_branco", "banco_marrom", "feno_rosa", "feno_anil",
             "feno_branco", "balanco", "banheiro", "barraca_frutas", "bebedouro", "bebedouro_alto", "caixa_areia", "canteiro",
             "carrinho_mao", "carro_amarelo", "carroca", "carrossel", "carrocao", "casa_passarinho", "casarao_vermelho",
             "casinha", "cavalinho", "cortador_grama_vermelho", "balanco2", "escorregador", "fusca_vermelho", "grelha", "lenha_machado",
             "mini_fabrica", "moinho2", "poco", "poste_branco", "poste_preto", "roda_quebrada", "templo", "trepa",
             "banheiro", "barracao_azul", "barracao_marrom", "barracao_rosa", "barril", "feno_vermelho",
-            "barril", "caixote", "flamingo", "relogio_sol", "pilao", "feno_anil", "feno_azul", 
+            "barril", "caixote", "flamingo", "relogio_sol", "pilao", "feno_anil", "feno_azul",
             "feno_amarelo", "fusca_vermelho",
             "cerca_verde256", "cerca_preta256", "cerca_branca256", "cerca_rosa256", "cerca_preta256",
-             "silo", "bancada_ferramentas"
+            "silo", "bancada_ferramentas"
 
         ]
     },

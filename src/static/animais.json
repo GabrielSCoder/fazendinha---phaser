@@ -1,0 +1,108 @@
+[
+    {
+        "id": "animal_vaca",
+        "nome": "Vaca",
+        "preco_compra": 600,
+        "preco_compra_grana": 0,
+        "preco_venda": 12,
+        "tempo_colheita_horas": 0.2,
+        "xp": 150,
+        "nivel_requerido": 1,
+        "img": "vaca",
+        "escala": 0.22,
+        "area": [
+            1,
+            2
+        ],
+        "tipo": "animal",
+        "origem": [
+            0.6,
+            0.6
+        ]
+    },
+    {
+        "id": "animal_frango",
+        "nome": "Frango",
+        "preco_compra": 450,
+        "preco_compra_grana": 0,
+        "preco_venda": 20,
+        "tempo_colheita_horas": 48,
+        "xp": 100,
+        "nivel_requerido": 4,
+        "img": "galo",
+        "escala": 0.15,
+        "area": [
+            1,
+            1
+        ],
+        "origem": [
+            0.4,
+            0.6
+        ],
+        "tipo": "animal",
+        "hidden": true
+    },
+    {
+        "id": "animal_porco",
+        "nome": "Porco",
+        "preco_compra": 800,
+        "preco_compra_grana": 0,
+        "preco_venda": 40,
+        "tempo_colheita_horas": 48,
+        "xp": 200,
+        "nivel_requerido": 10,
+        "img": "porco",
+        "escala": 0.20,
+        "area": [
+            1,
+            2
+        ],
+        "origem": [
+            0.58,
+            0.55
+        ],
+        "tipo": "animal"
+    },
+    {
+        "id": "animal_ovelha",
+        "nome": "Ovelha",
+        "preco_compra": 550,
+        "preco_compra_grana": 0,
+        "preco_venda": 30,
+        "tempo_colheita_horas": 36,
+        "xp": 150,
+        "nivel_requerido": 7,
+        "img": "ovelha",
+        "escala": 0.2,
+        "area": [
+            1,
+            2
+        ],
+        "origem": [
+            0.62,
+            0.55
+        ],
+        "tipo": "animal"
+    },
+    {
+        "id": "animal_galinha",
+        "nome": "Galinha",
+        "preco_compra": 550,
+        "preco_compra_grana": 0,
+        "preco_venda": 30,
+        "tempo_colheita_horas": 36,
+        "xp": 150,
+        "nivel_requerido": 7,
+        "img": "galinha",
+        "escala": 0.15,
+        "area": [
+            1,
+            1
+        ],
+        "origem": [
+            0.4,
+            0.6
+        ],
+        "tipo": "animal"
+    }
+]

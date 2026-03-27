@@ -36,6 +36,8 @@ export default class GrowthController {
 
             if (lastStage?.texture) {
                 sprite.setTexture(lastStage.texture);
+                if (lastStage?.origem)
+                    sprite.setOrigin(...lastStage.origem);
             }
 
         });

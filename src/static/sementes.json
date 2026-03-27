@@ -1,0 +1,500 @@
+[
+    {
+        "id": "semente_mirtilo",
+        "nome": "Mirtilo",
+        "preco_compra": 20,
+        "preco_venda": 70,
+        "tempo_colheita_horas": 4,
+        "xp": 1,
+        "nivel_requerido": 1,
+        "img": "semente_mirtilo",
+        "img_pronta": "pronto_mirtilo",
+        "escala": 0.73,
+        "area": [
+            4,
+            4
+        ],
+        "origem": [
+            0.5,
+            0.58
+        ],
+        "tipo": "semente",
+        "noStopBuy": false,
+        "tipo_plantacao": "solo_plantado_simples"
+    },
+    {
+        "id": "semente_soja",
+        "nome": "Soja",
+        "preco_compra": 50,
+        "preco_venda": 165,
+        "tempo_colheita_horas": 48,
+        "xp": 2,
+        "nivel_requerido": 1,
+        "img": "semente_soja",
+        "img_pronta": "pronto_soja",
+        "escala": 0.78,
+        "area": [
+            4,
+            4
+        ],
+        "tipo": "semente",
+        "noStopBuy": false,
+        "tipo_plantacao": "solo_plantado_simples"
+    },
+    {
+        "id": "semente_abobora",
+        "nome": "Abóbora",
+        "preco_compra": 70,
+        "preco_venda": 115,
+        "tempo_colheita_horas": 36,
+        "xp": 2,
+        "nivel_requerido": 1,
+        "img": "semente_abobora",
+        "img_pronta": "pronto_abobora",
+        "escala": 0.78,
+        "area": [
+            4,
+            4
+        ],
+        "tipo": "semente",
+        "noStopBuy": false,
+        "tipo_plantacao": "solo_plantado_simples"
+    },
+    {
+        "id": "semente_abobora_moranga",
+        "nome": "Abóbora Moranga",
+        "preco_compra": 70,
+        "preco_venda": 115,
+        "tempo_colheita_horas": 36,
+        "xp": 2,
+        "nivel_requerido": 1,
+        "escala": 0.78,
+        "area": [
+            4,
+            4
+        ],
+        "img": "semente_abobora_moranga",
+        "img_pronta": "pronto_abobora_moranga",
+        "tipo": "semente",
+        "noStopBuy": false,
+        "tipo_plantacao": "solo_plantado_simples"
+    },
+    {
+        "id": "semente_pimentao",
+        "nome": "Pimentão",
+        "preco_compra": 30,
+        "preco_venda": 125,
+        "tempo_colheita_horas": 24,
+        "xp": 2,
+        "nivel_requerido": 1,
+        "img": "semente_pimentao",
+        "img_pronta": "pronto_pimentao",
+        "tipo": "semente",
+        "escala": 0.78,
+        "area": [
+            4,
+            4
+        ],
+        "noStopBuy": false,
+        "tipo_plantacao": "solo_plantado_simples"
+    },
+    {
+        "id": "semente_pimenta",
+        "nome": "Pimenta",
+        "preco_compra": 80,
+        "preco_venda": 240,
+        "tempo_colheita_horas": 48,
+        "xp": 2,
+        "nivel_requerido": 2,
+        "img": "semente_pimenta",
+        "img_pronta": "pronto_pimenta",
+        "tipo": "semente",
+        "escala": 0.78,
+        "area": [
+            4,
+            4
+        ],
+        "noStopBuy": false,
+        "tipo_plantacao": "solo_plantado_simples"
+    },
+    {
+        "id": "semente_cenoura",
+        "nome": "Cenoura",
+        "preco_compra": 65,
+        "preco_venda": 140,
+        "tempo_colheita_horas": 8,
+        "xp": 1,
+        "nivel_requerido": 3,
+        "img": "semente_cenoura",
+        "img_pronta": "pronto_cenoura",
+        "tipo": "semente",
+        "escala": 0.78,
+        "area": [
+            4,
+            4
+        ],
+        "noStopBuy": false,
+        "tipo_plantacao": "solo_plantado_simples"
+    },
+    {
+        "id": "semente_beterraba",
+        "nome": "Beterraba",
+        "preco_compra": 65,
+        "preco_venda": 140,
+        "tempo_colheita_horas": 8,
+        "xp": 1,
+        "nivel_requerido": 3,
+        "img": "semente_beterraba",
+        "img_pronta": "pronto_beterraba",
+        "tipo": "semente",
+        "escala": 0.78,
+        "area": [
+            4,
+            4
+        ],
+        "noStopBuy": false,
+        "tipo_plantacao": "solo_plantado_simples"
+    },
+    {
+        "id": "semente_arroz",
+        "nome": "Arroz",
+        "preco_compra": 140,
+        "preco_venda": 400,
+        "tempo_colheita_horas": 72,
+        "xp": 2,
+        "nivel_requerido": 4,
+        "img": "semente_arroz",
+        "img_pronta": "pronto_arroz",
+        "tipo": "semente",
+        "escala": 0.78,
+        "area": [
+            4,
+            4
+        ],
+        "noStopBuy": false,
+        "tipo_plantacao": "solo_plantado_alagado"
+    },
+    {
+        "id": "semente_rabanete",
+        "nome": "Rabanete",
+        "preco_compra": 140,
+        "preco_venda": 400,
+        "tempo_colheita_horas": 72,
+        "xp": 2,
+        "nivel_requerido": 4,
+        "img": "semente_rabanete",
+        "img_pronta": "pronto_rabanete",
+        "tipo": "semente",
+        "escala": 0.78,
+        "area": [
+            4,
+            4
+        ],
+        "noStopBuy": false,
+        "tipo_plantacao": "solo_plantado_simples"
+    },
+    {
+        "id": "semente_alcachofra",
+        "nome": "Alcachofra",
+        "preco_compra": 90,
+        "preco_venda": 185,
+        "tempo_colheita_horas": 12,
+        "xp": 1,
+        "nivel_requerido": 5,
+        "img": "semente_alcachofra",
+        "img_pronta": "pronto_alcachofra",
+        "tipo": "semente",
+        "escala": 0.78,
+        "area": [
+            4,
+            4
+        ],
+        "noStopBuy": false,
+        "tipo_plantacao": "solo_plantado_simples"
+    },
+    {
+        "id": "semente_abacaxi",
+        "nome": "Abacaxi",
+        "preco_compra": 40,
+        "preco_venda": 95,
+        "tempo_colheita_horas": 2,
+        "xp": 1,
+        "nivel_requerido": 6,
+        "img": "semente_abacaxi",
+        "img_pronta": "pronto_abacaxi",
+        "tipo": "semente",
+        "escala": 0.78,
+        "area": [
+            4,
+            4
+        ],
+        "noStopBuy": false,
+        "tipo_plantacao": "solo_plantado_simples"
+    },
+    {
+        "id": "semente_uva",
+        "nome": "Uva",
+        "preco_compra": 150,
+        "preco_venda": 414,
+        "tempo_colheita_horas": 36,
+        "xp": 2,
+        "nivel_requerido": 7,
+        "img": "semente_uva",
+        "img_pronta": "pronto_uva",
+        "tipo": "semente",
+        "escala": 0.78,
+        "area": [
+            4,
+            4
+        ],
+        "noStopBuy": false,
+        "tipo_plantacao": "solo_plantado_simples"
+    },
+    {
+        "id": "semente_berinjela",
+        "nome": "Berinjela",
+        "preco_compra": 150,
+        "preco_venda": 398,
+        "tempo_colheita_horas": 48,
+        "xp": 2,
+        "nivel_requerido": 8,
+        "img": "semente_berinjela",
+        "img_pronta": "pronto_berinjela",
+        "tipo": "semente",
+        "escala": 0.78,
+        "area": [
+            4,
+            4
+        ],
+        "noStopBuy": false,
+        "tipo_plantacao": "solo_plantado_simples"
+    },
+    {
+        "id": "semente_trigo",
+        "nome": "Trigo",
+        "preco_compra": 140,
+        "preco_venda": 321,
+        "tempo_colheita_horas": 24,
+        "xp": 2,
+        "nivel_requerido": 9,
+        "img": "semente_trigo",
+        "img_pronta": "pronto_trigo",
+        "tipo": "semente",
+        "escala": 0.78,
+        "area": [
+            4,
+            4
+        ],
+        "noStopBuy": false,
+        "tipo_plantacao": "solo_plantado_simples"
+    },
+    {
+        "id": "semente_tomate",
+        "nome": "Tomate",
+        "preco_compra": 100,
+        "preco_venda": 165,
+        "tempo_colheita_horas": 6,
+        "xp": 1,
+        "nivel_requerido": 10,
+        "img": "semente_tomate",
+        "img_pronta": "pronto_tomate",
+        "tipo": "semente",
+        "escala": 0.78,
+        "area": [
+            4,
+            4
+        ],
+        "noStopBuy": false,
+        "tipo_plantacao": "solo_plantado_simples"
+    },
+    {
+        "id": "semente_framboesa",
+        "nome": "Framboesa",
+        "preco_compra": 190,
+        "preco_venda": 475,
+        "tempo_colheita_horas": 48,
+        "xp": 2,
+        "nivel_requerido": 11,
+        "img": "semente_framboesa",
+        "img_pronta": "pronto_framboesa",
+        "tipo": "semente",
+        "escala": 0.78,
+        "area": [
+            4,
+            4
+        ],
+        "noStopBuy": false,
+        "tipo_plantacao": "solo_plantado_simples"
+    },
+    {
+        "id": "semente_morango",
+        "nome": "Morango",
+        "preco_compra": 100,
+        "preco_venda": 175,
+        "tempo_colheita_horas": 4,
+        "xp": 1,
+        "nivel_requerido": 12,
+        "img": "semente_morango",
+        "img_pronta": "pronto_morango",
+        "tipo": "semente",
+        "escala": 0.78,
+        "area": [
+            4,
+            4
+        ],
+        "noStopBuy": false,
+        "tipo_plantacao": "solo_plantado_simples"
+    },
+    {
+        "id": "semente_batata",
+        "nome": "Batata",
+        "preco_compra": 260,
+        "preco_venda": 175,
+        "tempo_colheita_horas": 4,
+        "xp": 1,
+        "nivel_requerido": 13,
+        "img": "semente_batata_inglesa",
+        "img_pronta": "pronto_batata_inglesa",
+        "tipo": "semente",
+        "escala": 0.78,
+        "area": [
+            4,
+            4
+        ],
+        "noStopBuy": false,
+        "tipo_plantacao": "solo_plantado_simples"
+    },
+    {
+        "id": "semente_algodao",
+        "nome": "Algodão",
+        "preco_compra": 170,
+        "preco_venda": 538,
+        "tempo_colheita_horas": 24,
+        "xp": 2,
+        "nivel_requerido": 14,
+        "img": "semente_algodao",
+        "img_pronta": "pronto_algodao",
+        "tipo": "semente",
+        "escala": 0.78,
+        "area": [
+            4,
+            4
+        ],
+        "noStopBuy": false,
+        "tipo_plantacao": "solo_plantado_simples"
+    },
+    {
+        "id": "semente_aloe_vera",
+        "nome": "Aloe vera",
+        "preco_compra": 200,
+        "preco_venda": 349,
+        "tempo_colheita_horas": 8,
+        "xp": 1,
+        "nivel_requerido": 15,
+        "img": "semente_aloe_vera",
+        "img_pronta": "pronto_aloe_vera",
+        "tipo": "semente",
+        "escala": 0.78,
+        "area": [
+            4,
+            4
+        ],
+        "noStopBuy": false,
+        "tipo_plantacao": "solo_plantado_simples"
+    },
+    {
+        "id": "semente_hortela",
+        "nome": "Hortelã",
+        "preco_compra": 250,
+        "preco_venda": 510,
+        "tempo_colheita_horas": 24,
+        "xp": 2,
+        "nivel_requerido": 16,
+        "img": "semente_alcachofra",
+        "img_pronta": "pronto_mirtilo",
+        "tipo": "semente",
+        "escala": 0.78,
+        "area": [
+            4,
+            4
+        ],
+        "noStopBuy": false,
+        "tipo_plantacao": "solo_plantado_simples"
+    },
+    {
+        "id": "semente_espinafre",
+        "nome": "Espinafre",
+        "preco_compra": 100,
+        "preco_venda": 136,
+        "tempo_colheita_horas": 0.0833,
+        "xp": 1,
+        "nivel_requerido": 16,
+        "img": "semente_espinafre",
+        "img_pronta": "pronto_espinafre",
+        "tipo": "semente",
+        "escala": 0.78,
+        "area": [
+            4,
+            4
+        ],
+        "noStopBuy": false,
+        "tipo_plantacao": "solo_plantado_simples"
+    },
+    {
+        "id": "semente_melancia",
+        "nome": "Melancia",
+        "preco_compra": 270,
+        "preco_venda": 438,
+        "tempo_colheita_horas": 72,
+        "xp": 8,
+        "nivel_requerido": 16,
+        "img": "semente_melancia",
+        "img_pronta": "pronto_melancia",
+        "tipo": "semente",
+        "escala": 0.78,
+        "area": [
+            4,
+            4
+        ],
+        "noStopBuy": false,
+        "tipo_plantacao": "solo_plantado_simples"
+    },
+    {
+        "id": "semente_girassol",
+        "nome": "Girassol",
+        "preco_compra": 125,
+        "preco_venda": 315,
+        "tempo_colheita_horas": 24,
+        "xp": 2,
+        "nivel_requerido": 17,
+        "img": "semente_girassol",
+        "img_pronta": "pronto_girassol",
+        "tipo": "semente",
+        "escala": 0.78,
+        "area": [
+            4,
+            4
+        ],
+        "noStopBuy": false,
+        "tipo_plantacao": "solo_plantado_simples"
+    },
+    {
+        "id": "semente_cebola",
+        "nome": "Cebola",
+        "preco_compra": 170,
+        "preco_venda": 275,
+        "tempo_colheita_horas": 12,
+        "xp": 1,
+        "nivel_requerido": 19,
+        "img": "semente_cebola",
+        "img_pronta": "pronto_cebola",
+        "tipo": "semente",
+        "escala": 0.78,
+        "area": [
+            4,
+            4
+        ],
+        "noStopBuy": false,
+        "tipo_plantacao": "solo_plantado_simples"
+    }
+]

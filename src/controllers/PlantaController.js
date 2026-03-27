@@ -87,10 +87,12 @@ export default class PlantaController {
         sprite.setTexture(itemData.img)
 
         const stages = [
-            { percent: 1, texture: semente.img_pronta }
+            { percent: 1, texture: semente.img_pronta, origem : [0.52, 0.45] }
         ];
+        
+        let plantCalc = this.scene.gameVariables.fastHarvestMode ? this.scene.gameVariables.debugHaverstTime : semente.tempoColheita;
 
-        this.controllers.growth.startGrowth(sprite, semente.tempoColheita * 60 * 1000, stages);
+        this.controllers.growth.startGrowth(sprite, plantCalc * 60 * 1000, stages);
 
         sprite.tipo = semente.tipo_plantacao;
         sprite.isMoving = false;
@@ -116,7 +118,7 @@ export default class PlantaController {
             y: sprite.y
         })
 
-        this.uiEvents.emit("plant", { target: "solo_plantado_simples", seed: sprite.nome.toLowerCase(), sprite : sprite });
+        this.uiEvents.emit("plant", { target: "solo_plantado_simples", seed: sprite.nome.toLowerCase(), sprite: sprite });
 
         this.uiEvents.emit("action:FreeSoil");
     }

@@ -1,0 +1,244 @@
+[
+    {
+        "id": "arvore_abrico",
+        "nome": "Abricó",
+        "preco_compra": 100,
+        "preco_compra_grana": 0,
+        "preco_venda": 25,
+        "tempo_colheita_horas": 36,
+        "xp": 2,
+        "nivel_requerido": 1,
+        "img": "abrico_vazio",
+        "img_pronta": "abrico_cheio",
+        "escala": 0.25,
+        "area": [
+            1,
+            1
+        ],
+        "origem": [
+            0.5,
+            0.82
+        ],
+        "tipo": "arvore"
+    },
+    {
+        "id": "arvore_maca",
+        "nome": "Maçã",
+        "preco_compra": 650,
+        "preco_compra_grana": 0,
+        "preco_venda": 55,
+        "tempo_colheita_horas": 72,
+        "xp": 3,
+        "nivel_requerido": 5,
+        "img": "macieira_vazia",
+        "img_pronta": "macieira_cheia",
+        "escala": 0.18,
+        "area": [
+            1,
+            1
+        ],
+        "origem": [
+            0.55,
+            0.8
+        ],
+        "tipo": "arvore"
+    },
+    {
+        "id": "arvore_banana",
+        "nome": "Bananeira",
+        "preco_compra": 650,
+        "preco_compra_grana": 0,
+        "preco_venda": 55,
+        "tempo_colheita_horas": 72,
+        "xp": 3,
+        "nivel_requerido": 5,
+        "img": "bananeira_vazia",
+        "img_pronta": "bananeira_cheia",
+        "escala": 0.4,
+        "area": [
+            1,
+            1
+        ],
+        "origem": [
+            0.5,
+            0.85
+        ],
+        "tipo": "arvore"
+    },
+    {
+        "id": "arvore_atemoia",
+        "nome": "Atemoia",
+        "preco_compra": 600,
+        "preco_compra_grana": 0,
+        "preco_venda": 40,
+        "tempo_colheita_horas": 48,
+        "xp": 4,
+        "nivel_requerido": 8,
+        "img": "atemoia_vazia",
+        "img_pronta": "atemoia_cheia",
+        "escala": 0.3,
+        "area": [
+            1,
+            1
+        ],
+        "origem": [
+            0.5,
+            0.85
+        ],
+        "tipo": "arvore"
+    },
+    {
+        "id": "arvore_pessego",
+        "nome": "Pessego",
+        "preco_compra": 420,
+        "preco_compra_grana": 0,
+        "preco_venda": 60,
+        "tempo_colheita_horas": 48,
+        "xp": 2,
+        "nivel_requerido": 10,
+        "tipo": "arvore",
+        "img": "pessegueiro_vazio",
+        "img_pronta": "pessegueiro_cheio",
+        "escala": 0.3,
+        "area": [
+            1,
+            1
+        ],
+        "origem": [
+            0.54,
+            0.8
+        ]
+    },
+    {
+        "id": "arvore_nectarina",
+        "nome": "Nectarina",
+        "preco_compra": 600,
+        "preco_compra_grana": 0,
+        "preco_venda": 55,
+        "tempo_colheita_horas": 72,
+        "xp": 2,
+        "nivel_requerido": 20,
+        "tipo": "arvore",
+        "img": "nectarina_vazia",
+        "img_pronta": "nectarina_cheia",
+        "escala": 0.3,
+        "area": [
+            1,
+            1
+        ],
+        "origem": [
+            0.5,
+            0.85
+        ]
+    },
+    {
+        "id": "arvore_coqueiro",
+        "nome": "Coqueiro",
+        "preco_compra": 600,
+        "preco_compra_grana": 0,
+        "preco_venda": 55,
+        "tempo_colheita_horas": 36,
+        "xp": 2,
+        "nivel_requerido": 20,
+        "tipo": "arvore",
+        "img": "coqueiro_vazio",
+        "img_pronta": "coqueiro_cheio",
+        "escala": 0.3,
+        "area": [
+            1,
+            1
+        ],
+        "origem": [
+            0.42,
+            0.87
+        ]
+    },
+    {
+        "id": "arvore_cerejeira",
+        "nome": "Cerejeira",
+        "preco_compra": 600,
+        "preco_compra_grana": 0,
+        "preco_venda": 55,
+        "tempo_colheita_horas": 24,
+        "xp": 2,
+        "nivel_requerido": 20,
+        "tipo": "arvore",
+        "img": "cerejeira_vazia",
+        "img_pronta": "cerejeira_cheia",
+        "escala": 0.2,
+        "area": [
+            1,
+            1
+        ],
+        "origem": [
+            0.5,
+            0.75
+        ]
+    },
+    {
+        "id": "arvore_mangueira",
+        "nome": "Magueira",
+        "preco_compra": 600,
+        "preco_compra_grana": 0,
+        "preco_venda": 55,
+        "tempo_colheita_horas": 72,
+        "xp": 2,
+        "nivel_requerido": 20,
+        "tipo": "arvore",
+        "img": "mangueira_vazia",
+        "img_pronta": "mangueira_cheia",
+        "escala": 0.2,
+        "area": [
+            1,
+            1
+        ],
+        "origem": [
+            0.5,
+            0.75
+        ]
+    },
+    {
+        "id": "arvore_pereira",
+        "nome": "Pereira",
+        "preco_compra": 600,
+        "preco_compra_grana": 0,
+        "preco_venda": 55,
+        "tempo_colheita_horas": 72,
+        "xp": 2,
+        "nivel_requerido": 20,
+        "tipo": "arvore",
+        "img": "pereira_vazia",
+        "img_pronta": "pereira_cheia",
+        "escala": 0.2,
+        "area": [
+            1,
+            1
+        ],
+        "origem": [
+            0.5,
+            0.75
+        ]
+    },
+    {
+        "id": "arvore_laranjeira",
+        "nome": "Laranjeira",
+        "preco_compra": 600,
+        "preco_compra_grana": 0,
+        "preco_venda": 55,
+        "tempo_colheita_horas": 72,
+        "xp": 2,
+        "nivel_requerido": 20,
+        "tipo": "arvore",
+        "img": "laranjeira_vazia",
+        "img_pronta": "laranjeira_cheia",
+        "escala": 0.3,
+        "area": [
+            1,
+            1
+        ],
+        "origem": [
+            0.5,
+            0.82
+        ]
+    }
+]

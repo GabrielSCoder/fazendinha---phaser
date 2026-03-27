@@ -1,15 +1,12 @@
-import { sementes, animais, arvores, decoracoes, solos } from "../objects.js";
-
-
 export default class CatalogUtils {
 
     constructor(scene, config = {}) {
         this.scene = scene;
-        this.seeds = sementes;
-        this.animals = animais;
-        this.trees = arvores;
-        this.decoration = decoracoes;
-        this.soils = solos;
+        this.seeds = scene.sementes;
+        this.animals = scene.animais;
+        this.trees = scene.arvores;
+        this.decoration = scene.decoracoes;
+        this.soils = scene.solos;
         this.uiEvents = config.uiEvents;
         this.classEvents();
     }
@@ -26,10 +23,10 @@ export default class CatalogUtils {
 
     getCatalog() {
         return {
-            animal: this.animals,
-            tree: this.trees,
-            decoration: this.decoration,
-            seed: this.seeds
+            animal: this.animals.filter(item => !item.hidden),
+            tree: this.trees.filter(item => !item.hidden),
+            decoration: this.decoration.filter(item => !item.hidden),
+            seed: this.seeds.filter(item => !item.hidden)
         }
     }
 

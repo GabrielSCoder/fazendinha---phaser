@@ -78,13 +78,20 @@ export class Start extends Phaser.Scene {
         this.load.image('back_frame2', 'assets/anim/back/frame_2.png');
         this.load.image('back_frame3', 'assets/anim/back/frame_3.png');
 
-        this.load.image('solo', 'assets/solo/solo_preparado.png');
-        this.load.image('solo_plantado_simples', 'assets/solo/solo_plantado_simples.png');
-        this.load.image('solo_seco', 'assets/solo/solo_seco.png');
-        this.load.image('solo_alagado', 'assets/solo/solo_alagado.png');
-        this.load.image('solo_plantado_alagado', 'assets/solo/solo_alagado_2.png');
+        this.load.image('solo2', 'assets/solo/512/solo_preparado512.png');
+        this.load.image('solo_plantado_simples', 'assets/solo/512/solo_plantado_simples512.png');
+        this.load.image('solo_seco', 'assets/solo/512/solo_seco512.png');
+        this.load.image('solo_alagado', 'assets/solo/512/solo_plantado_alagado512.png');
+        this.load.image('solo_alagado2', 'assets/solo/512/solo_plantado_alagado512.png');
+        this.load.image('solo_plantado_alagado', 'assets/solo/512/solo_plantado_alagado512.png');
 
         this.load.json('saveData', 'src/static/player_save.json')
+        this.load.json('sementes_data', 'src/static/sementes.json');
+        this.load.json('arvores_data', 'src/static/arvores.json');
+        this.load.json('animais_data', 'src/static/animais.json');
+        this.load.json('decoracoes_data', 'src/static/decoracoes.json');
+        this.load.json('solos_data', 'src/static/solos.json');
+
 
         AssetLoader.load(this)
         this.gameVariables = new GameVariablesController(this);
@@ -103,13 +110,18 @@ export class Start extends Phaser.Scene {
 
         this.controllers = {}
         const saveData = this.cache.json.get('saveData');
+        this.sementes = this.cache.json.get('sementes_data');
+        this.animais = this.cache.json.get('animais_data');
+        this.arvores = this.cache.json.get('arvores_data');
+        this.decoracoes = this.cache.json.get('decoracoes_data');
+        this.solos = this.cache.json.get('solos_data');
 
         this.createControllers(saveData)
         this.initControllers()
 
         this.controllers.sprite.initialGraphics();
         this.controllers.gridUtils.drawMatrix();
-        this.controllers.gridUtils.gridStart();
+        this.controllers.gridUtils.drawGridBorder();
 
         this.controllers.world.mountMap()
 
@@ -192,8 +204,8 @@ export class Start extends Phaser.Scene {
 
     update() {
 
-        const fps = Math.floor(this.game.loop.actualFps);
-        this.controllers.sprite.fpsText.setText(`FPS: ${fps}`);
+        // const fps = Math.floor(this.game.loop.actualFps);
+        // this.controllers.sprite.fpsText.setText(`FPS: ${fps}`);
 
         this.controllers.sell.updateSelling();
 
@@ -220,7 +232,7 @@ export class Start extends Phaser.Scene {
 
         this.controllers.save = new SaveLoadController(this, saveData, { uiEvents: events });
 
-        this.controllers.world = new WorldController(this, this.controllers.save, events );
+        this.controllers.world = new WorldController(this, this.controllers.save, events);
 
         this.controllers.presents = new PresentsControler(this, this.controllers.save, { uiEvents: events });
 

@@ -57,7 +57,7 @@ export default class SoloController {
 
         this.controllers.acoesUtils.clearPreviewTiles();
 
-        const blockSize = 4; // tamanho fixo de um "solo"
+        const blockSize = 4; 
         const totalWidth = blockSize * blocksWide;
         const totalHeight = blockSize * blocksHigh;
 
@@ -190,8 +190,11 @@ export default class SoloController {
             const w = blockSize;
             const h = blockSize;
 
-            const centerX = startX + (w / 2) - (1 - originX - 0.25);
-            const centerY = startY + (h / 2) - (1 - originY - 0.18);
+            const centerX = startX + (w / 2) - (1 - originX - 0.1);
+            const centerY = startY + (h / 2) - (1 - originY - 0.15);
+
+            console.log(centerX)
+            console.log(centerY)
 
             const screenPos = this.gridUtils.isoToScreen(centerX, centerY);
 
@@ -426,7 +429,7 @@ export default class SoloController {
                 sprite.nome = "solo_preparado";
                 sprite.tipo = "solo_preparado";
 
-                sprite.setTexture("solo");
+                sprite.setTexture("solo2");
                 sprite.setAlpha(1)
 
                 sprite.setInteractive({ pixelPerfect: true, alphaTolerance: 1, useHandCursor: true });
@@ -464,6 +467,7 @@ export default class SoloController {
         sprite.growthStage = null;
         sprite.harvestReady = false;
         sprite.preco_colheita = null;
+        sprite.setOrigin(0.52, 0.4);
         sprite.setTexture("solo_seco");
         sprite.setAlpha(1);
         sprite.setInteractive({ pixelPerfect: true, alphaTolerance: 1, useHandCursor: true });
