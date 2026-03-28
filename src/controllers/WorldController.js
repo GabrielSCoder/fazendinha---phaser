@@ -98,6 +98,7 @@ export class WorldController {
         obj.state = "planted";
         obj.item = sprite.planta_cultivada;
         obj.plantTime = sprite.growthStart;
+        obj.duration = sprite.growthDuration;
 
         this.save();
     }
@@ -133,6 +134,8 @@ export class WorldController {
                 ...save,
                 type: obj.type,
                 state: "placed",
+                plantTime: sprite.growthStart,
+                duration: obj.duration,
             }
         } else {
             save = {
@@ -158,6 +161,8 @@ export class WorldController {
             return;
         }
 
+        console.log(this.saveController.getWorld().objects[key])
+
         let save = {
             uuid: key,
             id: sprite.id,
@@ -174,6 +179,7 @@ export class WorldController {
             save = {
                 ...save,
                 plantTime: sprite.growthStart,
+                duration: sprite.duration,
                 harvestTimes: sprite.harvestTime,
             }
         }
@@ -265,12 +271,6 @@ export class WorldController {
 
 
                 sprite.regrow = false;
-
-                const stages = [
-                    { percent: 1, texture: first.img_pronta }
-                ];
-
-                this.scene.controllers.growth.startGrowth(sprite, first.tempo_colheita_horas * 60 * 1000, stages);
             }
 
             this.scene.controllers.gridUtils.recalculateDepthAround(sprite);
@@ -279,9 +279,9 @@ export class WorldController {
 
         this.scene.controllers.camera.ignoreInUICamera([...this.scene.gameVariables.sprites])
 
-        // this.scene.controllers.gridUtils.recalculateAllDepths();
-
         this.scene.controllers.gridUtils.drawFootprints();
+
+        this.scene.controllers.growth.start();
 
     }
 

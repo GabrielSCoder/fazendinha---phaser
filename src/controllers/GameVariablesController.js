@@ -25,14 +25,15 @@ export default class GameVariablesController {
         this.changeCameraZoom = false;
         this.previewTiles = [];
         this.previewOccupiedtiles = [];
+        this.growingSprites = [];
         this.fenceSnapTarget = null;
         this.tileSize = this.gridSize;
         this.hoveredSprite = null;
         this.canInteract = true;
         this.activeBar = false;
-        this.creativeMode = true;
+        this.creativeMode = false;
         this.staticMode = false;
-        this.noExperienceMode = true;
+        this.noExperienceMode = false;
         this.noFootprints = false;
         this.actionTileX = 3;
         this.actionTileY = 3;
@@ -44,7 +45,7 @@ export default class GameVariablesController {
         this.matrixVisible = false;
         this.debugBarVisible = false;
         this.fastHarvestMode = true;
-        this.debugHaverstTime = 0.02;
+        this.debugHaverstTime = 0.2;
 
         this.selectedSprite = null;
         this.selectedSpriteDelete = null;

@@ -8,6 +8,7 @@ export default class SpriteUtils {
 
     addGameSprite(data, x, y, scale = 0.5, originX, originY, isRotated = false, rebuild = false) {
 
+        const is_solo_plantado = data.tipo === "solo_plantado_simples" || data.tipo === "solo_plantado_alagado";
         const is_semente = data.tipo === "semente";
         const custom_scale = data.tipo === "semente" ? 0.2 : scale;
 
@@ -32,12 +33,13 @@ export default class SpriteUtils {
         sprite.isRotated = isRotated;
         sprite.footprint = data.area;
         sprite.originalFootprint = data.area;
+        sprite.canRotate = !data?.cannotRotate;
 
         rebuild ? sprite.uuid = data.uuid : false
 
         if (isRotated) {
             const [w, h] = data.area;
-            sprite.footprint = [ h, w ]
+            sprite.footprint = [h, w]
             sprite.flipX = isRotated;
         }
 
@@ -46,23 +48,37 @@ export default class SpriteUtils {
             sprite.regrow = false;
         }
 
+        if (data.tipo == "solo_seco") {
+            sprite.harvestTime = data.harvestTimes;
+        }
+
         const canGrow = this.controllers.sprite.growingSprites.find(c => c == data.tipo);
 
         if (canGrow) {
+
+            const stages = [
+                { percent: 1, texture: sprite.texture.key },
+                { percent: 100, texture: data.img_pronta ?? sprite.texture.key, origem: is_solo_plantado ? [0.52, 0.45] : data.origem }
+            ];
+
             sprite.tempoColheita = data.tempo_colheita_horas;
             sprite.img_pronta = data.img_pronta ?? "";
             sprite.growthStage = 0;
             sprite.harvestReady = false;
             sprite.preco_colheita = data.preco_venda;
             sprite.canGrow = true;
-            sprite.harvestTime = 0;
-
-            const stages = [
-                { percent: 1, texture: sprite.texture.key },
-                { percent: 100, texture: sprite.img_pronta ?? sprite.texture.key }
-            ];
+            sprite.harvestTime = rebuild ? data.harvestTimes ?? 0 : 0;
 
             sprite.stages = stages;
+
+
+            if (rebuild) {
+                sprite.growthStart = data.plantTime;
+                sprite.growthDuration = data.duration;
+                sprite.growthStages = stages
+            }
+
+            this.scene.gameVariables.growingSprites.push(sprite)
 
             if (!is_semente) sprite.regrow = true;
         }
@@ -155,6 +171,7 @@ export default class SpriteUtils {
 
         const sprite = this.scene.gameVariables.selectedSprite;
         if (!sprite || !sprite.footprint) return;
+        if (!sprite.canRotate) return;
         this.controllers.itemMenu.hide();
 
         if (!sprite.originalFootprint) {

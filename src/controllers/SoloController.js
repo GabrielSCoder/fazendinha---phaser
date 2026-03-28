@@ -1,4 +1,3 @@
-import { solos } from "../objects.js"
 
 export default class SoloController {
     constructor(scene, config = {}) {
@@ -16,6 +15,7 @@ export default class SoloController {
         this.uiEvents = config.uiEvents;
         this.AcoesUtils = scene.acoesUtils;
         this.interact = scene.interactController;
+        this.solos = scene.solos;
 
     }
 
@@ -176,7 +176,7 @@ export default class SoloController {
 
         if (!validTiles.length) return [];
 
-        const itemData = solos.find(c => c.nome === "solo_preparado");
+        const itemData = this.solos.find(c => c.nome === "solo_preparado");
         if (!itemData) return [];
 
         const scale = itemData.escala || 1;

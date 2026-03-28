@@ -135,6 +135,8 @@ export default class SpriteController {
 
         if (!sprite) return;
 
+        console.log(sprite)
+
         let text = "";
 
         if (sprite.tipo == "decoracao" || sprite.tipo == "cerca") {
@@ -149,15 +151,13 @@ export default class SpriteController {
 
         else if (this.growingSprites.includes(sprite.tipo)) {
 
-            let percent = this.controllers.growth.getGrowthPercent(sprite);
-            percent = Math.floor(percent * 100);
-
-            text = sprite.nome + " " + percent + "%";
-
-            console.log(percent)
-
             if (sprite.harvestReady) {
                 text = sprite.nome + "\n" + colher;
+            } else {
+                let percent = this.controllers.growth.getGrowthPercent(sprite);
+                percent = Math.floor(percent * 100);
+    
+                text = sprite.nome + " " + percent + "%";
             }
         }
 

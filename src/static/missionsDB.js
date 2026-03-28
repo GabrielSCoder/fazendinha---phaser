@@ -94,7 +94,7 @@ export const intro_missions = [
         unlocks: null,
         level_requirement: 5,
         auto_start: true,
-        icon: "abrico",
+        icon: "abrico_cheio",
 
         description: "Arborize sua fazenda",
 
@@ -106,7 +106,7 @@ export const intro_missions = [
                         amount: 10,
                         text: "Plante 10 árvores",
                         target : "arvore",
-                        icon: "abrico"
+                        icon: "abrico_vazio"
                     },
                     {
                         action: "harvest",
@@ -114,7 +114,7 @@ export const intro_missions = [
                         text: "colha 10 árvores de abricó",
                         target: "arvore",
                         filters : { name : "arvore_abrico"},
-                        icon: "abrico"
+                        icon: "abrico_cheio"
                     }
                 ],
             }

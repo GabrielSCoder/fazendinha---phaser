@@ -1,61 +1,44 @@
 {
-  "user": {
-    "id": 1,
-    "uuid": "111-111",
-    "name": "gabriel",
-    "gold": 9971866,
-    "money": 903,
-    "xp": 23398,
-    "level": 14,
-    "energy": 0,
-    "energyMax": 50,
-    "lastEnergyUpdate": 0,
-    "lastUpdate": 0,
-    "options": {
-      "musicDisabled": false
-    }
-  },
-  "storage": [],
-  "gift": [],
-  "mission": {
-    "activeMissions": {
-      "1": {
-        "state": 0,
-        "objectives": [
-          {
-            "progress": 0,
-            "amount": 4,
-            "done": false
-          }
-        ],
-        "completed": false,
-        "startedAt": 1774291935648
-      },
-      "3": {
-        "state": 0,
-        "objectives": [
-          {
-            "progress": 10,
-            "amount": 10,
-            "done": true
-          },
-          {
-            "progress": 0,
-            "amount": 10,
-            "done": false
-          }
-        ],
-        "completed": false,
-        "startedAt": 1774292138361
-      }
+    "version": "0.0.1",
+    "user": {
+        "id": 1,
+        "uuid": "111-111",
+        "name": "gabriel",
+        "gold": 1000,
+        "money": 6,
+        "level": 1,
+        "xp": 0,
+        "energy": 0,
+        "energyMax": 50,
+        "lastEnergyUpdate": 0,
+        "options": {
+            "musicDisabled": false
+        }
     },
-    "completedMissions": []
-  },
-  "world": {
-    "id": 1,
-    "sizeX": 10,
-    "sizeY": 10,
-    "lastUpdate": 1774297667125,
-    "objects": []
-  }
+    "storage": [],
+    "gift": [],
+    "mission": {
+        "activeMissions": {
+            "1": {
+                "state": 0,
+                "objectives": [
+                    {
+                        "progress": 0,
+                        "amount": 4,
+                        "done": false
+                    }
+                ],
+                "completed": false,
+                "startedAt": 1774552268824
+            }
+        },
+        "completedMissions": []
+    },
+    "world": {
+        "id": 1,
+        "sizeX": 10,
+        "sizeY": 10,
+        "lastUpdate": 0,
+        "objects": []
+    }
 }

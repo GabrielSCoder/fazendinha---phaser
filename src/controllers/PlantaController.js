@@ -14,6 +14,7 @@ export default class PlantaController {
         this.itemMenuUI = scene.itemMenuUI;
         this.gridUtils = scene.controllers.gridUtils;
         this.uiEvents = config.uiEvents;
+        this.staticMode = scene.gameVariables.staticMode;
 
     }
 
@@ -87,12 +88,13 @@ export default class PlantaController {
         sprite.setTexture(itemData.img)
 
         const stages = [
-            { percent: 1, texture: semente.img_pronta, origem : [0.52, 0.45] }
+            { percent: 1, texture: semente.img_pronta, origem: [0.52, 0.45] }
         ];
-        
+
         let plantCalc = this.scene.gameVariables.fastHarvestMode ? this.scene.gameVariables.debugHaverstTime : semente.tempoColheita;
 
-        this.controllers.growth.startGrowth(sprite, plantCalc * 60 * 1000, stages);
+        if (!this.staticMode)
+            this.controllers.growth.startGrowth(sprite, plantCalc * 60 * 1000, stages);
 
         sprite.tipo = semente.tipo_plantacao;
         sprite.isMoving = false;

@@ -238,6 +238,7 @@ export class Start extends Phaser.Scene {
 
         this.controllers.gridUtils = new GridUtils(this, { uiEvents: events });
         this.controllers.catalog = new CatalogUtils(this, { uiEvents: events })
+        this.controllers.spriteUtils = new SpriteUtils(this, { uiEvents: events })
         this.controllers.banner = new UINotificationController(this, { uiEvents: events });
 
         this.controllers.missions = new MissionController(this, intro_missions, this.controllers.save, events)
@@ -245,7 +246,6 @@ export class Start extends Phaser.Scene {
         this.controllers.growth = new GrowthController(this)
 
         this.controllers.sideUi = new SidesUi(this, { uiEvents: events });
-        this.controllers.spriteUtils = new SpriteUtils(this, { uiEvents: events })
         this.controllers.acoesUtils = new AcoesUtils(this, { uiEvents: events })
 
         this.controllers.xp = new XPController(this, xpTable, events, this.controllers.save)

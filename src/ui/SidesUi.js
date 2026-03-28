@@ -242,13 +242,13 @@ export default class SidesUi {
 
         btn.alert.setVisible(true);
 
-        // this.scene.tweens.add({
-        //     targets: btn.alert,
-        //     scale: { from: 1, to: 1.3 },
-        //     duration: 400,
-        //     yoyo: true,
-        //     repeat: -1
-        // });
+        this.scene.tweens.add({
+            targets: btn.alert,
+            scale: { from: 1, to: 1.3 },
+            duration: 400,
+            yoyo: true,
+            repeat: -1
+        });
 
     }
     show() {

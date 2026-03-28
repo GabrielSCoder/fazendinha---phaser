@@ -260,12 +260,16 @@ export default class GameEventsController {
 
                 let plantCalc = this.scene.gameVariables.fastHarvestMode ? this.scene.gameVariables.debugHaverstTime : semente.tempoColheita;
 
-                this.controllers.growth.startGrowth(sprite, plantCalc * 60 * 1000, sprite.stages)
+                plantCalc = plantCalc * 60 * 1000;
+
+                sprite.duration = plantCalc;
+
+                this.controllers.growth.startGrowth(sprite, plantCalc, sprite.stages);
             }
         }
 
         if (!sprite.uuid) {
-            sprite.uuid = `${sprite.gridX}_${sprite.gridY}`
+            sprite.uuid = `${sprite.lastFreePos.startX}_${sprite.lastFreePos.startY}`
         }
 
         this.scene.gameVariables.selectedSprite = null;
