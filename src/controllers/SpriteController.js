@@ -135,8 +135,6 @@ export default class SpriteController {
 
         if (!sprite) return;
 
-        console.log(sprite)
-
         let text = "";
 
         if (sprite.tipo == "decoracao" || sprite.tipo == "cerca") {

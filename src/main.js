@@ -1,5 +1,6 @@
 import { Start } from './scenes/Start.js';
 import { Menu } from './scenes/Menu.js';
+import { Loading } from './scenes/Loading.js';
 
 const config = {
     type: Phaser.AUTO,
@@ -11,8 +12,9 @@ const config = {
     backgroundColor: '#000000',
     pixelArt: false,
     scene: [
-        Start,
-        Menu
+        // Menu,
+        Loading,
+        Start
     ],
     physics: {
         default: 'arcade',

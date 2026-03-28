@@ -1,4 +1,5 @@
 import { debounce } from "../utils/debounce.js";
+import { messages } from "../static/server_messages.js";
 
 export default class SaveLoadController {
 
@@ -10,6 +11,7 @@ export default class SaveLoadController {
         this.gift = null;
         this.mission = null;
         this.world = null;
+        this.messages = null;
         this.uiEvents = config.uiEvents;
 
         this.saveDebounced = debounce(() => {
@@ -28,6 +30,10 @@ export default class SaveLoadController {
             this.downloadSaveFile();
         });
 
+        this.uiEvents.on("ui:warnings", (callback) => {
+            callback(this.getServerMessages())
+        })
+
     }
 
     loadSaveData() {
@@ -35,6 +41,7 @@ export default class SaveLoadController {
         this.storage = structuredClone(this.saveArchive.storage);
         this.gift = structuredClone(this.saveArchive.gift);
         this.mission = structuredClone(this.saveArchive.mission);
+        this.messages = structuredClone(this.saveArchive.messages);
         this.loadWorld(this.saveArchive.world);
     }
 
@@ -59,7 +66,13 @@ export default class SaveLoadController {
         }
 
         this.dirty = false;
+    }
 
+    changeMessages(data) {
+
+        this.messages = data;
+
+        this.saveDebounced();
     }
 
     changeMissions(data) {
@@ -69,6 +82,10 @@ export default class SaveLoadController {
         this.uiEvents.emit("save:mission:update", this.mission);
 
         this.saveDebounced();
+    }
+
+    getServerMessages() {
+        return messages.filter(msg => !this.messages.includes(msg.id));
     }
 
     getUser() {
@@ -97,6 +114,7 @@ export default class SaveLoadController {
             storage: this.storage,
             gift: this.gift,
             mission: this.mission,
+            messages: this.messages,
             world: this.getWorldSaveFormat()
         }
     }

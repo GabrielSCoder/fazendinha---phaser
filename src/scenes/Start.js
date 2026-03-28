@@ -28,9 +28,9 @@ import { intro_missions } from '../static/missionsDB.js';
 import SidesUi from '../ui/SidesUi.js';
 import PresentsControler from '../controllers/PresentsController.js';
 import PresentsMenuUI from '../ui/PresentsMenuUI.js';
-import PaginationUtils from '../utils/PaginationUtils.js';
 import SaveLoadController from '../controllers/SaveLoadController.js';
 import { WorldController } from '../controllers/WorldController.js';
+import { messages } from '../static/server_messages.js';
 
 export class Start extends Phaser.Scene {
     constructor() {
@@ -38,63 +38,9 @@ export class Start extends Phaser.Scene {
     }
 
     preload() {
-        this.load.font('LuckiestGuy-Regular', 'assets/fonts/LuckiestGuy-Regular.ttf', 'truetype');
 
-        this.load.text('xpTable', 'assets/data/xp_levels.csv');
-
-
-        this.load.image('menu_bg', 'assets/ui/fundo_madeira.jpg');
-        this.load.image('item_bg', 'assets/ui/fundo_item_loja.png');
-        this.load.image('item_bloqueado', 'assets/ui/bloqueado_ui.png');
-        this.load.image('categoria_bg', 'assets/ui/categoria_fundo.png');
-        this.load.image('gold_icon', 'assets/ui/gold.png');
-        this.load.image('cash_icon', 'assets/ui/cash.png');
-        this.load.image('clock_icon', 'assets/ui/clock2.png');
-        this.load.image('close_button', 'assets/ui/close.png');
-        this.load.image('confirm_button', 'assets/ui/confirm.png');
-        this.load.image('proximo_button', 'assets/ui/proximo.png');
-        this.load.image('anterior_button', 'assets/ui/anterior.png');
-        this.load.image('enxada', 'assets/ui/enxada.png');
-        this.load.image('pa', 'assets/ui/pazinha.png');
-        this.load.image('star', 'assets/ui/star.png');
-        this.load.image('energy', 'assets/ui/energy.png');
-        this.load.image('gift', 'assets/ui/gift2.png');
-        this.load.image('grama', 'assets/fundo/grama_tile.png');
-
-        this.load.image('fundo_madeira', 'assets/ui/fundo_madeira_escuro_2.png');
-        this.load.image('fundo_madeira_medio', 'assets/ui/banner_medio.png');
-        this.load.image('fundo_madeira_branco', 'assets/ui/fundo_madeira_escuro_medio_fundo_branco.png');
-
-        this.load.image('boneco_frente', 'assets/boneco/boneco_frente.png');
-        this.load.image('boneco_costas', 'assets/boneco/boneco_tras.png');
-
-        this.load.image('frame1', 'assets/anim/frame_01.png');
-        this.load.image('frame2', 'assets/anim/frame_02.png');
-        this.load.image('frame3', 'assets/anim/frame_03.png');
-        this.load.image('frame4', 'assets/anim/frame_04.png');
-
-        this.load.image('back_frame0', 'assets/anim/back/frame_0.png');
-        this.load.image('back_frame1', 'assets/anim/back/frame_1.png');
-        this.load.image('back_frame2', 'assets/anim/back/frame_2.png');
-        this.load.image('back_frame3', 'assets/anim/back/frame_3.png');
-
-        this.load.image('solo2', 'assets/solo/512/solo_preparado512.png');
-        this.load.image('solo_plantado_simples', 'assets/solo/512/solo_plantado_simples512.png');
-        this.load.image('solo_seco', 'assets/solo/512/solo_seco512.png');
-        this.load.image('solo_alagado', 'assets/solo/512/solo_plantado_alagado512.png');
-        this.load.image('solo_alagado2', 'assets/solo/512/solo_plantado_alagado512.png');
-        this.load.image('solo_plantado_alagado', 'assets/solo/512/solo_plantado_alagado512.png');
-
-        this.load.json('saveData', 'src/static/player_save.json')
-        this.load.json('sementes_data', 'src/static/sementes.json');
-        this.load.json('arvores_data', 'src/static/arvores.json');
-        this.load.json('animais_data', 'src/static/animais.json');
-        this.load.json('decoracoes_data', 'src/static/decoracoes.json');
-        this.load.json('solos_data', 'src/static/solos.json');
-
-
-        AssetLoader.load(this)
         this.gameVariables = new GameVariablesController(this);
+        this.load.json('saveData', 'src/static/player_save.json')
     }
 
     create() {
@@ -109,7 +55,16 @@ export class Start extends Phaser.Scene {
         this.gridMap = this.gameVariables.gridMap;
 
         this.controllers = {}
+
+        // const saveData = SaveLoadController.loadFromStorage();
+
+        // if (!saveData) {
+        //     console.error("Nenhum save encontrado!");
+        //     this.scene.start("Menu");
+        //     return;
+        // }
         const saveData = this.cache.json.get('saveData');
+
         this.sementes = this.cache.json.get('sementes_data');
         this.animais = this.cache.json.get('animais_data');
         this.arvores = this.cache.json.get('arvores_data');
@@ -133,13 +88,6 @@ export class Start extends Phaser.Scene {
             callback: this.controllers.sprite.updateHoverPlantPercent,
             callbackScope: this.controllers.sprite
         });
-
-        // this.time.addEvent({
-        //     delay: 200,
-        //     loop: true,
-        //     callback: () => console.log(this.gameVariables.selectedSpriteDelete),
-        //     callbackScope: this
-        // });
 
         this.controllers.camera.ignoreInUICamera([
             this.controllers.itemMenu.itemMenu,

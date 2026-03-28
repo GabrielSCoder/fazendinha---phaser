@@ -3,8 +3,8 @@ export default class GameVariablesController {
         this.scene = scene;
 
         this.gridSize = 32;
-        this.gridWidth = 10;
-        this.gridHeight = 10;
+        this.gridWidth = 12;
+        this.gridHeight = 12;
         this.offsetX = 0;
         this.offsetY = -this.gridHeight * (this.gridSize / 4);
         this.matrixOffsetX = 20;
@@ -35,16 +35,16 @@ export default class GameVariablesController {
         this.staticMode = false;
         this.noExperienceMode = false;
         this.noFootprints = false;
-        this.actionTileX = 3;
-        this.actionTileY = 3;
+        this.actionTileX = 2;
+        this.actionTileY = 2;
         this.plowing = false;
         this.buyItemTmp = null;
         this.planting = false;
         this.selling = false;
         this.hoverEnabled = true;
         this.matrixVisible = false;
-        this.debugBarVisible = false;
-        this.fastHarvestMode = true;
+        this.debugBarVisible = true;
+        this.fastHarvestMode = false;
         this.debugHaverstTime = 0.2;
 
         this.selectedSprite = null;

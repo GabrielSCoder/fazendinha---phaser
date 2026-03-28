@@ -5,7 +5,7 @@ export default class TopUI {
         this.scene = scene;
         this.uiEvents = config.uiEvents;
 
-        this.userName = config.userName || "Gabriel";
+        this.userName = "";
 
         this.level = 0;
         this.gold = 0;
@@ -17,6 +17,8 @@ export default class TopUI {
     }
 
     init() {
+
+        this.userName = this.scene.controllers.save.getUser().name;
 
         this.createUI();
 
@@ -33,8 +35,6 @@ export default class TopUI {
 
             this.gold = data.gold;
             this.money = data.money;
-
-            console.log(data)
 
             this.updateUI();
 

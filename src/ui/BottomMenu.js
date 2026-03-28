@@ -1,3 +1,4 @@
+import { messages } from "../static/server_messages.js";
 
 export default class BottomMenu {
     constructor(scene, config = {}) {
@@ -339,7 +340,7 @@ export default class BottomMenu {
         })
 
         this.btnPlusXp.on("pointerup", () => {
-            this.uiEvents.emit("action:addXP", { amount: 100 });
+            this.uiEvents.emit("ui:notify", {type : "advice", data : messages[0].mensagem})
         });
 
         this.CheatMenu.add([this.btnPlusGold, this.btnPlusMoney, this.btnPlusXp]);

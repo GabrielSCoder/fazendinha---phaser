@@ -258,7 +258,7 @@ export default class GameEventsController {
 
             if (sprite.stages && !sprite.harvestReady && !sprite.growthStart && !this.staticMode) {
 
-                let plantCalc = this.scene.gameVariables.fastHarvestMode ? this.scene.gameVariables.debugHaverstTime : semente.tempoColheita;
+                let plantCalc = this.scene.gameVariables.fastHarvestMode ? this.scene.gameVariables.debugHaverstTime : sprite.tempoColheita;
 
                 plantCalc = plantCalc * 60 * 1000;
 

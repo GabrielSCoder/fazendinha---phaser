@@ -52,9 +52,6 @@ export class WorldController {
 
         const map = this.saveController.getWorld().objects;
 
-        console.log(map)
-
-        console.log(map[key])
 
         if (!key) {
             console.log("Sem uuid")
@@ -161,7 +158,6 @@ export class WorldController {
             return;
         }
 
-        console.log(this.saveController.getWorld().objects[key])
 
         let save = {
             uuid: key,
@@ -217,8 +213,6 @@ export class WorldController {
         const map = this.saveController.getWorld().objects;
 
         if (!map) return;
-
-        console.log(map)
 
         let objects = [];
 

@@ -15,7 +15,7 @@ export const intro_missions = [
                     {
                         action: "plow",
                         amount: 4,
-                        text: "Are 4 solos",
+                        text: "Are solos",
                         target: "solo_preparado",
                         icon: "enxada"
                     },
@@ -45,14 +45,14 @@ export const intro_missions = [
                     {
                         action: "plant",
                         amount: 2,
-                        text: "Plante 2 mirtilos",
+                        text: "Plante mirtilos",
                         target: "solo_plantado_simples",
                         filters: { seed: "mirtilo" }
                     },
                     {
                         action: "plant",
                         amount: 2,
-                        text: "Plante 2 soja",
+                        text: "Plante soja",
                         target: "solo_plantado_simples",
                         filters: { seed: "soja" }
                     }
@@ -66,14 +66,14 @@ export const intro_missions = [
                     {
                         action: "harvest",
                         amount: 2,
-                        text: "Colha 2 mirtilos",
+                        text: "Colha mirtilos",
                         target: "solo_plantado_simples",
                         filters: { seed: "mirtilo" }
                     },
                     {
                         action: "harvest",
                         amount: 2,
-                        text: "Colha 2 soja",
+                        text: "Colha soja",
                         target: "solo_plantado_simples",
                         filters: { seed: "soja" }
                     }
@@ -104,14 +104,14 @@ export const intro_missions = [
                     {
                         action: "place",
                         amount: 10,
-                        text: "Plante 10 árvores",
+                        text: "Plante árvores",
                         target : "arvore",
                         icon: "abrico_vazio"
                     },
                     {
                         action: "harvest",
                         amount: 10,
-                        text: "colha 10 árvores de abricó",
+                        text: "colha árvores de abricó",
                         target: "arvore",
                         filters : { name : "arvore_abrico"},
                         icon: "abrico_cheio"

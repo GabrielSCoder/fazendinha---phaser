@@ -38,6 +38,7 @@ export default class UINotificationController {
         this.sellContainer = this.scene.add.container(0, 0).setVisible(false);
         this.itemContainer = this.scene.add.container(0, 0).setVisible(false);
         this.concludedContainer = this.scene.add.container(0, 0).setVisible(false);
+        this.advideContainer = this.scene.add.container(0, 0).setVisible(false);
 
         this.container.add([
             this.newMissionContainer,
@@ -46,14 +47,19 @@ export default class UINotificationController {
             this.genericContainer,
             this.sellContainer,
             this.concludedContainer,
-            this.itemContainer
+            this.itemContainer,
+            this.advideContainer
         ]);
 
         this.uiEvents.on("ui:notify", this.notify, this);
 
+        this.uiEvents.emit("ui:warnings", (data) => {
+            this.notifyWarnings(data)
+        })
     }
 
     notify(data) {
+        console.log(data)
         this.uiEvents.emit("ui:closeMenuSprite")
         this.uiEvents.emit("action:StopPlowing")
         this.queue.push(data);
@@ -83,6 +89,7 @@ export default class UINotificationController {
         this.sellContainer.setVisible(false);
         this.concludedContainer.setVisible(false);
         this.itemContainer.setVisible(false);
+        this.advideContainer.setVisible(false);
 
         switch (data.type) {
 
@@ -116,12 +123,38 @@ export default class UINotificationController {
                 this.sellContainer.setVisible(true);
                 break;
 
+            case "advice":
+                this.createAdviceBanner(data.data);
+                this.advideContainer.setVisible(true);
+                break;
+
             default:
                 this.createGenericPopup(data);
                 this.genericContainer.setVisible(true);
         }
 
         this.open();
+    }
+
+    createAdviceBanner(data) {
+
+        const bg = this.scene.add.image(0, 0, "fundo_madeira_medio").setDisplaySize(500, 200);
+
+        const body = this.scene.add.text(
+            0,
+            0,
+            data,
+            {
+                fontSize: "22px", color: "#ffffff", fontFamily: 'LuckiestGuy-Regular', lineSpacing: 2, wordWrap: {
+                    width: this.bgFullWidth * 0.9
+                }
+            }
+        ).setOrigin(0.5).setStroke('#000', 4);
+
+        // const confirm = this.createConfirmButton();
+        const close = this.createCloseButton(data);
+
+        this.advideContainer.add([bg, body, close]);
     }
 
     createLevelPopup(data) {
@@ -220,7 +253,6 @@ export default class UINotificationController {
 
         this.itemContainer.add([bg, title, body, description, item, confirm]);
     }
-
 
     createMissionPopup(data) {
 
@@ -599,6 +631,20 @@ export default class UINotificationController {
         btn.on("pointerout", () => btn.setScale(0.7))
 
         return btn;
+    }
+
+    notifyWarnings(data) {
+
+        if (!data.length) return;
+
+        let array = []
+
+        data.forEach(element => {
+            this.notify({type : "advice", data : element.mensagem})
+            array.push(element.id)
+        })
+
+        this.controllers.save.changeMessages(array)
     }
 
     open() {
