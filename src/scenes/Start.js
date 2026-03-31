@@ -22,15 +22,14 @@ import XPController from '../controllers/XpController.js';
 import FloatingTextController from '../controllers/FloatingTextController.js';
 import UINotificationController from '../controllers/UIController.js';
 import CatalogUtils from '../utils/CatalogUtils.js';
-import { AssetLoader } from '../utils/AssetLoader.js';
-import { MissionController } from '../controllers/MissionController.js';
 import { intro_missions } from '../static/missionsDB.js';
 import SidesUi from '../ui/SidesUi.js';
 import PresentsControler from '../controllers/PresentsController.js';
 import PresentsMenuUI from '../ui/PresentsMenuUI.js';
 import SaveLoadController from '../controllers/SaveLoadController.js';
-import { WorldController } from '../controllers/WorldController.js';
-import { messages } from '../static/server_messages.js';
+import { parseCSV } from '../utils/parseCsv.js';
+import WorldController from '../controllers/WorldController.js';
+import MissionController from "../controllers/MissionController.js"
 
 export class Start extends Phaser.Scene {
     constructor() {
@@ -40,7 +39,6 @@ export class Start extends Phaser.Scene {
     preload() {
 
         this.gameVariables = new GameVariablesController(this);
-        this.load.json('saveData', 'src/static/player_save.json')
     }
 
     create() {
@@ -56,14 +54,14 @@ export class Start extends Phaser.Scene {
 
         this.controllers = {}
 
-        // const saveData = SaveLoadController.loadFromStorage();
+        const saveData = SaveLoadController.loadFromStorage();
 
-        // if (!saveData) {
-        //     console.error("Nenhum save encontrado!");
-        //     this.scene.start("Menu");
-        //     return;
-        // }
-        const saveData = this.cache.json.get('saveData');
+        if (!saveData) {
+            console.error("Nenhum save encontrado!");
+            this.scene.start("Menu");
+            return;
+        }
+        // const saveData = this.cache.json.get('saveData');
 
         this.sementes = this.cache.json.get('sementes_data');
         this.animais = this.cache.json.get('animais_data');
@@ -152,8 +150,8 @@ export class Start extends Phaser.Scene {
 
     update() {
 
-        // const fps = Math.floor(this.game.loop.actualFps);
-        // this.controllers.sprite.fpsText.setText(`FPS: ${fps}`);
+        const fps = Math.floor(this.game.loop.actualFps);
+        this.controllers.sprite.fpsText.setText(`FPS: ${fps}`);
 
         this.controllers.sell.updateSelling();
 
@@ -176,7 +174,7 @@ export class Start extends Phaser.Scene {
 
         const raw = this.cache.text.get("xpTable");
 
-        const xpTable = this.parseCSV(raw)
+        const xpTable = parseCSV(raw)
 
         this.controllers.save = new SaveLoadController(this, saveData, { uiEvents: events });
 
@@ -240,24 +238,4 @@ export class Start extends Phaser.Scene {
 
     }
 
-    parseCSV(csv) {
-
-        const lines = csv.trim().split("\n");
-        const headers = lines.shift().split(",");
-
-        return lines.map(line => {
-
-            const values = line.split(",");
-
-            const obj = {};
-
-            headers.forEach((h, i) => {
-                obj[h.trim()] = Number(values[i]);
-            });
-
-            return obj;
-
-        });
-
-    }
 }

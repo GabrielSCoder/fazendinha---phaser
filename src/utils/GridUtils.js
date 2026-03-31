@@ -1116,6 +1116,15 @@ export default class GridUtils {
 
         return false;
     }
+
+    isInsideGrid(startX, startY, w, h) {
+        return (
+            startX >= 0 &&
+            startY >= 0 &&
+            (startX + w - 1) < this.gridWidth * this.logicFactor &&
+            (startY + h - 1) < this.gridHeight * this.logicFactor
+        );
+    }
 }
 
 

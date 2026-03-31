@@ -1,386 +1,24 @@
 [
   {
-    "nome": "solo_alagado2",
-    "img": "solo_alagado2",
-    "escala": 0.23,
-    "area": [
-      4,
-      4
-    ],
-    "origem": [
-      0.5,
-      0.4
-    ],
-    "tipo": "decoracao",
-    "noStopBuy": false,
-    "preco_venda": 1,
-    "hidden": true,
-    "cannotRotate": false
-  },
-  {
-    "nome": "solo_mirtilo",
-    "img": "pronto_mirtilo",
-    "escala": 0.23,
-    "area": [
-      4,
-      4
-    ],
-    "origem": [
-      0.5,
-      0.42
-    ],
-    "tipo": "decoracao",
-    "noStopBuy": false,
-    "preco_venda": 1,
-    "hidden": true,
-    "cannotRotate": true
-  },
-  {
-    "id": "boneco",
-    "nome": "Boneco",
+    "id": "anao_jardim",
+    "nome": "Anão de jardim",
     "preco_compra": 0,
-    "preco_compra_grana": 18,
-    "preco_venda": 0,
+    "preco_compra_grana": 12,
+    "preco_venda": 2430,
     "tempo_colheita_horas": 0,
-    "xp": 490,
-    "nivel_requerido": 0,
-    "img": "boneco_frente",
-    "escala": 0.5,
-    "area": [
-      1,
-      1
-    ],
-    "origem": [
-      0.4,
-      0.8
-    ],
-    "tipo": "decoracao",
-    "hidden": true
-  },
-  {
-    "id": "gazebo",
-    "nome": "Gazebo",
-    "preco_compra": 0,
-    "preco_compra_grana": 18,
-    "preco_venda": 0,
-    "tempo_colheita_horas": 0,
-    "xp": 490,
-    "nivel_requerido": 1,
-    "img": "bangalo",
-    "escala": 0.8,
-    "area": [
-      2,
-      2
-    ],
-    "origem": [
-      0.5,
-      0.75
-    ],
-    "tipo": "decoracao",
-    "noStopBuy": false
-  },
-  {
-    "id": "feno",
-    "nome": "Feno",
-    "tipo": "decoracao",
-    "preco_compra": 110,
-    "preco_compra_grana": 0,
-    "preco_venda": 0,
-    "tempo_colheita_horas": 0,
-    "xp": 490,
-    "nivel_requerido": 1,
-    "img": "feno_amarelo",
-    "escala": 0.11,
+    "xp": 180,
+    "nivel_requerido": 6,
+    "img": "anao_jardim",
+    "escala": 0.18,
     "area": [
       1,
       1
     ],
     "origem": [
       0.5,
-      0.5
+      0.6
     ],
-    "cannotRotate": true
-  },
-  {
-    "id": "feno_vermelho",
-    "nome": "Feno vermelho",
-    "tipo": "decoracao",
-    "preco_compra": 250,
-    "preco_compra_grana": 0,
-    "preco_venda": 0,
-    "tempo_colheita_horas": 0,
-    "xp": 490,
-    "nivel_requerido": 1,
-    "img": "feno_vermelho",
-    "escala": 0.11,
-    "area": [
-      1,
-      1
-    ],
-    "origem": [
-      0.5,
-      0.5
-    ],
-    "cannotRotate": true
-  },
-  {
-    "id": "feno_rosa",
-    "nome": "Feno rosa",
-    "tipo": "decoracao",
-    "preco_compra": 500,
-    "preco_compra_grana": 0,
-    "preco_venda": 0,
-    "tempo_colheita_horas": 0,
-    "xp": 490,
-    "nivel_requerido": 3,
-    "img": "feno_rosa",
-    "escala": 0.11,
-    "area": [
-      1,
-      1
-    ],
-    "origem": [
-      0.5,
-      0.5
-    ],
-    "cannotRotate": true
-  },
-  {
-    "id": "feno_preto",
-    "nome": "Feno preto",
-    "tipo": "decoracao",
-    "preco_compra": 500,
-    "preco_compra_grana": 0,
-    "preco_venda": 0,
-    "tempo_colheita_horas": 0,
-    "xp": 490,
-    "nivel_requerido": 1,
-    "img": "feno_preto",
-    "escala": 0.11,
-    "area": [
-      1,
-      1
-    ],
-    "origem": [
-      0.5,
-      0.5
-    ],
-    "cannotRotate": true
-  },
-  {
-    "id": "feno_azul",
-    "nome": "Feno azul",
-    "tipo": "decoracao",
-    "preco_compra": 350,
-    "preco_compra_grana": 0,
-    "preco_venda": 0,
-    "tempo_colheita_horas": 0,
-    "xp": 490,
-    "nivel_requerido": 0,
-    "img": "feno_azul",
-    "escala": 0.11,
-    "area": [
-      1,
-      1
-    ],
-    "origem": [
-      0.5,
-      0.5
-    ],
-    "cannotRotate": true
-  },
-  {
-    "id": "feno_anil",
-    "nome": "Feno anil",
-    "tipo": "decoracao",
-    "preco_compra": 250,
-    "preco_compra_grana": 0,
-    "preco_venda": 0,
-    "tempo_colheita_horas": 0,
-    "xp": 490,
-    "nivel_requerido": 1,
-    "img": "feno_anil",
-    "escala": 0.11,
-    "area": [
-      1,
-      1
-    ],
-    "origem": [
-      0.5,
-      0.5
-    ],
-    "cannotRotate": true
-  },
-  {
-    "id": "feno_branco",
-    "nome": "Feno branco",
-    "tipo": "decoracao",
-    "preco_compra": 250,
-    "preco_compra_grana": 0,
-    "preco_venda": 0,
-    "tempo_colheita_horas": 0,
-    "xp": 490,
-    "nivel_requerido": 1,
-    "img": "feno_branco",
-    "escala": 0.11,
-    "area": [
-      1,
-      1
-    ],
-    "origem": [
-      0.5,
-      0.5
-    ],
-    "cannotRotate": true
-  },
-  {
-    "id": "feno_verde",
-    "nome": "Feno verde",
-    "tipo": "decoracao",
-    "preco_compra": 500,
-    "preco_compra_grana": 0,
-    "preco_venda": 0,
-    "tempo_colheita_horas": 0,
-    "xp": 490,
-    "nivel_requerido": 1,
-    "img": "feno_verde",
-    "escala": 0.11,
-    "area": [
-      1,
-      1
-    ],
-    "origem": [
-      0.5,
-      0.5
-    ],
-    "cannotRotate": true
-  },
-  {
-    "id": "cerca_madeira",
-    "nome": "Cerca madeira",
-    "tipo": "cerca",
-    "preco_compra": 500,
-    "preco_compra_grana": 0,
-    "preco_venda": 0,
-    "tempo_colheita_horas": 0,
-    "xp": 6,
-    "nivel_requerido": 5,
-    "img": "cerca_madeira256",
-    "escala": 0.4,
-    "area": [
-      5,
-      1
-    ],
-    "origem": [
-      0.5,
-      0.5
-    ],
-    "cannotRotate": true
-  },
-  {
-    "id": "cerca_branca",
-    "nome": "Cerca branca",
-    "tipo": "cerca",
-    "preco_compra": 150,
-    "preco_compra_grana": 0,
-    "preco_venda": 0,
-    "tempo_colheita_horas": 0,
-    "xp": 6,
-    "nivel_requerido": 1,
-    "img": "cerca_branca256",
-    "escala": 0.4,
-    "area": [
-      5,
-      1
-    ],
-    "origem": [
-      0.5,
-      0.5
-    ]
-  },
-  {
-    "id": "cerca_preta",
-    "nome": "Cerca preta",
-    "tipo": "cerca",
-    "preco_compra": 400,
-    "preco_compra_grana": 0,
-    "preco_venda": 0,
-    "tempo_colheita_horas": 0,
-    "xp": 6,
-    "nivel_requerido": 1,
-    "img": "cerca_preta256",
-    "escala": 0.4,
-    "area": [
-      5,
-      1
-    ],
-    "origem": [
-      0.5,
-      0.5
-    ]
-  },
-  {
-    "id": "cerca_rosa",
-    "nome": "Cerca rosa",
-    "tipo": "cerca",
-    "preco_compra": 300,
-    "preco_compra_grana": 0,
-    "preco_venda": 0,
-    "tempo_colheita_horas": 0,
-    "xp": 6,
-    "nivel_requerido": 1,
-    "img": "cerca_rosa256",
-    "escala": 0.4,
-    "area": [
-      5,
-      1
-    ],
-    "origem": [
-      0.5,
-      0.5
-    ]
-  },
-  {
-    "id": "cerca_azul",
-    "nome": "Cerca azul",
-    "tipo": "cerca",
-    "preco_compra": 300,
-    "preco_compra_grana": 0,
-    "preco_venda": 0,
-    "tempo_colheita_horas": 0,
-    "xp": 6,
-    "nivel_requerido": 1,
-    "img": "cerca_azul256",
-    "escala": 0.4,
-    "area": [
-      5,
-      1
-    ],
-    "origem": [
-      0.5,
-      0.5
-    ]
-  },
-  {
-    "id": "cerca_verde",
-    "nome": "Cerca branca",
-    "tipo": "cerca",
-    "preco_compra": 300,
-    "preco_compra_grana": 0,
-    "preco_venda": 0,
-    "tempo_colheita_horas": 0,
-    "xp": 6,
-    "nivel_requerido": 1,
-    "img": "cerca_verde256",
-    "escala": 0.4,
-    "area": [
-      5,
-      1
-    ],
-    "origem": [
-      0.5,
-      0.5
-    ]
+    "tipo": "decoracao"
   },
   {
     "id": "balanco",
@@ -404,288 +42,34 @@
     ]
   },
   {
-    "id": "flamingo",
-    "nome": "Flamingo",
+    "id": "gangorra",
+    "nome": "Gangorra",
     "preco_compra": 0,
-    "preco_compra_grana": 0,
+    "preco_compra_grana": 14,
     "preco_venda": 0,
     "tempo_colheita_horas": 0,
-    "xp": 0,
-    "nivel_requerido": 6,
+    "xp": 300,
+    "nivel_requerido": 3,
     "tipo": "decoracao",
-    "img": "flamingo",
-    "escala": 0.2,
+    "img": "balanco2",
+    "escala": 0.5,
     "area": [
       1,
-      1
+      2
     ],
     "origem": [
       0.5,
       0.6
     ]
-  },
-  {
-    "id": "relogio_sol",
-    "nome": "Relógio de Sol",
-    "preco_compra": 0,
-    "preco_compra_grana": 23,
-    "preco_venda": 0,
-    "tempo_colheita_horas": 0,
-    "xp": 0,
-    "nivel_requerido": 4,
-    "tipo": "decoracao",
-    "img": "relogio_sol",
-    "escala": 0.1,
-    "area": [
-      2,
-      2
-    ],
-    "origem": [
-      0.5,
-      0.45
-    ]
-  },
-  {
-    "id": "cabana_rosa",
-    "nome": "Cabana rosa",
-    "tipo": "decoracao",
-    "preco_compra": 19000,
-    "preco_compra_grana": 0,
-    "preco_venda": 0,
-    "tempo_colheita_horas": 0,
-    "xp": 0,
-    "nivel_requerido": 10,
-    "img": "cabana_rosa",
-    "escala": 0.3,
-    "area": [
-      2,
-      2
-    ],
-    "origem": [
-      0.5,
-      0.75
-    ]
-  },
-  {
-    "id": "poco",
-    "nome": "Poço",
-    "preco_compra": 1800,
-    "preco_compra_grana": 0,
-    "preco_venda": 0,
-    "tempo_colheita_horas": 0,
-    "xp": 0,
-    "nivel_requerido": 4,
-    "img": "poco",
-    "escala": 0.2,
-    "area": [
-      2,
-      2
-    ],
-    "origem": [
-      0.5,
-      0.7
-    ],
-    "tipo": "decoracao",
-    "cannotRotate": true
-  },
-  {
-    "id": "oficina",
-    "nome": "Oficina",
-    "preco_compra": 0,
-    "preco_compra_grana": 0,
-    "preco_venda": 0,
-    "tempo_colheita_horas": 0,
-    "xp": 0,
-    "nivel_requerido": 15,
-    "img": "bancada_ferramentas",
-    "escala": 0.2,
-    "area": [
-      2,
-      3
-    ],
-    "origem": [
-      0.5,
-      0.6
-    ],
-    "tipo": "decoracao"
-  },
-  {
-    "id": "celeiro_vermelho",
-    "nome": "Celeiro Vermelho",
-    "preco_compra": 82000,
-    "preco_compra_grana": 0,
-    "preco_venda": 0,
-    "tempo_colheita_horas": 0,
-    "xp": 410,
-    "nivel_requerido": 1,
-    "tipo": "decoracao",
-    "img": "barracao_marrom",
-    "escala": 0.3,
-    "area": [
-      5,
-      4
-    ],
-    "origem": [
-      0.5,
-      0.72
-    ]
-  },
-  {
-    "id": "celerio_rosa",
-    "nome": "Celerio Rosa",
-    "preco_compra": 0,
-    "preco_compra_grana": 27,
-    "preco_venda": 0,
-    "tempo_colheita_horas": 0,
-    "xp": 820,
-    "nivel_requerido": 1,
-    "tipo": "decoracao",
-    "img": "barracao_rosa",
-    "escala": 0.3,
-    "area": [
-      5,
-      4
-    ],
-    "origem": [
-      0.5,
-      0.72
-    ]
-  },
-  {
-    "id": "celeiro_azul",
-    "nome": "Celeiro Azul",
-    "preco_compra": 0,
-    "preco_compra_grana": 27,
-    "preco_venda": 0,
-    "tempo_colheita_horas": 0,
-    "xp": 820,
-    "nivel_requerido": 1,
-    "tipo": "decoracao",
-    "img": "barracao_azul",
-    "escala": 0.3,
-    "area": [
-      5,
-      4
-    ],
-    "origem": [
-      0.5,
-      0.72
-    ]
-  },
-  {
-    "id": "celeiro",
-    "nome": "Celeiro",
-    "preco_compra": 0,
-    "preco_compra_grana": 27,
-    "preco_venda": 0,
-    "tempo_colheita_horas": 0,
-    "xp": 820,
-    "nivel_requerido": 1,
-    "img": "armazem",
-    "escala": 0.9,
-    "area": [
-      6,
-      6
-    ],
-    "origem": [
-      0.5,
-      0.7
-    ],
-    "tipo": "decoracao"
-  },
-  {
-    "id": "pilao",
-    "nome": "Pilão",
-    "preco_compra": 0,
-    "preco_compra_grana": 27,
-    "preco_venda": 0,
-    "tempo_colheita_horas": 0,
-    "xp": 820,
-    "nivel_requerido": 7,
-    "img": "pilao",
-    "escala": 0.1,
-    "area": [
-      1,
-      1
-    ],
-    "origem": [
-      0.5,
-      0.6
-    ],
-    "tipo": "decoracao",
-    "cannotRotate": true
-  },
-  {
-    "id": "rede_praia",
-    "nome": "Rede praia",
-    "preco_compra": 1000,
-    "preco_compra_grana": 0,
-    "preco_venda": 0,
-    "tempo_colheita_horas": 0,
-    "xp": 820,
-    "nivel_requerido": 1,
-    "img": "rede_praia",
-    "escala": 0.15,
-    "area": [
-      3,
-      2
-    ],
-    "origem": [
-      0.5,
-      0.75
-    ],
-    "tipo": "decoracao"
-  },
-  {
-    "id": "tora",
-    "nome": "Toras cortadas",
-    "preco_compra": 3000,
-    "preco_compra_grana": 0,
-    "preco_venda": 0,
-    "tempo_colheita_horas": 0,
-    "xp": 820,
-    "nivel_requerido": 8,
-    "img": "toras",
-    "escala": 0.18,
-    "area": [
-      2,
-      3
-    ],
-    "origem": [
-      0.5,
-      0.48
-    ],
-    "tipo": "decoracao"
-  },
-  {
-    "id": "anao_jardim",
-    "nome": "Anão de jardim",
-    "preco_compra": 0,
-    "preco_compra_grana": 27,
-    "preco_venda": 0,
-    "tempo_colheita_horas": 0,
-    "xp": 820,
-    "nivel_requerido": 6,
-    "img": "anao_jardim",
-    "escala": 0.18,
-    "area": [
-      1,
-      1
-    ],
-    "origem": [
-      0.5,
-      0.6
-    ],
-    "tipo": "decoracao"
   },
   {
     "id": "banco_branco",
     "nome": "Banco branco",
     "preco_compra": 0,
     "preco_compra_grana": 27,
-    "preco_venda": 0,
+    "preco_venda": 5468,
     "tempo_colheita_horas": 0,
-    "xp": 820,
+    "xp": 405,
     "nivel_requerido": 13,
     "img": "banco_branco",
     "escala": 0.1,
@@ -700,13 +84,13 @@
     "tipo": "decoracao"
   },
   {
-    "id": "banco_marrom",
-    "nome": "Banco marrom",
-    "preco_compra": 0,
+    "id": "banco_madeira",
+    "nome": "Banco madeira",
+    "preco_compra": 5000,
     "preco_compra_grana": 27,
-    "preco_venda": 0,
+    "preco_venda": 1350,
     "tempo_colheita_horas": 0,
-    "xp": 820,
+    "xp": 100,
     "nivel_requerido": 27,
     "img": "banco_marrom",
     "escala": 0.09,
@@ -721,34 +105,13 @@
     "tipo": "decoracao"
   },
   {
-    "id": "caixa_correio",
-    "nome": "Caixa de correio",
-    "preco_compra": 0,
-    "preco_compra_grana": 27,
-    "preco_venda": 0,
-    "tempo_colheita_horas": 0,
-    "xp": 820,
-    "nivel_requerido": 6,
-    "img": "caixa_correio",
-    "escala": 0.13,
-    "area": [
-      1,
-      1
-    ],
-    "origem": [
-      0.6,
-      0.65
-    ],
-    "tipo": "decoracao"
-  },
-  {
     "id": "banheiro",
     "nome": "Banheiro",
     "preco_compra": 0,
-    "preco_compra_grana": 27,
-    "preco_venda": 0,
+    "preco_compra_grana": 8,
+    "preco_venda": 1620,
     "tempo_colheita_horas": 0,
-    "xp": 820,
+    "xp": 120,
     "nivel_requerido": 0,
     "img": "banheiro",
     "escala": 0.15,
@@ -763,35 +126,34 @@
     "tipo": "decoracao"
   },
   {
-    "id": "caixote",
-    "nome": "Caixote",
-    "preco_compra": 0,
-    "preco_compra_grana": 27,
-    "preco_venda": 0,
+    "id": "barraca_frutas",
+    "nome": "Barraca de frutas",
+    "preco_compra": 21000,
+    "preco_compra_grana": 0,
+    "preco_venda": 5670,
     "tempo_colheita_horas": 0,
-    "xp": 820,
-    "nivel_requerido": 0,
-    "img": "caixote",
-    "escala": 0.09,
+    "xp": 420,
+    "nivel_requerido": 10,
+    "tipo": "decoracao",
+    "img": "barraca_frutas",
+    "escala": 0.4,
     "area": [
-      1,
-      1
+      4,
+      3
     ],
     "origem": [
       0.5,
-      0.5
-    ],
-    "tipo": "decoracao",
-    "cannotRotate": true
+      0.6
+    ]
   },
   {
     "id": "barril",
     "nome": "Barril de madeira",
     "preco_compra": 0,
     "preco_compra_grana": 27,
-    "preco_venda": 0,
+    "preco_venda": 5468,
     "tempo_colheita_horas": 0,
-    "xp": 820,
+    "xp": 405,
     "nivel_requerido": 3,
     "img": "barril",
     "escala": 0.1,
@@ -807,55 +169,13 @@
     "cannotRotate": true
   },
   {
-    "id": "balanco2",
-    "nome": "Grande balanço",
-    "preco_compra": 0,
-    "preco_compra_grana": 0,
-    "preco_venda": 0,
-    "tempo_colheita_horas": 0,
-    "xp": 0,
-    "nivel_requerido": 3,
-    "tipo": "decoracao",
-    "img": "balanco2",
-    "escala": 0.5,
-    "area": [
-      1,
-      2
-    ],
-    "origem": [
-      0.5,
-      0.6
-    ]
-  },
-  {
-    "id": "barraca_frutas",
-    "nome": "Barraca de frutas",
-    "preco_compra": 0,
-    "preco_compra_grana": 0,
-    "preco_venda": 0,
-    "tempo_colheita_horas": 0,
-    "xp": 0,
-    "nivel_requerido": 10,
-    "tipo": "decoracao",
-    "img": "barraca_frutas",
-    "escala": 0.4,
-    "area": [
-      4,
-      3
-    ],
-    "origem": [
-      0.5,
-      0.6
-    ]
-  },
-  {
     "id": "bebedouro",
     "nome": "Bebedouro",
-    "preco_compra": 0,
+    "preco_compra": 850,
     "preco_compra_grana": 0,
-    "preco_venda": 0,
+    "preco_venda": 230,
     "tempo_colheita_horas": 0,
-    "xp": 0,
+    "xp": 17,
     "nivel_requerido": 5,
     "tipo": "decoracao",
     "img": "bebedouro",
@@ -872,11 +192,11 @@
   {
     "id": "bebedouro2",
     "nome": "Bebedouro alto",
-    "preco_compra": 0,
+    "preco_compra": 3000,
     "preco_compra_grana": 0,
     "preco_venda": 0,
     "tempo_colheita_horas": 0,
-    "xp": 0,
+    "xp": 20,
     "nivel_requerido": 5,
     "tipo": "decoracao",
     "img": "bebedouro_alto",
@@ -891,13 +211,55 @@
     ]
   },
   {
+    "id": "cabana",
+    "nome": "Cabana",
+    "preco_compra": 119000,
+    "preco_compra_grana": 48,
+    "preco_venda": 32130,
+    "tempo_colheita_horas": 0,
+    "xp": 2380,
+    "nivel_requerido": 2,
+    "tipo": "decoracao",
+    "img": "casinha",
+    "escala": 0.3,
+    "area": [
+      2,
+      2
+    ],
+    "origem": [
+      0.5,
+      0.7
+    ]
+  },
+  {
+    "id": "cabana_rosa",
+    "nome": "Cabana rosa",
+    "tipo": "decoracao",
+    "preco_compra": 119000,
+    "preco_compra_grana": 0,
+    "preco_venda": 32130,
+    "tempo_colheita_horas": 0,
+    "xp": 2380,
+    "nivel_requerido": 10,
+    "img": "cabana_rosa",
+    "escala": 0.3,
+    "area": [
+      2,
+      2
+    ],
+    "origem": [
+      0.5,
+      0.75
+    ]
+  },
+  {
     "id": "caixa_areia",
     "nome": "Caixinha de areia",
-    "preco_compra": 0,
-    "preco_compra_grana": 0,
-    "preco_venda": 0,
+    "preco_compra": 800,
+    "preco_compra_grana": 8,
+    "preco_venda": 216,
     "tempo_colheita_horas": 0,
-    "xp": 0,
+    "xp": 16,
     "nivel_requerido": 21,
     "tipo": "decoracao",
     "img": "caixa_areia",
@@ -913,13 +275,56 @@
     "cannotRotate": true
   },
   {
-    "id": "canteiro",
-    "nome": "Canteiro de flores",
+    "id": "caixa_correio",
+    "nome": "Caixa de correio",
     "preco_compra": 0,
-    "preco_compra_grana": 0,
+    "preco_compra_grana": 38,
+    "preco_venda": 7695,
+    "tempo_colheita_horas": 0,
+    "xp": 570,
+    "nivel_requerido": 6,
+    "img": "caixa_correio",
+    "escala": 0.13,
+    "area": [
+      1,
+      1
+    ],
+    "origem": [
+      0.6,
+      0.65
+    ],
+    "tipo": "decoracao"
+  },
+  {
+    "id": "caixote",
+    "nome": "Caixote",
+    "preco_compra": 0,
+    "preco_compra_grana": 27,
     "preco_venda": 0,
     "tempo_colheita_horas": 0,
     "xp": 0,
+    "nivel_requerido": 0,
+    "img": "caixote",
+    "escala": 0.09,
+    "area": [
+      1,
+      1
+    ],
+    "origem": [
+      0.5,
+      0.5
+    ],
+    "tipo": "decoracao",
+    "cannotRotate": true
+  },
+  {
+    "id": "canteiro",
+    "nome": "Canteiro de flores",
+    "preco_compra": 700,
+    "preco_compra_grana": 0,
+    "preco_venda": 0,
+    "tempo_colheita_horas": 0,
+    "xp": 15,
     "nivel_requerido": 3,
     "tipo": "decoracao",
     "img": "canteiro",
@@ -936,11 +341,11 @@
   {
     "id": "carrinho_mao",
     "nome": "Carrinho de mão",
-    "preco_compra": 0,
+    "preco_compra": 1200,
     "preco_compra_grana": 0,
-    "preco_venda": 0,
+    "preco_venda": 324,
     "tempo_colheita_horas": 0,
-    "xp": 0,
+    "xp": 24,
     "nivel_requerido": 12,
     "tipo": "decoracao",
     "img": "carrinho_mao",
@@ -957,11 +362,11 @@
   {
     "id": "carro_amarelo",
     "nome": "Carro amarelo",
-    "preco_compra": 0,
+    "preco_compra": 65000,
     "preco_compra_grana": 0,
-    "preco_venda": 0,
+    "preco_venda": 17550,
     "tempo_colheita_horas": 0,
-    "xp": 0,
+    "xp": 1300,
     "nivel_requerido": 3,
     "tipo": "decoracao",
     "img": "carro_amarelo",
@@ -976,342 +381,24 @@
     ]
   },
   {
-    "id": "escorregador",
-    "nome": "Escorregador",
-    "preco_compra": 0,
-    "preco_compra_grana": 9,
-    "preco_venda": 0,
+    "id": "carrocao",
+    "nome": "Carroção",
+    "preco_compra": 1000,
+    "preco_compra_grana": 38,
+    "preco_venda": 270,
     "tempo_colheita_horas": 0,
-    "xp": 0,
-    "nivel_requerido": 1,
+    "xp": 20,
+    "nivel_requerido": 9,
     "tipo": "decoracao",
-    "img": "escorregador",
-    "escala": 0.4,
-    "area": [
-      1,
-      2
-    ],
-    "origem": [
-      0.5,
-      0.55
-    ]
-  },
-  {
-    "id": "estufa",
-    "nome": "Estufa",
-    "preco_compra": 0,
-    "preco_compra_grana": 0,
-    "preco_venda": 0,
-    "tempo_colheita_horas": 0,
-    "xp": 0,
-    "nivel_requerido": 20,
-    "tipo": "decoracao",
-    "img": "estufa",
-    "escala": 0.22,
-    "area": [
-      4,
-      5
-    ],
-    "origem": [
-      0.5,
-      0.6
-    ]
-  },
-  {
-    "id": "fusca_vermelho",
-    "nome": "Carro vermelho",
-    "preco_compra": 0,
-    "preco_compra_grana": 0,
-    "preco_venda": 0,
-    "tempo_colheita_horas": 0,
-    "xp": 0,
-    "nivel_requerido": 15,
-    "tipo": "decoracao",
-    "img": "fusca_vermelho",
-    "escala": 0.5,
-    "area": [
-      2,
-      3
-    ],
-    "origem": [
-      0.5,
-      0.5
-    ]
-  },
-  {
-    "id": "grelha",
-    "nome": "Grelha",
-    "preco_compra": 0,
-    "preco_compra_grana": 0,
-    "preco_venda": 0,
-    "tempo_colheita_horas": 0,
-    "xp": 0,
-    "nivel_requerido": 17,
-    "tipo": "decoracao",
-    "img": "grelha",
-    "escala": 0.2,
-    "area": [
-      1,
-      1
-    ],
-    "origem": [
-      0.5,
-      0.6
-    ],
-    "cannotRotate": true
-  },
-  {
-    "id": "lenha_machado",
-    "nome": "Machado na lenha",
-    "preco_compra": 0,
-    "preco_compra_grana": 0,
-    "preco_venda": 0,
-    "tempo_colheita_horas": 0,
-    "xp": 0,
-    "nivel_requerido": 22,
-    "tipo": "decoracao",
-    "img": "lenha_machado",
-    "escala": 0.3,
-    "area": [
-      2,
-      2
-    ],
-    "origem": [
-      0.4,
-      0.55
-    ]
-  },
-  {
-    "id": "mini_fabrica",
-    "nome": "Fábrica",
-    "preco_compra": 0,
-    "preco_compra_grana": 0,
-    "preco_venda": 0,
-    "tempo_colheita_horas": 0,
-    "xp": 0,
-    "nivel_requerido": 18,
-    "tipo": "decoracao",
-    "img": "mini_fabrica",
-    "escala": 0.4,
-    "area": [
-      4,
-      5
-    ],
-    "origem": [
-      0.54,
-      0.6
-    ]
-  },
-  {
-    "id": "poste_branco",
-    "nome": "Poste branco",
-    "preco_compra": 0,
-    "preco_compra_grana": 0,
-    "preco_venda": 0,
-    "tempo_colheita_horas": 0,
-    "xp": 0,
-    "nivel_requerido": 25,
-    "tipo": "decoracao",
-    "img": "poste_branco",
-    "escala": 0.35,
-    "area": [
-      1,
-      1
-    ],
-    "origem": [
-      0.5,
-      0.72
-    ],
-    "cannotRotate": true
-  },
-  {
-    "id": "poste_preto",
-    "nome": "Poste preto",
-    "preco_compra": 0,
-    "preco_compra_grana": 0,
-    "preco_venda": 0,
-    "tempo_colheita_horas": 0,
-    "xp": 0,
-    "nivel_requerido": 25,
-    "tipo": "decoracao",
-    "img": "poste_preto",
-    "escala": 0.35,
-    "area": [
-      1,
-      1
-    ],
-    "origem": [
-      0.5,
-      0.72
-    ],
-    "cannotRotate": true
-  },
-  {
-    "id": "roda_quebrada",
-    "nome": "Roda quebrada",
-    "preco_compra": 0,
-    "preco_compra_grana": 0,
-    "preco_venda": 0,
-    "tempo_colheita_horas": 0,
-    "xp": 0,
-    "nivel_requerido": 22,
-    "tipo": "decoracao",
-    "img": "roda_quebrada",
-    "escala": 0.25,
-    "area": [
-      2,
-      1
-    ],
-    "origem": [
-      0.5,
-      0.6
-    ]
-  },
-  {
-    "id": "templo",
-    "nome": "Templo",
-    "preco_compra": 0,
-    "preco_compra_grana": 0,
-    "preco_venda": 0,
-    "tempo_colheita_horas": 0,
-    "xp": 0,
-    "nivel_requerido": 1,
-    "tipo": "decoracao",
-    "img": "templo",
+    "img": "carrocao",
     "escala": 0.7,
-    "area": [
-      7,
-      4
-    ],
-    "origem": [
-      0.48,
-      0.62
-    ]
-  },
-  {
-    "id": "trepa",
-    "nome": "Brinquedo de subir",
-    "preco_compra": 0,
-    "preco_compra_grana": 0,
-    "preco_venda": 0,
-    "tempo_colheita_horas": 0,
-    "xp": 0,
-    "nivel_requerido": 3,
-    "tipo": "decoracao",
-    "img": "trepa",
-    "escala": 0.4,
-    "area": [
-      1,
-      2
-    ],
-    "origem": [
-      0.5,
-      0.6
-    ]
-  },
-  {
-    "id": "silo_de_graos",
-    "nome": "Silo de grãos",
-    "preco_compra": 0,
-    "preco_compra_grana": 0,
-    "preco_venda": 0,
-    "tempo_colheita_horas": 0,
-    "xp": 0,
-    "nivel_requerido": 13,
-    "tipo": "decoracao",
-    "img": "silo",
-    "escala": 0.3,
-    "area": [
-      2,
-      2
-    ],
-    "origem": [
-      0.5,
-      0.8
-    ]
-  },
-  {
-    "id": "moinho_de_vento",
-    "nome": "Moinho de vento",
-    "preco_compra": 0,
-    "preco_compra_grana": 0,
-    "preco_venda": 0,
-    "tempo_colheita_horas": 0,
-    "xp": 0,
-    "nivel_requerido": 22,
-    "img": "moinho2",
-    "escala": 0.4,
     "area": [
       3,
       3
     ],
     "origem": [
       0.5,
-      0.75
-    ],
-    "tipo": "decoracao"
-  },
-  {
-    "id": "casarao_vermelho",
-    "nome": "Casarão vermelho",
-    "preco_compra": 0,
-    "preco_compra_grana": 0,
-    "preco_venda": 0,
-    "tempo_colheita_horas": 0,
-    "xp": 0,
-    "nivel_requerido": 26,
-    "tipo": "decoracao",
-    "img": "casarao_vermelho",
-    "escala": 0.5,
-    "area": [
-      6,
-      6
-    ],
-    "origem": [
-      0.48,
-      0.65
-    ]
-  },
-  {
-    "id": "cavalinho",
-    "nome": "Cavalinhho",
-    "preco_compra": 0,
-    "preco_compra_grana": 0,
-    "preco_venda": 0,
-    "tempo_colheita_horas": 0,
-    "xp": 0,
-    "nivel_requerido": 14,
-    "tipo": "decoracao",
-    "img": "cavalinho",
-    "escala": 0.4,
-    "area": [
-      1,
-      1
-    ],
-    "origem": [
-      0.58,
       0.6
-    ]
-  },
-  {
-    "id": "cabana",
-    "nome": "Cabana",
-    "preco_compra": 0,
-    "preco_compra_grana": 48,
-    "preco_venda": 0,
-    "tempo_colheita_horas": 0,
-    "xp": 1500,
-    "nivel_requerido": 2,
-    "tipo": "decoracao",
-    "img": "casinha",
-    "escala": 0.3,
-    "area": [
-      2,
-      2
-    ],
-    "origem": [
-      0.5,
-      0.7
     ]
   },
   {
@@ -1337,34 +424,13 @@
     "cannotRotate": true
   },
   {
-    "id": "carrocao",
-    "nome": "Carroção",
-    "preco_compra": 0,
-    "preco_compra_grana": 38,
-    "preco_venda": 0,
-    "tempo_colheita_horas": 0,
-    "xp": 1000,
-    "nivel_requerido": 9,
-    "tipo": "decoracao",
-    "img": "carrocao",
-    "escala": 0.7,
-    "area": [
-      3,
-      3
-    ],
-    "origem": [
-      0.5,
-      0.6
-    ]
-  },
-  {
-    "id": "casa_passarinho",
+    "id": "casa_passaros",
     "nome": "Casa de passarinho",
-    "preco_compra": 0,
+    "preco_compra": 1100,
     "preco_compra_grana": 38,
-    "preco_venda": 0,
+    "preco_venda": 297,
     "tempo_colheita_horas": 0,
-    "xp": 1000,
+    "xp": 22,
     "nivel_requerido": 19,
     "tipo": "decoracao",
     "img": "casa_passarinho",
@@ -1379,13 +445,245 @@
     ]
   },
   {
-    "id": "cortador_grama_vermelho",
-    "nome": "Cortador de grama",
+    "id": "casarao_vermelho",
+    "nome": "Casarão vermelho",
     "preco_compra": 0,
-    "preco_compra_grana": 38,
+    "preco_compra_grana": 30,
+    "preco_venda": 6075,
+    "tempo_colheita_horas": 0,
+    "xp": 450,
+    "nivel_requerido": 26,
+    "tipo": "decoracao",
+    "img": "casarao_vermelho",
+    "escala": 0.5,
+    "area": [
+      6,
+      6
+    ],
+    "origem": [
+      0.48,
+      0.65
+    ]
+  },
+  {
+    "id": "cavalo",
+    "nome": "Cavalinhho",
+    "preco_compra": 0,
+    "preco_compra_grana": 7,
+    "preco_venda": 1418,
+    "tempo_colheita_horas": 0,
+    "xp": 105,
+    "nivel_requerido": 14,
+    "tipo": "decoracao",
+    "img": "cavalinho",
+    "escala": 0.4,
+    "area": [
+      1,
+      1
+    ],
+    "origem": [
+      0.58,
+      0.6
+    ]
+  },
+  {
+    "id": "celeiro_azul",
+    "nome": "Celeiro Azul",
+    "preco_compra": 0,
+    "preco_compra_grana": 27,
     "preco_venda": 0,
     "tempo_colheita_horas": 0,
-    "xp": 1000,
+    "xp": 820,
+    "nivel_requerido": 1,
+    "tipo": "decoracao",
+    "img": "barracao_azul",
+    "escala": 0.3,
+    "area": [
+      5,
+      4
+    ],
+    "origem": [
+      0.5,
+      0.72
+    ]
+  },
+  {
+    "id": "celeiro_vermelho",
+    "nome": "Celeiro Vermelho",
+    "preco_compra": 82000,
+    "preco_compra_grana": 0,
+    "preco_venda": 22140,
+    "tempo_colheita_horas": 0,
+    "xp": 1640,
+    "nivel_requerido": 1,
+    "tipo": "decoracao",
+    "img": "barracao_marrom",
+    "escala": 0.3,
+    "area": [
+      5,
+      4
+    ],
+    "origem": [
+      0.5,
+      0.72
+    ]
+  },
+  {
+    "id": "celerio_rosa",
+    "nome": "Celerio Rosa",
+    "preco_compra": 0,
+    "preco_compra_grana": 27,
+    "preco_venda": 5468,
+    "tempo_colheita_horas": 0,
+    "xp": 405,
+    "nivel_requerido": 1,
+    "tipo": "decoracao",
+    "img": "barracao_rosa",
+    "escala": 0.3,
+    "area": [
+      5,
+      4
+    ],
+    "origem": [
+      0.5,
+      0.72
+    ]
+  },
+  {
+    "id": "cerca_azul",
+    "nome": "Cerca azul",
+    "tipo": "cerca",
+    "preco_compra": 300,
+    "preco_compra_grana": 0,
+    "preco_venda": 81,
+    "tempo_colheita_horas": 0,
+    "xp": 6,
+    "nivel_requerido": 1,
+    "img": "cerca_azul256",
+    "escala": 0.4,
+    "area": [
+      5,
+      1
+    ],
+    "origem": [
+      0.5,
+      0.5
+    ]
+  },
+  {
+    "id": "cerca_branca",
+    "nome": "Cerca branca",
+    "tipo": "cerca",
+    "preco_compra": 150,
+    "preco_compra_grana": 0,
+    "preco_venda": 0,
+    "tempo_colheita_horas": 0,
+    "xp": 6,
+    "nivel_requerido": 1,
+    "img": "cerca_branca256",
+    "escala": 0.4,
+    "area": [
+      5,
+      1
+    ],
+    "origem": [
+      0.5,
+      0.5
+    ]
+  },
+  {
+    "id": "cerca_madeira",
+    "nome": "Cerca madeira",
+    "tipo": "cerca",
+    "preco_compra": 500,
+    "preco_compra_grana": 0,
+    "preco_venda": 135,
+    "tempo_colheita_horas": 0,
+    "xp": 10,
+    "nivel_requerido": 5,
+    "img": "cerca_madeira256",
+    "escala": 0.4,
+    "area": [
+      5,
+      1
+    ],
+    "origem": [
+      0.5,
+      0.5
+    ],
+    "cannotRotate": true
+  },
+  {
+    "id": "cerca_preta",
+    "nome": "Cerca preta",
+    "tipo": "cerca",
+    "preco_compra": 300,
+    "preco_compra_grana": 0,
+    "preco_venda": 81,
+    "tempo_colheita_horas": 0,
+    "xp": 6,
+    "nivel_requerido": 1,
+    "img": "cerca_preta256",
+    "escala": 0.4,
+    "area": [
+      5,
+      1
+    ],
+    "origem": [
+      0.5,
+      0.5
+    ]
+  },
+  {
+    "id": "cerca_rosa",
+    "nome": "Cerca rosa",
+    "tipo": "cerca",
+    "preco_compra": 300,
+    "preco_compra_grana": 0,
+    "preco_venda": 81,
+    "tempo_colheita_horas": 0,
+    "xp": 6,
+    "nivel_requerido": 1,
+    "img": "cerca_rosa256",
+    "escala": 0.4,
+    "area": [
+      5,
+      1
+    ],
+    "origem": [
+      0.5,
+      0.5
+    ]
+  },
+  {
+    "id": "cerca_verde",
+    "nome": "Cerca branca",
+    "tipo": "cerca",
+    "preco_compra": 300,
+    "preco_compra_grana": 0,
+    "preco_venda": 81,
+    "tempo_colheita_horas": 0,
+    "xp": 6,
+    "nivel_requerido": 1,
+    "img": "cerca_verde256",
+    "escala": 0.4,
+    "area": [
+      5,
+      1
+    ],
+    "origem": [
+      0.5,
+      0.5
+    ]
+  },
+  {
+    "id": "maquina_cortar_grama",
+    "nome": "Cortador de grama",
+    "preco_compra": 800,
+    "preco_compra_grana": 38,
+    "preco_venda": 216,
+    "tempo_colheita_horas": 0,
+    "xp": 16,
     "nivel_requerido": 4,
     "tipo": "decoracao",
     "img": "cortador_grama_vermelho",
@@ -1398,6 +696,608 @@
       0.45,
       0.65
     ]
+  },
+  {
+    "id": "escorrega",
+    "nome": "Escorregador",
+    "preco_compra": 0,
+    "preco_compra_grana": 9,
+    "preco_venda": 1823,
+    "tempo_colheita_horas": 0,
+    "xp": 135,
+    "nivel_requerido": 1,
+    "tipo": "decoracao",
+    "img": "escorregador",
+    "escala": 0.4,
+    "area": [
+      1,
+      2
+    ],
+    "origem": [
+      0.5,
+      0.55
+    ]
+  },
+  {
+    "id": "estufa",
+    "nome": "Estufa",
+    "preco_compra": 35000,
+    "preco_compra_grana": 0,
+    "preco_venda": 0,
+    "tempo_colheita_horas": 0,
+    "xp": 500,
+    "nivel_requerido": 20,
+    "tipo": "decoracao",
+    "img": "estufa",
+    "escala": 0.22,
+    "area": [
+      4,
+      5
+    ],
+    "origem": [
+      0.5,
+      0.6
+    ]
+  },
+  {
+    "id": "fardos_feno",
+    "nome": "Feno",
+    "tipo": "decoracao",
+    "preco_compra": 110,
+    "preco_compra_grana": 0,
+    "preco_venda": 30,
+    "tempo_colheita_horas": 0,
+    "xp": 3,
+    "nivel_requerido": 1,
+    "img": "feno_amarelo",
+    "escala": 0.11,
+    "area": [
+      1,
+      1
+    ],
+    "origem": [
+      0.5,
+      0.5
+    ],
+    "cannotRotate": true
+  },
+  {
+    "id": "feno_anil",
+    "nome": "Feno anil",
+    "tipo": "decoracao",
+    "preco_compra": 350,
+    "preco_compra_grana": 0,
+    "preco_venda": 95,
+    "tempo_colheita_horas": 0,
+    "xp": 7,
+    "nivel_requerido": 1,
+    "img": "feno_anil",
+    "escala": 0.11,
+    "area": [
+      1,
+      1
+    ],
+    "origem": [
+      0.5,
+      0.5
+    ],
+    "cannotRotate": true
+  },
+  {
+    "id": "feno_azul",
+    "nome": "Feno azul",
+    "tipo": "decoracao",
+    "preco_compra": 350,
+    "preco_compra_grana": 0,
+    "preco_venda": 95,
+    "tempo_colheita_horas": 0,
+    "xp": 7,
+    "nivel_requerido": 0,
+    "img": "feno_azul",
+    "escala": 0.11,
+    "area": [
+      1,
+      1
+    ],
+    "origem": [
+      0.5,
+      0.5
+    ],
+    "cannotRotate": true
+  },
+  {
+    "id": "feno_branco",
+    "nome": "Feno branco",
+    "tipo": "decoracao",
+    "preco_compra": 250,
+    "preco_compra_grana": 0,
+    "preco_venda": 68,
+    "tempo_colheita_horas": 0,
+    "xp": 5,
+    "nivel_requerido": 1,
+    "img": "feno_branco",
+    "escala": 0.11,
+    "area": [
+      1,
+      1
+    ],
+    "origem": [
+      0.5,
+      0.5
+    ],
+    "cannotRotate": true
+  },
+  {
+    "id": "feno_preto",
+    "nome": "Feno preto",
+    "tipo": "decoracao",
+    "preco_compra": 500,
+    "preco_compra_grana": 0,
+    "preco_venda": 135,
+    "tempo_colheita_horas": 0,
+    "xp": 10,
+    "nivel_requerido": 1,
+    "img": "feno_preto",
+    "escala": 0.11,
+    "area": [
+      1,
+      1
+    ],
+    "origem": [
+      0.5,
+      0.5
+    ],
+    "cannotRotate": true
+  },
+  {
+    "id": "feno_rosa",
+    "nome": "Feno rosa",
+    "tipo": "decoracao",
+    "preco_compra": 500,
+    "preco_compra_grana": 0,
+    "preco_venda": 135,
+    "tempo_colheita_horas": 0,
+    "xp": 10,
+    "nivel_requerido": 3,
+    "img": "feno_rosa",
+    "escala": 0.11,
+    "area": [
+      1,
+      1
+    ],
+    "origem": [
+      0.5,
+      0.5
+    ],
+    "cannotRotate": true
+  },
+  {
+    "id": "feno_verde",
+    "nome": "Feno verde",
+    "tipo": "decoracao",
+    "preco_compra": 500,
+    "preco_compra_grana": 0,
+    "preco_venda": 135,
+    "tempo_colheita_horas": 0,
+    "xp": 10,
+    "nivel_requerido": 1,
+    "img": "feno_verde",
+    "escala": 0.11,
+    "area": [
+      1,
+      1
+    ],
+    "origem": [
+      0.5,
+      0.5
+    ],
+    "cannotRotate": true
+  },
+  {
+    "id": "feno_vermelho",
+    "nome": "Feno vermelho",
+    "tipo": "decoracao",
+    "preco_compra": 250,
+    "preco_compra_grana": 0,
+    "preco_venda": 68,
+    "tempo_colheita_horas": 0,
+    "xp": 5,
+    "nivel_requerido": 1,
+    "img": "feno_vermelho",
+    "escala": 0.11,
+    "area": [
+      1,
+      1
+    ],
+    "origem": [
+      0.5,
+      0.5
+    ],
+    "cannotRotate": true
+  },
+  {
+    "id": "flamingo",
+    "nome": "Flamingo",
+    "preco_compra": 0,
+    "preco_compra_grana": 9,
+    "preco_venda": 1823,
+    "tempo_colheita_horas": 0,
+    "xp": 135,
+    "nivel_requerido": 6,
+    "tipo": "decoracao",
+    "img": "flamingo",
+    "escala": 0.2,
+    "area": [
+      1,
+      1
+    ],
+    "origem": [
+      0.5,
+      0.6
+    ]
+  },
+  {
+    "id": "carro_vermelho",
+    "nome": "Carro vermelho",
+    "preco_compra": 0,
+    "preco_compra_grana": 17,
+    "preco_venda": 3443,
+    "tempo_colheita_horas": 0,
+    "xp": 255,
+    "nivel_requerido": 15,
+    "tipo": "decoracao",
+    "img": "fusca_vermelho",
+    "escala": 0.5,
+    "area": [
+      2,
+      3
+    ],
+    "origem": [
+      0.5,
+      0.5
+    ]
+  },
+  {
+    "id": "gazebo",
+    "nome": "Gazebo",
+    "preco_compra": 0,
+    "preco_compra_grana": 18,
+    "preco_venda": 3645,
+    "tempo_colheita_horas": 0,
+    "xp": 270,
+    "nivel_requerido": 1,
+    "img": "bangalo",
+    "escala": 0.8,
+    "area": [
+      2,
+      2
+    ],
+    "origem": [
+      0.5,
+      0.75
+    ],
+    "tipo": "decoracao",
+    "noStopBuy": false
+  },
+  {
+    "id": "churrasqueira",
+    "nome": "Grelha",
+    "preco_compra": 2100,
+    "preco_compra_grana": 0,
+    "preco_venda": 567,
+    "tempo_colheita_horas": 0,
+    "xp": 42,
+    "nivel_requerido": 17,
+    "tipo": "decoracao",
+    "img": "grelha",
+    "escala": 0.2,
+    "area": [
+      1,
+      1
+    ],
+    "origem": [
+      0.5,
+      0.6
+    ],
+    "cannotRotate": true
+  },
+  {
+    "id": "machado_pedra",
+    "nome": "Machado na lenha",
+    "preco_compra": 1100,
+    "preco_compra_grana": 0,
+    "preco_venda": 297,
+    "tempo_colheita_horas": 0,
+    "xp": 22,
+    "nivel_requerido": 22,
+    "tipo": "decoracao",
+    "img": "lenha_machado",
+    "escala": 0.3,
+    "area": [
+      2,
+      2
+    ],
+    "origem": [
+      0.4,
+      0.55
+    ]
+  },
+  {
+    "id": "mini_fabrica",
+    "nome": "Fábrica",
+    "preco_compra": 40000,
+    "preco_compra_grana": 0,
+    "preco_venda": 0,
+    "tempo_colheita_horas": 0,
+    "xp": 600,
+    "nivel_requerido": 18,
+    "tipo": "decoracao",
+    "img": "mini_fabrica",
+    "escala": 0.4,
+    "area": [
+      4,
+      5
+    ],
+    "origem": [
+      0.54,
+      0.6
+    ]
+  },
+  {
+    "id": "moinho_vento",
+    "nome": "Moinho de vento",
+    "preco_compra": 15000,
+    "preco_compra_grana": 0,
+    "preco_venda": 4050,
+    "tempo_colheita_horas": 0,
+    "xp": 300,
+    "nivel_requerido": 22,
+    "img": "moinho2",
+    "escala": 0.4,
+    "area": [
+      3,
+      3
+    ],
+    "origem": [
+      0.5,
+      0.75
+    ],
+    "tipo": "decoracao"
+  },
+  {
+    "id": "oficina",
+    "nome": "Oficina",
+    "preco_compra": 0,
+    "preco_compra_grana": 15,
+    "preco_venda": 3038,
+    "tempo_colheita_horas": 0,
+    "xp": 225,
+    "nivel_requerido": 15,
+    "img": "bancada_ferramentas",
+    "escala": 0.2,
+    "area": [
+      2,
+      3
+    ],
+    "origem": [
+      0.5,
+      0.6
+    ],
+    "tipo": "decoracao"
+  },
+  {
+    "id": "batedeira_manteiga",
+    "nome": "Pilão",
+    "preco_compra": 0,
+    "preco_compra_grana": 27,
+    "preco_venda": 0,
+    "tempo_colheita_horas": 0,
+    "xp": 0,
+    "nivel_requerido": 7,
+    "img": "pilao",
+    "escala": 0.1,
+    "area": [
+      1,
+      1
+    ],
+    "origem": [
+      0.5,
+      0.6
+    ],
+    "tipo": "decoracao",
+    "cannotRotate": true
+  },
+  {
+    "id": "poco",
+    "nome": "Poço",
+    "preco_compra": 1800,
+    "preco_compra_grana": 0,
+    "preco_venda": 486,
+    "tempo_colheita_horas": 0,
+    "xp": 36,
+    "nivel_requerido": 4,
+    "img": "poco",
+    "escala": 0.2,
+    "area": [
+      2,
+      2
+    ],
+    "origem": [
+      0.5,
+      0.7
+    ],
+    "tipo": "decoracao",
+    "cannotRotate": true
+  },
+  {
+    "id": "poste_luz_cinza",
+    "nome": "Poste branco",
+    "preco_compra": 2500,
+    "preco_compra_grana": 0,
+    "preco_venda": 675,
+    "tempo_colheita_horas": 0,
+    "xp": 50,
+    "nivel_requerido": 25,
+    "tipo": "decoracao",
+    "img": "poste_branco",
+    "escala": 0.35,
+    "area": [
+      1,
+      1
+    ],
+    "origem": [
+      0.5,
+      0.72
+    ],
+    "cannotRotate": true
+  },
+  {
+    "id": "poste_luz_preto",
+    "nome": "Poste preto",
+    "preco_compra": 2500,
+    "preco_compra_grana": 1,
+    "preco_venda": 675,
+    "tempo_colheita_horas": 0,
+    "xp": 50,
+    "nivel_requerido": 25,
+    "tipo": "decoracao",
+    "img": "poste_preto",
+    "escala": 0.35,
+    "area": [
+      1,
+      1
+    ],
+    "origem": [
+      0.5,
+      0.72
+    ],
+    "cannotRotate": true
+  },
+  {
+    "id": "rede_para_dormir",
+    "nome": "Rede praia",
+    "preco_compra": 1000,
+    "preco_compra_grana": 0,
+    "preco_venda": 270,
+    "tempo_colheita_horas": 0,
+    "xp": 20,
+    "nivel_requerido": 1,
+    "img": "rede_praia",
+    "escala": 0.15,
+    "area": [
+      3,
+      2
+    ],
+    "origem": [
+      0.5,
+      0.75
+    ],
+    "tipo": "decoracao"
+  },
+  {
+    "id": "relogio_sol",
+    "nome": "Relógio de Sol",
+    "preco_compra": 0,
+    "preco_compra_grana": 23,
+    "preco_venda": 4658,
+    "tempo_colheita_horas": 0,
+    "xp": 345,
+    "nivel_requerido": 4,
+    "tipo": "decoracao",
+    "img": "relogio_sol",
+    "escala": 0.1,
+    "area": [
+      2,
+      2
+    ],
+    "origem": [
+      0.5,
+      0.45
+    ]
+  },
+  {
+    "id": "roda_carroca",
+    "nome": "Roda quebrada",
+    "preco_compra": 1400,
+    "preco_compra_grana": 0,
+    "preco_venda": 378,
+    "tempo_colheita_horas": 0,
+    "xp": 28,
+    "nivel_requerido": 22,
+    "tipo": "decoracao",
+    "img": "roda_quebrada",
+    "escala": 0.25,
+    "area": [
+      2,
+      1
+    ],
+    "origem": [
+      0.5,
+      0.6
+    ]
+  },
+  {
+    "id": "silo_graos",
+    "nome": "Silo de grãos",
+    "preco_compra": 42000,
+    "preco_compra_grana": 0,
+    "preco_venda": 11340,
+    "tempo_colheita_horas": 0,
+    "xp": 840,
+    "nivel_requerido": 13,
+    "tipo": "decoracao",
+    "img": "silo",
+    "escala": 0.3,
+    "area": [
+      2,
+      2
+    ],
+    "origem": [
+      0.5,
+      0.8
+    ]
+  },
+  {
+    "id": "casa_grande",
+    "nome": "Templo",
+    "preco_compra": 90000,
+    "preco_compra_grana": 0,
+    "preco_venda": 0,
+    "tempo_colheita_horas": 0,
+    "xp": 1000,
+    "nivel_requerido": 1,
+    "tipo": "decoracao",
+    "img": "templo",
+    "escala": 0.7,
+    "area": [
+      7,
+      4
+    ],
+    "origem": [
+      0.48,
+      0.62
+    ]
+  },
+  {
+    "id": "pilha_madeira",
+    "nome": "Toras cortadas",
+    "preco_compra": 1100,
+    "preco_compra_grana": 0,
+    "preco_venda": 297,
+    "tempo_colheita_horas": 0,
+    "xp": 22,
+    "nivel_requerido": 8,
+    "img": "toras",
+    "escala": 0.18,
+    "area": [
+      2,
+      3
+    ],
+    "origem": [
+      0.5,
+      0.48
+    ],
+    "tipo": "decoracao"
   },
   {
     "id": "trator_amarelo",
@@ -1466,6 +1366,24 @@
     "hidden": true
   },
   {
+    "id": "trator_verde",
+    "nome": "Trator X",
+    "preco_compra": 0,
+    "preco_compra_grana": 38,
+    "preco_venda": 0,
+    "tempo_colheita_horas": 0,
+    "xp": 1000,
+    "nivel_requerido": 0,
+    "img": "trator3",
+    "escala": 1,
+    "area": [
+      4,
+      4
+    ],
+    "tipo": "decoracao",
+    "hidden": true
+  },
+  {
     "id": "trator_vermelho",
     "nome": "Trator Vermelho",
     "preco_compra": 0,
@@ -1488,43 +1406,24 @@
     "hidden": true
   },
   {
-    "id": "trator_verde",
-    "nome": "Trator X",
+    "id": "escada_sinuosa",
+    "nome": "Escada sinuosa",
     "preco_compra": 0,
-    "preco_compra_grana": 38,
+    "preco_compra_grana": 12,
     "preco_venda": 0,
     "tempo_colheita_horas": 0,
-    "xp": 1000,
-    "nivel_requerido": 0,
-    "img": "trator3",
-    "escala": 1,
-    "area": [
-      4,
-      4
-    ],
+    "xp": 500,
+    "nivel_requerido": 3,
     "tipo": "decoracao",
-    "hidden": true
-  },
-  {
-    "id": "estabulo",
-    "nome": "Estábulo",
-    "preco_compra": 0,
-    "preco_compra_grana": 38,
-    "preco_venda": 0,
-    "tempo_colheita_horas": 0,
-    "xp": 1000,
-    "nivel_requerido": 50,
-    "img": "estabulo",
-    "escala": 0.5,
+    "img": "trepa",
+    "escala": 0.4,
     "area": [
-      2,
-      5
+      1,
+      2
     ],
     "origem": [
       0.5,
-      0.65
-    ],
-    "tipo": "decoracao",
-    "hidden" : true
+      0.6
+    ]
   }
 ]

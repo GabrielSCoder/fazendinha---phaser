@@ -52,6 +52,10 @@ export default class SpriteUtils {
             sprite.harvestTime = data.harvestTimes;
         }
 
+        if (data.tipo == "solo_preparado" && rebuild) {
+            sprite.harvestTime = data.harvestTimes;
+        }
+
         const canGrow = this.controllers.sprite.growingSprites.find(c => c == data.tipo);
 
         if (canGrow) {
@@ -68,6 +72,8 @@ export default class SpriteUtils {
             sprite.preco_colheita = data.preco_venda;
             sprite.canGrow = true;
             sprite.harvestTime = rebuild ? data.harvestTimes ?? 0 : 0;
+
+            console.log(sprite.harvestTime)
 
             sprite.stages = stages;
 

@@ -1,4 +1,4 @@
-export class WorldController {
+export default class WorldController {
 
     constructor(scene, saveController, uiEvents) {
         this.scene = scene;
@@ -38,7 +38,8 @@ export class WorldController {
             state: "plowed",
             position: { x: sprite.gridX, y: sprite.gridY },
             x: sprite.x,
-            y: sprite.y
+            y: sprite.y,
+            harvestTimes : 0
         };
 
         this.save();

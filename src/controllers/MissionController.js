@@ -1,4 +1,4 @@
-export class MissionController {
+export default class MissionController {
 
     constructor(scene, missions, saveController = null, uiEvents) {
 

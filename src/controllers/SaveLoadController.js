@@ -1,5 +1,6 @@
 import { debounce } from "../utils/debounce.js";
 import { messages } from "../static/server_messages.js";
+import { stringToNumber } from "../utils/hash.js";
 
 export default class SaveLoadController {
 
@@ -220,5 +221,82 @@ export default class SaveLoadController {
 
         });
 
+    }
+
+    static createStartSave(data, scene) {
+
+        const saveData = scene.cache.json.get('save_template');
+        const objectData = scene.cache.json.get('objects_template');
+
+        let newSave = JSON.parse(JSON.stringify(saveData));
+
+        newSave.user.id = 90;
+        newSave.user.name = data.nome;
+
+        const timestamp = Date.now();
+        const idade = data.idade;
+
+        const frutaHash = stringToNumber(data.fruta);
+
+        const random = Math.floor(Math.random() * 10000);
+
+        const uuid = `${timestamp}${idade}${frutaHash}${random}`;
+
+        newSave.user.uuid = uuid;
+        newSave.user.createdAt = timestamp;
+        newSave.world.objects = objectData;
+
+        newSave.world.objects[1].plantTime = Date.now();
+        newSave.world.objects[2].plantTime = Date.now();
+        
+        localStorage.setItem("game_save", JSON.stringify(newSave));
+
+        scene.scene.start("Loading");
+    }
+
+    static openFileLoader(scene) {
+        const input = document.createElement("input");
+        input.type = "file";
+        input.accept = "application/json";
+
+        input.style.display = "none";
+
+        document.body.appendChild(input);
+
+        input.click();
+
+        input.onchange = (event) => {
+            const file = event.target.files[0];
+
+            if (!file) return;
+
+            const reader = new FileReader();
+
+            reader.onload = (e) => {
+                try {
+                    const save = JSON.parse(e.target.result);
+
+                    // 🔥 validação básica
+                    if (!save.user || !save.world) {
+                        throw new Error("Arquivo inválido");
+                    }
+
+                    // 🔥 salva no localStorage
+                    localStorage.setItem("game_save", JSON.stringify(save));
+
+                    // 🔥 vai pro jogo
+                    scene.start("Loading");
+
+                } catch (err) {
+                    console.error("Erro ao carregar save:", err);
+                    alert("Arquivo de save inválido!");
+                }
+            };
+
+            reader.readAsText(file);
+
+           
+            input.remove();
+        };
     }
 }

@@ -16,7 +16,6 @@ export default class SpriteController {
         this.uiEvents = config.uiEvents;
         this.growingSprites = ["semente", "arvore", "solo_plantado_simples", "solo_plantado_alagado", "animal"];
 
-
     }
 
     init() {
@@ -36,38 +35,83 @@ export default class SpriteController {
         this.controllers.camera.ignoreInUICamera(this.hoverText)
     }
 
+    // updateSprite() {
+
+    //     if (this.scene.gameVariables.planting) return;
+
+    //     if (this.scene.gameVariables.selectedSprite && this.scene.gameVariables.selectedSprite.isMoving) {
+    //         const sprite = this.scene.gameVariables.selectedSprite;
+    //         const pointer = this.scene.input.activePointer;
+    //         // this.uiEvents.emit('ui:desativarBottonMenu');
+
+    //         if (this.controllers.banner.isOpen()) return;
+
+    //         if (this.scene.gameVariables.middleButtonDown) return;
+
+    //         if (this.scene.gameVariables.freeClick) return;
+
+    //         let iso = this.gridUtils.screenToIso(pointer.worldX, pointer.worldY);
+    //         const { w, h } = this.gridUtils.getSpriteFootprint(sprite);
+
+    //         iso.x = Phaser.Math.Clamp(iso.x - (w / 2 - 0.5), 0, this.gridWidth * this.logicFactor - w) + (w / 2 - 0.5);
+    //         iso.y = Phaser.Math.Clamp(iso.y - (h / 2 - 0.5), 0, this.gridHeight * this.logicFactor - h) + (h / 2 - 0.5);
+
+    //         this.controllers.acoesUtils.convert(iso, sprite)
+
+    //         const startX = Math.round(iso.x - (w / 2 - 0.5));
+    //         const startY = Math.round(iso.y - (h / 2 - 0.5));
+    //         // this.gridUtils.recalculateDepthAround(sprite);
+
+
+    //         const occupied = this.gridUtils.checkOccupiedGrid(startX, startY, startX + w - 1, startY + h - 1, sprite);
+
+    //         // if (sprite.tipo != "cerca")
+    //             sprite.setTint(occupied ? 0xff8888 : 0x88ff88);
+
+    //         this.gridUtils.drawSpriteFootprint(sprite);
+    //     }
+    // }
+
     updateSprite() {
 
         if (this.scene.gameVariables.planting) return;
 
         if (this.scene.gameVariables.selectedSprite && this.scene.gameVariables.selectedSprite.isMoving) {
+
             const sprite = this.scene.gameVariables.selectedSprite;
             const pointer = this.scene.input.activePointer;
-            // this.uiEvents.emit('ui:desativarBottonMenu');
 
             if (this.controllers.banner.isOpen()) return;
-
             if (this.scene.gameVariables.middleButtonDown) return;
-
             if (this.scene.gameVariables.freeClick) return;
 
             let iso = this.gridUtils.screenToIso(pointer.worldX, pointer.worldY);
             const { w, h } = this.gridUtils.getSpriteFootprint(sprite);
 
-            iso.x = Phaser.Math.Clamp(iso.x - (w / 2 - 0.5), 0, this.gridWidth * this.logicFactor - w) + (w / 2 - 0.5);
-            iso.y = Phaser.Math.Clamp(iso.y - (h / 2 - 0.5), 0, this.gridHeight * this.logicFactor - h) + (h / 2 - 0.5);
+            iso.x = iso.x - (w / 2 - 0.5);
+            iso.y = iso.y - (h / 2 - 0.5);
 
-            this.controllers.acoesUtils.convert(iso, sprite)
+            iso.x += (w / 2 - 0.5);
+            iso.y += (h / 2 - 0.5);
+
+            this.controllers.acoesUtils.convert(iso, sprite);
 
             const startX = Math.round(iso.x - (w / 2 - 0.5));
             const startY = Math.round(iso.y - (h / 2 - 0.5));
-            // this.gridUtils.recalculateDepthAround(sprite);
 
+            const insideGrid = this.gridUtils.isInsideGrid(startX, startY, w, h);
 
-            const occupied = this.gridUtils.checkOccupiedGrid(startX, startY, startX + w - 1, startY + h - 1, sprite);
+            const occupied = this.gridUtils.checkOccupiedGrid(
+                startX,
+                startY,
+                startX + w - 1,
+                startY + h - 1,
+                sprite
+            );
 
-            // if (sprite.tipo != "cerca")
-                sprite.setTint(occupied ? 0xff8888 : 0x88ff88);
+            const valid = insideGrid && !occupied;
+
+            sprite.setTint(valid ? 0x88ff88 : 0xff8888);
 
             this.gridUtils.drawSpriteFootprint(sprite);
         }
@@ -86,6 +130,14 @@ export default class SpriteController {
         const startX = Math.round(iso.x - (w / 2 - 0.5));
         const startY = Math.round(iso.y - (h / 2 - 0.5));
 
+        const insideGrid = this.gridUtils.isInsideGrid(startX, startY, w, h);
+
+        if (!insideGrid) {
+            sprite.setTint(0xff0000);
+            this.scene.gameVariables.fenceSnapTarget = null;
+            return;
+        }
+
         let foundSnap = false;
         let possibleSnaps = [];
         let cols = []
@@ -98,6 +150,7 @@ export default class SpriteController {
                 }
             }
         }
+
 
         if (cols.length && cols.length === 1) {
             const cell = cols[0];
@@ -124,7 +177,6 @@ export default class SpriteController {
             this.scene.gameVariables.fenceSnapTarget = possibleSnaps.map(s => s.cell);
             this.scene.gameVariables.collisionDataTemp = possibleSnaps.map(s => s.data);
         } else {
-            //console.log("nenhum encontrado")
             sprite.setTint(0xffaaaa);
             this.scene.gameVariables.fenceSnapTarget = null;
         }
@@ -134,6 +186,8 @@ export default class SpriteController {
     updateHoverText(sprite) {
 
         if (!sprite) return;
+
+        console.log(sprite)
 
         let text = "";
 
@@ -154,7 +208,7 @@ export default class SpriteController {
             } else {
                 let percent = this.controllers.growth.getGrowthPercent(sprite);
                 percent = Math.floor(percent * 100);
-    
+
                 text = sprite.nome + " " + percent + "%";
             }
         }
@@ -200,7 +254,7 @@ export default class SpriteController {
         this.fpsText = this.scene.add.text(10, 10, '', {
             font: '16px Arial',
             fill: '#00ff00'
-        });
+        }).setVisible(this.gameVariables.debugShowFps);
 
         this.ground = this.scene.add.tileSprite(
             0,

@@ -25,6 +25,8 @@ export default class ShopItemCard {
 
     createCard() {
 
+        console.log(this.data)
+
         const s = this.scene;
 
         const locked = this.requiredLevel > this.playerLevel;
@@ -73,16 +75,21 @@ export default class ShopItemCard {
                 fontFamily: 'LuckiestGuy-Regular'
             }).setOrigin(0.5);
 
-            const clockIcon = s.add.image(50, 125, 'clock_icon')
-                .setOrigin(0.5)
-                .setDisplaySize(15, 15);
+            if (this.data.tipo == "semente" || this.data.tipo == "arvore" || this.data.tipo == "animal") {
+                const clockIcon = s.add.image(50, 125, 'clock_icon')
+                    .setOrigin(0.5)
+                    .setDisplaySize(15, 15);
 
-            const tempoText = s.add.text(60, 120,
-                `${this.data.tempo_colheita_horas} horas`, {
-                fontSize: '10px',
-                color: '#000',
-                fontFamily: 'LuckiestGuy-Regular'
-            });
+                const tempoText = s.add.text(60, 120,
+                    `${this.data.tempo_colheita_horas} horas`, {
+                    fontSize: '10px',
+                    color: '#000',
+                    fontFamily: 'LuckiestGuy-Regular'
+                });
+
+                elements.push(clockIcon, tempoText)
+            }
+
 
             const vendaText = s.add.text(40, 135,
                 `Vender por: ${this.data.preco_venda}`, {
@@ -148,8 +155,6 @@ export default class ShopItemCard {
 
             elements.push(
                 xpText,
-                clockIcon,
-                tempoText,
                 vendaText,
                 monetary,
                 compraText,

@@ -97,30 +97,73 @@ export default class AcoesUtils {
         }
     }
 
+    // convert(iso, sprite) {
+    //     const { w, h } = this.gridUtils.getSpriteFootprint(sprite);
+    //     const offsetX = (w % 2 === 0) ? 0.5 : 0;
+    //     const offsetY = (h % 2 === 0) ? 0.5 : 0;
+    //     let snapped = null;
+    //     let multiFactor = 0;
+
+    //     if (sprite.tipo === "cerca") {
+    //         iso.x = Phaser.Math.Clamp(iso.x - (w / 2 - 0.5), 0, this.gridWidth * this.logicFactor - w) + (w / 2 - 0.5);
+    //         iso.y = Phaser.Math.Clamp(iso.y - (h / 2 - 0.5), 0, this.gridHeight * this.logicFactor - h) + (h / 2 - 0.5);
+    //         snapped = this.gridUtils.isoToScreen(Math.floor(iso.x), Math.floor(iso.y));
+    //         multiFactor = this.gridSize * 0.20
+
+    //         sprite.x = snapped.x;
+    //         sprite.y = snapped.y - multiFactor;
+
+    //     } else if (sprite.tipo === "solo") {
+    //         snapped = this.gridUtils.isoToScreen(Math.floor(iso.x) + offsetX, Math.floor(iso.y) + offsetY);
+    //         sprite.x = snapped.x;
+    //         sprite.y = snapped.y + this.gridSize * 0.12;
+    //     } else {
+    //         iso.x = Phaser.Math.Clamp(iso.x - (w / 2 - 0.5), 0, this.gridWidth * this.logicFactor - w) + (w / 2 - 0.5);
+    //         iso.y = Phaser.Math.Clamp(iso.y - (h / 2 - 0.5), 0, this.gridHeight * this.logicFactor - h) + (h / 2 - 0.5);
+    //         snapped = this.gridUtils.isoToScreen(Math.floor(iso.x) + offsetX, Math.floor(iso.y) + offsetY);
+    //         sprite.x = snapped.x;
+    //         sprite.y = snapped.y + multiFactor;
+    //     }
+    // }
+
     convert(iso, sprite) {
+
         const { w, h } = this.gridUtils.getSpriteFootprint(sprite);
+
         const offsetX = (w % 2 === 0) ? 0.5 : 0;
         const offsetY = (h % 2 === 0) ? 0.5 : 0;
-        let snapped = null;
+
+        let snapped;
         let multiFactor = 0;
 
+        const baseX = Math.floor(iso.x);
+        const baseY = Math.floor(iso.y);
+
         if (sprite.tipo === "cerca") {
-            iso.x = Phaser.Math.Clamp(iso.x - (w / 2 - 0.5), 0, this.gridWidth * this.logicFactor - w) + (w / 2 - 0.5);
-            iso.y = Phaser.Math.Clamp(iso.y - (h / 2 - 0.5), 0, this.gridHeight * this.logicFactor - h) + (h / 2 - 0.5);
-            snapped = this.gridUtils.isoToScreen(Math.floor(iso.x), Math.floor(iso.y));
-            multiFactor = this.gridSize * 0.20
+
+            snapped = this.gridUtils.isoToScreen(baseX, baseY);
+            multiFactor = this.gridSize * 0.20;
 
             sprite.x = snapped.x;
             sprite.y = snapped.y - multiFactor;
 
         } else if (sprite.tipo === "solo") {
-            snapped = this.gridUtils.isoToScreen(Math.floor(iso.x) + offsetX, Math.floor(iso.y) + offsetY);
+
+            snapped = this.gridUtils.isoToScreen(
+                baseX + offsetX,
+                baseY + offsetY
+            );
+
             sprite.x = snapped.x;
             sprite.y = snapped.y + this.gridSize * 0.12;
+
         } else {
-            iso.x = Phaser.Math.Clamp(iso.x - (w / 2 - 0.5), 0, this.gridWidth * this.logicFactor - w) + (w / 2 - 0.5);
-            iso.y = Phaser.Math.Clamp(iso.y - (h / 2 - 0.5), 0, this.gridHeight * this.logicFactor - h) + (h / 2 - 0.5);
-            snapped = this.gridUtils.isoToScreen(Math.floor(iso.x) + offsetX, Math.floor(iso.y) + offsetY);
+
+            snapped = this.gridUtils.isoToScreen(
+                baseX + offsetX,
+                baseY + offsetY
+            );
+
             sprite.x = snapped.x;
             sprite.y = snapped.y + multiFactor;
         }

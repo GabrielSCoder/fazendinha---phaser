@@ -1,0 +1,99 @@
+[
+    {
+        "uuid": "9_7",
+        "id": "gazebo",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+            "x": 9,
+            "y": 7
+        },
+        "x": 32,
+        "y": 40
+    },
+    {
+        "uuid": "6_8",
+        "id": "arvore_cerejeira",
+        "type": "arvore",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+            "x": 6,
+            "y": 8
+        },
+        "x": -32,
+        "y": 16,
+        "plantTime": 0,
+        "duration": 1440000,
+        "harvestTimes": 0
+    },
+    {
+        "uuid": "14_8",
+        "id": "arvore_cerejeira",
+        "type": "arvore",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+            "x": 14,
+            "y": 8
+        },
+        "x": 96,
+        "y": 80,
+        "plantTime": 0,
+        "duration": 1440000,
+        "harvestTimes": 0
+    },
+    {
+        "uuid": "6_11",
+        "id": "solo_preparado",
+        "type": "soil",
+        "state": "plowed",
+        "position": {
+            "x": 6,
+            "y": 11
+        },
+        "x": -78.88000000000001,
+        "y": 65.36000000000001,
+        "harvestTimes": 0
+    },
+    {
+        "uuid": "6_15",
+        "id": "solo_preparado",
+        "type": "soil",
+        "state": "plowed",
+        "position": {
+            "x": 6,
+            "y": 15
+        },
+        "x": -142.88,
+        "y": 97.36000000000001,
+        "harvestTimes": 0
+    },
+    {
+        "uuid": "10_11",
+        "id": "solo_preparado",
+        "type": "soil",
+        "state": "plowed",
+        "position": {
+            "x": 10,
+            "y": 11
+        },
+        "x": -14.880000000000024,
+        "y": 97.36000000000001,
+        "harvestTimes": 0
+    },
+    {
+        "uuid": "10_15",
+        "id": "solo_preparado",
+        "type": "soil",
+        "state": "plowed",
+        "position": {
+            "x": 10,
+            "y": 15
+        },
+        "x": -78.88000000000002,
+        "y": 129.36,
+        "harvestTimes": 0
+    }
+]

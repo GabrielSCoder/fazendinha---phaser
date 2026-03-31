@@ -11,7 +11,6 @@ export default class HarvestController {
         if (!sprite.harvestReady) return;
         if (this.controllers.queue.isFull()) return;
 
-
         sprite.setAlpha(0.7);
         sprite.disableInteractive();
         sprite.clearTint();

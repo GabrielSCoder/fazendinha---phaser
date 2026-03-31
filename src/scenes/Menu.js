@@ -1,4 +1,5 @@
-import { stringToNumber } from "../utils/hash.js";
+import SaveLoadController from "../controllers/SaveLoadController.js";
+
 
 
 export class Menu extends Phaser.Scene {
@@ -9,6 +10,8 @@ export class Menu extends Phaser.Scene {
         this.load.image("icon", "assets/ui/freeFarmIcon.png");
         this.load.image("logo", "assets/ui/freeFarmLogo.png");
         this.load.json('save_template', 'src/static/player_save_template.json');
+        this.load.json('objects_template', 'src/static/objects_save_template.json');
+        localStorage.setItem("game_save", "");
     }
 
     constructor() {
@@ -16,47 +19,9 @@ export class Menu extends Phaser.Scene {
     }
 
     create() {
+        
+        this.createMenu();
 
-
-        const { width, height } = this.scale;
-
-        const bg = this.add.image(0, 0, "bg")
-            .setOrigin(0);
-
-        bg.setDisplaySize(width, height);
-
-        this.add.rectangle(0, 0, width, height, 0x000000, 0.3)
-            .setOrigin(0);
-
-        const bg2 = this.add.image(width / 2, height / 2 - 120, "logo")
-            .setOrigin(0.5);
-
-        bg2.setDisplaySize(500, 500);
-
-        const container = this.add.container(width / 2, height / 2 + 120);
-
-        const panel = this.add.rectangle(0, 0, 300, 150, 0x222222, 0.9)
-            .setStrokeStyle(2, 0xffffff);
-
-        container.add([panel]);
-
-        const btnStart = this.createButton("Novo Jogo", 0, -30, () => {
-            this.createCadastroInput()
-        });
-
-        const btnLoad = this.createButton("Carregar Jogo", 0, 30, () => {
-            // const save = localStorage.getItem("game_save");
-
-            // if (!save) {
-            //     console.warn("Nenhum save encontrado");
-            //     return;
-            // }
-
-            // this.scene.start("Start");
-            this.openFileLoader();
-        });
-
-        container.add([btnStart, btnLoad]);
     }
 
     createButton(text, x, y, callback, sizeX = 200, sizeY = 40, bgColor = 0x444444, bgHoverColor = 0x666666) {
@@ -159,7 +124,7 @@ export class Menu extends Phaser.Scene {
             const idade = this.formInputs[1].value;
             const fruta = this.formInputs[2].value;
 
-            this.createStartSave({ nome, idade, fruta })
+            SaveLoadController.createStartSave({ nome, idade, fruta }, this)
 
             this.closeCadastro();
 
@@ -238,75 +203,47 @@ export class Menu extends Phaser.Scene {
         return input;
     }
 
-    createStartSave(data) {
-        const saveData = this.cache.json.get('save_template');
+    createMenu() {
 
-        let newSave = JSON.parse(JSON.stringify(saveData));
+        const { width, height } = this.scale;
 
-        newSave.user.id = 90;
-        newSave.user.name = data.nome;
+        const bg = this.add.image(0, 0, "bg")
+            .setOrigin(0);
 
-        const timestamp = Date.now();
-        const idade = data.idade;
+        bg.setDisplaySize(width, height);
 
-        const frutaHash = stringToNumber(data.fruta);
+        this.add.rectangle(0, 0, width, height, 0x000000, 0.3)
+            .setOrigin(0);
 
-        const random = Math.floor(Math.random() * 10000);
+        const bg2 = this.add.image(width / 2, height / 2 - 120, "logo")
+            .setOrigin(0.5);
 
-        const uuid = `${timestamp}${idade}${frutaHash}${random}`;
+        bg2.setDisplaySize(500, 500);
 
-        newSave.user.uuid = uuid;
-        newSave.user.createdAt = timestamp;
+        const container = this.add.container(width / 2, height / 2 + 120);
 
-        localStorage.setItem("game_save", JSON.stringify(newSave));
+        const panel = this.add.rectangle(0, 0, 300, 150, 0x222222, 0.9)
+            .setStrokeStyle(2, 0xffffff);
 
-        this.scene.start("Loading");
-    }
+        container.add([panel]);
 
-    openFileLoader() {
-        const input = document.createElement("input");
-        input.type = "file";
-        input.accept = "application/json";
+        const btnStart = this.createButton("Novo Jogo", 0, -30, () => {
+            this.createCadastroInput()
+        });
 
-        input.style.display = "none";
+        const btnLoad = this.createButton("Carregar Jogo", 0, 30, () => {
+            // const save = localStorage.getItem("game_save");
 
-        document.body.appendChild(input);
+            // if (!save) {
+            //     console.warn("Nenhum save encontrado");
+            //     return;
+            // }
 
-        input.click();
+            // this.scene.start("Start");
+            SaveLoadController.openFileLoader(this.scene);
+        });
 
-        input.onchange = (event) => {
-            const file = event.target.files[0];
-
-            if (!file) return;
-
-            const reader = new FileReader();
-
-            reader.onload = (e) => {
-                try {
-                    const save = JSON.parse(e.target.result);
-
-                    // 🔥 validação básica
-                    if (!save.user || !save.world) {
-                        throw new Error("Arquivo inválido");
-                    }
-
-                    // 🔥 salva no localStorage
-                    localStorage.setItem("game_save", JSON.stringify(save));
-
-                    // 🔥 vai pro jogo
-                    this.scene.start("Loading");
-
-                } catch (err) {
-                    console.error("Erro ao carregar save:", err);
-                    alert("Arquivo de save inválido!");
-                }
-            };
-
-            reader.readAsText(file);
-
-            // limpa input depois
-            input.remove();
-        };
+        container.add([btnStart, btnLoad]);
     }
 
 }
