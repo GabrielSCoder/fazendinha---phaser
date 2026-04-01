@@ -59,7 +59,8 @@ export default class UINotificationController {
     }
 
     notify(data) {
-        console.log(data)
+        
+        if (this.scene.gameVariables.creativeMode) return;
         this.uiEvents.emit("ui:closeMenuSprite")
         this.uiEvents.emit("action:StopPlowing")
         this.queue.push(data);
@@ -640,7 +641,7 @@ export default class UINotificationController {
         let array = []
 
         data.forEach(element => {
-            this.notify({type : "advice", data : element.mensagem})
+            this.notify({ type: "advice", data: element.mensagem })
             array.push(element.id)
         })
 

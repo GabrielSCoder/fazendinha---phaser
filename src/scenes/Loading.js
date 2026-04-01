@@ -41,6 +41,8 @@ export class Loading extends Phaser.Scene {
             text.setText("Pronto!");
         });
 
+        this.load.font('LuckiestGuy-Regular', 'assets/fonts/LuckiestGuy-Regular.ttf', 'truetype');
+
         this.load.json('sementes_data', 'src/static/sementes.json');
         this.load.json('arvores_data', 'src/static/arvores.json');
         this.load.json('animais_data', 'src/static/animais.json');

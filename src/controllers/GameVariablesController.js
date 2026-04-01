@@ -32,9 +32,9 @@ export default class GameVariablesController {
         this.canInteract = true;
         this.activeBar = false;
         this.creativeMode = false;
-        this.staticMode = true;
-        this.noExperienceMode = true;
-        this.noFootprints = false;
+        this.staticMode = false;
+        this.noExperienceMode = false;
+        this.noFootprints = true;
         this.actionTileX = 1;
         this.actionTileY = 1;
         this.plowing = false;
@@ -44,7 +44,7 @@ export default class GameVariablesController {
         this.hoverEnabled = true;
         this.matrixVisible = false;
         this.debugBarVisible = false;
-        this.fastHarvestMode = true;
+        this.fastHarvestMode = false;
         this.debugHaverstTime = 0.2;
         this.debugShowFps = false;
 

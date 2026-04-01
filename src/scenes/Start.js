@@ -39,6 +39,7 @@ export class Start extends Phaser.Scene {
     preload() {
 
         this.gameVariables = new GameVariablesController(this);
+        this.load.json('saveData', 'src/static/player_save.json');
     }
 
     create() {
@@ -54,14 +55,14 @@ export class Start extends Phaser.Scene {
 
         this.controllers = {}
 
-        const saveData = SaveLoadController.loadFromStorage();
+        // const saveData = SaveLoadController.loadFromStorage();
 
-        if (!saveData) {
-            console.error("Nenhum save encontrado!");
-            this.scene.start("Menu");
-            return;
-        }
-        // const saveData = this.cache.json.get('saveData');
+        // if (!saveData) {
+        //     console.error("Nenhum save encontrado!");
+        //     this.scene.start("Menu");
+        //     return;
+        // }
+        const saveData = this.cache.json.get('saveData');
 
         this.sementes = this.cache.json.get('sementes_data');
         this.animais = this.cache.json.get('animais_data');

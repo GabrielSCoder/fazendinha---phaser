@@ -13,6 +13,9 @@ export default class ShopItemCard {
         this.creativeMode = scene.gameVariables.creativeMode;
         this.noExperienceMode = scene.gameVariables.noExperienceMode;
 
+        this.smallSprite = ["cabana", "cabana_rosa", "gazebo", "gazebo_rosa", "escorrega", "anao_jardim", "gangorra", "flamingo",
+            "carro_amarelo", "carro_vermelho", "casa_grande", "casa_cogumelo", "espantalho_palha", "espantalho_azul"]
+
         this.x = x;
         this.y = y;
         this.width = width;
@@ -27,6 +30,11 @@ export default class ShopItemCard {
 
         console.log(this.data)
 
+        const smallSprite = this.smallSprite.includes(this.data.id)
+
+        const imgSizeX = smallSprite ? 120 : 70
+        const imgSizeY = smallSprite ? 120 : 70
+
         const s = this.scene;
 
         const locked = this.requiredLevel > this.playerLevel;
@@ -40,15 +48,18 @@ export default class ShopItemCard {
 
         const title = s.add.text(this.width / 2, 20, this.data.nome, {
             fontSize: this.data.nome.length > 10 ? '10px' : '14px',
-            color: '#875e2b',
-            fontFamily: 'LuckiestGuy-Regular'
+            color: '#000',
+            fontFamily: 'LuckiestGuy-Regular',
+            lineSpacing: 2, wordWrap: {
+                width: this.width * 0.9
+            }
         }).setOrigin(0.5);
 
         elements.push(title);
 
         const img = s.add.image(this.width / 2, 70, this.data.img)
             .setOrigin(0.5)
-            .setDisplaySize(60, 60);
+            .setDisplaySize(imgSizeX, imgSizeY);
 
         elements.push(img);
 
@@ -98,25 +109,28 @@ export default class ShopItemCard {
                 fontFamily: 'LuckiestGuy-Regular'
             });
 
-            let monetary = ""
+            const value = tipo_compra == "gold"
+                ? this.data.preco_compra
+                : this.data.preco_compra_grana;
 
+            const container = s.add.container(this.width / 2, 165);
 
-            if (tipo_compra == "gold") {
-                monetary = s.add.image(this.width / 2 - 6, 165, 'gold_icon')
-                    .setOrigin(0.5)
-                    .setDisplaySize(20, 20);
-            } else {
-                monetary = s.add.image(this.width / 2 - 6, 165, 'cash_icon')
-                    .setOrigin(0.5)
-                    .setDisplaySize(20, 20);
-            }
+            const icon = s.add.image(0, 0,
+                tipo_compra == "gold" ? 'gold_icon' : 'cash_icon'
+            )
+                .setOrigin(0.5)
+                .setDisplaySize(20, 20);
 
-            const compraText = s.add.text(this.width / 2 + 5, 165,
-                tipo_compra == "gold" ? this.data.preco_compra : this.data.preco_compra_grana, {
+            const text = s.add.text(0, 0, value, {
                 fontSize: '14px',
                 color: '#000',
                 fontFamily: 'LuckiestGuy-Regular'
             }).setOrigin(0, 0.5);
+
+            icon.x = - (text.width / 2) - 2;
+            text.x = - (text.width / 2) + 10;
+
+            container.add([icon, text]);
 
             const comprarBtn = s.add.text(
                 this.width / 2,
@@ -156,8 +170,7 @@ export default class ShopItemCard {
             elements.push(
                 xpText,
                 vendaText,
-                monetary,
-                compraText,
+                container,
                 comprarBtn
             );
         }

@@ -21,6 +21,7 @@ export default class MissionController {
     }
 
     init() {
+
         this.initMissions()
 
         if (this.scene.gameVariables.creativeMode) return;
