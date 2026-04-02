@@ -240,6 +240,7 @@ export class Menu extends Phaser.Scene {
             // }
 
             // this.scene.start("Start");
+            //console.log("dhjjdjd")
             SaveLoadController.openFileLoader(this.scene);
         });
 
