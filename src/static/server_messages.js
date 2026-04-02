@@ -6,5 +6,9 @@ export const messages = [
     {
         "id": 4,
         "mensagem": "Atenção!\n Sempre salve seu jogo!"
+    },
+    {
+        "id" : 5,
+        "mensagem" : "Clique em 'Loja' para deixar de comprar alguma coisa que está selecionada"
     }
 ]

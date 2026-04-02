@@ -26,13 +26,12 @@ export const assetsConfig = {
             "cebola", "cafe", "couve_flor", "girassol", "melancia",
             "milho", "mirtilo", "morango", "nabo", "pimenta",
             "pimentao", "rabanete", "trigo", "cenoura", "soja",
-            "tomate", "alcachofra", "espinafre", "aloe_vera", "uva"
+            "tomate", "alcachofra", "espinafre", "aloe_vera", "uva", "berinjela"
         ],
 
         getFile: name => {
 
             if (name === "batata_inglesa") return "solo_pronto_batata.png"
-            if (name === "pimentao") return "solo_pronto_pimenta.png"
 
             return `solo_pronto_${name}.png`
         }

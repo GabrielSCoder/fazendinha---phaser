@@ -137,15 +137,34 @@
         "tipo_plantacao": "solo_plantado_simples"
     },
     {
-        "id": "semente_beterraba",
-        "nome": "Beterraba",
+        "id": "semente_nabo",
+        "nome": "Nabo",
         "preco_compra": 65,
         "preco_venda": 140,
         "tempo_colheita_horas": 8,
         "xp": 1,
         "nivel_requerido": 3,
-        "img": "semente_beterraba",
-        "img_pronta": "pronto_beterraba",
+        "img": "semente_nabo",
+        "img_pronta": "pronto_nabo",
+        "tipo": "semente",
+        "escala": 0.78,
+        "area": [
+            4,
+            4
+        ],
+        "noStopBuy": false,
+        "tipo_plantacao": "solo_plantado_simples"
+    },
+    {
+        "id": "semente_cafe",
+        "nome": "Café",
+        "preco_compra": 240,
+        "preco_venda": 300,
+        "tempo_colheita_horas": 16,
+        "xp": 1,
+        "nivel_requerido": 29,
+        "img": "semente_cafe",
+        "img_pronta": "pronto_cafe",
         "tipo": "semente",
         "escala": 0.78,
         "area": [

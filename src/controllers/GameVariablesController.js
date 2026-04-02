@@ -34,7 +34,7 @@ export default class GameVariablesController {
         this.creativeMode = false;
         this.staticMode = false;
         this.noExperienceMode = false;
-        this.noFootprints = true;
+        this.noFootprints = false;
         this.actionTileX = 1;
         this.actionTileY = 1;
         this.plowing = false;
@@ -44,7 +44,7 @@ export default class GameVariablesController {
         this.hoverEnabled = true;
         this.matrixVisible = false;
         this.debugBarVisible = false;
-        this.fastHarvestMode = true;
+        this.fastHarvestMode = false;
         this.debugHaverstTime = 0.2;
         this.debugShowFps = false;
 

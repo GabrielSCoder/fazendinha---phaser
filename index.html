@@ -5,6 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Free Farm</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+        rel="stylesheet">
     <style>
         *,
         *::before,
@@ -19,13 +23,40 @@
             width: 100%;
             height: 100%;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
+            font-family: "Open Sans";
         }
 
         body {
             line-height: 1;
-            background-color: black;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+
+            background-image: url(assets/wallpaper/wall.jpg);
+            background-size: cover;
+            background-position: center;
+
+            z-index: -2;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+
+            background: rgba(0, 0, 0, 0.5);
+
+            z-index: -1;
+        }
+
+        header {
+            background-color: green;
         }
 
         ol,
@@ -50,13 +81,108 @@
             max-width: 1000px;
         }
 
+        #container {
+            width: 80%;
+            height: 100%;
+            margin: auto 0px;
+        }
     </style>
 </head>
 
 <body>
-    <div id="game-container"></div>
-    <script src="./phaser.js"></script>
-    <script type="module" src="./src/main.js"></script>
+
+    <div id="container">
+        <header
+            style="height: 110px; display: flex; align-items: center; justify-content: space-between; padding: 0 40px;">
+
+            <div style="width: 20px;"></div>
+
+            <div style="display: flex; gap: 8px; align-items: center; justify-content: center;">
+                <img src="assets/UI/freeFarmIcon.png" height="80" width="80" />
+                <h1 style="color: white;">Free Farm</h1>
+            </div>
+
+            <div style="display: flex; gap: 20px; align-items: center; font-size: 20px;">
+                <div style="cursor: pointer;" onclick="toggleBackground()">💡</div>
+            </div>
+
+        </header>
+
+        <div id="cont"
+            style="background-color: white; min-height: 600px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 20px; padding: 10px 10px;">
+            <div
+                style="padding: 4px 4px; height: 100px; border: solid 2px black; align-items: center; display: flex; flex-direction: column; justify-content: center;">
+                <h2>Controles</h2><br />
+                <p>
+                    <strong>Botão esquerdo do mouse:</strong> Seleciona, fixa item, etc. <br />
+                    <strong>Botão central do mouse:</strong> Segure e arraste para mover a câmera
+                </p>
+            </div>
+
+            <div id="game-container"></div>
+            <script src="./phaser.js"></script>
+            <script type="module" src="./src/main.js"></script>
+
+            <div
+                style="display: flex; flex-direction: column; justify-content: center; align-items: start; gap: 40px; width: 900px; margin-top: 50px; margin-bottom: 50px;">
+                <div style="flex-direction: column; display: flex; gap: 8px">
+                    <h2>O jogo</h2>
+                    <p>Partiu de um sentimento de nostalgia da minha infância. Jutando meu hábito de aprender novas
+                        linguagens e frameworks
+                        com a vontade que sempre tive de fazer algo parecido com o finado jogo "Mini Fazenda". Apesar de
+                        ainda estar muito cru e longe do que
+                        eu considero estar um jogo completo, Free Farm é o resultado de quase meio ano de
+                        desenvolvimento
+                        feito por uma pessoa só.
+                    </p>
+                </div>
+                <div style="flex-direction: column; display: flex; gap: 8px">
+                    <h2>Programação</h2>
+                    <p>A primeira coisa que pensei ao iniciar esse projeto era em qual plataforma de código eu iria
+                        programar e os desafios de implementar o mínimo
+                        que eu tinha em mente. Pensei em pygame, Unity, godot e no fim utilizei uma que não fazia a
+                        menor
+                        ideia que existia: <strong>Phaser</strong>,
+                        uma biblioteca de criação de jogos feita em JavaScript. Uma biblioteca de simples entendimento e
+                        usabilidade e o principal, usando uma linguagem
+                        extramente acessível como o JS.
+                    </p>
+                </div>
+                <div style="flex-direction: column; display: flex; gap: 8px">
+                    <h2>O estágio atual do jogo</h2>
+                    <p>Apesar de meses de desenvolvimento o jogo ainda esta muito "verde", e bugs e erros podem
+                        acontecer a
+                        qualquer momento, princpalmente visualmente. O jogo é 100% offline por enquanto. Todo o
+                        progresso é armazenado no localStorage e
+                        salvo em arquivo .json. <br /><br /> <strong>Sempre salve antes de sair!</strong>
+                    </p>
+                </div>
+                <div style="flex-direction: column; display: flex; gap: 8px">
+                    <h2>Doação</h2>
+                    <p>Caso queira doar, por vontade própria, alguma quantia para o desenvolvedor, sinta-se à
+                        vontade.
+                    </p>
+                    <p>
+                        <strong>PIX:</strong> 10f2fa9f-e6df-4edc-8903-b067d5570554
+                    </p>
+                </div>
+            </div>
+        </div>
+        <footer
+            style="height: 90px; background-color: green; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+            <h4>Gabriel. 2026</h4>
+        </footer>
+    </div>
 </body>
+
+<script>
+
+    function toggleBackground() {
+        const div = document.getElementById("cont")
+        const bg = div.style.getPropertyValue("background-color");
+        bg == "black" ? div.style.setProperty("background-color", "white") : div.style.setProperty("background-color", "black")
+    }
+
+</script>
 
 </html>

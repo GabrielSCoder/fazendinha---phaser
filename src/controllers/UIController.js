@@ -15,7 +15,8 @@ export default class UINotificationController {
 
         this.priority = {
             levelUp: 1,
-            newMission: 2,
+            advice : 2,
+            newMission: 3,
             default: 99
         };
 
@@ -92,15 +93,9 @@ export default class UINotificationController {
 
     organizeQueue() {
 
-        const priority = {
-            levelUp: 1,
-            newMission: 2,
-            default: 99
-        };
-
         this.queue.sort((a, b) => {
-            const pa = priority[a.type] ?? priority.default;
-            const pb = priority[b.type] ?? priority.default;
+            const pa = this.priority[a.type] ?? this.priority.default;
+            const pb = this.priority[b.type] ?? this.priority.default;
 
             return pa - pb;
         });

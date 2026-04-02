@@ -90,7 +90,7 @@ export default class ShopItemCard {
                     .setDisplaySize(15, 15);
 
                 const tempoText = s.add.text(60, 120,
-                    `${this.data.tempo_colheita_horas} horas`, {
+                    `${this.data.tempo_colheita_horas} minutos`, {
                     fontSize: '10px',
                     color: '#000',
                     fontFamily: 'LuckiestGuy-Regular'

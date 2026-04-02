@@ -22,12 +22,26 @@
     "activeMissions": {},
     "completedMissions": []
   },
-  "messages" : [], 
+  "messages": [],
   "world": {
     "id": 1,
     "sizeX": 12,
     "sizeY": 12,
     "lastUpdate": 0,
     "objects": []
+  },
+  "records": {
+    "gold_spent": 0,
+    "money_spent": 0,
+    "gold_gained": 0,
+    "money_gained": 0,
+    "trees_bought": 0,
+    "trees_harvested": 0,
+    "soil_plowded": 0,
+    "soil_renewed": 0,
+    "seeds_planted": 0,
+    "seeds_harvested": 0,
+    "animals_bought": 0,
+    "animals_harvested": 0
   }
 }
