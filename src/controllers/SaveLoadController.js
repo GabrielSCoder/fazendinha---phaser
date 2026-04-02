@@ -13,6 +13,7 @@ export default class SaveLoadController {
         this.mission = null;
         this.world = null;
         this.messages = null;
+        this.records = null;
         this.uiEvents = config.uiEvents;
 
         this.saveDebounced = debounce(() => {
@@ -43,6 +44,7 @@ export default class SaveLoadController {
         this.gift = structuredClone(this.saveArchive.gift);
         this.mission = structuredClone(this.saveArchive.mission);
         this.messages = structuredClone(this.saveArchive.messages);
+        this.records = structuredClone(this.saveArchive.records);
         this.loadWorld(this.saveArchive.world);
     }
 
@@ -116,7 +118,8 @@ export default class SaveLoadController {
             gift: this.gift,
             mission: this.mission,
             messages: this.messages,
-            world: this.getWorldSaveFormat()
+            world: this.getWorldSaveFormat(),
+            records: this.records
         }
     }
 
@@ -157,6 +160,16 @@ export default class SaveLoadController {
 
         this.user[type] += amount;
 
+        if (type == "gold" || type == "money") {
+            const data = {
+                type: "transaction",
+                monetary: type,
+                amount: amount
+            }
+            this.changeRecords(data)
+        }
+
+
         this.uiEvents.emit(`save:user:${type}`, this.user[type]);
 
         this.saveDebounced();
@@ -169,6 +182,34 @@ export default class SaveLoadController {
         this.uiEvents.emit("save:world:update", world);
 
         this.saveDebounced();
+    }
+
+    changeRecords(data) {
+        
+        switch (data.type) {
+            case "transaction":
+                let monetary = data.monetary
+                if (data.amount > 0) {
+                    this.records[`${monetary}_gained`] += data.amount
+                } else {
+                    this.records[`${monetary}_spent`] += data.amount
+                }
+                break;
+            case "plow":
+                this.records["soil_plowded"] += 1
+                break;
+            case "renew":
+                this.records["soil_renewed"] += 1
+                break;
+            case "harvest":
+                this.records["seeds_harvested"] += 1
+                break;
+            case "plant":
+                this.records["seeds_planted"] += 1
+                break;
+            default:
+                break;
+        }
     }
 
     getWorldSaveFormat() {
@@ -248,7 +289,7 @@ export default class SaveLoadController {
 
         newSave.world.objects[1].plantTime = Date.now();
         newSave.world.objects[2].plantTime = Date.now();
-        
+
         localStorage.setItem("game_save", JSON.stringify(newSave));
 
         scene.scene.start("Loading");
@@ -295,7 +336,7 @@ export default class SaveLoadController {
 
             reader.readAsText(file);
 
-           
+
             input.remove();
         };
     }

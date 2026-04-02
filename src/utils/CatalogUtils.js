@@ -75,9 +75,9 @@ export default class CatalogUtils {
         const seeds = this.seeds.filter(element => element.nivel_requerido == level);
         const animals = this.animals.filter(element => element.nivel_requerido == level);
         const trees = this.trees.filter(element => element.nivel_requerido == level);
-        const soils = this.soils.filter(element => element.nivel_requerido == level);
+        const decoration = this.decoration.filter(element => element.nivel_requerido == level);
 
-        list.push(...seeds, ...animals, ...trees, ...soils);
+        list.push(...seeds, ...animals, ...trees, ...decoration);
 
         return list;
     }
@@ -85,7 +85,8 @@ export default class CatalogUtils {
     getResumeUnlockLevel(level) {
         let list = this.getUnlockedItensListByLevel(level);
 
-        let newList = list.slice().sort((a, b) => b.preco_compra - a.preco_compra).slice(0, 5).map(item => item.nome);
+
+        let newList = list.slice().sort((a, b) => a.nome - b.nome).slice(0, 5).map(item => item.nome);
 
         return newList;
     }

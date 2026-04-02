@@ -28,8 +28,6 @@ export default class ShopItemCard {
 
     createCard() {
 
-        console.log(this.data)
-
         const smallSprite = this.smallSprite.includes(this.data.id)
 
         const imgSizeX = smallSprite ? 120 : 70

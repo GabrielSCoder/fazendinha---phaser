@@ -187,7 +187,7 @@ export default class SpriteController {
 
         if (!sprite) return;
 
-        console.log(sprite)
+        // console.log(sprite)
 
         let text = "";
 

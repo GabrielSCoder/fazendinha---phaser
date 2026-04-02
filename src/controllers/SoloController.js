@@ -193,9 +193,6 @@ export default class SoloController {
             const centerX = startX + (w / 2) - (1 - originX - 0.1);
             const centerY = startY + (h / 2) - (1 - originY - 0.15);
 
-            console.log(centerX)
-            console.log(centerY)
-
             const screenPos = this.gridUtils.isoToScreen(centerX, centerY);
 
             const sprite = this.scene.controllers.spriteUtils.addGameSprite(
@@ -324,7 +321,6 @@ export default class SoloController {
 
         this.uiEvents.emit("action:getGold", (result) => {
             gold = result;
-            //console.log(gold)
         })
 
         return Math.floor(gold / price);
@@ -423,7 +419,7 @@ export default class SoloController {
             sprite.y,
             50,
             10,
-            1.8,
+            0.5,
             () => {
 
                 sprite.nome = "solo_preparado";

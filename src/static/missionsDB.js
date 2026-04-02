@@ -1,41 +1,11 @@
 export const intro_missions = [
     {
         id: 1,
-        title: "Começando",
-        unlocks: [2],
-        level_requirement: 1,
-        auto_start: true,
-        icon: "enxada",
-
-        description: "Primeiro passo para cultivar é preparando o terreno",
-
-        states: [
-            {
-                objectives: [
-                    {
-                        action: "plow",
-                        amount: 4,
-                        text: "Are solos",
-                        target: "solo_preparado",
-                        icon: "enxada"
-                    },
-                ]
-            }
-        ],
-
-        final_reward: {
-            xp: 10
-        },
-
-        duration: null,
-        expires: false
-    },
-    {
-        id: 2,
         title: "Experimentação",
-        unlocks: null,
+        level_requirement: 1,
+        unlocks: [5],
         auto_start: true,
-        icon: "semente_abacaxi",
+        icon: "semente_mirtilo",
 
         description: "Hora de conhecer as sementes",
 
@@ -60,7 +30,6 @@ export const intro_missions = [
 
                 reward: { xp: 20 }
             },
-
             {
                 objectives: [
                     {
@@ -84,14 +53,61 @@ export const intro_missions = [
         ],
 
         final_reward: {
-            xp: 50,
-            gold: 100
+            xp: 30,
+            gold: 150
         }
+    },
+    {
+        id: 2,
+        title: "Experimentação II",
+        unlocks: null,
+        auto_start: true,
+        icon: "enxada",
+        need_mission_complete: 5,
+
+        description: "Hora de aumentar a plantação",
+
+        states: [
+            {
+                objectives: [
+                    {
+                        action: "plow",
+                        amount: 4,
+                        text: "Are solos",
+                        target: "solo_preparado",
+                        icon: "enxada"
+                    },
+                    {
+                        action: "plant",
+                        amount: 4,
+                        text: "Plante pimentão",
+                        target: "solo_plantado_simples",
+                        filters: { seed: "pimentão" }
+                    },
+                    {
+                        action: "harvest",
+                        amount: 4,
+                        text: "Colha pimentão",
+                        target: "solo_plantado_simples",
+                        filters: { seed: "pimentão" }
+                    }
+                ]
+            },
+
+        ],
+
+        final_reward: {
+            xp: 100,
+            gold: 500
+        },
+
+        duration: null,
+        expires: false
     },
     {
         id: 3,
         title: "Reflorestamento",
-        unlocks: null,
+        unlocks: [4],
         level_requirement: 5,
         auto_start: true,
         icon: "abrico_cheio",
@@ -103,17 +119,16 @@ export const intro_missions = [
                 objectives: [
                     {
                         action: "place",
-                        amount: 10,
+                        amount: 5,
                         text: "Plante árvores",
-                        target : "arvore",
+                        target: "arvore",
                         icon: "abrico_vazio"
                     },
                     {
                         action: "harvest",
-                        amount: 10,
-                        text: "colha árvores de abricó",
+                        amount: 5,
+                        text: "Colha frutos das árvores",
                         target: "arvore",
-                        filters : { name : "arvore_abrico"},
                         icon: "abrico_cheio"
                     }
                 ],
@@ -121,8 +136,75 @@ export const intro_missions = [
         ],
 
         final_reward: {
-            xp: 200,
-            gold: 300
+            xp: 100,
+            gold: 900
         }
-    }
+    },
+    {
+        id: 4,
+        title: "Reflorestamento II",
+        unlocks: null,
+        level_requirement: 8,
+        auto_start: false,
+        need_mission_complete: 3,
+        icon: "bananeira_cheia",
+
+        description: "Vai uma banana?",
+
+        states: [
+            {
+                objectives: [
+                    {
+                        action: "place",
+                        amount: 5,
+                        text: "Plante bananeiras",
+                        target: "arvore",
+                        icon: "bananeira_cheia",
+                        filters: { name: "bananeira" }
+                    },
+                    {
+                        action: "harvest",
+                        amount: 5,
+                        text: "Colha bananas",
+                        target: "arvore",
+                        icon: "bananeira_cheia",
+                        filters: { name: "bananas" }
+                    }
+                ],
+            }
+        ],
+
+        final_reward: {
+            xp: 100,
+            gold: 900
+        }
+    },
+    {
+        id: 5,
+        title: "Arando e Arando",
+        unlocks: [2],
+        auto_start: false,
+        icon: "solo2",
+        need_mission_complete : 1,
+        description: "Prepare o solo para o replantio",
+
+        states: [
+            {
+                objectives: [
+                    {
+                        action: "renew",
+                        amount: 4,
+                        text: "Renove o solo ",
+                        target: "solo_preparado",
+                        icon: "solo2"
+                    }
+                ],
+            }
+        ],
+
+        final_reward: {
+            xp: 100,
+            gold: 200
+        }
+    },
 ]

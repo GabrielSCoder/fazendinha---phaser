@@ -35,17 +35,17 @@ export default class MissionController {
         })
 
         this.uiEvents.on("plant", data => {
-            //console.log(data)
+            ////console.log(data)
             this.onAction({ action: "plant", ...data })
         })
 
         this.uiEvents.on("place", data => {
-            //console.log(data)
+            ////console.log(data)
             this.onAction({ action: "place", ...data })
         })
 
         this.uiEvents.on("harvest", data => {
-            //console.log(data)
+            ////console.log(data)
             this.onAction({ action: "harvest", ...data })
         })
 
@@ -53,8 +53,12 @@ export default class MissionController {
             this.onAction({ action: "plow", ...data })
         })
 
+        this.uiEvents.on("renewSoil", data => {
+            this.onAction({ action: "renew", ...data })
+        })
+        
         this.uiEvents.on("save:mission:update", () => {
-            //console.log("missão mudada")
+            ////console.log("missão mudada")
             this.uiEvents.emit("data:missions", this.getMissions());
         });
 
@@ -271,16 +275,11 @@ export default class MissionController {
 
         this.missionsDB.forEach(mission => {
 
-            if (!mission.level_requirement) return;
-            if (mission.level_requirement > playerLevel) return
+            if (this.canUnlockMission(mission, playerLevel)) {
+                this.assignMission(mission.id);
+            }
 
-            if (this.getActiveMissions()[mission.id]) return
-
-            if (this.getCompletedMissions().some(m => m.id === mission.id)) return
-
-            this.assignMission(mission.id)
-
-        })
+        });
 
     }
 
@@ -382,9 +381,17 @@ export default class MissionController {
         if (mission.unlocks) {
 
             mission.unlocks.forEach(id => {
-                this.assignMission(id)
-            })
 
+                const nextMission = this.missionsById[id];
+                const playerLevel = this.saveController.getUser().level;
+
+                //console.log(nextMission, playerLevel)
+
+                if (this.canUnlockMission(nextMission, playerLevel)) {
+                    this.assignMission(id);
+                }
+
+            });
         }
 
 
@@ -420,4 +427,25 @@ export default class MissionController {
 
     }
 
+    canUnlockMission(mission, playerLevel) {
+
+        // já ativa
+        if (this.getActiveMissions()[mission.id]) return false;
+
+        // já completada
+        if (this.getCompletedMissions().some(m => m.id === mission.id)) return false;
+
+        // requisito de level
+        if (mission.level_requirement && playerLevel < mission.level_requirement) return false;
+
+        // requisito de missão anterior
+        if (mission.need_mission_complete) {
+            const completed = this.getCompletedMissions();
+            const hasCompleted = completed.some(m => m.id === mission.need_mission_complete);
+
+            if (!hasCompleted) return false;
+        }
+
+        return true;
+    }
 }

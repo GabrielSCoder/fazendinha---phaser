@@ -182,8 +182,7 @@ export default class SidesUi {
         const bg = this.scene.add.circle(0, 0, radius, 0xfffff, 1)
             .setStrokeStyle(2, 0xffffff);
 
-        const icon = this.scene.add.image(0, 0, key.icon)
-            .setScale(0.2);
+        const icon = this.scene.add.image(0, 0, key.icon).setDisplaySize(50,50)
 
         // indicador !
         const alert = this.scene.add.text(radius - 8, -radius + 8, "!", {

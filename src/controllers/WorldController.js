@@ -27,7 +27,6 @@ export default class WorldController {
 
 
         if (!key) {
-            console.log("Sem uuid")
             return;
         }
 
@@ -39,10 +38,10 @@ export default class WorldController {
             position: { x: sprite.gridX, y: sprite.gridY },
             x: sprite.x,
             y: sprite.y,
-            harvestTimes : 0
+            harvestTimes: 0
         };
 
-        this.save();
+        this.save("plow");
     }
 
     onRenew(data) {
@@ -55,7 +54,6 @@ export default class WorldController {
 
 
         if (!key) {
-            console.log("Sem uuid")
             return;
         }
 
@@ -70,7 +68,7 @@ export default class WorldController {
             y: sprite.y
         };
 
-        this.save();
+        this.save("renew");
     }
 
     onPlant(data) {
@@ -82,7 +80,6 @@ export default class WorldController {
 
 
         if (!key) {
-            console.log("Sem uuid")
             return;
         }
 
@@ -98,7 +95,7 @@ export default class WorldController {
         obj.plantTime = sprite.growthStart;
         obj.duration = sprite.growthDuration;
 
-        this.save();
+        this.save("plant");
     }
 
     onHarvest(data) {
@@ -109,7 +106,6 @@ export default class WorldController {
         const obj = this.saveController.getWorld().objects[key];
 
         if (!key) {
-            console.log("Sem uuid")
             return;
         }
 
@@ -146,7 +142,7 @@ export default class WorldController {
 
         this.saveController.getWorld().objects[key] = save;
 
-        this.save();
+        this.save("harvest");
     }
 
     onMove(data) {
@@ -155,7 +151,6 @@ export default class WorldController {
         const key = sprite.uuid;
 
         if (!key) {
-            console.log("Sem uuid")
             return;
         }
 
@@ -194,7 +189,6 @@ export default class WorldController {
         const obj = this.saveController.getWorld().objects[key];
 
         if (!key) {
-            console.log("Sem uuid");
             return;
         }
 
@@ -280,7 +274,11 @@ export default class WorldController {
 
     }
 
-    save() {
+    save(type = false) {
+
+        if (type)
+            this.saveController.changeRecords({ type: type });
+
         const world = this.saveController.getWorld();
 
         world.lastUpdate = Date.now();

@@ -13,6 +13,12 @@ export default class UINotificationController {
         this.queue = [];
         this.isShowing = false;
 
+        this.priority = {
+            levelUp: 1,
+            newMission: 2,
+            default: 99
+        };
+
     }
 
     init() {
@@ -59,13 +65,12 @@ export default class UINotificationController {
     }
 
     notify(data) {
-        
+
         if (this.scene.gameVariables.creativeMode) return;
         this.uiEvents.emit("ui:closeMenuSprite")
         this.uiEvents.emit("action:StopPlowing")
-        this.queue.push(data);
+        this.addQueue(data)
         this.processQueue();
-
     }
 
     processQueue() {
@@ -78,8 +83,29 @@ export default class UINotificationController {
         this.isShowing = true;
 
         this.showPopup(data);
-
     }
+
+    addQueue(data) {
+        this.queue.push(data);
+        this.organizeQueue();
+    }
+
+    organizeQueue() {
+
+        const priority = {
+            levelUp: 1,
+            newMission: 2,
+            default: 99
+        };
+
+        this.queue.sort((a, b) => {
+            const pa = priority[a.type] ?? priority.default;
+            const pb = priority[b.type] ?? priority.default;
+
+            return pa - pb;
+        });
+    }
+
 
     showPopup(data) {
 
@@ -450,7 +476,7 @@ export default class UINotificationController {
             -width / 2 + 25,
             0,
             objective.icon || "semente_mirtilo"
-        ).setScale(0.15);
+        ).setDisplaySize(40, 40)
 
         // texto
         const text = this.scene.add.text(

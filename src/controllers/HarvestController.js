@@ -28,7 +28,7 @@ export default class HarvestController {
                     sprite.y + 10,
                     50,
                     10,
-                    1.8,
+                    0.5,
                     () => {
 
                         if (sprite.regrow) {
