@@ -240,7 +240,7 @@ export default class WorldController {
                     item.nome = seed.nome
                     seed.img = seed.tipo_plantacao
                     seed.tipo = element.id
-
+                    seed.preco_colheita = seed.preco_venda
                 }
             }
 
@@ -257,8 +257,6 @@ export default class WorldController {
             this.scene.controllers.gridUtils.markOccupied(sprite, first.position.x, first.position.y, w, h);
 
             if (this.scene.controllers.catalog.isCultivableSoil(sprite.tipo)) {
-
-
                 sprite.regrow = false;
             }
 

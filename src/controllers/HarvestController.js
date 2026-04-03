@@ -63,9 +63,9 @@ export default class HarvestController {
 
         const sprite_nome = sprite.nome;
         sprite.harvestTime += 1;
-        const preco_venda = sprite.preco_venda;
+        const preco_venda = sprite.preco_colheita;
         const xp = sprite.xp;
-
+        
         const confirm = this.controllers.soil.clearSoil(sprite);
 
         if (confirm) {

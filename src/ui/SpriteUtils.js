@@ -18,6 +18,7 @@ export default class SpriteUtils {
             useHandCursor: true
         }).setOrigin(originX, originY);
 
+        
         sprite.id = data.id;
         sprite.originalScale = sprite.scaleX;
         sprite.isMoving = false;
@@ -73,15 +74,13 @@ export default class SpriteUtils {
             sprite.canGrow = true;
             sprite.harvestTime = rebuild ? data.harvestTimes ?? 0 : 0;
 
-            console.log(sprite.harvestTime)
-
             sprite.stages = stages;
-
 
             if (rebuild) {
                 sprite.growthStart = data.plantTime;
                 sprite.growthDuration = data.duration;
                 sprite.growthStages = stages
+                sprite.preco_colheita = data.preco_colheita
             }
 
             this.scene.gameVariables.growingSprites.push(sprite)

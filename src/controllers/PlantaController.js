@@ -101,7 +101,7 @@ export default class PlantaController {
         sprite.nome = semente.nome;
         sprite.plantado = true;
         sprite.planta_cultivada = semente.id;
-        sprite.preco_venda = semente.preco_venda;
+        sprite.preco_colheita = semente.preco_venda;
         sprite.preco_compra = semente.preco_compra;
         sprite.regrow = false;
         sprite.harvestTime = solo.harvestTime;
