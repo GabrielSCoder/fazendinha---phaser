@@ -104,7 +104,7 @@ export default class TopUI {
 
         this.uiLeftContainer = this.scene.add.container(leftX, leftY);
         this.uiRightContainer = this.scene.add.container(width - 120, leftY)
-        this.containerUI.add(this.uiLeftContainer, this.uiRightContainer);
+        this.containerUI.add([this.uiLeftContainer, this.uiRightContainer]);
 
         const leftBg = this.scene.add.rectangle(0, 0, 250, 60, 0x222222, 0.7).setOrigin(0, 0);
         const rightBg = this.scene.add.rectangle(0, 0, 100, 60, 0x222222, 0.7).setOrigin(0, 0);
@@ -161,7 +161,7 @@ export default class TopUI {
         }).setOrigin(0, 0.5).setStroke('black', 5);
 
         this.uiLeftContainer.add([this.barraBg, this.barraXp, this.xpText, this.farmNameText, this.levelText]);
-        this.uiRightContainer.add(this.salvarBtn);
+        this.uiRightContainer.add([this.salvarBtn]);
 
         const centerY = 20;
         this.uiCenterContainer = this.scene.add.container(width / 2, centerY);

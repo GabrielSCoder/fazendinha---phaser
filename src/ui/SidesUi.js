@@ -22,6 +22,8 @@ export default class SidesUi {
         this.eastSideContainer.setDepth(9997);
         this.westSideContainer.setDepth(9997);
 
+        this.controllers.camera.ignoreInMainCamera([this.eastSideContainer]);
+
     }
 
     init() {
