@@ -58,12 +58,12 @@ export default class WorldController {
         }
 
         map[key] = {
+            ...map[key],
             id: "solo_preparado",
             uuid: key,
             type: "soil",
             state: "plowed",
             harvestTimes: sprite.harvestTime,
-            position: { x: sprite.gridX, y: sprite.gridY },
             x: sprite.x,
             y: sprite.y
         };
