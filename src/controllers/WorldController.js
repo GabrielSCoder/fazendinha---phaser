@@ -15,6 +15,7 @@ export default class WorldController {
         this.uiEvents.on("move", data => this.onMove(data));
         this.uiEvents.on("sell", data => this.onDelete(data));
         this.uiEvents.on("listObjects", () => this.mountMap());
+
     }
 
     onPlow(data) {
@@ -100,10 +101,13 @@ export default class WorldController {
 
     onHarvest(data) {
 
+
         const sprite = data.sprite;
 
         const key = sprite.uuid;
-        const obj = this.saveController.getWorld().objects[key];
+        const obj = Object.values(
+            this.saveController.getWorld().objects
+        ).find(o => o.uuid === key);
 
         if (!key) {
             return;
@@ -123,6 +127,8 @@ export default class WorldController {
             y: obj.y
         }
 
+        console.log(save.uuid)
+
         if (sprite.tipo == "animal" || sprite.tipo == "arvore") {
             save = {
                 ...save,
@@ -140,7 +146,17 @@ export default class WorldController {
             }
         }
 
-        this.saveController.getWorld().objects[key] = save;
+        const objects = this.saveController.getWorld().objects;
+
+        Object.keys(objects).forEach(k => {
+
+            if (objects[k].uuid === save.uuid) {
+                delete objects[k];
+            }
+
+        });
+
+        objects[save.uuid] = save;
 
         this.save("harvest");
     }
@@ -154,6 +170,7 @@ export default class WorldController {
             return;
         }
 
+        console.log(sprite)
 
         let save = {
             uuid: key,
@@ -171,12 +188,12 @@ export default class WorldController {
             save = {
                 ...save,
                 plantTime: sprite.growthStart,
-                duration: sprite.duration,
+                duration: sprite.growthDuration,
                 harvestTimes: sprite.harvestTime,
             }
         }
 
-
+        console.log(save)
         this.saveController.getWorld().objects[key] = save;
 
         this.save();
@@ -212,6 +229,7 @@ export default class WorldController {
         let objects = [];
 
         Object.values(map).forEach(element => {
+
 
             let seed = null
             let item = null

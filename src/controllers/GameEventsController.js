@@ -269,7 +269,7 @@ export default class GameEventsController {
         }
 
         if (!sprite.uuid) {
-            sprite.uuid = `${sprite.lastFreePos.startX}_${sprite.lastFreePos.startY}`
+            sprite.uuid = crypto.randomUUID();
         }
 
         this.scene.gameVariables.selectedSprite = null;

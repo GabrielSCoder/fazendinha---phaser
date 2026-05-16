@@ -1,6 +1,6 @@
 [
     {
-        "uuid": "9_7",
+        "uuid": "1",
         "id": "cabana_descanso",
         "type": "decoracao",
         "state": "placed",
@@ -13,7 +13,7 @@
         "y": 40
     },
     {
-        "uuid": "6_8",
+        "uuid": "2",
         "id": "arvore_cerejeira",
         "type": "arvore",
         "state": "placed",
@@ -29,7 +29,7 @@
         "harvestTimes": 0
     },
     {
-        "uuid": "14_8",
+        "uuid": "3",
         "id": "arvore_cerejeira",
         "type": "arvore",
         "state": "placed",
@@ -45,7 +45,7 @@
         "harvestTimes": 0
     },
     {
-        "uuid": "6_11",
+        "uuid": "4",
         "id": "solo_preparado",
         "type": "soil",
         "state": "plowed",
@@ -58,7 +58,7 @@
         "harvestTimes": 0
     },
     {
-        "uuid": "6_15",
+        "uuid": "5",
         "id": "solo_preparado",
         "type": "soil",
         "state": "plowed",
@@ -71,7 +71,7 @@
         "harvestTimes": 0
     },
     {
-        "uuid": "10_11",
+        "uuid": "6",
         "id": "solo_preparado",
         "type": "soil",
         "state": "plowed",
@@ -84,7 +84,7 @@
         "harvestTimes": 0
     },
     {
-        "uuid": "10_15",
+        "uuid": "7",
         "id": "solo_preparado",
         "type": "soil",
         "state": "plowed",

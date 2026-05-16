@@ -268,7 +268,7 @@ export default class SoloController {
 
         this.gridUtils.recalculateDepthAround(sprite);
 
-        sprite.uuid = `${sprite.gridX}_${sprite.gridY}`
+        sprite.uuid = crypto.randomUUID();
 
         this.uiEvents.emit("action:reward", {
             xp: 1,
