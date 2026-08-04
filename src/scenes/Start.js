@@ -44,14 +44,16 @@ export class Start extends Phaser.Scene {
 
     create() {
 
+        // const saveData = this.cache.json.get('saveData');
+
+        let sizeX = this.gameVariables.gridWidth, sizeY = this.gameVariables.gridHeight
+
         this.gridSize = this.gameVariables.gridSize;
-        this.gridWidth = this.gameVariables.gridWidth;
-        this.gridHeight = this.gameVariables.gridHeight;
         this.offsetX = this.gameVariables.offsetX;
         this.offsetY = this.gameVariables.offsetY;
         this.logicFactor = this.gameVariables.logicFactor;
-
         this.gridMap = this.gameVariables.gridMap;
+
 
         this.controllers = {}
 
@@ -63,13 +65,18 @@ export class Start extends Phaser.Scene {
             return;
         }
 
-        // const saveData = this.cache.json.get('saveData');
+        saveData.world.sizeX > 0 ? (sizeX = saveData.world.sizeX, sizeY = saveData.world.sizeY) : null;
+
+        console.log(sizeX, sizeY)
+
+        this.gameVariables.reorganizeGrid(sizeX, sizeY);
 
         this.sementes = this.cache.json.get('sementes_data');
         this.animais = this.cache.json.get('animais_data');
         this.arvores = this.cache.json.get('arvores_data');
         this.decoracoes = this.cache.json.get('decoracoes_data');
         this.solos = this.cache.json.get('solos_data');
+        this.expansoes = this.cache.json.get('expansoes_data');
 
         this.createControllers(saveData)
         this.initControllers()

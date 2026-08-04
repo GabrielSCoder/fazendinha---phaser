@@ -22,11 +22,12 @@
     "activeMissions": {},
     "completedMissions": []
   },
-  "messages": [],
+  "messages": [6],
   "world": {
     "id": 1,
     "sizeX": 12,
     "sizeY": 12,
+    "expansion_step": 0,
     "lastUpdate": 0,
     "objects": []
   },
@@ -42,6 +43,18 @@
     "seeds_planted": 0,
     "seeds_harvested": 0,
     "animals_bought": 0,
-    "animals_harvested": 0
+    "animals_harvested": 0,
+    "expansions_bought": 0
+  },
+  "expansions": {
+    "bought_16x16": false,
+    "bought_18x18": false,
+    "bought_20x20": false,
+    "bought_22x22": false,
+    "bought_24x24": false,
+    "bought_26x26": false,
+    "bought_28x28": false,
+    "bought_30x30": false,
+    "bought_32x12": false
   }
 }

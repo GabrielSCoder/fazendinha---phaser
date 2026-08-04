@@ -43,7 +43,7 @@ export default class GameVariablesController {
         this.selling = false;
         this.hoverEnabled = true;
         this.matrixVisible = false;
-        this.debugBarVisible = false;
+        this.debugBarVisible = true;
         this.fastHarvestMode = true;
         this.debugHaverstTime = 0.2;
         this.debugShowFps = false;
@@ -63,5 +63,19 @@ export default class GameVariablesController {
         this.actionQueue = [];
         this.isProcessingAction = false;
         this.eventsCenter = new Phaser.Events.EventEmitter();
+    }
+
+    reorganizeGrid(valueX, valueY) {
+
+        this.gridHeight = valueX;
+        this.gridWidth = valueY;
+
+        this.offsetY = -this.gridHeight * (this.gridSize / 4);
+
+        this.gridMap = Array.from({ length: this.gridWidth * this.logicFactor },
+            () => Array(this.gridHeight * this.logicFactor).fill(null));
+
+        this.gridReserved = Array.from({ length: this.gridWidth * this.logicFactor },
+            () => Array(this.gridHeight * this.logicFactor).fill(null));
     }
 }

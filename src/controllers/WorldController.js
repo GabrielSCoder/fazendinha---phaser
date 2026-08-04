@@ -1,3 +1,5 @@
+import { messages } from "../static/server_messages.js";
+
 export default class WorldController {
 
     constructor(scene, saveController, uiEvents) {
@@ -15,7 +17,7 @@ export default class WorldController {
         this.uiEvents.on("move", data => this.onMove(data));
         this.uiEvents.on("sell", data => this.onDelete(data));
         this.uiEvents.on("listObjects", () => this.mountMap());
-
+        this.uiEvents.on("expand", data => this.onExpand(data));
     }
 
     onPlow(data) {
@@ -218,6 +220,24 @@ export default class WorldController {
 
         this.save();
 
+    }
+
+    onExpand(data) {
+
+        const exp = this.saveController.getExpansion();
+        const obj = this.saveController.getWorld();
+
+        Object.entries(exp).forEach(([key], index) => {
+            exp[key] = (index + 1 <= data.etapaExpansao);
+        });
+
+        obj.expansion_step = data.etapaExpansao;
+        obj.sizeX = data.tamanhoX;
+        obj.sizeY = data.tamanhoY;
+
+        this.save()
+
+        this.uiEvents.emit("ui:notify", {type : "advice", data : messages[3].mensagem})
     }
 
     mountMap() {

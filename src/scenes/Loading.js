@@ -62,6 +62,7 @@ export class Loading extends Phaser.Scene {
         this.load.image('confirm_button', 'assets/ui/confirm.png');
         this.load.image('proximo_button', 'assets/ui/proximo.png');
         this.load.image('anterior_button', 'assets/ui/anterior.png');
+        this.load.image('expansao', 'assets/ui/icone_expansao.png');
         this.load.image('enxada', 'assets/ui/enxada.png');
         this.load.image('pa', 'assets/ui/pazinha.png');
         this.load.image('star', 'assets/ui/star.png');
@@ -98,7 +99,7 @@ export class Loading extends Phaser.Scene {
         this.load.json('animais_data', 'src/static/animais.json');
         this.load.json('decoracoes_data', 'src/static/decoracoes.json');
         this.load.json('solos_data', 'src/static/solos.json');
-
+        this.load.json('expansoes_data', 'src/static/expansoes.json');
 
         AssetLoader.load(this)
     }

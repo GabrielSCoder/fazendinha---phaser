@@ -22,7 +22,8 @@
         2,
         3,
         4,
-        5
+        5,
+        6
     ],
     "gift": [],
     "mission": {
@@ -51,6 +52,7 @@
         "id": 1,
         "sizeX": 12,
         "sizeY": 12,
+        "expansion_step": 0,
         "lastUpdate": 0,
         "objects": [
             {
@@ -95,6 +97,110 @@
                 "state": "placed",
                 "plantTime": 1775232638656,
                 "duration": 6000
+            },
+            {
+                "uuid": "fd80a02c-1919-4f7c-a402-c028e377a4a1",
+                "id": "cerca_azul",
+                "type": "cerca",
+                "state": "placed",
+                "isRotated": false,
+                "position": {
+                    "x": 19,
+                    "y": 23
+                },
+                "x": -32,
+                "y": 249.6
+            },
+            {
+                "uuid": "10352362-2705-4b51-8bc3-c6e60f494428",
+                "id": "cerca_azul",
+                "type": "cerca",
+                "state": "placed",
+                "isRotated": false,
+                "position": {
+                    "x": 15,
+                    "y": 23
+                },
+                "x": -96,
+                "y": 217.6
+            },
+            {
+                "uuid": "e0ab34d4-43b7-4ef2-9225-254729cea1fe",
+                "id": "cerca_azul",
+                "type": "cerca",
+                "state": "placed",
+                "isRotated": false,
+                "position": {
+                    "x": 11,
+                    "y": 23
+                },
+                "x": -160,
+                "y": 185.6
+            },
+            {
+                "uuid": "08bcafd6-66a7-4ee9-b4a6-9cb7d9ab6a11",
+                "id": "cerca_azul",
+                "type": "cerca",
+                "state": "placed",
+                "isRotated": false,
+                "position": {
+                    "x": 7,
+                    "y": 23
+                },
+                "x": -224,
+                "y": 153.6
+            },
+            {
+                "uuid": "12ca3983-9995-46c4-8066-8b1b1258e0cd",
+                "id": "cerca_azul",
+                "type": "cerca",
+                "state": "placed",
+                "isRotated": false,
+                "position": {
+                    "x": 3,
+                    "y": 23
+                },
+                "x": -288,
+                "y": 121.6
+            },
+            {
+                "uuid": "30350140-0421-4a85-a746-c703c9180895",
+                "id": "cerca_azul",
+                "type": "cerca",
+                "state": "placed",
+                "isRotated": true,
+                "position": {
+                    "x": 23,
+                    "y": 15
+                },
+                "x": 96,
+                "y": 217.6
+            },
+            {
+                "uuid": "d57f1fae-3ac7-4f36-978e-2669028f0a94",
+                "id": "cerca_azul",
+                "type": "cerca",
+                "state": "placed",
+                "isRotated": true,
+                "position": {
+                    "x": 23,
+                    "y": 19
+                },
+                "x": 32,
+                "y": 249.6
+            },
+            {
+                "uuid": "2adfdbb9-117b-42d8-a3b6-3ee6057b4c9c",
+                "id": "cerca_azul",
+                "type": "cerca",
+                "state": "placed",
+                "isRotated": true,
+                "position": {
+                    "x": 23,
+                    "y": 11
+                },
+                "x": 160,
+                "y": 185.6
             }
         ]
     },
@@ -110,6 +216,18 @@
         "seeds_planted": 0,
         "seeds_harvested": 0,
         "animals_bought": 0,
-        "animals_harvested": 0
+        "animals_harvested": 0,
+        "expansions_bought": 0
+    },
+    "expansions": {
+        "bought_16x16": false,
+        "bought_18x18": false,
+        "bought_20x20": false,
+        "bought_22x22": false,
+        "bought_24x24": false,
+        "bought_26x26": false,
+        "bought_28x28": false,
+        "bought_30x30": false,
+        "bought_32x12": false
     }
 }

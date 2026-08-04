@@ -1,7 +1,6 @@
 import { Start } from './scenes/Start.js';
 import { Menu } from './scenes/Menu.js';
 import { Loading } from './scenes/Loading.js';
-import { Scene1 } from './scenes/Pista.js';
 
 const config = {
     type: Phaser.AUTO,
@@ -16,7 +15,6 @@ const config = {
         Menu,
         Loading,
         Start,
-        Scene1,
     ],
     physics: {
         default: 'arcade',

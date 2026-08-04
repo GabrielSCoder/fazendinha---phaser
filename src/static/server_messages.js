@@ -10,5 +10,9 @@ export const messages = [
     {
         "id" : 5,
         "mensagem" : "Clique em 'Loja' para deixar de comprar alguma coisa que está selecionada"
+    },
+    {
+        "id" : 6,
+        "mensagem" : "Expansão com sucesso!\n Salve seu progresso e carregue para a fazenda ser modificada"
     }
 ]

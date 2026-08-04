@@ -30,7 +30,8 @@ export default class ShopMenu {
             'Sementes': data.seed,
             'Árvores': data.tree,
             'Animais': data.animal,
-            'Decorações': data.decoration
+            'Decorações': data.decoration,
+            'Expansões' : data.expansion
         };
 
     }
@@ -108,8 +109,7 @@ export default class ShopMenu {
 
         this.container.add([bg, bgTexture, title, closeBtn]);
 
-        // === BOTÕES DE CATEGORIA ===
-        const categories = ['Sementes', 'Árvores', 'Animais', 'Decorações'];
+        const categories = ['Sementes', 'Árvores', 'Animais', 'Decorações', 'Expansões'];
         this.categoryButtons = [];
 
         const startX = 40;
@@ -254,7 +254,7 @@ export default class ShopMenu {
             const x = startX + col * (itemWidth + spacingX);
             const y = startY + row * (itemHeight + spacingY);
 
-            const card = new ShopItemCard(this.scene, this.itemsContainer, data, x, y, itemWidth, itemHeight, this.playerLevel);
+            const card = new ShopItemCard(this.scene, this.uiEvents, this.itemsContainer, data, x, y, itemWidth, itemHeight, this.playerLevel);
             this.shopItems.push(card);
         });
 

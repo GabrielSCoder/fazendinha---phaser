@@ -39,12 +39,16 @@ export default class SaveLoadController {
     }
 
     loadSaveData() {
+
+        console.log(this.saveArchive)
+
         this.user = structuredClone(this.saveArchive.user);
         this.storage = structuredClone(this.saveArchive.storage);
         this.gift = structuredClone(this.saveArchive.gift);
         this.mission = structuredClone(this.saveArchive.mission);
         this.messages = structuredClone(this.saveArchive.messages);
         this.records = structuredClone(this.saveArchive.records);
+        this.expansions = structuredClone(this.saveArchive.expansions);
         this.loadWorld(this.saveArchive.world);
     }
 
@@ -111,7 +115,14 @@ export default class SaveLoadController {
         return this.gift;
     }
 
+    getExpansion() {
+        return this.expansions;
+    }
+
     getSaveData() {
+
+        console.log(this.expansions)
+        
         return {
             user: this.user,
             storage: this.storage,
@@ -119,7 +130,8 @@ export default class SaveLoadController {
             mission: this.mission,
             messages: this.messages,
             world: this.getWorldSaveFormat(),
-            records: this.records
+            records: this.records,
+            expansions : this.expansions
         }
     }
 
@@ -182,6 +194,10 @@ export default class SaveLoadController {
         this.uiEvents.emit("save:world:update", world);
 
         this.saveDebounced();
+    }
+
+    changeExpansions(data) {
+
     }
 
     changeRecords(data) {
@@ -317,15 +333,15 @@ export default class SaveLoadController {
                 try {
                     const save = JSON.parse(e.target.result);
 
-                    // 🔥 validação básica
+               
                     if (!save.user || !save.world) {
                         throw new Error("Arquivo inválido");
                     }
 
-                    // 🔥 salva no localStorage
+                   
                     localStorage.setItem("game_save", JSON.stringify(save));
 
-                    // 🔥 vai pro jogo
+                   
                     scene.start("Loading");
 
                 } catch (err) {

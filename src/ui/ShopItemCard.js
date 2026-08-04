@@ -1,6 +1,6 @@
 export default class ShopItemCard {
 
-    constructor(scene, container, data, x, y, width = 130, height = 180, playerLevel) {
+    constructor(scene, events, container, data, x, y, width = 130, height = 180, playerLevel) {
 
         if (!scene) throw new Error("ShopItemCard: scene não foi passado!");
         if (!container) throw new Error("ShopItemCard: container não foi passado!");
@@ -9,6 +9,7 @@ export default class ShopItemCard {
         this.controllers = scene.controllers;
         this.container = container;
         this.data = data;
+        this.uiEvents = events;
         this.requiredLevel = data.nivel_requerido || 1;
         this.creativeMode = scene.gameVariables.creativeMode;
         this.noExperienceMode = scene.gameVariables.noExperienceMode;
@@ -39,7 +40,11 @@ export default class ShopItemCard {
 
         const tipo_compra = this.data.preco_compra > this.data.preco_compra_grana || !this.data.preco_compra_grana ? "gold" : "money"
 
+        const isExpansion = this.data.tipo == "expansão" ? true : false;
+
         const elements = [];
+
+        const img_h_value = isExpansion ? 90 : 70
 
         const bg = s.add.tileSprite(0, 0, this.width, this.height, 'item_bg').setOrigin(0);
         elements.push(bg);
@@ -55,7 +60,17 @@ export default class ShopItemCard {
 
         elements.push(title);
 
-        const img = s.add.image(this.width / 2, 70, this.data.img)
+        if (isExpansion) {
+            const subText = s.add.text(this.width / 2, 40, `( ${this.data.tamanhoX} x  ${this.data.tamanhoX})`, {
+                fontSize: '14px',
+                color: '#000',
+                fontFamily: 'LuckiestGuy-Regular'
+            }).setOrigin(0.5)
+
+            elements.push(subText)
+        }
+
+        const img = s.add.image(this.width / 2, img_h_value, this.data.img)
             .setOrigin(0.5)
             .setDisplaySize(imgSizeX, imgSizeY);
 
@@ -78,11 +93,17 @@ export default class ShopItemCard {
 
         } else {
 
-            const xpText = s.add.text(75, 110, `XP: ${this.data.xp}`, {
-                fontSize: '14px',
-                color: '#000',
-                fontFamily: 'LuckiestGuy-Regular'
-            }).setOrigin(0.5);
+            if (!isExpansion) {
+
+                const xpText = s.add.text(75, 110, `XP: ${this.data.xp}`, {
+                    fontSize: '14px',
+                    color: '#000',
+                    fontFamily: 'LuckiestGuy-Regular'
+                }).setOrigin(0.5);
+
+                elements.push(xpText)
+
+            }
 
             if (this.data.tipo == "semente" || this.data.tipo == "arvore" || this.data.tipo == "animal") {
                 const clockIcon = s.add.image(50, 125, 'clock_icon')
@@ -99,13 +120,17 @@ export default class ShopItemCard {
                 elements.push(clockIcon, tempoText)
             }
 
+            if (!isExpansion) {
+                const vendaText = s.add.text(40, 135,
+                    `Vender por: ${this.data.preco_venda}`, {
+                    fontSize: '10px',
+                    color: '#000',
+                    fontFamily: 'LuckiestGuy-Regular'
+                });
 
-            const vendaText = s.add.text(40, 135,
-                `Vender por: ${this.data.preco_venda}`, {
-                fontSize: '10px',
-                color: '#000',
-                fontFamily: 'LuckiestGuy-Regular'
-            });
+                elements.push(vendaText)
+            }
+
 
             const value = tipo_compra == "gold"
                 ? this.data.preco_compra
@@ -151,7 +176,12 @@ export default class ShopItemCard {
 
                 this.controllers.shopMenu.close();
 
-                this.scene.events.emit('itemPurchased', this.data);
+                if (isExpansion) {
+                    this.uiEvents.emit('action:expand', this.data);
+                } else {
+                    this.scene.events.emit('itemPurchased', this.data)
+                }
+
 
             }, 150);
 
@@ -166,8 +196,6 @@ export default class ShopItemCard {
             );
 
             elements.push(
-                xpText,
-                vendaText,
                 container,
                 comprarBtn
             );

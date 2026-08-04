@@ -34,6 +34,11 @@ export default class GameEventsController {
             this.uiEvents.emit("floating:rewards", data);
 
         });
+
+        this.uiEvents.on("action:expand", (data) => {
+            console.log("-----")
+            this.checkMonetaryItem(data);
+        })
     }
 
     colocarCercasCheck() {
@@ -133,11 +138,16 @@ export default class GameEventsController {
 
     checkMonetaryItem(sprite) {
 
+        
         if (sprite.xp && !sprite.xpYeld && !sprite.gift) {
-
+            
             let res = false;
-
+            
             const tipo_compra = sprite.preco_compra > sprite.preco_compra_grana || !sprite.preco_compra_grana ? "gold" : "money"
+            
+            const isExpansion = sprite.tipo == "expansão" ? true : false
+            
+            console.log(sprite)
 
             this.uiEvents.emit("action:buyItem", {
                 type: tipo_compra,
@@ -169,10 +179,17 @@ export default class GameEventsController {
                     }
                 }
 
-                this.uiEvents.emit("action:reward", dados);
-                this.uiEvents.emit("place", { target: sprite.tipo, nome: sprite.nome.toLowerCase() });
+                console.log(dados)
 
-                sprite.xpYeld = true;
+                this.uiEvents.emit("action:reward", dados);
+
+                if (!isExpansion) {
+                    this.uiEvents.emit("place", { target: sprite.tipo, nome: sprite.nome.toLowerCase() });
+                    sprite.xpYeld = true;
+                } else {
+                    this.uiEvents.emit("expand", sprite);
+                }
+
                 res = true
             });
 
@@ -500,4 +517,5 @@ export default class GameEventsController {
 
         this.uiEvents.emit("ui:notify", { type: "item", data: itemData, amount: 1 });
     }
+
 }

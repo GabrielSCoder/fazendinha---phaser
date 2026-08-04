@@ -6,6 +6,7 @@ export default class CatalogUtils {
         this.animals = scene.animais;
         this.trees = scene.arvores;
         this.decoration = scene.decoracoes;
+        this.expansion = scene.expansoes;
         this.soils = scene.solos;
         this.uiEvents = config.uiEvents;
         this.classEvents();
@@ -26,7 +27,8 @@ export default class CatalogUtils {
             animal: this.animals.filter(item => !item.hidden),
             tree: this.trees.filter(item => !item.hidden),
             decoration: this.decoration.filter(item => !item.hidden),
-            seed: this.seeds.filter(item => !item.hidden)
+            seed: this.seeds.filter(item => !item.hidden),
+            expansion : this.expansion.filter(item => !item.hidden)
         }
     }
 

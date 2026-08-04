@@ -336,7 +336,7 @@ export default class BottomMenu {
 
         this.btnPlusMoney.on("pointerup", () => {
             // this.uiEvents.emit("action:setMoney", 10)
-            this.uiEvents.emit("listObjects")
+            this.uiEvents.emit("action:expand", "daat");
         })
 
         this.btnPlusXp.on("pointerup", () => {
