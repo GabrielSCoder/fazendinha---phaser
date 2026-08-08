@@ -14,6 +14,8 @@ export default class SaveLoadController {
         this.world = null;
         this.messages = null;
         this.records = null;
+        this.expansions = null;
+        this.achievements = null;
         this.uiEvents = config.uiEvents;
 
         this.saveDebounced = debounce(() => {
@@ -40,8 +42,6 @@ export default class SaveLoadController {
 
     loadSaveData() {
 
-        console.log(this.saveArchive)
-
         this.user = structuredClone(this.saveArchive.user);
         this.storage = structuredClone(this.saveArchive.storage);
         this.gift = structuredClone(this.saveArchive.gift);
@@ -49,6 +49,7 @@ export default class SaveLoadController {
         this.messages = structuredClone(this.saveArchive.messages);
         this.records = structuredClone(this.saveArchive.records);
         this.expansions = structuredClone(this.saveArchive.expansions);
+        this.achievements = structuredClone(this.saveArchive.achievements);
         this.loadWorld(this.saveArchive.world);
     }
 
@@ -119,9 +120,11 @@ export default class SaveLoadController {
         return this.expansions;
     }
 
-    getSaveData() {
+    getAchievements() {
+        return this.achievements;
+    }
 
-        console.log(this.expansions)
+    getSaveData() {
         
         return {
             user: this.user,
@@ -131,7 +134,8 @@ export default class SaveLoadController {
             messages: this.messages,
             world: this.getWorldSaveFormat(),
             records: this.records,
-            expansions : this.expansions
+            expansions : this.expansions,
+            achievements : this.achievements
         }
     }
 
@@ -168,6 +172,8 @@ export default class SaveLoadController {
 
     addUser(type, amount) {
 
+        console.log(type, amount)
+
         if (this.user[type] === undefined) return;
 
         this.user[type] += amount;
@@ -180,7 +186,6 @@ export default class SaveLoadController {
             }
             this.changeRecords(data)
         }
-
 
         this.uiEvents.emit(`save:user:${type}`, this.user[type]);
 

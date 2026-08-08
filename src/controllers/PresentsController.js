@@ -65,6 +65,7 @@ export default class PresentsControler {
 
     init() {
 
+        // this.presentList = this.dataTest;
         this.presentList = this.saveController.getGift() || [];
 
         this.actualStorageAmount = this.presentList.reduce((acc, item) => acc + item.amount, 0);

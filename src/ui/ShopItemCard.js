@@ -13,6 +13,7 @@ export default class ShopItemCard {
         this.requiredLevel = data.nivel_requerido || 1;
         this.creativeMode = scene.gameVariables.creativeMode;
         this.noExperienceMode = scene.gameVariables.noExperienceMode;
+        this.allUnlockedMode = scene.gameVariables.allUnlockedMode;
 
         this.smallSprite = ["cabana", "cabana_rosa", "gazebo", "gazebo_rosa", "escorrega", "anao_jardim", "gangorra", "flamingo",
             "carro_amarelo", "carro_vermelho", "casa_grande", "casa_cogumelo", "espantalho_palha", "espantalho_azul"]
@@ -34,13 +35,22 @@ export default class ShopItemCard {
         const imgSizeX = smallSprite ? 120 : 70
         const imgSizeY = smallSprite ? 120 : 70
 
+        const greenRgba = '#28a745'
+        const greyRgba = '#979797'
+
         const s = this.scene;
+
+        const world_info = s.controllers.save.getWorld().expansion_step;
+
+        const etapa = this.data.etapaExpansao;
 
         const locked = this.requiredLevel > this.playerLevel;
 
         const tipo_compra = this.data.preco_compra > this.data.preco_compra_grana || !this.data.preco_compra_grana ? "gold" : "money"
 
         const isExpansion = this.data.tipo == "expansão" ? true : false;
+
+        const comprarText = isExpansion ? etapa <= world_info ? "adquirido" : "comprar" : "comprar";
 
         const elements = [];
 
@@ -76,7 +86,7 @@ export default class ShopItemCard {
 
         elements.push(img);
 
-        if (locked && !this.creativeMode && !this.noExperienceMode) {
+        if (locked && !this.creativeMode && !this.noExperienceMode && !this.allUnlockedMode) {
 
             const bloqueado = s.add.tileSprite(20, 100, 140, 90, 'item_bloqueado')
                 .setOrigin(0)
@@ -158,11 +168,11 @@ export default class ShopItemCard {
             const comprarBtn = s.add.text(
                 this.width / 2,
                 this.height + 3,
-                "Comprar",
+                comprarText,
                 {
                     fontSize: '14px',
                     color: 'white',
-                    backgroundColor: '#28a745',
+                    backgroundColor: comprarText == "comprar" ? greenRgba : greyRgba,
                     padding: { left: 10, right: 10, top: 4, bottom: 4 },
                     fontFamily: 'LuckiestGuy-Regular'
                 }
@@ -173,6 +183,8 @@ export default class ShopItemCard {
                 .setShadow(2, 2, '#000', 2, true, true);
 
             const debouncedComprar = this.debounce(() => {
+
+                if (comprarText == "adquirido") return;
 
                 this.controllers.shopMenu.close();
 
@@ -187,13 +199,15 @@ export default class ShopItemCard {
 
             comprarBtn.on('pointerdown', debouncedComprar);
 
-            comprarBtn.on('pointerover', () =>
+            comprarBtn.on('pointerover', () => {
+                if (comprarText == "adquirido") return;
                 comprarBtn.setStyle({ backgroundColor: '#3ec25f' })
-            );
+            });
 
-            comprarBtn.on('pointerout', () =>
+            comprarBtn.on('pointerout', () => {
+                if (comprarText == "adquirido") return;
                 comprarBtn.setStyle({ backgroundColor: '#28a745' })
-            );
+            });
 
             elements.push(
                 container,

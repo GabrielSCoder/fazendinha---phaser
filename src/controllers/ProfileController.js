@@ -58,7 +58,6 @@ export default class ProfileController {
         });
 
         this.uiEvents.on("action:GetAllProfileData", (callback) => {
-
             callback(this.getData())
         })
 
@@ -87,6 +86,9 @@ export default class ProfileController {
 
         if ((this.getGold() + gold) < 0) return;
 
+        if (gold < 0)
+            this.uiEvents.emit("transaction:gold", -gold);
+
         this.saveController.addUser("gold", gold);
 
         if (data.x !== undefined) {
@@ -106,6 +108,8 @@ export default class ProfileController {
         const money = data.amount || data
 
         if ((this.getMoney() + money) < 0) return;
+
+        this.uiEvents.emit("transaction:gold", money);
 
         this.saveController.addUser("money", money);
     }

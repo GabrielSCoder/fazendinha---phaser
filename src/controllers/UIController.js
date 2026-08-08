@@ -15,7 +15,7 @@ export default class UINotificationController {
 
         this.priority = {
             levelUp: 1,
-            advice : 2,
+            advice: 2,
             newMission: 3,
             default: 99
         };
@@ -46,6 +46,7 @@ export default class UINotificationController {
         this.itemContainer = this.scene.add.container(0, 0).setVisible(false);
         this.concludedContainer = this.scene.add.container(0, 0).setVisible(false);
         this.advideContainer = this.scene.add.container(0, 0).setVisible(false);
+        this.achivContainer = this.scene.add.container(0, 0).setVisible(false);
 
         this.container.add([
             this.newMissionContainer,
@@ -55,7 +56,8 @@ export default class UINotificationController {
             this.sellContainer,
             this.concludedContainer,
             this.itemContainer,
-            this.advideContainer
+            this.advideContainer,
+            this.achivContainer
         ]);
 
         this.uiEvents.on("ui:notify", this.notify, this);
@@ -112,6 +114,7 @@ export default class UINotificationController {
         this.concludedContainer.setVisible(false);
         this.itemContainer.setVisible(false);
         this.advideContainer.setVisible(false);
+        this.achivContainer.setVisible(false);
 
         switch (data.type) {
 
@@ -150,6 +153,11 @@ export default class UINotificationController {
                 this.advideContainer.setVisible(true);
                 break;
 
+            case "achiv":
+                this.createAchivBanner(data.data);
+                this.achivContainer.setVisible(true);
+                break;
+
             default:
                 this.createGenericPopup(data);
                 this.genericContainer.setVisible(true);
@@ -177,6 +185,46 @@ export default class UINotificationController {
         const close = this.createCloseButton(data);
 
         this.advideContainer.add([bg, body, close]);
+    }
+
+    createAchivBanner(data) {
+        const bg = this.scene.add.image(0, 0, "fundo_madeira").setDisplaySize(500, 400);
+
+        const title = this.scene.add.text(
+            0,
+            -this.bgFullHeight / 2 + 80,
+            "Parabéns", {
+            fontSize: '34px',
+            fontStyle: 'bold',
+            color: '#fff',
+            fontFamily: 'LuckiestGuy-Regular'
+        }).setStroke('#000', 4).setOrigin(0.5);
+
+        const body = this.scene.add.text(
+            0,
+            -90,
+            "Subiu nível de conquista",
+            { fontSize: "28px", color: "#ffffff", fontFamily: 'LuckiestGuy-Regular', lineSpacing: 2 }
+        ).setOrigin(0.5).setStroke('#000', 4);
+
+        const achiName = this.scene.add.text(
+            0,
+            -60,
+            data.title,
+            { fontSize: "28px", color: "#fbff00", fontFamily: 'LuckiestGuy-Regular', lineSpacing: 2 }
+        ).setOrigin(0.5).setStroke('#000', 4);
+
+        const item = this.scene.add
+            .image(0, 20, data.img)
+            .setDisplaySize(120, 120);
+
+        const rewardContainer = this.scene.add.container(-20, 110);
+
+        this.createRewardLine(rewardContainer, { reward : data.reward})
+
+        const confirm = this.createConfirmButton({type : "conclusion_mission"});
+
+        this.achivContainer.add([bg, title, body, achiName, item, confirm, rewardContainer])
     }
 
     createLevelPopup(data) {

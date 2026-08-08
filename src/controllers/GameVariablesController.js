@@ -34,6 +34,7 @@ export default class GameVariablesController {
         this.creativeMode = false;
         this.staticMode = false;
         this.noExperienceMode = false;
+        this.allUnlockedMode = true;
         this.noFootprints = false;
         this.actionTileX = 1;
         this.actionTileY = 1;
@@ -46,7 +47,7 @@ export default class GameVariablesController {
         this.debugBarVisible = true;
         this.fastHarvestMode = true;
         this.debugHaverstTime = 0.2;
-        this.debugShowFps = false;
+        this.debugShowFps = true;
 
         this.selectedSprite = null;
         this.selectedSpriteDelete = null;

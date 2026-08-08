@@ -87,7 +87,7 @@ export default class WorldController {
         }
 
         if (!obj || obj.state != "plowed") {
-            console.log("não achou")
+            //console.log("não achou")
             return;
         };
 
@@ -116,7 +116,7 @@ export default class WorldController {
         }
 
         if (!obj) {
-            console.log("não achou")
+            //console.log("não achou")
             return;
         };
 
@@ -129,7 +129,7 @@ export default class WorldController {
             y: obj.y
         }
 
-        console.log(save.uuid)
+        //console.log(save.uuid)
 
         if (sprite.tipo == "animal" || sprite.tipo == "arvore") {
             save = {
@@ -172,7 +172,7 @@ export default class WorldController {
             return;
         }
 
-        console.log(sprite)
+        //console.log(sprite)
 
         let save = {
             uuid: key,
@@ -195,7 +195,7 @@ export default class WorldController {
             }
         }
 
-        console.log(save)
+        //console.log(save)
         this.saveController.getWorld().objects[key] = save;
 
         this.save();
@@ -212,7 +212,7 @@ export default class WorldController {
         }
 
         if (!obj) {
-            console.log("Objeto não existe no world");
+            //console.log("Objeto não existe no world");
             return;
         }
 

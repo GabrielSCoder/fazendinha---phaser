@@ -49,7 +49,6 @@ export class Loading extends Phaser.Scene {
         this.load.json('decoracoes_data', 'src/static/decoracoes.json');
         this.load.json('solos_data', 'src/static/solos.json');
 
-
         this.load.text('xpTable', 'assets/data/xp_levels.csv');
         this.load.image('menu_bg', 'assets/ui/fundo_madeira.jpg');
         this.load.image('item_bg', 'assets/ui/fundo_item_loja.png');
@@ -66,9 +65,16 @@ export class Loading extends Phaser.Scene {
         this.load.image('enxada', 'assets/ui/enxada.png');
         this.load.image('pa', 'assets/ui/pazinha.png');
         this.load.image('star', 'assets/ui/star.png');
+        this.load.image('hollow_star', 'assets/ui/hollow_star.png');
         this.load.image('energy', 'assets/ui/energy.png');
         this.load.image('gift', 'assets/ui/gift2.png');
+        this.load.image('trophy', 'assets/ui/trophy.png');
         this.load.image('grama', 'assets/fundo/grama_tile.png');
+
+        this.load.image('trofeu_arvore', 'assets/trofeu/arvore.png');
+        this.load.image('trofeu_semente', 'assets/trofeu/jardineiro.png');
+        this.load.image('trofeu_gastador', 'assets/trofeu/gastador.png');
+        this.load.image('trofeu_colecionador', 'assets/trofeu/colecionador.png');
 
         this.load.image('fundo_madeira', 'assets/ui/fundo_madeira_escuro_2.png');
         this.load.image('fundo_madeira_medio', 'assets/ui/banner_medio.png');

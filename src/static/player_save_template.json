@@ -22,7 +22,9 @@
     "activeMissions": {},
     "completedMissions": []
   },
-  "messages": [6],
+  "messages": [
+    6
+  ],
   "world": {
     "id": 1,
     "sizeX": 12,
@@ -56,5 +58,23 @@
     "bought_28x28": false,
     "bought_30x30": false,
     "bought_32x12": false
+  },
+  "achievements": {
+    "1": {
+      "steps_done": 0,
+      "amount": 0
+    },
+    "2": {
+      "steps_done": 0,
+      "amount": 0
+    },
+    "3": {
+      "steps_done": 0,
+      "amount": 0
+    },
+    "4": {
+      "steps_done": 0,
+      "amount": 0
+    }
   }
 }

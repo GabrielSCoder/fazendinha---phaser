@@ -23,6 +23,7 @@ import FloatingTextController from '../controllers/FloatingTextController.js';
 import UINotificationController from '../controllers/UIController.js';
 import CatalogUtils from '../utils/CatalogUtils.js';
 import { intro_missions } from '../static/missionsDB.js';
+import { achievements } from '../static/AchievementsDB.js';
 import SidesUi from '../ui/SidesUi.js';
 import PresentsControler from '../controllers/PresentsController.js';
 import PresentsMenuUI from '../ui/PresentsMenuUI.js';
@@ -30,6 +31,8 @@ import SaveLoadController from '../controllers/SaveLoadController.js';
 import { parseCSV } from '../utils/parseCsv.js';
 import WorldController from '../controllers/WorldController.js';
 import MissionController from "../controllers/MissionController.js"
+import AchivMenuUI from '../ui/AchivMenuUI.js';
+import AchivController from '../controllers/AchivController.js';
 
 export class Start extends Phaser.Scene {
     constructor() {
@@ -67,7 +70,6 @@ export class Start extends Phaser.Scene {
 
         saveData.world.sizeX > 0 ? (sizeX = saveData.world.sizeX, sizeY = saveData.world.sizeY) : null;
 
-        console.log(sizeX, sizeY)
 
         this.gameVariables.reorganizeGrid(sizeX, sizeY);
 
@@ -192,11 +194,13 @@ export class Start extends Phaser.Scene {
         this.controllers.presents = new PresentsControler(this, this.controllers.save, { uiEvents: events });
 
         this.controllers.gridUtils = new GridUtils(this, { uiEvents: events });
-        this.controllers.catalog = new CatalogUtils(this, { uiEvents: events })
+        this.controllers.catalog = new CatalogUtils(this, { uiEvents: events, save: this.controllers.save });
         this.controllers.spriteUtils = new SpriteUtils(this, { uiEvents: events })
         this.controllers.banner = new UINotificationController(this, { uiEvents: events });
 
-        this.controllers.missions = new MissionController(this, intro_missions, this.controllers.save, events)
+        this.controllers.missions = new MissionController(this, intro_missions, this.controllers.save, events);
+        this.controllers.achivs = new AchivController(this, achievements, this.controllers.save, { uiEvents: events });
+
         this.controllers.camera = new CameraController(this)
         this.controllers.growth = new GrowthController(this)
 
@@ -215,6 +219,7 @@ export class Start extends Phaser.Scene {
         this.controllers.interact = new InteractController(this, { uiEvents: events })
 
         this.controllers.presentsUI = new PresentsMenuUI(this, { uiEvents: events })
+        this.controllers.achivsUI = new AchivMenuUI(this, { uiEvents: events }, achievements);
 
         this.controllers.soil = new SoloController(this, { uiEvents: events })
         this.controllers.plant = new PlantaController(this, { uiEvents: events })

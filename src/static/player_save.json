@@ -50,9 +50,9 @@
     },
     "world": {
         "id": 1,
-        "sizeX": 12,
-        "sizeY": 12,
-        "expansion_step": 0,
+        "sizeX": 18,
+        "sizeY": 18,
+        "expansion_step": 2,
         "lastUpdate": 0,
         "objects": [
             {
@@ -220,8 +220,8 @@
         "expansions_bought": 0
     },
     "expansions": {
-        "bought_16x16": false,
-        "bought_18x18": false,
+        "bought_16x16": true,
+        "bought_18x18": true,
         "bought_20x20": false,
         "bought_22x22": false,
         "bought_24x24": false,
@@ -229,5 +229,23 @@
         "bought_28x28": false,
         "bought_30x30": false,
         "bought_32x12": false
+    },
+    "achievements": {
+        "1": {
+            "steps_done": 0,
+            "amount": 0
+        },
+        "2": {
+            "steps_done": 0,
+            "amount": 0
+        },
+        "3": {
+            "steps_done": 0,
+            "amount": 0
+        },
+        "4": {
+            "steps_done": 0,
+            "amount": 0
+        }
     }
 }

@@ -36,7 +36,7 @@ export default class GameEventsController {
         });
 
         this.uiEvents.on("action:expand", (data) => {
-            console.log("-----")
+            //console.log("-----")
             this.checkMonetaryItem(data);
         })
     }
@@ -147,7 +147,7 @@ export default class GameEventsController {
             
             const isExpansion = sprite.tipo == "expansão" ? true : false
             
-            console.log(sprite)
+            //console.log(sprite)
 
             this.uiEvents.emit("action:buyItem", {
                 type: tipo_compra,
@@ -179,7 +179,7 @@ export default class GameEventsController {
                     }
                 }
 
-                console.log(dados)
+                //console.log(dados)
 
                 this.uiEvents.emit("action:reward", dados);
 
@@ -234,7 +234,7 @@ export default class GameEventsController {
         const ocupado = this.gridUtils.checkOccupiedGrid(startX, startY, endX, endY, sprite);
 
         if (ocupado) {
-            console.log("❌ Tile ocupado — revertendo sprite.");
+            //console.log("❌ Tile ocupado — revertendo sprite.");
             return;
         }
 

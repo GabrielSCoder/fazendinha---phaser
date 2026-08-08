@@ -1,6 +1,7 @@
 export default class CatalogUtils {
 
     constructor(scene, config = {}) {
+        if (!config.save) throw new Error("Sem controller de save!");
         this.scene = scene;
         this.seeds = scene.sementes;
         this.animals = scene.animais;
@@ -9,6 +10,7 @@ export default class CatalogUtils {
         this.expansion = scene.expansoes;
         this.soils = scene.solos;
         this.uiEvents = config.uiEvents;
+        this.saveController = config.save;
         this.classEvents();
     }
 
@@ -22,13 +24,18 @@ export default class CatalogUtils {
         })
     }
 
+    init()
+    {
+        this.getBuyableExpansionList();
+    }
+
     getCatalog() {
         return {
             animal: this.animals.filter(item => !item.hidden),
             tree: this.trees.filter(item => !item.hidden),
             decoration: this.decoration.filter(item => !item.hidden),
             seed: this.seeds.filter(item => !item.hidden),
-            expansion : this.expansion.filter(item => !item.hidden)
+            expansion: this.expansion.filter(item => !item.hidden)
         }
     }
 
@@ -93,4 +100,16 @@ export default class CatalogUtils {
         return newList;
     }
 
+    getBuyableExpansionList() {
+
+        const step = this.saveController.getWorld().expansion_step;
+
+        const b = { "bought": true }
+
+        Object.entries(this.expansion).forEach(([key], index) => {
+            if (this.expansion[key].etapaExpansao <= step)
+                this.expansion[key] = {... this.expansion[key], ...b}
+        });
+
+    }
 }

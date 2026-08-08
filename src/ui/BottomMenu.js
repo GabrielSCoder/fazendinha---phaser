@@ -32,7 +32,7 @@ export default class BottomMenu {
 
     createUI() {
         const { width, height } = this.scene.scale;
-        const menuWidth = 240;
+        const menuWidth = 300;
         const menuHeight = 60;
 
         const upperMenuWidth = 40
@@ -42,7 +42,7 @@ export default class BottomMenu {
         this.containerUI.setScrollFactor(0);
 
         this.upperMenu = this.scene.add.container(
-            width - upperMenuWidth - 230,
+            width - upperMenuWidth - 290,
             height - upperMenuHeight - 30
         )
 
@@ -120,11 +120,12 @@ export default class BottomMenu {
             .setOrigin(0.5)
             .setInteractive({ useHandCursor: true });
 
-        this.btnContainer = this.scene.add.container(menuWidth - 155, menuHeight / 2);
+        this.btnContainer = this.scene.add.container(menuWidth - 210, menuHeight / 2);
 
         this.btnBg = this.scene.add.rectangle(0, 0, 50, 50, 0x54c848, 1)
             .setOrigin(0.5)
             .setStrokeStyle(2, 0x000000);
+            
         this.btnContainer.add(this.btnBg);
 
         this.btnArar = this.scene.add.image(0, 0, "enxada")
@@ -136,11 +137,12 @@ export default class BottomMenu {
         this.btnContainer.setSize(50, 50);
         this.btnContainer.setInteractive({ useHandCursor: true });
 
-        this.btnContainerPa = this.scene.add.container(menuWidth - 210, menuHeight / 2);
+        this.btnContainerPa = this.scene.add.container(menuWidth - 265, menuHeight / 2);
 
         this.btnBgPa = this.scene.add.rectangle(0, 0, 50, 50, 0xfa0202, 1)
             .setOrigin(0.5)
             .setStrokeStyle(2, 0x000000);
+
 
         this.btnContainerPa.add(this.btnBgPa);
 
@@ -153,7 +155,13 @@ export default class BottomMenu {
         this.btnContainerPa.setSize(50, 50);
         this.btnContainerPa.setInteractive({ useHandCursor: true });
 
-        this.btnContainerGift = this.scene.add.container(menuWidth - 100, menuHeight / 2).setSize(50, 50)
+        this.btnContainerGift = this.scene.add.container(menuWidth - 155, menuHeight / 2).setSize(50, 50)
+
+        this.btnContainerAchiv = this.scene.add.container(menuWidth - 100, menuHeight / 2).setSize(50, 50)
+
+        this.btnAchiv = this.scene.add.rectangle(0, 0, 50, 50, 0x7d12d4, 1)
+            .setOrigin(0.5)
+            .setStrokeStyle(2, 0x000000)
 
         this.btnGift = this.scene.add.rectangle(0, 0, 50, 50, 0xf7e300, 1)
             .setOrigin(0.5)
@@ -163,16 +171,28 @@ export default class BottomMenu {
             .setOrigin(0.5)
             .setDisplaySize(40, 40);
 
+        this.imgAchiv = this.scene.add.image(0, 0, "trophy")
+            .setOrigin(0.5)
+            .setDisplaySize(35, 35);
+
         this.btnContainerGift.add([this.btnGift, this.imgGift])
 
+        this.btnContainerAchiv.add([this.btnAchiv, this.imgAchiv])
+
         this.btnContainerGift.setInteractive({ useHandCursor: true });
+
+        this.btnContainerAchiv.setInteractive({ useHandCursor: true });
 
         this.btnContainerGift.on("pointerdown", () => {
             this.uiEvents.emit("ui:showPresents")
         })
 
+        this.btnContainerAchiv.on("pointerdown", () => {
+            this.uiEvents.emit("ui:showAchivs")
+        })
+
         this.upperMenu.add([this.btnMatriz, this.btnZoomIn, this.btnZoomOut, this.btnCancelar, this.btnMode])
-        this.bottomMenu.add([this.btnLoja, this.btnContainer, this.btnContainerPa, this.btnContainerGift]);
+        this.bottomMenu.add([this.btnLoja, this.btnContainer, this.btnContainerPa, this.btnContainerGift, this.btnContainerAchiv]);
 
         this.buttons['arar'] = this.btnContainer;
         this.buttons['loja'] = this.btnLoja;
@@ -327,7 +347,7 @@ export default class BottomMenu {
         })
 
         this.btnMinusXp.on("pointerup", () => {
-            this.uiEvents.emit("ui:showPresents")
+             this.uiEvents.emit("ui:notify", { type: "achiv", data: {title : "Amigo da floresta", img : "trofeu_arvore"} })
         });
 
         this.btnPlusGold.on("pointerup", () => {
@@ -340,7 +360,7 @@ export default class BottomMenu {
         })
 
         this.btnPlusXp.on("pointerup", () => {
-            this.uiEvents.emit("ui:notify", {type : "advice", data : messages[0].mensagem})
+            this.uiEvents.emit("ui:notify", { type: "advice", data: messages[0].mensagem })
         });
 
         this.CheatMenu.add([this.btnPlusGold, this.btnPlusMoney, this.btnPlusXp]);

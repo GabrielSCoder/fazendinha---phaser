@@ -10,8 +10,6 @@ export default class XPController {
         this.maxLevel = xpTable[xpTable.length - 1].level;
     }
 
-
-
     init() {
         this.gameEvents()
     }
