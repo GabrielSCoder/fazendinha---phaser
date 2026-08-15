@@ -418,6 +418,12 @@ export default class GameEventsController {
     controleSolo() {
 
         if (!this.scene.gameVariables.plowing) return;
+
+        if (this.scene.gameVariables.freeClick) {
+            this.scene.gameVariables.freeClick = false;
+            return;
+        };
+
         if (!this.scene.gameVariables.previewOccupiedtiles?.length) return;
         if (this.controllers.queue.isFull()) return;
 
@@ -587,10 +593,41 @@ export default class GameEventsController {
 
             action: (done) => {
 
+                const first = validReserva[0];
+
                 progressBar =
-                    this.plantarSementes(
-                        validReserva,
-                        done
+                    this.controllers.bar.criarBarraProgresso(
+
+                        first.x - 25,
+                        first.y - first.displayHeight / 2,
+                        50,
+                        10,
+                        0.5,
+
+                        () => {
+
+                            validReserva.forEach(solo => {
+
+                                if (!solo)
+                                    return;
+
+                                if (solo.cancelled)
+                                    return;
+
+                                if (!solo.isQueued)
+                                    return;
+
+                                this.uiEvents.emit(
+                                    "action:Seed",
+                                    solo
+                                );
+
+                                solo.isQueued = false;
+                                solo.isReserved = false;
+                            });
+
+                            done();
+                        }
                     );
             },
 
@@ -604,6 +641,9 @@ export default class GameEventsController {
 
                 validReserva.forEach(solo => {
 
+                    if (!solo)
+                        return;
+
                     solo.isReserved = false;
                     solo.isQueued = false;
                     solo.cancelled = true;
@@ -616,9 +656,10 @@ export default class GameEventsController {
                     });
                 });
 
-                this.controllers.plant.cancelReserve(validReserva);
+                this.controllers.plant.cancelReserve(
+                    validReserva
+                );
             }
-
         });
     }
 

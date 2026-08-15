@@ -186,14 +186,13 @@ export default class ShopItemCard {
 
                 if (comprarText == "adquirido") return;
 
-                this.controllers.shopMenu.close();
-
                 if (isExpansion) {
                     this.uiEvents.emit('action:expand', this.data);
                 } else {
                     this.scene.events.emit('itemPurchased', this.data)
                 }
 
+                this.controllers.shopMenu.close();
 
             }, 150);
 

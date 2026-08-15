@@ -45,6 +45,13 @@ export default class SpriteUtils {
         }
 
         if (is_semente) {
+
+            const vehicle = this.scene.gameVariables.vehicleSelected;
+
+            if (vehicle) {
+                this.addToolSprite({ action: "seed", img: vehicle, vehicle: true })
+            }
+
             this.scene.gameVariables.planting = true;
         }
 
@@ -246,7 +253,82 @@ export default class SpriteUtils {
             if (sprite.isReserved)
                 return false;
 
-            const iso =  this.controllers.gridUtils.screenToIso(
+            const iso = this.controllers.gridUtils.screenToIso(
+                sprite.x,
+                sprite.y
+            );
+
+            const spriteX = Math.floor(iso.x);
+            const spriteY = Math.floor(iso.y);
+
+            return (
+                spriteX >= x &&
+                spriteX < x + size &&
+                spriteY >= y &&
+                spriteY < y + size
+            );
+        });
+    }
+
+    findHarvestableSprite(x, y, size = 4) {
+        const sprites =
+            this.scene.gameVariables.sprites || [];
+
+        return sprites.find(sprite => {
+
+            console.log(sprite)
+
+            if (!sprite) return false;
+
+            if (sprite.isQueued)
+                return false;
+
+            if (sprite.isReserved)
+                return false;
+
+            if (sprite.harvestReady !== true)
+                return false;
+
+            if (sprite.tipo !== "solo_plantado_simples" && sprite.tipo !== "solo_plantado_alagado")
+                return false;
+
+
+            const iso = this.controllers.gridUtils.screenToIso(
+                sprite.x,
+                sprite.y
+            );
+
+            const spriteX = Math.floor(iso.x);
+            const spriteY = Math.floor(iso.y);
+
+            return (
+                spriteX >= x &&
+                spriteX < x + size &&
+                spriteY >= y &&
+                spriteY < y + size
+            );
+        });
+    }
+
+    findDrySoil(x, y, size = 4) {
+
+        const sprites =
+            this.scene.gameVariables.sprites || [];
+
+        return sprites.find(sprite => {
+
+            if (!sprite) return false;
+
+            if (sprite.isQueued)
+                return false;
+
+            if (sprite.isReserved)
+                return false;
+
+            if (sprite.tipo !== "solo_seco")
+                return false;
+
+            const iso = this.controllers.gridUtils.screenToIso(
                 sprite.x,
                 sprite.y
             );
@@ -287,5 +369,103 @@ export default class SpriteUtils {
         });
 
         this.controllers.gridUtils.drawFootprints();
+    }
+
+    addToolSprite(data, x, y, scale = 0.2, originX = 0.5, originY = 0.5) {
+
+        if (!data.action) return;
+
+        this.scene.gameVariables.selectedSpriteDelete = null;
+
+        switch (data.action) {
+
+            case "plow":
+                if (this.scene.gameVariables.selling) this.uiEvents.emit("action:StopSelling");
+                // if (this.scene.gameVariables.plowing) this.uiEvents.emit("action:StopPlowing");
+                if (this.scene.gameVariables.planting) this.uiEvents.emit("action:StopSeeding");
+                if (this.scene.gameVariables.harvesting) this.uiEvents.emit("action:StopHarvesting");
+                break;
+            case "seed":
+                if (this.scene.gameVariables.selling) this.uiEvents.emit("action:StopSelling");
+                if (this.scene.gameVariables.plowing) this.uiEvents.emit("action:StopPlowing");
+                if (this.scene.gameVariables.harvesting) this.uiEvents.emit("action:StopHarvesting");
+                // if (this.scene.gameVariables.planting) this.uiEvents.emit("action:StopSeeding");
+                break;
+            case "harvest":
+                // if (this.scene.gameVariables.harvesting) this.uiEvents.emit("action:StopHarvesting");
+                if (this.scene.gameVariables.selling) this.uiEvents.emit("action:StopSelling");
+                if (this.scene.gameVariables.plowing) this.uiEvents.emit("action:StopPlowing");
+                if (this.scene.gameVariables.planting) this.uiEvents.emit("action:StopSeeding");
+                break;
+            default:
+                break;
+        }
+
+        let itemData;
+
+
+        if (data.action === "plow") {
+
+            if (data.vehicle == true) {
+                itemData = { img: data.img.id };
+            } else {
+                itemData = { img: 'enxada' }
+            }
+        } else {
+            itemData = { img: data.img.id }
+        }
+
+        const sprite = this.addGameSprite(
+            itemData,
+            this.scene.scale / 2,
+            this.scene.scale / 2,
+            scale,
+            originX,
+            originY
+        );
+
+        sprite.nome = "tool";
+        sprite.isMoving = true;
+        sprite.setDepth(9999);
+        sprite.disableInteractive();
+
+        if (data.vehicle == true) {
+            data.img.setAlpha(0.2);
+            data.img.disableInteractive();
+            this.scene.gameVariables.vehicleSelected = data.img;
+        }
+
+        this.scene.gameVariables.toolSprite = sprite;
+
+        if (!this.scene.gameVariables.sprites)
+            this.scene.gameVariables.sprites = [];
+
+        this.scene.gameVariables.sprites.push(sprite);
+
+        this.controllers.camera.ignoreInUICamera([
+            ...this.scene.gameVariables.sprites
+        ]);
+
+    }
+
+    destroyToolSprite() {
+
+        if (!this.scene.gameVariables.toolSprite) return;
+
+        const sprite_del = this.scene.gameVariables.toolSprite;
+        sprite_del.destroy();
+
+        this.scene.gameVariables.sprites = this.scene.gameVariables.sprites.filter(
+            s => s && s !== sprite_del && !s.destroyed
+        );
+
+        this.scene.gameVariables.toolSprite = null;
+
+        console.log(this.scene.gameVariables.vehicleSelected)
+
+        if (this.scene.gameVariables.vehicleSelected) {
+            this.scene.gameVariables.vehicleSelected.setAlpha(1);
+            this.scene.gameVariables.vehicleSelected = null;
+        }
     }
 }

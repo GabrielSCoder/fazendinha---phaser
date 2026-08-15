@@ -25,8 +25,8 @@ export default class SoloController {
 
     classEvents() {
 
-        this.uiEvents.on("action:StartPlowing", () => {
-            this.startPlowing();
+        this.uiEvents.on("action:StartPlowing", (data) => {
+            this.startPlowing(data);
         })
 
         this.uiEvents.on("action:StopPlowing", () => {
@@ -40,20 +40,23 @@ export default class SoloController {
 
     updatePlowing(blocksWide = 1, blocksHigh = 1) {
 
-        if (this.scene.gameVariables.middleButtonDown) return;
         if (this.scene.gameVariables.activeBar) return;
         if (!this.scene.gameVariables.plowing) return;
         if (this.scene.gameVariables.selling) this.controllers.sell.stopSelling();
         if (this.scene.gameVariables.planting) this.controllers.plant.stopSeeding();
 
-
         const pointer = this.scene.input.activePointer;
+        const sprite = this.scene.gameVariables.toolSprite;
         const cam = this.scene.cameras.main;
         const worldPoint = cam.getWorldPoint(pointer.x, pointer.y);
+        const pointerOffset = blocksWide > 1 ? 2.7 : 1.3;
+
+        sprite.x = pointer.worldX + 10;
+        sprite.y = pointer.worldY - 10;
 
         const iso = this.controllers.gridUtils.screenToIso(worldPoint.x, worldPoint.y);
-        const startX = Math.floor(iso.x);
-        const startY = Math.floor(iso.y);
+        const startX = Math.floor(iso.x - pointerOffset);
+        const startY = Math.floor(iso.y - pointerOffset);
 
         this.controllers.acoesUtils.clearPreviewTiles();
 
@@ -87,8 +90,8 @@ export default class SoloController {
                     null
                 );
 
-                const fillColor = isOccupied ? 0xaa0000 : 0x00aa00; // escuro
-                const borderColor = isOccupied ? 0xff6666 : 0x66ff66; // claro
+                const fillColor = isOccupied ? 0xaa0000 : 0x00aa00; 
+                const borderColor = isOccupied ? 0xff6666 : 0x66ff66;
 
                 const cornersIso = [
                     { x: sx, y: sy },
@@ -104,7 +107,7 @@ export default class SoloController {
                     .polygon(0, 0, points, fillColor, 0.35)
                     .setStrokeStyle(1, borderColor, 0.9)
                     .setOrigin(0, 0)
-                    .setDepth(9999);
+                    .setDepth(3000);
 
                 this.scene.gameVariables.previewTiles.push(tile);
                 this.controllers.camera.ignoreInUICamera([tile]);
@@ -122,15 +125,16 @@ export default class SoloController {
         this.controllers.camera.ignoreInUICamera([outerBorder]);
     }
 
-
-    startPlowing() {
+    startPlowing(data) {
         if (this.scene.gameVariables.plowing) return;
 
         if (this.scene.gameVariables.planting) this.uiEvents.emit("action:StopSeeding");
         if (this.scene.gameVariables.selling) this.uiEvents.emit("action:StopSelling");
+        if (this.scene.gameVariables.harvesting) this.uiEvents.emit("action:StopHarvesting");
 
         this.uiEvents.emit("interact:DesativateAll");
         this.scene.gameVariables.plowing = true;
+        this.controllers.spriteUtils.addToolSprite(data, this.scene.scale / 2, this.scene.scale / 2, 0.2, 0.5, 0.5);
     }
 
     stopPlowing() {
@@ -140,6 +144,7 @@ export default class SoloController {
         this.scene.gameVariables.plowing = false;
         this.scene.gameVariables.changeActionSize(1, 1);
         this.uiEvents.emit("interact:ActivateAll");
+        this.controllers.spriteUtils.destroyToolSprite();
     }
 
     freeSoil(solo) {
@@ -163,7 +168,6 @@ export default class SoloController {
 
         this.controllers.interact.ativarInteratividadeItensPorNome(solo.nome);
     }
-
 
     createReserveSoil() {
 
@@ -252,6 +256,7 @@ export default class SoloController {
 
         sprite.setAlpha(1);
         sprite.isReserved = false;
+        const tool = this.scene.gameVariables.toolSprite;
 
         const { gridX, gridY, blockSize } = sprite;
 
@@ -278,6 +283,8 @@ export default class SoloController {
         );
 
         this.gridUtils.recalculateDepthAround(sprite);
+
+        tool.setDepth(9999);
 
         sprite.uuid = crypto.randomUUID();
 

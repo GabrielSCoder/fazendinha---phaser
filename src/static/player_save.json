@@ -3,7 +3,7 @@
     "id": 90,
     "uuid": "1786390687120273945125666",
     "name": "Melksedek",
-    "gold": 9999999,
+    "gold": 1000,
     "money": 9999979,
     "level": 1,
     "xp": 1,
@@ -40,7 +40,12 @@
     "completedMissions": []
   },
   "messages": [
-    1,2,3,4,5,6
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
   ],
   "world": {
     "id": 1,
@@ -95,56 +100,43 @@
         "harvestTimes": 0
       },
       {
-        "uuid": "4",
-        "id": "solo_preparado",
-        "type": "soil",
-        "state": "plowed",
+        "uuid": "a1a43ca9-dfee-4f9a-bd27-21b4b31cb9a0",
+        "id": "trator_vermelho",
+        "type": "veiculo",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 3,
+          "y": 0
+        },
+        "x": 40,
+        "y": -52
+      },
+      {
+        "uuid": "e4f193dc-0f98-44a9-af32-d29fbab9ae31",
+        "id": "trator_verde",
+        "type": "veiculo",
+        "state": "placed",
+        "isRotated": false,
         "position": {
           "x": 6,
-          "y": 11
+          "y": 0
         },
-        "x": -78.88000000000001,
-        "y": 65.36000000000001,
-        "harvestTimes": 0
+        "x": 96,
+        "y": -24
       },
       {
-        "uuid": "5",
-        "id": "solo_preparado",
-        "type": "soil",
-        "state": "plowed",
+        "uuid": "09b65994-f102-42f8-a129-0368def84aff",
+        "id": "trator_azul",
+        "type": "veiculo",
+        "state": "placed",
+        "isRotated": false,
         "position": {
-          "x": 6,
-          "y": 15
+          "x": 11,
+          "y": 0
         },
-        "x": -142.88,
-        "y": 97.36000000000001,
-        "harvestTimes": 0
-      },
-      {
-        "uuid": "6",
-        "id": "solo_preparado",
-        "type": "soil",
-        "state": "plowed",
-        "position": {
-          "x": 10,
-          "y": 11
-        },
-        "x": -14.880000000000024,
-        "y": 97.36000000000001,
-        "harvestTimes": 0
-      },
-      {
-        "uuid": "7",
-        "id": "solo_preparado",
-        "type": "soil",
-        "state": "plowed",
-        "position": {
-          "x": 10,
-          "y": 15
-        },
-        "x": -78.88000000000002,
-        "y": 129.36,
-        "harvestTimes": 0
+        "x": 168,
+        "y": 12
       }
     ]
   },

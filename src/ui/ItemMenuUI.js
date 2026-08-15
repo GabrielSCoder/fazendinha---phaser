@@ -66,10 +66,17 @@ export default class ItemMenuUI {
 
                 switch (sprite.vehicle_action) {
                     case "plow":
-                        this.uiEvents.emit("action:StartPlowing");
+                        this.uiEvents.emit("action:StartPlowing", {vehicle : true, img: sprite, action: "plow" });
                         break;
                     case "harvest":
-                        this.uiEvents.emit("action:StartHarvesting");
+                        this.uiEvents.emit("action:StartHarvesting", {vehicle : true, img: sprite, action: "harvest" });
+                        break;
+                    case "seed":
+                        this.scene.gameVariables.vehicleSelected = sprite;
+                        this.controllers.shopMenu.activeCategory = 'Sementes';
+                        this.controllers.shopMenu.open();
+                        break;
+                    default:
                         break;
                 }
             }
@@ -150,8 +157,6 @@ export default class ItemMenuUI {
     }
 
     updateMenuOptions(sprite) {
-
-        console.log(sprite)
 
         const options = [];
 

@@ -224,7 +224,7 @@ export default class BottomMenu {
             }
 
             const arando = this.scene.gameVariables.plowing;
-            arando ? this.uiEvents.emit("action:StopPlowing") : this.uiEvents.emit("action:StartPlowing");
+            arando ? this.uiEvents.emit("action:StopPlowing") : this.uiEvents.emit("action:StartPlowing", {vehicle : false, action : "plow", img : "enxada"});
         });
 
         this.btnContainerPa.on('pointerdown', () => {

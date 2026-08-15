@@ -34,15 +34,16 @@ export default class GameVariablesController {
         this.activeBar = false;
         this.creativeMode = false;
         this.staticMode = false;
-        this.noExperienceMode = true;
+        this.noExperienceMode = false;
         this.allUnlockedMode = true;
-        this.noFootprints = false;
+        this.noFootprints = true;
         this.actionTileX = 1;
         this.actionTileY = 1;
         this.plowing = false;
         this.buyItemTmp = null;
         this.planting = false;
         this.selling = false;
+        this.harvesting = false;
         this.hoverEnabled = true;
         this.matrixVisible = false;
         this.debugBarVisible = true;
@@ -54,6 +55,7 @@ export default class GameVariablesController {
         this.selectedSprite = null;
         this.selectedSpriteDelete = null;
         this.selectedSeed = null;
+        this.vehicleSelected = null;
 
         this.collisionDataTemp = null;
         this.toolSprite = null;

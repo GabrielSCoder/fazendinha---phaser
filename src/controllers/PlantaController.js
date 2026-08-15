@@ -24,8 +24,6 @@ export default class PlantaController {
 
     classEvents() {
 
-        //console.log("Ligando listeners....")
-
         this.uiEvents.on("action:StopSeeding", () => {
             this.stopSeeding();
         })
@@ -52,13 +50,24 @@ export default class PlantaController {
             this.uiEvents.emit("action:StopPlowing");
         }
 
+        if (this.scene.gameVariables.harvesting) {
+            this.uiEvents.emit("action:StopHarvesting");
+        }
+
+        const tool = this.scene.gameVariables.toolSprite;
         const sprite = this.scene.gameVariables.selectedSeed;
         const pointer = this.scene.input.activePointer;
         const cam = this.scene.cameras.main;
+        const pointerOffset = blocksWide > 1 ? 2.7 : 1.3;
 
         sprite.x = pointer.worldX + 20;
         sprite.y = pointer.worldY;
         sprite.setDepth(9999);
+
+        if (tool) {
+            tool.x = pointer.worldX;
+            tool.y = pointer.worldY;
+        }
 
         const worldPoint = cam.getWorldPoint(pointer.x, pointer.y);
 
@@ -67,8 +76,8 @@ export default class PlantaController {
             worldPoint.y
         );
 
-        const startX = Math.floor(iso.x - 1.5);
-        const startY = Math.floor(iso.y - 1.5);
+        const startX = Math.floor(iso.x - pointerOffset);
+        const startY = Math.floor(iso.y - pointerOffset);
 
         this.controllers.acoesUtils.clearPreviewTiles();
 
@@ -195,11 +204,8 @@ export default class PlantaController {
 
     stopSeeding() {
 
-        console.log("Stopping seeding...")
-
         if (!this.scene.gameVariables.planting) return;
 
-        // Limpa os tiles de preview
         this.controllers.acoesUtils.clearPreviewTiles();
         this.controllers.acoesUtils.clearPreviewOccupiedTiles();
 
@@ -224,6 +230,12 @@ export default class PlantaController {
                 this.scene.gameVariables.sprites.filter(
                     s => s && s !== seed && !s.destroyed
                 );
+        }
+
+        const tool = this.scene.gameVariables.toolSprite;
+
+        if (tool) {
+            this.controllers.spriteUtils.destroyToolSprite();
         }
 
         this.scene.gameVariables.selectedSprite = null;

@@ -143,14 +143,16 @@ export class Start extends Phaser.Scene {
             }
         });
 
-
         this.input.on('pointerup', () => {
             this.controllers.gameEvents.controleSolo();
         });
 
-
         this.input.on('pointerup', (pointer) => {
             this.controllers.gameEvents.controlePlantar();
+        })
+
+        this.input.on('pointerup', (pointer) => {
+            this.controllers.harvest.harvestArea();
         })
 
         this.events.on('itemPurchased', (itemData) => {
@@ -179,6 +181,7 @@ export class Start extends Phaser.Scene {
 
         this.controllers.plant.updateSeeding(this.gameVariables.actionTileX, this.gameVariables.actionTileY);
 
+        this.controllers.harvest.updateHarvest(this.gameVariables.actionTileX, this.gameVariables.actionTileY);
     }
 
     createControllers(saveData) {

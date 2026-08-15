@@ -182,7 +182,6 @@ export default class SpriteController {
         }
     }
 
-
     updateHoverText(sprite) {
 
         if (!sprite) return;

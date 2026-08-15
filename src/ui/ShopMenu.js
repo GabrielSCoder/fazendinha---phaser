@@ -31,8 +31,8 @@ export default class ShopMenu {
             'Árvores': data.tree,
             'Animais': data.animal,
             'Decorações': data.decoration,
-            'Expansões' : data.expansion,
-            'Veículos' : data.vehicle
+            'Expansões': data.expansion,
+            'Veículos': data.vehicle
         };
 
     }
@@ -185,6 +185,15 @@ export default class ShopMenu {
     }
 
     close() {
+
+        if (!this.scene.gameVariables.selectedSeed) {
+            this.scene.gameVariables.changeActionSize(1, 1);
+        }
+
+        if (!this.scene.gameVariables.selectedSeed && this.scene.gameVariables.vehicleSelected) {
+            this.scene.gameVariables.vehicleSelected = null;
+        }
+
         this.scene.tweens.add({
             targets: this.container,
             alpha: 0,

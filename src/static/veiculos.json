@@ -56,7 +56,7 @@
         "xp": 1000,
         "nivel_requerido": 12,
         "action" : "harvest",
-        "img": "trator_verde400",
+        "img": "trator_verde",
         "escala": 0.28,
         "base_action": 2,
         "area": [
