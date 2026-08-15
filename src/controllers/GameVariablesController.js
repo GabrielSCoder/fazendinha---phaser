@@ -48,7 +48,7 @@ export default class GameVariablesController {
         this.matrixVisible = false;
         this.debugBarVisible = true;
         this.fastHarvestMode = true;
-        this.debugHaverstTime = 0.2;
+        this.debugHaverstTime = 0.1;
         this.debugShowFps = false;
         this.noEnergyConsumption = true;
 

@@ -42,27 +42,52 @@ export default class SoloController {
 
         if (this.scene.gameVariables.activeBar) return;
         if (!this.scene.gameVariables.plowing) return;
-        if (this.scene.gameVariables.selling) this.controllers.sell.stopSelling();
-        if (this.scene.gameVariables.planting) this.controllers.plant.stopSeeding();
+        if (this.scene.gameVariables.selling)
+            this.controllers.sell.stopSelling();
+
+        if (this.scene.gameVariables.planting)
+            this.controllers.plant.stopSeeding();
 
         const pointer = this.scene.input.activePointer;
         const sprite = this.scene.gameVariables.toolSprite;
         const cam = this.scene.cameras.main;
-        const worldPoint = cam.getWorldPoint(pointer.x, pointer.y);
-        const pointerOffset = blocksWide > 1 ? 2.7 : 1.3;
 
-        sprite.x = pointer.worldX + 10;
-        sprite.y = pointer.worldY - 10;
+        const hasVehicle = !!sprite;
 
-        const iso = this.controllers.gridUtils.screenToIso(worldPoint.x, worldPoint.y);
-        const startX = Math.floor(iso.x - pointerOffset);
-        const startY = Math.floor(iso.y - pointerOffset);
+        const worldPoint = cam.getWorldPoint(
+            pointer.x,
+            pointer.y
+        );
+
+        const pointerOffset =
+            blocksWide > 1 ? 2.7 : 1.3;
+
+        if (sprite) {
+            sprite.x = pointer.worldX + 10;
+            sprite.y = pointer.worldY - 10;
+        }
+
+        const iso =
+            this.controllers.gridUtils.screenToIso(
+                worldPoint.x,
+                worldPoint.y
+            );
+
+        const startX =
+            Math.floor(iso.x - pointerOffset);
+
+        const startY =
+            Math.floor(iso.y - pointerOffset);
 
         this.controllers.acoesUtils.clearPreviewTiles();
 
         const blockSize = 4;
-        const totalWidth = blockSize * blocksWide;
-        const totalHeight = blockSize * blocksHigh;
+
+        const totalWidth =
+            blockSize * blocksWide;
+
+        const totalHeight =
+            blockSize * blocksHigh;
 
         const outerCornersIso = [
             { x: startX, y: startY },
@@ -70,28 +95,78 @@ export default class SoloController {
             { x: startX + totalWidth, y: startY + totalHeight },
             { x: startX, y: startY + totalHeight }
         ];
-        const outerCornersScreen = outerCornersIso.map(c => this.gridUtils.isoToScreen(c.x, c.y));
+
+        const outerCornersScreen =
+            outerCornersIso.map(c =>
+                this.gridUtils.isoToScreen(c.x, c.y)
+            );
+
         const outerPoints = [];
 
-        for (const c of outerCornersScreen) outerPoints.push(c.x, c.y);
+        for (const c of outerCornersScreen) {
+            outerPoints.push(c.x, c.y);
+        }
 
         this.scene.gameVariables.previewOccupiedtiles = [];
 
         for (let bx = 0; bx < blocksWide; bx++) {
+
             for (let by = 0; by < blocksHigh; by++) {
 
-                const sx = startX + bx * blockSize;
-                const sy = startY + by * blockSize;
+                const sx =
+                    startX + bx * blockSize;
 
-                const isOccupied = this.gridUtils.checkOccupiedGrid(
-                    sx, sy,
-                    sx + blockSize - 1,
-                    sy + blockSize - 1,
-                    null
-                );
+                const sy =
+                    startY + by * blockSize;
 
-                const fillColor = isOccupied ? 0xaa0000 : 0x00aa00; 
-                const borderColor = isOccupied ? 0xff6666 : 0x66ff66;
+                const isOccupied =
+                    this.gridUtils.checkOccupiedGrid(
+                        sx,
+                        sy,
+                        sx + blockSize - 1,
+                        sy + blockSize - 1,
+                        null
+                    );
+
+                // Só procura solo seco se estiver usando veículo
+                let drySoil = null;
+
+                if (hasVehicle && isOccupied) {
+
+                    drySoil =
+                        this.controllers.spriteUtils.findDrySoil(
+                            sx,
+                            sy,
+                            blockSize
+                        );
+                }
+
+                let action = "blocked";
+
+                // Espaço vazio → criar solo
+                if (!isOccupied) {
+
+                    action = "plow";
+
+                    // Veículo + solo seco → renovar
+                } else if (hasVehicle && drySoil) {
+
+                    action = "renew";
+                }
+
+                const valid =
+                    action === "plow" ||
+                    action === "renew";
+
+                const fillColor =
+                    valid
+                        ? 0x00aa00
+                        : 0xaa0000;
+
+                const borderColor =
+                    valid
+                        ? 0x66ff66
+                        : 0xff6666;
 
                 const cornersIso = [
                     { x: sx, y: sy },
@@ -99,30 +174,78 @@ export default class SoloController {
                     { x: sx + blockSize, y: sy + blockSize },
                     { x: sx, y: sy + blockSize }
                 ];
-                const cornersScreen = cornersIso.map(c => this.gridUtils.isoToScreen(c.x, c.y));
+
+                const cornersScreen =
+                    cornersIso.map(c =>
+                        this.gridUtils.isoToScreen(c.x, c.y)
+                    );
+
                 const points = [];
-                for (const c of cornersScreen) points.push(c.x, c.y);
+
+                for (const c of cornersScreen) {
+                    points.push(c.x, c.y);
+                }
 
                 const tile = this.scene.add
-                    .polygon(0, 0, points, fillColor, 0.35)
-                    .setStrokeStyle(1, borderColor, 0.9)
+                    .polygon(
+                        0,
+                        0,
+                        points,
+                        fillColor,
+                        0.35
+                    )
+                    .setStrokeStyle(
+                        1,
+                        borderColor,
+                        0.9
+                    )
                     .setOrigin(0, 0)
                     .setDepth(3000);
 
                 this.scene.gameVariables.previewTiles.push(tile);
-                this.controllers.camera.ignoreInUICamera([tile]);
 
-                this.scene.gameVariables.previewOccupiedtiles.push({ x: sx, y: sy, w: blockSize, h: blockSize, occupied: isOccupied });
+                this.controllers.camera.ignoreInUICamera([
+                    tile
+                ]);
+
+                this.scene.gameVariables.previewOccupiedtiles.push({
+                    x: sx,
+                    y: sy,
+                    w: blockSize,
+                    h: blockSize,
+                    occupied: isOccupied,
+
+                    // O que deve acontecer nessa célula
+                    action: action,
+
+                    // Só preenchido quando for renovação
+                    sprite: drySoil
+                });
             }
         }
 
         const outerBorder = this.scene.add
-            .polygon(0, 0, outerPoints, 0x000000, 0)
-            .setStrokeStyle(2, 0xffffff, 0.7)
+            .polygon(
+                0,
+                0,
+                outerPoints,
+                0x000000,
+                0
+            )
+            .setStrokeStyle(
+                2,
+                0xffffff,
+                0.7
+            )
             .setOrigin(0, 0);
 
-        this.scene.gameVariables.previewTiles.push(outerBorder);
-        this.controllers.camera.ignoreInUICamera([outerBorder]);
+        this.scene.gameVariables.previewTiles.push(
+            outerBorder
+        );
+
+        this.controllers.camera.ignoreInUICamera([
+            outerBorder
+        ]);
     }
 
     startPlowing(data) {
@@ -172,81 +295,146 @@ export default class SoloController {
     createReserveSoil() {
 
         const tiles = [];
-        const validTiles = [];
 
         const blockSize = 4;
 
-        this.scene.gameVariables.previewOccupiedtiles.forEach(tile => {
+        const preview =
+            this.scene.gameVariables.previewOccupiedtiles || [];
 
-            const startX = tile.startX ?? tile.x;
-            const startY = tile.startY ?? tile.y;
+        const hasVehicle =
+            !!this.scene.gameVariables.toolSprite;
 
-            const ocupado = this.gridUtils.checkOccupiedBlock(startX, startY, blockSize, blockSize);
+        const itemData =
+            this.solos.find(c => c.nome === "solo_preparado");
 
-            if (!ocupado) {
-                validTiles.push({ startX, startY });
-            }
-
-        });
-
-        if (!validTiles.length) return [];
-
-        const itemData = this.solos.find(c => c.nome === "solo_preparado");
-        if (!itemData) return [];
+        if (!itemData)
+            return [];
 
         const scale = itemData.escala || 1;
         const originX = itemData.origem?.[0] ?? 0.5;
         const originY = itemData.origem?.[1] ?? 0.5;
         const tipo = itemData.tipo || "solo";
 
-        // PASSO 2: criar reservas
-        validTiles.forEach(({ startX, startY }) => {
+        preview.forEach(tile => {
 
-            const w = blockSize;
-            const h = blockSize;
+            const startX = tile.startX ?? tile.x;
+            const startY = tile.startY ?? tile.y;
 
-            const centerX = startX + (w / 2) - (1 - originX - 0.1);
-            const centerY = startY + (h / 2) - (1 - originY - 0.15);
+            /*
+             * ==========================================
+             * CRIAR NOVO SOLO
+             * ==========================================
+             */
+            if (tile.action === "plow") {
 
-            const screenPos = this.gridUtils.isoToScreen(centerX, centerY);
+                const ocupado =
+                    this.gridUtils.checkOccupiedBlock(
+                        startX,
+                        startY,
+                        blockSize,
+                        blockSize
+                    );
 
-            const sprite = this.scene.controllers.spriteUtils.addGameSprite(
-                itemData,
-                screenPos.x,
-                screenPos.y,
-                scale,
-                originX,
-                originY
-            );
+                if (ocupado)
+                    return;
 
-            sprite.harvestTime = 0;
-            sprite.setAlpha(0.4);
-            sprite.isReserved = true;
-            sprite.hoverEnabled = true;
-            sprite.gridX = startX;
-            sprite.gridY = startY;
-            sprite.blockSize = blockSize;
-            sprite.nome = "solo_preparado";
-            sprite.tipo = tipo;
-            sprite.preco_venda = itemData.preco_venda;
-            sprite.disableInteractive();
+                const w = blockSize;
+                const h = blockSize;
 
-            // agora reserva
-            this.gridUtils.markTemporaryReserved(startX, startY, blockSize, blockSize);
+                const centerX =
+                    startX +
+                    (w / 2) -
+                    (1 - originX - 0.1);
 
-            if (!this.scene.gameVariables.sprites)
-                this.scene.gameVariables.sprites = [];
+                const centerY =
+                    startY +
+                    (h / 2) -
+                    (1 - originY - 0.15);
 
-            this.scene.gameVariables.sprites.push(sprite);
+                const screenPos =
+                    this.gridUtils.isoToScreen(
+                        centerX,
+                        centerY
+                    );
 
-            this.controllers.camera.ignoreInUICamera([sprite]);
+                const sprite =
+                    this.scene.controllers.spriteUtils.addGameSprite(
+                        itemData,
+                        screenPos.x,
+                        screenPos.y,
+                        scale,
+                        originX,
+                        originY
+                    );
 
-            tiles.push({
-                sprite,
-                screenX: screenPos.x,
-                screenY: screenPos.y
-            });
+                sprite.harvestTime = 0;
+                sprite.setAlpha(0.4);
+                sprite.isReserved = true;
+                sprite.hoverEnabled = true;
 
+                sprite.gridX = startX;
+                sprite.gridY = startY;
+                sprite.blockSize = blockSize;
+
+                sprite.nome = "solo_preparado";
+                sprite.tipo = tipo;
+                sprite.preco_venda = itemData.preco_venda;
+
+                sprite.disableInteractive();
+
+                this.gridUtils.markTemporaryReserved(
+                    startX,
+                    startY,
+                    blockSize,
+                    blockSize
+                );
+
+                if (!this.scene.gameVariables.sprites)
+                    this.scene.gameVariables.sprites = [];
+
+                this.scene.gameVariables.sprites.push(sprite);
+
+                this.controllers.camera.ignoreInUICamera([
+                    sprite
+                ]);
+
+                tiles.push({
+                    sprite,
+                    screenX: screenPos.x,
+                    screenY: screenPos.y,
+                    action: "plow"
+                });
+
+                return;
+            }
+
+            /*
+             * ==========================================
+             * RENOVAR SOLO SECO
+             * ==========================================
+             */
+            if (
+                tile.action === "renew" &&
+                hasVehicle &&
+                tile.sprite
+            ) {
+
+                const sprite = tile.sprite;
+
+                if (sprite.isReserved || sprite.isQueued)
+                    return;
+
+                sprite.isReserved = true;
+                sprite.setAlpha(0.4);
+                sprite.disableInteractive();
+
+                tiles.push({
+                    sprite,
+                    screenX: sprite.x,
+                    screenY: sprite.y,
+                    action: "renew"
+                });
+            }
         });
 
         return tiles;
@@ -302,6 +490,9 @@ export default class SoloController {
 
         const first = reserva[0];
 
+        if (!first)
+            return;
+
         const resp = this.canPlow();
 
         if (!resp) {
@@ -311,23 +502,30 @@ export default class SoloController {
             return;
         }
 
-        const bar = this.controllers.bar.criarBarraProgresso(
-            first.screenX,
-            first.screenY,
-            50,
-            10,
-            0.5,
-            () => {
+        const bar =
+            this.controllers.bar.criarBarraProgresso(
+                first.screenX,
+                first.screenY,
+                50,
+                10,
+                0.5,
+                () => {
 
-                reserva.forEach(tile => {
+                    reserva.forEach(tile => {
 
-                    this.confirmSoil(tile.sprite);
-                });
+                        if (tile.action === "plow") {
 
-                done();
+                            this.confirmSoil(tile.sprite);
 
-            }
-        );
+                        } else if (tile.action === "renew") {
+
+                            this.renewSoil(tile.sprite);
+                        }
+                    });
+
+                    done();
+                }
+            );
 
         return bar;
     }
@@ -346,25 +544,64 @@ export default class SoloController {
 
     cancelReserve(reserva) {
 
+        if (!reserva?.length)
+            return;
+
         reserva.forEach(tile => {
 
             const sprite = tile.sprite;
 
-            const { gridStartX, gridStartY, blockSize } = sprite;
+            if (!sprite)
+                return;
 
-            sprite.destroy();
+            // ==========================================
+            // NOVO SOLO TEMPORÁRIO
+            // ==========================================
+            if (tile.action === "plow") {
 
-            this.gridUtils.clearTemporaryReserved(
-                gridStartX,
-                gridStartY,
-                blockSize,
-                blockSize
-            );
+                const {
+                    gridX,
+                    gridY,
+                    blockSize
+                } = sprite;
 
-            this.scene.gameVariables.sprites = this.scene.gameVariables.sprites.filter(s => s !== sprite);
+                sprite.destroy();
 
+                this.gridUtils.clearTemporaryReserved(
+                    gridX,
+                    gridY,
+                    blockSize,
+                    blockSize
+                );
+
+                this.scene.gameVariables.sprites =
+                    this.scene.gameVariables.sprites.filter(
+                        s => s !== sprite
+                    );
+
+                return;
+            }
+
+            // ==========================================
+            // SOLO SECO RESERVADO PARA RENOVAÇÃO
+            // ==========================================
+            if (tile.action === "renew") {
+
+                sprite.isReserved = false;
+                sprite.isQueued = false;
+                sprite.cancelled = false;
+                sprite.hoverEnabled = true;
+
+                sprite.setAlpha(1);
+                sprite.clearTint();
+
+                sprite.setInteractive({
+                    pixelPerfect: true,
+                    alphaTolerance: 1,
+                    useHandCursor: true
+                });
+            }
         });
-
     }
 
     canPlow(reney = false) {
@@ -384,6 +621,89 @@ export default class SoloController {
         if (!HaveMoney) {
             return false;
         }
+
+        return true;
+    }
+
+    renewSoil(sprite) {
+
+        if (!sprite)
+            return;
+
+        sprite.nome = "solo_preparado";
+        sprite.tipo = "solo_preparado";
+
+        sprite.setTexture("solo2");
+
+        sprite.setAlpha(1);
+
+        // Libera o sprite da reserva da ação em área
+        sprite.isReserved = false;
+        sprite.isQueued = false;
+        sprite.cancelled = false;
+        sprite.hoverEnabled = true;
+
+        sprite.clearTint();
+
+        sprite.setInteractive({
+            pixelPerfect: true,
+            alphaTolerance: 1,
+            useHandCursor: true
+        });
+
+        this.uiEvents.emit("action:reward", {
+            xp: 1,
+            gold: -this.scene.gameVariables.prepareSoilCost ?? 0,
+            x: sprite.x,
+            y: sprite.y
+        });
+
+        this.uiEvents.emit("renewSoil", {
+            target: "solo_preparado",
+            sprite: sprite
+        });
+    }
+
+    executeRenewSoil(sprite, done) {
+
+        const bar =
+            this.controllers.bar.criarBarraProgresso(
+                sprite.x,
+                sprite.y,
+                50,
+                10,
+                0.5,
+                () => {
+
+                    this.renewSoil(sprite);
+
+                    done();
+                }
+            );
+
+        return bar;
+    }
+
+    clearSoil(sprite) {
+
+        if (!sprite) return;
+
+        this.controllers.growth.cancelGrowth(sprite)
+        sprite.nome = "solo_seco";
+        sprite.tipo = "solo_seco";
+        sprite.planta_cultivada = null;
+        sprite.growthStages = null;
+        sprite.preco_venda = 1;
+        sprite.xp = 0;
+        sprite.tempoColheita = null;
+        sprite.img_pronta = null;
+        sprite.growthStage = null;
+        sprite.harvestReady = false;
+        sprite.preco_colheita = null;
+        sprite.setOrigin(0.52, 0.4);
+        sprite.setTexture("solo_seco");
+        sprite.setAlpha(1);
+        sprite.setInteractive({ pixelPerfect: true, alphaTolerance: 1, useHandCursor: true });
 
         return true;
     }
@@ -428,65 +748,6 @@ export default class SoloController {
 
         });
 
-    }
-
-    executeRenewSoil(sprite, done) {
-
-        const bar = this.controllers.bar.criarBarraProgresso(
-            sprite.x,
-            sprite.y,
-            50,
-            10,
-            0.5,
-            () => {
-
-                sprite.nome = "solo_preparado";
-                sprite.tipo = "solo_preparado";
-
-                sprite.setTexture("solo2");
-                sprite.setAlpha(1)
-
-                sprite.setInteractive({ pixelPerfect: true, alphaTolerance: 1, useHandCursor: true });
-
-                this.uiEvents.emit("action:reward", {
-                    xp: 1,
-                    gold: -this.scene.gameVariables.prepareSoilCost ?? 0,
-                    x: sprite.x,
-                    y: sprite.y
-                })
-
-                this.uiEvents.emit("renewSoil", { target: "solo_preparado", sprite: sprite });
-
-                done();
-
-            }
-        );
-
-        return bar;
-    }
-
-    clearSoil(sprite) {
-
-        if (!sprite) return;
-
-        this.controllers.growth.cancelGrowth(sprite)
-        sprite.nome = "solo_seco";
-        sprite.tipo = "solo_seco";
-        sprite.planta_cultivada = null;
-        sprite.growthStages = null;
-        sprite.preco_venda = 1;
-        sprite.xp = 0;
-        sprite.tempoColheita = null;
-        sprite.img_pronta = null;
-        sprite.growthStage = null;
-        sprite.harvestReady = false;
-        sprite.preco_colheita = null;
-        sprite.setOrigin(0.52, 0.4);
-        sprite.setTexture("solo_seco");
-        sprite.setAlpha(1);
-        sprite.setInteractive({ pixelPerfect: true, alphaTolerance: 1, useHandCursor: true });
-
-        return true;
     }
 
 }
