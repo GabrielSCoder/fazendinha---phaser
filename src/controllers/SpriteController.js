@@ -191,7 +191,7 @@ export default class SpriteController {
 
         let text = "";
 
-        if (sprite.tipo == "decoracao" || sprite.tipo == "cerca") {
+        if (sprite.tipo == "decoracao" || sprite.tipo == "cerca" || sprite.tipo == "veiculo") {
             text = sprite.nome;
         }
 

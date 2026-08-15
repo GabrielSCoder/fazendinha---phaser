@@ -1,5 +1,7 @@
 export default class ItemMenuUI {
+
     constructor(scene, config = {}) {
+
         this.scene = scene;
         this.controllers = scene.controllers;
         this.gridUtils = scene.controllers.gridUtils;
@@ -9,52 +11,17 @@ export default class ItemMenuUI {
             .setDepth(2000)
             .setVisible(false);
 
-        const bgx = scene.add.rectangle(0, 0, 50, 60, 0xffffff, 1).setOrigin(0);
-        bgx.setStrokeStyle(1, 0xffffff, 0.5);
-
-        const btnMove = this.createButton('Mover', 5, 1);
-        const btnSell = this.createButton('Vender', 3, 23);
-        const btnRotate = this.createButton('Girar', 5, 44);
-
-        const line = this.scene.add.rectangle(
-            0,
-            20,
-            50,
-            2,
-            0x000,
-            0.25
-        ).setOrigin(0);
-
-        const line2 = this.scene.add.rectangle(
-            0,
-            40,
-            50,
-            2,
-            0x000,
-            0.25
-        ).setOrigin(0);
-
-        this.itemMenu.add([bgx, btnMove, line, btnSell, line2, btnRotate]);
-
         this.selectedSprite = null;
 
-        btnMove.on('pointerup', (pointer, localX, localY, event) => {
-            this.onMoveClick(pointer, localX, localY, event);
-        });
+        this.buttons = {};
+        this.lines = [];
 
-        btnSell.on("pointerup", () => {
-            this.scene.gameVariables.selectedSpriteDelete = this.scene.gameVariables.selectedSprite;
-            this.uiEvents.emit("ui:notify", {
-                type: "sell", nome: this.scene.gameVariables.selectedSpriteDelete.nome,
-                preco: this.scene.gameVariables.selectedSpriteDelete.preco_venda,
-                action: "action:SellItemUI"
-            });
-        })
-
-        btnRotate.on('pointerup', () => this.controllers.spriteUtils.onRotateClick());
+        this.createMenu();
 
         scene.input.on('pointerup', (pointer, objs) => {
-            if (!objs.length) this.hide();
+            if (!objs.length) {
+                this.hide();
+            }
         });
 
         this.gameEvents();
@@ -66,15 +33,108 @@ export default class ItemMenuUI {
         })
     }
 
-    createButton(text, x, y) {
+    createMenu() {
 
-        const btn = this.scene.add.text(x, y, text, {
-            fontSize: '10px',
-            fontFamily: 'LuckiestGuy-Regular',
-            color: '#000',
-            backgroundColor: '#ffffff',
-            padding: { left: 4, right: 4, top: 2, bottom: 2 }
+        this.bg = this.scene.add.rectangle(
+            0,
+            0,
+            1,
+            1,
+            0xffffff,
+            1
+        )
+            .setOrigin(0)
+            .setStrokeStyle(1, 0xffffff, 0.5);
+
+        this.itemMenu.add(this.bg);
+
+        this.buttons.move = this.createButton("Mover");
+        this.buttons.sell = this.createButton("Vender");
+        this.buttons.rotate = this.createButton("Girar");
+        this.buttons.use = this.createButton("Usar");
+
+        this.buttons.move.on('pointerup', (pointer, localX, localY, event) => {
+            this.onMoveClick(pointer, localX, localY, event);
+        });
+
+        this.buttons.use.on('pointerup', () => {
+            this.hide();
+            const sprite = this.scene.gameVariables.selectedSprite;
+            if (!sprite) return;
+            if (sprite.tipo === "veiculo") {
+                this.scene.gameVariables.changeActionSize(sprite.base_action, sprite.base_action);
+
+                switch (sprite.vehicle_action) {
+                    case "plow":
+                        this.uiEvents.emit("action:StartPlowing");
+                        break;
+                    case "harvest":
+                        this.uiEvents.emit("action:StartHarvesting");
+                        break;
+                }
+            }
         })
+
+        this.buttons.sell.on("pointerup", () => {
+            this.scene.gameVariables.selectedSpriteDelete = this.scene.gameVariables.selectedSprite;
+            this.uiEvents.emit("ui:notify", {
+                type: "sell", nome: this.scene.gameVariables.selectedSpriteDelete.nome,
+                preco: this.scene.gameVariables.selectedSpriteDelete.preco_venda,
+                action: "action:SellItemUI"
+            });
+        })
+
+        this.buttons.rotate.on('pointerup', () => this.controllers.spriteUtils.onRotateClick());
+
+        this.itemMenu.add([
+            this.buttons.move,
+            this.buttons.sell,
+            this.buttons.rotate,
+            this.buttons.use
+        ]);
+
+        this.createLines();
+
+        this.itemMenu.add(this.lines);
+    }
+
+    createLines() {
+
+        for (let i = 0; i < 3; i++) {
+
+            const line = this.scene.add.rectangle(
+                0,
+                0,
+                50,
+                2,
+                0x000000,
+                0.25
+            )
+                .setOrigin(0);
+
+            this.lines.push(line);
+        }
+    }
+
+    createButton(text) {
+
+        const btn = this.scene.add.text(
+            0,
+            0,
+            text,
+            {
+                fontSize: '10px',
+                fontFamily: 'LuckiestGuy-Regular',
+                color: '#000',
+                backgroundColor: '#ffffff',
+                padding: {
+                    left: 2,
+                    right: 2,
+                    top: 2,
+                    bottom: 2
+                }
+            }
+        )
             .setOrigin(0)
             .setInteractive({ useHandCursor: true });
 
@@ -89,9 +149,95 @@ export default class ItemMenuUI {
         return btn;
     }
 
-    // === Controles de visibilidade ===
+    updateMenuOptions(sprite) {
+
+        console.log(sprite)
+
+        const options = [];
+
+        if (!sprite.cannotMove) {
+            options.push("move");
+        }
+
+        if (!sprite.cannotSell) {
+            options.push("sell");
+        }
+
+        if (!sprite.cannotRotate) {
+            options.push("rotate");
+        }
+
+        if (sprite.tipo === "veiculo") {
+            options.push("use");
+        }
+
+        this.updateButtonPositions(options);
+    }
+
+    updateButtonPositions(options) {
+
+        const buttonHeight = 20;
+        const padding = 4;
+
+        let y = padding;
+
+        options.forEach((option, index) => {
+
+            const button = this.buttons[option];
+
+            button.setPosition(5, y);
+            button.setVisible(true);
+
+            y += buttonHeight;
+        });
+
+        Object.entries(this.buttons).forEach(([key, button]) => {
+
+            if (!options.includes(key)) {
+                button.setVisible(false);
+            }
+        });
+
+        const visibleLines = options.length - 1;
+
+        this.lines.forEach((line, index) => {
+
+            if (index < visibleLines) {
+
+                line.setPosition(
+                    0,
+                    padding + buttonHeight * (index + 1) - 2
+                );
+
+                line.setVisible(true);
+
+            } else {
+
+                line.setVisible(false);
+
+            }
+        });
+
+        const menuHeight =
+            padding * 2 +
+            buttonHeight * options.length;
+
+        this.bg.setSize(50, menuHeight);
+
+        this.itemMenu.setSize(50, menuHeight);
+    }
+
     show(x, y, sprite = null) {
+
         this.selectedSprite = sprite;
+
+        if (!sprite) {
+            this.hide();
+            return;
+        }
+
+        this.updateMenuOptions(sprite);
+
         this.itemMenu.setPosition(x, y);
         this.itemMenu.setVisible(true);
     }
@@ -100,7 +246,6 @@ export default class ItemMenuUI {
         this.selectedSprite = null;
         this.itemMenu.setVisible(false);
     }
-
 
     isVisibile() {
         return this.itemMenu.visible
@@ -122,7 +267,5 @@ export default class ItemMenuUI {
             if (other !== sprite) other.disableInteractive();
         }
     }
-
-
 
 }

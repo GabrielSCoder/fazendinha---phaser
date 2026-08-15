@@ -9,6 +9,7 @@ export default class CatalogUtils {
         this.decoration = scene.decoracoes;
         this.expansion = scene.expansoes;
         this.soils = scene.solos;
+        this.vehicles = scene.veiculos;
         this.uiEvents = config.uiEvents;
         this.saveController = config.save;
         this.classEvents();
@@ -35,7 +36,8 @@ export default class CatalogUtils {
             tree: this.trees.filter(item => !item.hidden),
             decoration: this.decoration.filter(item => !item.hidden),
             seed: this.seeds.filter(item => !item.hidden),
-            expansion: this.expansion.filter(item => !item.hidden)
+            expansion: this.expansion.filter(item => !item.hidden),
+            vehicle: this.vehicles.filter(item => !item.hidden)
         }
     }
 
@@ -71,6 +73,12 @@ export default class CatalogUtils {
             case "cerca":
                 item = this.decoration.find(item => item.id == id)
                 break;
+            case "expansao":
+                item = this.expansion.find(item => item.id == id)
+                break;
+            case "veiculo":
+                item = this.vehicles.find(item => item.id == id)
+                break;
             default:
                 break;
         }
@@ -85,8 +93,9 @@ export default class CatalogUtils {
         const animals = this.animals.filter(element => element.nivel_requerido == level);
         const trees = this.trees.filter(element => element.nivel_requerido == level);
         const decoration = this.decoration.filter(element => element.nivel_requerido == level);
+        const vehicles = this.vehicles.filter(element => element.nivel_requerido == level);
 
-        list.push(...seeds, ...animals, ...trees, ...decoration);
+        list.push(...seeds, ...animals, ...trees, ...decoration, ...vehicles);
 
         return list;
     }

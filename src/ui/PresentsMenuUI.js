@@ -207,7 +207,7 @@ export default class PresentsMenuUI {
         const amount = this.scene.add.text(bgWidth / 2 - 20, -bgHeight / 2 + 30, data.amount, {
             fontSize: '20px',
             fontStyle: 'bold',
-            color: '#000000',
+            color: '#0c0606',
             fontFamily: 'LuckiestGuy-Regular'
         })
             .setStroke('#ffffff', 4)

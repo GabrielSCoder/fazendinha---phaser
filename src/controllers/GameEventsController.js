@@ -65,31 +65,9 @@ export default class GameEventsController {
 
     abrirLojaCheck() {
         if (this.controllers.shopMenu.isOpen() && this.scene.gameVariables.planting) {
-            const sprite = this.scene.gameVariables.selectedSeed;
-
-            if (sprite)
-                sprite.destroy();
-
-            this.scene.gameVariables.sprites = this.scene.gameVariables.sprites.filter(
-                (s) => s && s !== sprite && !s.destroyed
-            );
-
-            this.scene.gameVariables.selectedSeed = null;
-
-            this.scene.gameVariables.sprites.forEach((s) => {
-                if (s && !s.destroyed) {
-                    s.setInteractive({
-                        pixelPerfect: true,
-                        alphaTolerance: 1,
-                        useHandCursor: true,
-                    });
-                }
-            });
-
-            this.scene.gameVariables.planting = false;
-
+            this.uiEvents.emit("action:StopSeeding");
         } else if (this.controllers.shopMenu.isOpen() && this.scene.gameVariables.selling) {
-            this.scene.acoesUtils.stopSell();
+            this.uiEvents.emit("action:StopSelling");
         } else if (this.controllers.shopMenu.isOpen() && this.scene.gameVariables.plowing) {
             this.uiEvents.emit("action:StopPlowing")
         }
@@ -138,15 +116,15 @@ export default class GameEventsController {
 
     checkMonetaryItem(sprite) {
 
-        
+
         if (sprite.xp && !sprite.xpYeld && !sprite.gift) {
-            
+
             let res = false;
-            
+
             const tipo_compra = sprite.preco_compra > sprite.preco_compra_grana || !sprite.preco_compra_grana ? "gold" : "money"
-            
+
             const isExpansion = sprite.tipo == "expansão" ? true : false
-            
+
             //console.log(sprite)
 
             this.uiEvents.emit("action:buyItem", {
@@ -298,57 +276,129 @@ export default class GameEventsController {
         }
     }
 
-    plantarSementeCheck(solo, done) {
+    plantarSementes(solos, done) {
 
-        const token = this.controllers.queue.cancelToken;
+        const token =
+            this.controllers.queue.cancelToken;
 
-        if (solo.cancelled) return done();
-        if (token !== this.controllers.queue.cancelToken) return done();
+        let index = 0;
+        let progressBar = null;
 
-        if (!this.scene.gameVariables.planting) return done();
-        if (!this.scene.gameVariables.selectedSeed) return done();
+        const next = () => {
 
-        const price = this.scene.gameVariables.selectedSeed.preco_compra;
-        let HaveMoney = false;
+            if (token !== this.controllers.queue.cancelToken) {
+                done();
+                return;
+            }
 
-        this.uiEvents.emit("action:buyItem", {
-            type: "gold",
-            price: price,
-            level: 1
-        }, (result) => {
-            HaveMoney = result;
-        })
+            if (!this.scene.gameVariables.planting) {
+                done();
+                return;
+            }
 
-        if (!HaveMoney) {
-            this.uiEvents.emit("action:StopSeeding")
-            this.uiEvents.emit("queue:cancelAll");
-            this.uiEvents.emit("ui:notify", { type: "" });
-            return done();
-        }
+            if (index >= solos.length) {
+                done();
+                return;
+            }
 
+            const solo = solos[index];
 
-        const startX = solo.x - 100 / 2;
-        const startY = solo.y - solo.displayHeight / 2;
+            if (!solo || solo.cancelled) {
 
-        if (solo.progressBar) return;
-        solo.progressBar = this.controllers.bar.criarBarraProgresso(
-            startX,
-            startY,
-            50,
-            10,
-            0.5,
-            () => {
+                index++;
+                next();
 
-                if (solo.cancelled) return;
-                if (token !== this.controllers.queue.cancelToken) return;
+                return;
+            }
 
-                this.uiEvents.emit("action:Seed", solo);
+            const seed =
+                this.scene.gameVariables.selectedSeed;
 
-                solo.progressBar = null;
+            if (!seed) {
 
                 done();
+                return;
             }
-        );
+
+            const price =
+                seed.preco_compra;
+
+            let haveMoney = false;
+
+            this.uiEvents.emit("action:buyItem", {
+
+                type: "gold",
+                price: price,
+                level: 1
+
+            }, (result) => {
+
+                haveMoney = result;
+            });
+
+            if (!haveMoney) {
+
+                this.uiEvents.emit(
+                    "action:StopSeeding"
+                );
+
+                done();
+
+                return;
+            }
+
+            const startX =
+                solo.x - 50 / 2;
+
+            const startY =
+                solo.y - solo.displayHeight / 2;
+
+            progressBar =
+                this.controllers.bar.criarBarraProgresso(
+
+                    startX,
+                    startY,
+                    50,
+                    10,
+                    0.5,
+
+                    () => {
+
+                        if (
+                            solo.cancelled ||
+                            token !==
+                            this.controllers.queue.cancelToken
+                        ) {
+
+                            done();
+                            return;
+                        }
+
+                        this.uiEvents.emit(
+                            "action:Seed", solo
+                        );
+
+                        progressBar = null;
+
+                        index++;
+
+                        next();
+                    }
+                );
+        };
+
+        next();
+
+        return {
+            cancel: () => {
+
+                if (progressBar) {
+
+                    progressBar.cancel();
+                    progressBar = null;
+                }
+            }
+        };
     }
 
     ararSoloCheck(pointer, done) {
@@ -454,54 +504,122 @@ export default class GameEventsController {
         return true;
     }
 
+    getAffordablePlantTiles(amount, price) {
+
+        if (!price || price <= 0)
+            return amount;
+
+        const gold =
+            this.controllers.profile.getGold();
+
+        return Math.min(
+            amount,
+            Math.floor(gold / price)
+        );
+    }
+
     controlePlantar() {
 
-        const solo = this.scene.gameVariables.selectedSprite;
+        if (!this.scene.gameVariables.planting)
+            return;
 
-        if (this.controllers.queue.isFull()) return;
+        if (!this.scene.gameVariables.selectedSeed)
+            return;
 
-        if (!solo) return;
+        if (this.scene.gameVariables.selling)
+            return;
 
-        if (solo.nome !== "solo_preparado") return;
+        if (this.controllers.queue.isFull())
+            return;
 
-        if (solo.isQueued) return;
-        if (solo.isReserved) return;
-        if (this.scene.gameVariables.selling) return;
+        const reserva =
+            this.controllers.plant.createReservePlantSoil();
 
-        solo.isQueued = true;
+        if (!reserva.length)
+            return;
 
-        solo.setAlpha(0.7);
-        solo.clearTint();
-        solo.disableInteractive();
-        solo.cancelled = false;
-        solo.hoverEnabled = false;
+        this.scene.gameVariables.plantingReservedSoils = reserva;
+
+        const seed =
+            this.scene.gameVariables.selectedSeed;
+
+        const price = seed.preco_compra;
+
+        const maxTiles =
+            this.getAffordablePlantTiles(
+                reserva.length,
+                price
+            );
+
+        if (maxTiles <= 0) {
+
+            this.controllers.plant.cancelReserve(reserva);
+
+            this.uiEvents.emit("ui:notify", {
+                type: ""
+            });
+
+            return;
+        }
+
+        const validReserva =
+            reserva.slice(0, maxTiles);
+
+        const restReserva =
+            reserva.slice(maxTiles);
+
+        this.controllers.plant.cancelReserve(restReserva);
+
+        validReserva.forEach(solo => {
+
+            solo.isQueued = true;
+            solo.cancelled = false;
+            solo.hoverEnabled = false;
+
+            solo.setAlpha(0.4);
+            solo.clearTint();
+            solo.disableInteractive();
+        });
+
+        let progressBar = null;
 
         this.controllers.queue.add({
 
             action: (done) => {
-                this.plantarSementeCheck(solo, done);
+
+                progressBar =
+                    this.plantarSementes(
+                        validReserva,
+                        done
+                    );
             },
 
             onCancel: () => {
 
-                solo.cancelled = true;
+                if (progressBar) {
 
-                if (solo.progressBar) {
-                    solo.progressBar.cancel();
-                    solo.progressBar = null;
-                    this.scene.gameVariables.selectedSprite = null;
+                    progressBar.cancel();
+                    progressBar = null;
                 }
 
-                solo.clearTint();
-                solo.setAlpha(1);
-                solo.isQueued = false;
-                solo.setInteractive({ useHandCursor: true });
+                validReserva.forEach(solo => {
 
+                    solo.isReserved = false;
+                    solo.isQueued = false;
+                    solo.cancelled = true;
+
+                    solo.clearTint();
+                    solo.setAlpha(1);
+
+                    solo.setInteractive({
+                        useHandCursor: true
+                    });
+                });
+
+                this.controllers.plant.cancelReserve(validReserva);
             }
 
         });
-
-
     }
 
     receberItem(data) {

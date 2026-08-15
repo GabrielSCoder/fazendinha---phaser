@@ -31,7 +31,8 @@ export default class ShopMenu {
             'Árvores': data.tree,
             'Animais': data.animal,
             'Decorações': data.decoration,
-            'Expansões' : data.expansion
+            'Expansões' : data.expansion,
+            'Veículos' : data.vehicle
         };
 
     }
@@ -109,12 +110,12 @@ export default class ShopMenu {
 
         this.container.add([bg, bgTexture, title, closeBtn]);
 
-        const categories = ['Sementes', 'Árvores', 'Animais', 'Decorações', 'Expansões'];
+        const categories = ['Sementes', 'Árvores', 'Animais', 'Decorações', 'Veículos', 'Expansões'];
         this.categoryButtons = [];
 
         const startX = 40;
         const startY = 60;
-        const btnWidth = 140;
+        const btnWidth = 110;
         const btnHeight = 70;
         const spacing = 12;
 

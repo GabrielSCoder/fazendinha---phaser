@@ -25,6 +25,7 @@ export default class GameVariablesController {
         this.changeCameraZoom = false;
         this.previewTiles = [];
         this.previewOccupiedtiles = [];
+        this.plantingReservedSoils = [];
         this.growingSprites = [];
         this.fenceSnapTarget = null;
         this.tileSize = this.gridSize;
@@ -33,7 +34,7 @@ export default class GameVariablesController {
         this.activeBar = false;
         this.creativeMode = false;
         this.staticMode = false;
-        this.noExperienceMode = false;
+        this.noExperienceMode = true;
         this.allUnlockedMode = true;
         this.noFootprints = false;
         this.actionTileX = 1;
@@ -47,7 +48,8 @@ export default class GameVariablesController {
         this.debugBarVisible = true;
         this.fastHarvestMode = true;
         this.debugHaverstTime = 0.2;
-        this.debugShowFps = true;
+        this.debugShowFps = false;
+        this.noEnergyConsumption = true;
 
         this.selectedSprite = null;
         this.selectedSpriteDelete = null;
@@ -66,12 +68,19 @@ export default class GameVariablesController {
         this.eventsCenter = new Phaser.Events.EventEmitter();
     }
 
+    changeActionSize(valueX, valueY) {
+        this.actionTileX = valueX;
+        this.actionTileY = valueY;
+    }
+
     reorganizeGrid(valueX, valueY) {
 
         this.gridHeight = valueX;
         this.gridWidth = valueY;
 
         this.offsetY = -this.gridHeight * (this.gridSize / 4);
+
+        console.log(this.offsetY, this.gridHeight, this.gridWidth, this.gridSize )
 
         this.gridMap = Array.from({ length: this.gridWidth * this.logicFactor },
             () => Array(this.gridHeight * this.logicFactor).fill(null));

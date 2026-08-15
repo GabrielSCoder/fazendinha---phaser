@@ -33,6 +33,7 @@ import WorldController from '../controllers/WorldController.js';
 import MissionController from "../controllers/MissionController.js"
 import AchivMenuUI from '../ui/AchivMenuUI.js';
 import AchivController from '../controllers/AchivController.js';
+import BonecoController from '../controllers/BonecoController.js';
 
 export class Start extends Phaser.Scene {
     constructor() {
@@ -42,12 +43,12 @@ export class Start extends Phaser.Scene {
     preload() {
 
         this.gameVariables = new GameVariablesController(this);
-        // this.load.json('saveData', 'src/static/player_save.json');
+        this.load.json('saveData', 'src/static/player_save.json');
     }
 
     create() {
 
-        // const saveData = this.cache.json.get('saveData');
+        const saveData = this.cache.json.get('saveData');
 
         let sizeX = this.gameVariables.gridWidth, sizeY = this.gameVariables.gridHeight
 
@@ -56,17 +57,19 @@ export class Start extends Phaser.Scene {
         this.offsetY = this.gameVariables.offsetY;
         this.logicFactor = this.gameVariables.logicFactor;
         this.gridMap = this.gameVariables.gridMap;
+        this.gridHeight = this.gameVariables.gridHeight;
+        this.gridWidth = this.gameVariables.gridWidth;
 
 
         this.controllers = {}
 
-        const saveData = SaveLoadController.loadFromStorage();
+        // const saveData = SaveLoadController.loadFromStorage();
 
-        if (!saveData) {
-            console.error("Nenhum save encontrado!");
-            this.scene.start("Menu");
-            return;
-        }
+        // if (!saveData) {
+        //     console.error("Nenhum save encontrado!");
+        //     this.scene.start("Menu");
+        //     return;
+        // }
 
         saveData.world.sizeX > 0 ? (sizeX = saveData.world.sizeX, sizeY = saveData.world.sizeY) : null;
 
@@ -79,6 +82,7 @@ export class Start extends Phaser.Scene {
         this.decoracoes = this.cache.json.get('decoracoes_data');
         this.solos = this.cache.json.get('solos_data');
         this.expansoes = this.cache.json.get('expansoes_data');
+        this.veiculos = this.cache.json.get('veiculos_data');
 
         this.createControllers(saveData)
         this.initControllers()
@@ -88,8 +92,6 @@ export class Start extends Phaser.Scene {
         this.controllers.gridUtils.drawGridBorder();
 
         this.controllers.world.mountMap()
-
-        //this.bonecoController = new BonecoController(this);
 
         this.time.addEvent({
             delay: 200,
@@ -170,12 +172,12 @@ export class Start extends Phaser.Scene {
 
         this.controllers.soil.updatePlowing(this.gameVariables.actionTileX, this.gameVariables.actionTileY);
 
-        //this.bonecoController.update();
-        //this.getSpriteByPointerPosition();
+        // this.controllers.boneco.update();
+        // this.controllers.acoesUtils.getSpriteByPointerPosition();
 
         this.controllers.sprite.updateSprite();
 
-        this.controllers.plant.updateSeeding();
+        this.controllers.plant.updateSeeding(this.gameVariables.actionTileX, this.gameVariables.actionTileY);
 
     }
 
@@ -206,6 +208,8 @@ export class Start extends Phaser.Scene {
 
         this.controllers.sideUi = new SidesUi(this, { uiEvents: events });
         this.controllers.acoesUtils = new AcoesUtils(this, { uiEvents: events })
+
+        // this.controllers.boneco = new BonecoController(this, {gridUtils : this.controllers.gridUtils});
 
         this.controllers.xp = new XPController(this, xpTable, events, this.controllers.save)
 

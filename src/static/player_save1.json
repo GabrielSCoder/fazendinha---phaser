@@ -3,10 +3,10 @@
     "id": 90,
     "uuid": "1786390687120273945125666",
     "name": "Melksedek",
-    "gold": 9999999,
-    "money": 9999979,
-    "level": 1,
-    "xp": 1,
+    "gold": 9836029,
+    "money": 9999866,
+    "level": 8,
+    "xp": 3376,
     "energy": 0,
     "energyMax": 50,
     "createdAt": 1786390687120,
@@ -35,19 +35,38 @@
         ],
         "completed": false,
         "startedAt": 1786390689278
+      },
+      "3": {
+        "state": 0,
+        "objectives": [
+          {
+            "progress": 0,
+            "amount": 5,
+            "done": false
+          },
+          {
+            "progress": 0,
+            "amount": 5,
+            "done": false
+          }
+        ],
+        "completed": false,
+        "startedAt": 1786391355656
       }
     },
     "completedMissions": []
   },
   "messages": [
-    1,2,3,4,5,6
+    1,
+    4,
+    5
   ],
   "world": {
     "id": 1,
-    "sizeX": 12,
-    "sizeY": 12,
-    "expansion_step": 0,
-    "lastUpdate": 1786390862379,
+    "sizeX": 32,
+    "sizeY": 32,
+    "expansion_step": 9,
+    "lastUpdate": 1786391416132,
     "objects": [
       {
         "uuid": "1",
@@ -145,17 +164,95 @@
         "x": -78.88000000000002,
         "y": 129.36,
         "harvestTimes": 0
+      },
+      {
+        "uuid": "e685477d-59fa-4375-a254-94c8ee25615d",
+        "id": "celeiro_vermelho",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 1,
+          "y": 11
+        },
+        "x": -152,
+        "y": 28
+      },
+      {
+        "uuid": "1f398f4d-551d-479c-89bc-bfea829e86f0",
+        "id": "celeiro_vermelho",
+        "type": "decoracao",
+        "state": "placed",
+        "isRotated": false,
+        "position": {
+          "x": 1,
+          "y": 15
+        },
+        "x": -216,
+        "y": 60
+      },
+      {
+        "uuid": "7885db9f-00af-4481-b0dd-4101b18d5d12",
+        "id": "solo_preparado",
+        "type": "soil",
+        "state": "plowed",
+        "position": {
+          "x": 14,
+          "y": 11
+        },
+        "x": 49.119999999999976,
+        "y": 129.36,
+        "harvestTimes": 0
+      },
+      {
+        "uuid": "33854904-6bf3-4e8d-9e5c-6722362f88ff",
+        "id": "solo_preparado",
+        "type": "soil",
+        "state": "plowed",
+        "position": {
+          "x": 14,
+          "y": 15
+        },
+        "x": -14.880000000000024,
+        "y": 161.36,
+        "harvestTimes": 0
+      },
+      {
+        "uuid": "afa662e3-ec91-4504-9879-50f2d6d0a780",
+        "id": "solo_preparado",
+        "type": "soil",
+        "state": "plowed",
+        "position": {
+          "x": 18,
+          "y": 11
+        },
+        "x": 113.12,
+        "y": 161.36,
+        "harvestTimes": 0
+      },
+      {
+        "uuid": "74ca5dd2-42cf-4e2f-bef7-e753b8a1dae3",
+        "id": "solo_preparado",
+        "type": "soil",
+        "state": "plowed",
+        "position": {
+          "x": 18,
+          "y": 15
+        },
+        "x": 49.120000000000005,
+        "y": 193.36,
+        "harvestTimes": 0
       }
     ]
   },
   "records": {
-    "gold_spent": 0,
-    "money_spent": -20,
-    "gold_gained": 0,
-    "money_gained": 0,
+    "gold_spent": -164120,
+    "money_spent": -140,
+    "gold_gained": 150,
+    "money_gained": 7,
     "trees_bought": 0,
     "trees_harvested": 0,
-    "soil_plowded": 0,
+    "soil_plowded": 4,
     "soil_renewed": 0,
     "seeds_planted": 0,
     "seeds_harvested": 0,
@@ -164,15 +261,15 @@
     "expansions_bought": 0
   },
   "expansions": {
-    "bought_16x16": false,
-    "bought_18x18": false,
-    "bought_20x20": false,
-    "bought_22x22": false,
-    "bought_24x24": false,
-    "bought_26x26": false,
-    "bought_28x28": false,
-    "bought_30x30": false,
-    "bought_32x12": false
+    "bought_16x16": true,
+    "bought_18x18": true,
+    "bought_20x20": true,
+    "bought_22x22": true,
+    "bought_24x24": true,
+    "bought_26x26": true,
+    "bought_28x28": true,
+    "bought_30x30": true,
+    "bought_32x12": true
   },
   "achievements": {
     "1": {
@@ -184,8 +281,8 @@
       "amount": 0
     },
     "3": {
-      "steps_done": 0,
-      "amount": -20
+      "steps_done": 3,
+      "amount": 81986
     },
     "4": {
       "steps_done": 0,

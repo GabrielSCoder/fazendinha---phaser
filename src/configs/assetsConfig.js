@@ -172,8 +172,10 @@ export const assetsConfig = {
             "trator_amarelo256",
             "trator_amarelo400",
             "trator_verde400",
-            "trator_vermelho"
-
+            "trator_vermelho",
+            "trator_amarelo_ol",
+            "trator_azul_ol",
+            "trator_laranja_ol"
         ]
     }
 }

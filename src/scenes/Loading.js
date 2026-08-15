@@ -48,6 +48,7 @@ export class Loading extends Phaser.Scene {
         this.load.json('animais_data', 'src/static/animais.json');
         this.load.json('decoracoes_data', 'src/static/decoracoes.json');
         this.load.json('solos_data', 'src/static/solos.json');
+        this.load.json('veiculos_data', 'src/static/veiculos.json');
 
         this.load.text('xpTable', 'assets/data/xp_levels.csv');
         this.load.image('menu_bg', 'assets/ui/fundo_madeira.jpg');

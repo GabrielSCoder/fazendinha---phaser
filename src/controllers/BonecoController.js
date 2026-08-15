@@ -1,19 +1,22 @@
 export default class BonecoController {
     constructor(scene, config) {
         this.scene = scene;
-        this.gridUtils = this.scene.gridUtils;
-        this.shopMenu = this.scene.shopMenu;
-        this.gridSize = this.scene.gridSize;
-        this.offsetX = this.scene.offsetX;
-        this.offsetY = this.scene.offsetY;
-        this.gridWidth = this.scene.gridWidth;
-        this.gridHeight = this.scene.gridHeight;
+        this.gridUtils = config.gridUtils;
+        this.shopMenu = scene.shopMenu;
+        this.gridSize = scene.gridSize;
+        this.offsetX = scene.offsetX;
+        this.offsetY = scene.offsetY;
+        this.gridWidth = scene.gridWidth;
+        this.gridHeight = scene.gridHeight;
 
         this.spritesFaceLeft = true;
 
-        this.createBoneco();
         this.scene.input.on('pointerup', (pointer) => this.handlePointer(pointer));
         this.isStoped = true;
+    }
+
+    init() {
+        this.createBoneco();
     }
 
     createBoneco() {
@@ -22,17 +25,21 @@ export default class BonecoController {
             escala: 0.5,
             area: [1, 1],
             origem: [0.5, 0.8],
-            tipo : "boneco"
+            tipo: "boneco"
         };
 
+        console.log(this.gridHeight, this.gridWidth)
+
         const centerX = Math.floor(this.gridWidth);
-        const centerY = Math.floor(this.gridHeight );
+        const centerY = Math.floor(this.gridHeight);
         const screenPos = this.gridUtils.isoToScreen(centerX, centerY);
 
         const sprite = this.scene.add.sprite(screenPos.x, screenPos.y, bonecoData.img)
             .setScale(bonecoData.escala)
             .setOrigin(...bonecoData.origem)
             .setInteractive({ pixelPerfect: true, alphaTolerance: 1 });
+
+        console.log(sprite)
 
         sprite.isMoving = false;
         sprite.path = [];
@@ -41,7 +48,7 @@ export default class BonecoController {
         sprite._shouldFlipX = false;
         sprite.tipo = bonecoData.tipo
 
-        this.scene.gridUtils.markOccupied(sprite, centerX, centerY, 1, 1);
+        this.gridUtils.markOccupied(sprite, centerX, centerY, 1, 1);
         this.boneco = sprite;
 
         // --- Animação de frente ---
@@ -71,12 +78,13 @@ export default class BonecoController {
         });
     }
 
-    // === Clique do mouse ===
     setupPointerHandler() {
         this.scene.input.on('pointerup', (pointer) => this.handlePointer(pointer));
     }
 
     handlePointer(pointer) {
+        console.log("clicando.......")
+
         const scene = this.scene;
         const boneco = this.boneco;
         if (!boneco || scene.gameVariables.middleButtonDown || this.isStoped) return;

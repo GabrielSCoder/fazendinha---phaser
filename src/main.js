@@ -12,9 +12,9 @@ const config = {
     backgroundColor: '#000000',
     pixelArt: false,
     scene: [
-        Menu,
         Loading,
         Start,
+        Menu,
     ],
     physics: {
         default: 'arcade',

@@ -18,7 +18,7 @@ export default class SpriteUtils {
             useHandCursor: true
         }).setOrigin(originX, originY);
 
-        
+
         sprite.id = data.id;
         sprite.originalScale = sprite.scaleX;
         sprite.isMoving = false;
@@ -46,7 +46,11 @@ export default class SpriteUtils {
 
         if (is_semente) {
             this.scene.gameVariables.planting = true;
-            sprite.regrow = false;
+        }
+
+        if (data.tipo == "veiculo") {
+            sprite.base_action = data.base_action;
+            sprite.vehicle_action = data.action;
         }
 
         if (data.tipo == "solo_seco") {
@@ -139,7 +143,6 @@ export default class SpriteUtils {
 
         sprite.on("pointerover", () => {
 
-
             if (sprite.isReserved) return;
             if (sprite.isQueued) return;
             if (sprite.isMoving) return;
@@ -223,6 +226,41 @@ export default class SpriteUtils {
         this.gridUtils.drawFootprints();
 
 
+    }
+
+    findPreparedSoil(x, y, size = 4) {
+
+        const sprites =
+            this.scene.gameVariables.sprites || [];
+
+        return sprites.find(sprite => {
+
+            if (!sprite) return false;
+
+            if (sprite.nome !== "solo_preparado")
+                return false;
+
+            if (sprite.isQueued)
+                return false;
+
+            if (sprite.isReserved)
+                return false;
+
+            const iso =  this.controllers.gridUtils.screenToIso(
+                sprite.x,
+                sprite.y
+            );
+
+            const spriteX = Math.floor(iso.x);
+            const spriteY = Math.floor(iso.y);
+
+            return (
+                spriteX >= x &&
+                spriteX < x + size &&
+                spriteY >= y &&
+                spriteY < y + size
+            );
+        });
     }
 
     destroySprite(sprite) {

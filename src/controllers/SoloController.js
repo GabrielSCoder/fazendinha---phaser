@@ -33,9 +33,9 @@ export default class SoloController {
             this.stopPlowing();
         })
 
-        this.uiEvents.on("action:FreeSoil", () => {
-            this.freeSoil();
-        })
+        this.uiEvents.on("action:FreeSoil", (solo) => {
+            this.freeSoil(solo);
+        });
     }
 
     updatePlowing(blocksWide = 1, blocksHigh = 1) {
@@ -57,7 +57,7 @@ export default class SoloController {
 
         this.controllers.acoesUtils.clearPreviewTiles();
 
-        const blockSize = 4; 
+        const blockSize = 4;
         const totalWidth = blockSize * blocksWide;
         const totalHeight = blockSize * blocksHigh;
 
@@ -138,19 +138,30 @@ export default class SoloController {
         this.controllers.acoesUtils.clearPreviewTiles();
         this.controllers.acoesUtils.clearPreviewOccupiedTiles();
         this.scene.gameVariables.plowing = false;
+        this.scene.gameVariables.changeActionSize(1, 1);
         this.uiEvents.emit("interact:ActivateAll");
     }
 
-    freeSoil() {
-        if (!this.scene.gameVariables.planting) return;
-        if (!this.scene.gameVariables.selectedSeed) return;
+    freeSoil(solo) {
+
+        if (!this.scene.gameVariables.planting)
+            return;
+
+        if (!solo || solo.destroyed)
+            return;
+
+        solo.isReserved = false;
+        solo.isQueued = false;
+
+        const reserved =
+            this.scene.gameVariables.plantingReservedSoils || [];
+
+        this.scene.gameVariables.plantingReservedSoils =
+            reserved.filter(s => s !== solo);
 
         this.scene.gameVariables.selectedSeed.setDepth(2000);
-        this.scene.gameVariables.selectedSprite = null;
 
-        this.uiEvents.emit("interact:ActivateByName", "solo_preparado");
-
-        // this.scene.gameVariables.planting = false;
+        this.controllers.interact.ativarInteratividadeItensPorNome(solo.nome);
     }
 
 
