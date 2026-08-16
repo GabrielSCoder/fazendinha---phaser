@@ -34,6 +34,7 @@ import MissionController from "../controllers/MissionController.js"
 import AchivMenuUI from '../ui/AchivMenuUI.js';
 import AchivController from '../controllers/AchivController.js';
 import BonecoController from '../controllers/BonecoController.js';
+import EnergyManagementController from '../controllers/EnergyManagementController.js';
 
 export class Start extends Phaser.Scene {
     constructor() {
@@ -83,6 +84,7 @@ export class Start extends Phaser.Scene {
         this.solos = this.cache.json.get('solos_data');
         this.expansoes = this.cache.json.get('expansoes_data');
         this.veiculos = this.cache.json.get('veiculos_data');
+        this.consumibles = this.cache.json.get('consumibles_data');
 
         this.createControllers(saveData)
         this.initControllers()
@@ -202,7 +204,7 @@ export class Start extends Phaser.Scene {
         this.controllers.catalog = new CatalogUtils(this, { uiEvents: events, save: this.controllers.save });
         this.controllers.spriteUtils = new SpriteUtils(this, { uiEvents: events })
         this.controllers.banner = new UINotificationController(this, { uiEvents: events });
-
+        this.controllers.energy = new EnergyManagementController(this, {uiEvents : events, saveController : this.controllers.save, controllers : this.controllers })
         this.controllers.missions = new MissionController(this, intro_missions, this.controllers.save, events);
         this.controllers.achivs = new AchivController(this, achievements, this.controllers.save, { uiEvents: events });
 

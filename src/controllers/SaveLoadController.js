@@ -165,6 +165,8 @@ export default class SaveLoadController {
             this.user[type] = amount;
         }
 
+        if (type == "energy" && amount < 0) this.changeRecords({type : type})
+
         this.uiEvents.emit(`save:user:${type}`, this.user[type]);
 
         this.saveDebounced();
@@ -227,6 +229,9 @@ export default class SaveLoadController {
                 break;
             case "plant":
                 this.records["seeds_planted"] += 1
+                break;
+            case "energy":
+                this.records['vehicles_used'] += 1
                 break;
             default:
                 break;

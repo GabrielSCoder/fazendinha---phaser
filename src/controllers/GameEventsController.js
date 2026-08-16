@@ -7,6 +7,7 @@ export default class GameEventsController {
         this.creativeMode = scene.gameVariables.creativeMode;
         this.noExperienceMode = scene.gameVariables.noExperienceMode;
         this.staticMode = scene.gameVariables.staticMode;
+        this.noEnergyNeed = scene.gameVariables.noEnergyConsumption;
     }
 
     init() {
@@ -27,6 +28,18 @@ export default class GameEventsController {
                 this.uiEvents.emit("action:setMoney", data.money);
             }
 
+            if (data.energy) {
+                if (this.noEnergyNeed) {
+                    if (data.energy.amount > 0) {
+                        this.uiEvents.emit("energy:changeEnergy", data.energy)
+                    } else {
+                        data.energy = null;
+                    }
+                } else {
+                    this.uiEvents.emit("energy:changeEnergy", data.energy)
+                }
+            }
+
             if (data.id) {
                 this.receberItem(data);
             }
@@ -38,6 +51,10 @@ export default class GameEventsController {
         this.uiEvents.on("action:expand", (data) => {
             //console.log("-----")
             this.checkMonetaryItem(data);
+        })
+
+        this.uiEvents.on("action:buyConsumible", (data) => {
+            this.checkMonetaryItem(data)
         })
     }
 
@@ -124,8 +141,9 @@ export default class GameEventsController {
             const tipo_compra = sprite.preco_compra > sprite.preco_compra_grana || !sprite.preco_compra_grana ? "gold" : "money"
 
             const isExpansion = sprite.tipo == "expansão" ? true : false
+            const isConsumible = sprite.tipo == "consumivel" ? true : false;
 
-            //console.log(sprite)
+            if (isConsumible) { sprite.x = 0; sprite.y = 0; }
 
             this.uiEvents.emit("action:buyItem", {
                 type: tipo_compra,
@@ -157,17 +175,19 @@ export default class GameEventsController {
                     }
                 }
 
-                //console.log(dados)
-
                 this.uiEvents.emit("action:reward", dados);
 
-                if (!isExpansion) {
+                if (!isExpansion && !isConsumible) {
                     this.uiEvents.emit("place", { target: sprite.tipo, nome: sprite.nome.toLowerCase() });
                     sprite.xpYeld = true;
+                } else if (isConsumible) {
+                    console.log("chegando aqui")
+                    if (sprite.subtipo && sprite.subtipo == "energia") {
+                        this.uiEvents.emit("energy:changeEnergy", { amount: sprite.energy_yeld })
+                    }
                 } else {
                     this.uiEvents.emit("expand", sprite);
                 }
-
                 res = true
             });
 
@@ -276,131 +296,6 @@ export default class GameEventsController {
         }
     }
 
-    plantarSementes(solos, done) {
-
-        const token =
-            this.controllers.queue.cancelToken;
-
-        let index = 0;
-        let progressBar = null;
-
-        const next = () => {
-
-            if (token !== this.controllers.queue.cancelToken) {
-                done();
-                return;
-            }
-
-            if (!this.scene.gameVariables.planting) {
-                done();
-                return;
-            }
-
-            if (index >= solos.length) {
-                done();
-                return;
-            }
-
-            const solo = solos[index];
-
-            if (!solo || solo.cancelled) {
-
-                index++;
-                next();
-
-                return;
-            }
-
-            const seed =
-                this.scene.gameVariables.selectedSeed;
-
-            if (!seed) {
-
-                done();
-                return;
-            }
-
-            const price =
-                seed.preco_compra;
-
-            let haveMoney = false;
-
-            this.uiEvents.emit("action:buyItem", {
-
-                type: "gold",
-                price: price,
-                level: 1
-
-            }, (result) => {
-
-                haveMoney = result;
-            });
-
-            if (!haveMoney) {
-
-                this.uiEvents.emit(
-                    "action:StopSeeding"
-                );
-
-                done();
-
-                return;
-            }
-
-            const startX =
-                solo.x - 50 / 2;
-
-            const startY =
-                solo.y - solo.displayHeight / 2;
-
-            progressBar =
-                this.controllers.bar.criarBarraProgresso(
-
-                    startX,
-                    startY,
-                    50,
-                    10,
-                    0.5,
-
-                    () => {
-
-                        if (
-                            solo.cancelled ||
-                            token !==
-                            this.controllers.queue.cancelToken
-                        ) {
-
-                            done();
-                            return;
-                        }
-
-                        this.uiEvents.emit(
-                            "action:Seed", solo
-                        );
-
-                        progressBar = null;
-
-                        index++;
-
-                        next();
-                    }
-                );
-        };
-
-        next();
-
-        return {
-            cancel: () => {
-
-                if (progressBar) {
-
-                    progressBar.cancel();
-                    progressBar = null;
-                }
-            }
-        };
-    }
-
     ararSoloCheck(pointer, done) {
         if (!this.scene.gameVariables.plowing) return;
 
@@ -422,39 +317,95 @@ export default class GameEventsController {
         if (this.scene.gameVariables.freeClick) {
             this.scene.gameVariables.freeClick = false;
             return;
-        };
+        }
 
         if (!this.scene.gameVariables.previewOccupiedtiles?.length) return;
         if (this.controllers.queue.isFull()) return;
 
+        const hasVehicle =
+            !!this.scene.gameVariables.vehicleSelected;
+
+        let haveEnergy = true
+
+        if (hasVehicle && this.controllers.energy.getEnergy() < 1) haveEnergy = false;
+
         const resp = this.canPlow();
 
-        const reserva = this.controllers.soil.createReserveSoil();
+        const reserva =
+            this.controllers.soil.createReserveSoil();
+
         if (!reserva?.length) return;
 
-        if (!resp) {
+        if (!resp || !haveEnergy) {
+
             this.uiEvents.emit("queue:cancelAll");
             this.uiEvents.emit("action:StopPlowing");
+
             this.controllers.soil.cancelReserve(reserva);
-            this.uiEvents.emit("ui:notify", { type: "" });
+
+            this.uiEvents.emit("ui:notify", {
+                type: "",
+                text: !haveEnergy ? "Sem energia suficiente" : null
+            });
+
             return;
         }
 
         let validReserva = reserva;
 
-        if (this.scene.gameVariables.actionTileX != 1 || this.scene.gameVariables.actionTileY != 1) {
-            const maxTiles = this.controllers.soil.getAffordableTiles();
+        if (
+            this.scene.gameVariables.actionTileX != 1 ||
+            this.scene.gameVariables.actionTileY != 1
+        ) {
+
+            const maxTiles =
+                this.controllers.soil.getAffordableTiles();
 
             if (!maxTiles) {
+
                 this.controllers.soil.cancelReserve(reserva);
                 return;
             }
 
-            validReserva = reserva.slice(0, maxTiles);
-            const restReserva = reserva.slice(maxTiles);
+            validReserva =
+                reserva.slice(0, maxTiles);
+
+            const restReserva =
+                reserva.slice(maxTiles);
 
             this.controllers.soil.cancelReserve(restReserva);
         }
+
+        if (hasVehicle) {
+
+            const maxEnergyTiles =
+                this.getAffordableEnergyTiles(
+                    validReserva
+                );
+
+            if (!maxEnergyTiles) {
+
+                this.controllers.soil.cancelReserve(
+                    validReserva
+                );
+
+                return;
+            }
+
+            if (maxEnergyTiles < validReserva.length) {
+
+                const energyRest =
+                    validReserva.slice(maxEnergyTiles);
+
+                validReserva =
+                    validReserva.slice(0, maxEnergyTiles);
+
+                this.controllers.soil.cancelReserve(
+                    energyRest
+                );
+            }
+        }
+
 
         validReserva.forEach(tile => {
             tile.sprite.setAlpha(0.4);
@@ -466,12 +417,13 @@ export default class GameEventsController {
 
             action: (done) => {
 
-                progressBar = this.controllers.soil.executePlowingSoil(validReserva, () => {
-
-                    done();
-
-                });
-
+                progressBar =
+                    this.controllers.soil.executePlowingSoil(
+                        validReserva,
+                        () => {
+                            done();
+                        }
+                    );
             },
 
             onCancel: () => {
@@ -482,13 +434,10 @@ export default class GameEventsController {
                 }
 
                 this.controllers.soil.cancelReserve(reserva);
-
             }
 
         });
-
     }
-
     canPlow() {
 
         const price = this.scene.gameVariables.plowingCost;
@@ -551,6 +500,19 @@ export default class GameEventsController {
 
         const price = seed.preco_compra;
 
+        const canPlant = this.controllers.plant.canAffordOneSeed(price);
+
+        if (!canPlant) {
+            this.uiEvents.emit("action:StopSeeding")
+            this.uiEvents.emit("queue:cancelAll");
+            this.controllers.plant.cancelReserve(reserva);
+            this.uiEvents.emit("ui:notify", {
+                type: ""
+            });
+
+            return;
+        }
+
         const maxTiles =
             this.getAffordablePlantTiles(
                 reserva.length,
@@ -560,10 +522,13 @@ export default class GameEventsController {
         if (maxTiles <= 0) {
 
             this.controllers.plant.cancelReserve(reserva);
+            this.uiEvents.emit("action:StopSeeding")
 
+            this.uiEvents.emit("queue:cancelAll");
             this.uiEvents.emit("ui:notify", {
                 type: ""
             });
+
 
             return;
         }
@@ -675,6 +640,43 @@ export default class GameEventsController {
         this.uiEvents.emit("data:addItemStorage", itemData);
 
         this.uiEvents.emit("ui:notify", { type: "item", data: itemData, amount: 1 });
+    }
+
+    getAffordableEnergyTiles(reserva) {
+
+        if (!reserva?.length)
+            return 0;
+
+        let energy = this.controllers.energy.getEnergy();
+
+        let count = 0;
+
+        for (const tile of reserva) {
+
+            let cost = 0;
+
+            if (tile.action === "plow") {
+
+                cost =
+                    this.scene.gameVariables.energyPlowCost;
+
+            } else if (tile.action === "renew") {
+
+                cost =
+                    this.scene.gameVariables.energyRenewSoilCost;
+            }
+
+            if (cost <= 0)
+                continue;
+
+            if (energy < cost)
+                break;
+
+            energy -= cost;
+            count++;
+        }
+
+        return count;
     }
 
 }

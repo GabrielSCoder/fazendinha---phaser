@@ -70,6 +70,7 @@ export default class UINotificationController {
     notify(data) {
 
         if (this.scene.gameVariables.creativeMode) return;
+        if (this.scene.gameVariables.noPopUps) return;
         this.uiEvents.emit("ui:closeMenuSprite")
         this.uiEvents.emit("action:StopPlowing")
         this.addQueue(data)
@@ -601,7 +602,7 @@ export default class UINotificationController {
         const body = this.scene.add.text(
             0,
             0,
-            `Você não tem fundos suficiente`,
+            data.text ?? `Você não tem fundos suficiente`,
             {
                 fontSize: "22px", color: "#ffffff", fontFamily: 'LuckiestGuy-Regular', lineSpacing: 2, wordWrap: {
                     width: this.bgFullWidth * 0.9

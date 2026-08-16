@@ -33,7 +33,7 @@
         "nivel_requerido": 12,
         "img": "trator_azul",
         "escala": 0.3,
-        "base_action": 2,
+        "base_action": 3,
         "action" : "plow",
         "area": [
             3,

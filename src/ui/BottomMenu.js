@@ -30,6 +30,31 @@ export default class BottomMenu {
         return btn;
     }
 
+    init() {
+
+        this.uiEvents.emit(
+            "energy:checkEnergy",
+            (energy) => {
+
+                this.EnergyValue.setText(
+                    String(energy)
+                );
+
+            }
+        );
+
+        this.uiEvents.on(
+            "energy:updateUI",
+            (energy) => {
+
+                this.EnergyValue.setText(
+                    String(energy)
+                );
+
+            }
+        );
+    }
+
     createUI() {
         const { width, height } = this.scene.scale;
         const menuWidth = 300;
@@ -125,7 +150,7 @@ export default class BottomMenu {
         this.btnBg = this.scene.add.rectangle(0, 0, 50, 50, 0x54c848, 1)
             .setOrigin(0.5)
             .setStrokeStyle(2, 0x000000);
-            
+
         this.btnContainer.add(this.btnBg);
 
         this.btnArar = this.scene.add.image(0, 0, "enxada")
@@ -202,10 +227,14 @@ export default class BottomMenu {
         this.buttons['matriz'] = this.btnMatriz;
         this.buttons['cancelar'] = this.btnCancelar;
 
-        const cheatUi = this.createCheatMenu();
+        // const cheatUi = this.createCheatMenu();
 
-        this.containerUI.add(cheatUi.upper);
-        this.containerUI.add(cheatUi.bottom);
+        // this.containerUI.add(cheatUi.upper);
+        // this.containerUI.add(cheatUi.bottom);
+
+        const infoUI = this.createInfoBox();
+
+        this.containerUI.add(infoUI);
 
         this.btnMatriz.on('pointerup', () => {
             this.scene.gameVariables.freeClick = true;
@@ -224,7 +253,7 @@ export default class BottomMenu {
             }
 
             const arando = this.scene.gameVariables.plowing;
-            arando ? this.uiEvents.emit("action:StopPlowing") : this.uiEvents.emit("action:StartPlowing", {vehicle : false, action : "plow", img : "enxada"});
+            arando ? this.uiEvents.emit("action:StopPlowing") : this.uiEvents.emit("action:StartPlowing", { vehicle: false, action: "plow", img: "enxada" });
         });
 
         this.btnContainerPa.on('pointerdown', () => {
@@ -279,6 +308,7 @@ export default class BottomMenu {
         const { width, height } = this.scene.scale;
         const menuWidth = 250;
         const menuHeight = 40;
+
 
         this.CheatMenu = this.scene.add.container(
             50,
@@ -347,7 +377,7 @@ export default class BottomMenu {
         })
 
         this.btnMinusXp.on("pointerup", () => {
-             this.uiEvents.emit("ui:notify", { type: "achiv", data: {title : "Amigo da floresta", img : "trofeu_arvore"} })
+            this.uiEvents.emit("ui:notify", { type: "achiv", data: { title: "Amigo da floresta", img: "trofeu_arvore" } })
         });
 
         this.btnPlusGold.on("pointerup", () => {
@@ -364,7 +394,7 @@ export default class BottomMenu {
         });
 
         this.CheatMenu.add([this.btnPlusGold, this.btnPlusMoney, this.btnPlusXp]);
-        this.CheatMenuUpper.add([this.btnMinusGold, this.btnMinusMoney, this.btnMinusXp]);
+        this.CheatMenuUpper.add([this.btnMinusGold, this.btnMinusMoney, this.btnMinusXp, this.Battery]);
 
         const ui = {
             upper: this.CheatMenu,
@@ -372,6 +402,44 @@ export default class BottomMenu {
         }
 
         return ui
+    }
+
+    createInfoBox() {
+        const { width, height } = this.scene.scale;
+        const menuWidth = 250;
+        const menuHeight = 40;
+
+        this.Battery = this.scene.add.image(0, menuHeight - 20, 'energia').setOrigin(0.5).setDisplaySize(70, 70)
+
+        this.InfoMenu = this.scene.add.container(
+            50,
+            height - menuHeight - 20
+        ).setVisible(this.variables.debugBarVisible);
+
+        const bg = this.scene.add.rectangle(0, 0, menuWidth - 170, menuHeight, 0x222222, 0.85)
+            .setOrigin(0);
+
+        const valueContainer = this.scene.add.container(0, 0).setVisible(true)
+
+        const numberBg = this.scene.add.rectangle(35, 5, 40, menuHeight - 10, 0xfffff, 0.9).setOrigin(0)
+
+        this.EnergyValue = this.scene.add.text(
+            42,
+            12,
+            String(this.energyValue ?? 0),
+            {
+                fontSize: '14px',
+                fontFamily: 'LuckiestGuy-Regular',
+                color: 'black',
+            }
+        ).setOrigin(0);
+
+        valueContainer.add([numberBg, this.EnergyValue])
+
+        this.InfoMenu.add([bg, valueContainer])
+        this.InfoMenu.add(this.Battery)
+
+        return this.InfoMenu
     }
 
     setButtonState(buttonName, enabled) {

@@ -50,6 +50,8 @@ export default class ShopItemCard {
 
         const isExpansion = this.data.tipo == "expansão" ? true : false;
 
+        const isConsume = this.data.tipo == "consumivel" ? true : false;
+
         const comprarText = isExpansion ? etapa <= world_info ? "adquirido" : "comprar" : "comprar";
 
         const elements = [];
@@ -188,8 +190,10 @@ export default class ShopItemCard {
 
                 if (isExpansion) {
                     this.uiEvents.emit('action:expand', this.data);
+                } else if (isConsume) {
+                    this.uiEvents.emit('action:buyConsumible', this.data);
                 } else {
-                    this.scene.events.emit('itemPurchased', this.data)
+                    this.scene.events.emit('itemPurchased', this.data);
                 }
 
                 this.controllers.shopMenu.close();

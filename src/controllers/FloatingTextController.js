@@ -116,6 +116,14 @@ export default class FloatingTextController {
             });
         }
 
+        if (data.energy) {
+            rewards.push({
+                icon: "energia",
+                value : data.energy.amount,
+                color : "#ff0000"
+            })
+        }
+
         this.createFloatingRow(data.x, data.y, rewards);
     }
 

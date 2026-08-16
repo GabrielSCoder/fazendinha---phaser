@@ -29,7 +29,6 @@ export default class PlantaController {
         })
 
         this.uiEvents.on("action:Seed", (solo) => {
-            //console.log("-----")
             this.plantSeed(solo);
         })
     }
@@ -346,5 +345,26 @@ export default class PlantaController {
 
             soil.isReserved = false;
         });
+    }
+
+    canAffordOneSeed(preco) {
+        if (!this.scene.gameVariables.selectedSeed) return;
+        if (!preco) return;
+
+        let HaveMoney = false;
+
+        this.uiEvents.emit("action:buyItem", {
+            type: "gold",
+            price: preco,
+            level: 1
+        }, (result) => {
+            HaveMoney = result;
+        })
+
+        if (!HaveMoney) {
+            return false;
+        }
+
+        return true;
     }
 }

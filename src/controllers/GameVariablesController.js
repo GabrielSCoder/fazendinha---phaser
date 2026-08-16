@@ -50,7 +50,8 @@ export default class GameVariablesController {
         this.fastHarvestMode = true;
         this.debugHaverstTime = 0.1;
         this.debugShowFps = false;
-        this.noEnergyConsumption = true;
+        this.noEnergyConsumption = false;
+        this.noPopUps = false;
 
         this.selectedSprite = null;
         this.selectedSpriteDelete = null;
@@ -68,6 +69,11 @@ export default class GameVariablesController {
         this.actionQueue = [];
         this.isProcessingAction = false;
         this.eventsCenter = new Phaser.Events.EventEmitter();
+
+        this.energyPlowCost = 1;
+        this.energyHarvestCost = 1;
+        this.energyRenewSoilCost = 1;
+        this.energySeedCost = 2;
     }
 
     changeActionSize(valueX, valueY) {

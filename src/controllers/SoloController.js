@@ -218,7 +218,6 @@ export default class SoloController {
                     // O que deve acontecer nessa célula
                     action: action,
 
-                    // Só preenchido quando for renovação
                     sprite: drySoil
                 });
             }
@@ -479,9 +478,17 @@ export default class SoloController {
         this.uiEvents.emit("action:reward", {
             xp: 1,
             gold: -this.scene.gameVariables.plowingCost ?? 0,
+            energy : this.scene.gameVariables.vehicleSelected ? {action : "plow", amount : -this.scene.gameVariables.energyPlowCost} : null,
             x: sprite.x,
             y: sprite.y
         })
+
+        // if (this.scene.gameVariables.vehicleSelected) {
+
+        //     this.controllers.energy.useEnergy({
+        //         action: "plow"
+        //     });
+        // }
 
         this.uiEvents.emit("plow", { target: "solo_preparado", sprite: sprite });
     }
@@ -554,9 +561,6 @@ export default class SoloController {
             if (!sprite)
                 return;
 
-            // ==========================================
-            // NOVO SOLO TEMPORÁRIO
-            // ==========================================
             if (tile.action === "plow") {
 
                 const {
@@ -582,9 +586,6 @@ export default class SoloController {
                 return;
             }
 
-            // ==========================================
-            // SOLO SECO RESERVADO PARA RENOVAÇÃO
-            // ==========================================
             if (tile.action === "renew") {
 
                 sprite.isReserved = false;
@@ -657,6 +658,13 @@ export default class SoloController {
             x: sprite.x,
             y: sprite.y
         });
+
+        if (this.scene.gameVariables.vehicleSelected) {
+
+            this.controllers.energy.useEnergy({
+                action: "renew"
+            });
+        }
 
         this.uiEvents.emit("renewSoil", {
             target: "solo_preparado",

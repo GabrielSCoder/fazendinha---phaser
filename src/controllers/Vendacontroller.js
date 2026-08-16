@@ -129,8 +129,6 @@ export default class VendaController {
 
     completeSell() {
 
-        //console.log("entrando em complete")
-
         const item = this.scene.gameVariables.selectedSpriteDelete;
 
         if (item.growthStart && !item.harvestReady) {

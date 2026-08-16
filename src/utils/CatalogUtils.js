@@ -10,6 +10,7 @@ export default class CatalogUtils {
         this.expansion = scene.expansoes;
         this.soils = scene.solos;
         this.vehicles = scene.veiculos;
+        this.consumibles = scene.consumibles;
         this.uiEvents = config.uiEvents;
         this.saveController = config.save;
         this.classEvents();
@@ -28,6 +29,7 @@ export default class CatalogUtils {
     init()
     {
         this.getBuyableExpansionList();
+        this.mixVehicleAndEnergyConsumables();
     }
 
     getCatalog() {
@@ -37,7 +39,8 @@ export default class CatalogUtils {
             decoration: this.decoration.filter(item => !item.hidden),
             seed: this.seeds.filter(item => !item.hidden),
             expansion: this.expansion.filter(item => !item.hidden),
-            vehicle: this.vehicles.filter(item => !item.hidden)
+            vehicle: this.vehicles.filter(item => !item.hidden),
+            consumible: this.consumibles.filter(item => !item.hidden) 
         }
     }
 
@@ -79,6 +82,9 @@ export default class CatalogUtils {
             case "veiculo":
                 item = this.vehicles.find(item => item.id == id)
                 break;
+            case "consumible":
+                item = this.consumibles.find(item => item.id == id)
+                break;
             default:
                 break;
         }
@@ -94,8 +100,9 @@ export default class CatalogUtils {
         const trees = this.trees.filter(element => element.nivel_requerido == level);
         const decoration = this.decoration.filter(element => element.nivel_requerido == level);
         const vehicles = this.vehicles.filter(element => element.nivel_requerido == level);
+        const consumibles = this.consumibles.filter(element => element.nivel_requerido == level);
 
-        list.push(...seeds, ...animals, ...trees, ...decoration, ...vehicles);
+        list.push(...seeds, ...animals, ...trees, ...decoration, ...vehicles, ...consumibles);
 
         return list;
     }
@@ -120,5 +127,10 @@ export default class CatalogUtils {
                 this.expansion[key] = {... this.expansion[key], ...b}
         });
 
+    }
+
+    mixVehicleAndEnergyConsumables()
+    {
+        this.vehicles.push(...this.consumibles.filter(item => item.subtipo == "energia" && !item.hidden));
     }
 }

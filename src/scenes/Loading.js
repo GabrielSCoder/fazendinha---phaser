@@ -71,6 +71,7 @@ export class Loading extends Phaser.Scene {
         this.load.image('gift', 'assets/ui/gift2.png');
         this.load.image('trophy', 'assets/ui/trophy.png');
         this.load.image('grama', 'assets/fundo/grama_tile.png');
+        this.load.image('energia', 'assets/ui/energia.png');
 
         this.load.image('trofeu_arvore', 'assets/trofeu/arvore.png');
         this.load.image('trofeu_semente', 'assets/trofeu/jardineiro.png');
@@ -107,6 +108,7 @@ export class Loading extends Phaser.Scene {
         this.load.json('decoracoes_data', 'src/static/decoracoes.json');
         this.load.json('solos_data', 'src/static/solos.json');
         this.load.json('expansoes_data', 'src/static/expansoes.json');
+        this.load.json('consumibles_data', 'src/static/consumibles.json');
 
         AssetLoader.load(this)
     }

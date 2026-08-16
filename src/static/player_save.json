@@ -7,7 +7,7 @@
     "money": 9999979,
     "level": 1,
     "xp": 1,
-    "energy": 0,
+    "energy": 10,
     "energyMax": 50,
     "createdAt": 1786390687120,
     "lastEnergyUpdate": 0,
@@ -152,6 +152,7 @@
     "seeds_planted": 0,
     "seeds_harvested": 0,
     "animals_bought": 0,
+    "vehicles_used" : 0,
     "animals_harvested": 0,
     "expansions_bought": 0
   },
@@ -177,7 +178,7 @@
     },
     "3": {
       "steps_done": 0,
-      "amount": -20
+      "amount": 20
     },
     "4": {
       "steps_done": 0,
