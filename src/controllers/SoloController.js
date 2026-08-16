@@ -483,13 +483,6 @@ export default class SoloController {
             y: sprite.y
         })
 
-        // if (this.scene.gameVariables.vehicleSelected) {
-
-        //     this.controllers.energy.useEnergy({
-        //         action: "plow"
-        //     });
-        // }
-
         this.uiEvents.emit("plow", { target: "solo_preparado", sprite: sprite });
     }
 

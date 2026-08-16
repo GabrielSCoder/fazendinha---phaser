@@ -293,9 +293,12 @@ export default class PlantaController {
         this.uiEvents.emit("action:reward", {
             xp: 1,
             gold: -sprite.preco_compra ?? 0,
+            energy: this.scene.gameVariables.vehicleSelected ? { action: "seed", amount: -this.scene.gameVariables.energySeedCost } : null,
             x: sprite.x,
             y: sprite.y
         })
+
+
 
         this.uiEvents.emit("plant", { target: "solo_plantado_simples", seed: sprite.nome.toLowerCase(), sprite: sprite });
 
@@ -326,6 +329,7 @@ export default class PlantaController {
                 continue;
 
             soil.isReserved = true;
+            soil.action = "seed";
 
             reservation.push(soil);
         }

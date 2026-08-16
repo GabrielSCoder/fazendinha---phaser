@@ -493,6 +493,13 @@ export default class GameEventsController {
         if (!reserva.length)
             return;
 
+        const hasVehicle =
+            !!this.scene.gameVariables.vehicleSelected;
+
+        let haveEnergy = true
+
+        if (hasVehicle && this.controllers.energy.getEnergy() < this.scene.gameVariables.energySeedCost) haveEnergy = false;
+
         this.scene.gameVariables.plantingReservedSoils = reserva;
 
         const seed =
@@ -502,12 +509,13 @@ export default class GameEventsController {
 
         const canPlant = this.controllers.plant.canAffordOneSeed(price);
 
-        if (!canPlant) {
+        if (!canPlant || !haveEnergy) {
             this.uiEvents.emit("action:StopSeeding")
             this.uiEvents.emit("queue:cancelAll");
             this.controllers.plant.cancelReserve(reserva);
             this.uiEvents.emit("ui:notify", {
-                type: ""
+                type: "",
+                text: !haveEnergy ? "Sem energia suficiente" : null
             });
 
             return;
@@ -540,6 +548,38 @@ export default class GameEventsController {
             reserva.slice(maxTiles);
 
         this.controllers.plant.cancelReserve(restReserva);
+
+        if (hasVehicle) {
+
+            const maxEnergyTiles =
+                this.getAffordableEnergyTiles(
+                    validReserva
+                );
+
+            console.log(maxEnergyTiles)
+
+            if (!maxEnergyTiles) {
+
+                this.controllers.soil.cancelReserve(
+                    validReserva
+                );
+
+                return;
+            }
+
+            if (maxEnergyTiles < validReserva.length) {
+
+                const energyRest =
+                    validReserva.slice(maxEnergyTiles);
+
+                validReserva =
+                    validReserva.slice(0, maxEnergyTiles);
+
+                this.controllers.soil.cancelReserve(
+                    energyRest
+                );
+            }
+        }
 
         validReserva.forEach(solo => {
 
@@ -651,6 +691,8 @@ export default class GameEventsController {
 
         let count = 0;
 
+        console.log(reserva[0])
+
         for (const tile of reserva) {
 
             let cost = 0;
@@ -664,6 +706,9 @@ export default class GameEventsController {
 
                 cost =
                     this.scene.gameVariables.energyRenewSoilCost;
+            } else if (tile.action === "seed") {
+                cost =
+                    this.scene.gameVariables.energySeedCost;
             }
 
             if (cost <= 0)
