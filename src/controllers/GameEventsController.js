@@ -351,7 +351,7 @@ export default class GameEventsController {
             return;
         }
 
-        let validReserva = reserva;
+        let validReserva
 
         if (
             this.scene.gameVariables.actionTileX != 1 ||
@@ -367,8 +367,7 @@ export default class GameEventsController {
                 return;
             }
 
-            validReserva =
-                reserva.slice(0, maxTiles);
+            validReserva = reserva.slice(0, maxTiles);
 
             const restReserva =
                 reserva.slice(maxTiles);
@@ -438,6 +437,7 @@ export default class GameEventsController {
 
         });
     }
+    
     canPlow() {
 
         const price = this.scene.gameVariables.plowingCost;
@@ -541,7 +541,7 @@ export default class GameEventsController {
             return;
         }
 
-        const validReserva =
+        let validReserva =
             reserva.slice(0, maxTiles);
 
         const restReserva =
@@ -560,7 +560,7 @@ export default class GameEventsController {
 
             if (!maxEnergyTiles) {
 
-                this.controllers.soil.cancelReserve(
+                this.controllers.plant.cancelReserve(
                     validReserva
                 );
 
@@ -575,7 +575,7 @@ export default class GameEventsController {
                 validReserva =
                     validReserva.slice(0, maxEnergyTiles);
 
-                this.controllers.soil.cancelReserve(
+                this.controllers.plant.cancelReserve(
                     energyRest
                 );
             }

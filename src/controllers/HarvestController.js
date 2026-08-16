@@ -22,56 +22,6 @@ export default class HarvestController {
         })
     }
 
-    // tryHarvest(sprite) {
-
-    //     if (!sprite.harvestReady) return;
-    //     if (this.controllers.queue.isFull()) return;
-
-    //     sprite.setAlpha(0.7);
-    //     sprite.disableInteractive();
-    //     sprite.clearTint();
-    //     this.scene.gameVariables.hoveredSprite = null;
-    //     this.controllers.sprite.hoverText.setVisible(false);
-
-    //     let bar = null
-
-    //     this.controllers.queue.add({
-
-    //         action: (done) => {
-
-    //             bar = this.controllers.bar.criarBarraProgresso(
-    //                 sprite.x,
-    //                 sprite.y + 10,
-    //                 50,
-    //                 10,
-    //                 0.5,
-    //                 () => {
-
-    //                     if (sprite.regrow) {
-    //                         this.harvestRenewable(sprite);
-    //                     } else {
-    //                         this.harvestPlant(sprite);
-    //                     }
-
-    //                     done();
-    //                 }
-    //             );
-    //         },
-
-    //         onCancel: () => {
-
-    //             if (bar) {
-    //                 bar.cancel();
-    //                 bar = null;
-    //             }
-
-    //             sprite.setAlpha(1);
-    //             sprite.setInteractive({ pixelPerfect: true, alphaTolerance: 1, useHandCursor: true });
-
-    //         }
-    //     });
-    // }
-
     tryHarvest(sprite) {
 
         if (!sprite.harvestReady)
@@ -98,6 +48,7 @@ export default class HarvestController {
             this.uiEvents.emit("action:reward", {
                 xp: xp ?? 0,
                 gold: preco_venda ?? 0,
+                energy: this.scene.gameVariables.vehicleSelected ? { action: "harvest", amount: -this.scene.gameVariables.energyHarvestCost } : null,
                 x: sprite.x,
                 y: sprite.y
             });
@@ -330,8 +281,28 @@ export default class HarvestController {
 
     harvestArea() {
 
-        if (this.controllers.queue.isFull())
+        if (this.controllers.queue.isFull()) return;
+        if (!this.scene.gameVariables.harvesting) return;
+
+        const hasVehicle =
+            !!this.scene.gameVariables.vehicleSelected;
+
+        let haveEnergy = true
+
+        if (hasVehicle && this.controllers.energy.getEnergy() < this.scene.gameVariables.energyHarvestCost) haveEnergy = false;
+
+        if (!haveEnergy) {
+
+            this.uiEvents.emit("queue:cancelAll");
+            this.stopHarvestingGroup();
+
+            this.uiEvents.emit("ui:notify", {
+                type: "",
+                text: "Sem energia suficiente"
+            });
+
             return;
+        }
 
         const tiles =
             this.scene.gameVariables.previewOccupiedtiles || [];
@@ -352,7 +323,6 @@ export default class HarvestController {
         if (!sprites.length)
             return;
 
-        // Desativa visualmente todos imediatamente
         sprites.forEach(sprite => {
 
             sprite.setAlpha(0.7);
@@ -369,7 +339,6 @@ export default class HarvestController {
 
             action: (done) => {
 
-                // Uma ÚNICA barra para toda a área
                 const first = sprites[0];
 
                 bar =
@@ -381,8 +350,6 @@ export default class HarvestController {
                         0.5,
                         () => {
 
-                            // Quando a barra termina,
-                            // colhe TODOS de uma vez
                             sprites.forEach(sprite => {
 
                                 if (!sprite || sprite.destroyed)
@@ -494,4 +461,54 @@ export default class HarvestController {
             }
         });
     }
+
+    // tryHarvest(sprite) {
+
+    //     if (!sprite.harvestReady) return;
+    //     if (this.controllers.queue.isFull()) return;
+
+    //     sprite.setAlpha(0.7);
+    //     sprite.disableInteractive();
+    //     sprite.clearTint();
+    //     this.scene.gameVariables.hoveredSprite = null;
+    //     this.controllers.sprite.hoverText.setVisible(false);
+
+    //     let bar = null
+
+    //     this.controllers.queue.add({
+
+    //         action: (done) => {
+
+    //             bar = this.controllers.bar.criarBarraProgresso(
+    //                 sprite.x,
+    //                 sprite.y + 10,
+    //                 50,
+    //                 10,
+    //                 0.5,
+    //                 () => {
+
+    //                     if (sprite.regrow) {
+    //                         this.harvestRenewable(sprite);
+    //                     } else {
+    //                         this.harvestPlant(sprite);
+    //                     }
+
+    //                     done();
+    //                 }
+    //             );
+    //         },
+
+    //         onCancel: () => {
+
+    //             if (bar) {
+    //                 bar.cancel();
+    //                 bar = null;
+    //             }
+
+    //             sprite.setAlpha(1);
+    //             sprite.setInteractive({ pixelPerfect: true, alphaTolerance: 1, useHandCursor: true });
+
+    //         }
+    //     });
+    // }
 }
