@@ -405,6 +405,12 @@ export default class GameEventsController {
             }
         }
 
+        if (this.scene.gameVariables.actionTileX == 1 &&
+            this.scene.gameVariables.actionTileY == 1) {
+            validReserva = [reserva[0]]
+        }
+
+        console.log(validReserva)
 
         validReserva.forEach(tile => {
             tile.sprite.setAlpha(0.4);
@@ -437,7 +443,7 @@ export default class GameEventsController {
 
         });
     }
-    
+
     canPlow() {
 
         const price = this.scene.gameVariables.plowingCost;
@@ -555,8 +561,6 @@ export default class GameEventsController {
                 this.getAffordableEnergyTiles(
                     validReserva
                 );
-
-            console.log(maxEnergyTiles)
 
             if (!maxEnergyTiles) {
 
@@ -691,8 +695,6 @@ export default class GameEventsController {
 
         let count = 0;
 
-        console.log(reserva[0])
-
         for (const tile of reserva) {
 
             let cost = 0;
@@ -709,6 +711,9 @@ export default class GameEventsController {
             } else if (tile.action === "seed") {
                 cost =
                     this.scene.gameVariables.energySeedCost;
+            } else if (tile.action == "harvest") {
+                cost =
+                    this.scene.gameVariables.energyHarvestCost;
             }
 
             if (cost <= 0)

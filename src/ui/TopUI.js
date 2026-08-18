@@ -167,7 +167,7 @@ export default class TopUI {
         this.uiCenterContainer = this.scene.add.container(width / 2, centerY);
         this.containerUI.add(this.uiCenterContainer);
 
-        const centerBg = this.scene.add.rectangle(0, 0, 200, 40, 0x222222, 0.7).setOrigin(0.5, 0);
+        const centerBg = this.scene.add.rectangle(0, 0, 300, 40, 0x222222, 0.7).setOrigin(0.5, 0);
         this.uiCenterContainer.add(centerBg);
 
 

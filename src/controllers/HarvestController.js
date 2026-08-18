@@ -284,30 +284,10 @@ export default class HarvestController {
         if (this.controllers.queue.isFull()) return;
         if (!this.scene.gameVariables.harvesting) return;
 
-        const hasVehicle =
-            !!this.scene.gameVariables.vehicleSelected;
-
-        let haveEnergy = true
-
-        if (hasVehicle && this.controllers.energy.getEnergy() < this.scene.gameVariables.energyHarvestCost) haveEnergy = false;
-
-        if (!haveEnergy) {
-
-            this.uiEvents.emit("queue:cancelAll");
-            this.stopHarvestingGroup();
-
-            this.uiEvents.emit("ui:notify", {
-                type: "",
-                text: "Sem energia suficiente"
-            });
-
-            return;
-        }
-
         const tiles =
             this.scene.gameVariables.previewOccupiedtiles || [];
 
-        const sprites = [
+        let sprites = [
             ...new Set(
                 tiles
                     .filter(tile =>
@@ -322,6 +302,41 @@ export default class HarvestController {
 
         if (!sprites.length)
             return;
+
+
+        sprites.forEach(sprite => {
+            sprite.action = "harvest";
+        });
+
+        const hasVehicle =
+            !!this.scene.gameVariables.vehicleSelected;
+
+        if (hasVehicle) {
+
+            const maxEnergyTiles =
+                this.controllers.gameEvents.getAffordableEnergyTiles(
+                    sprites
+                );
+
+            if (!maxEnergyTiles) {
+
+                this.uiEvents.emit("queue:cancelAll");
+                this.stopHarvestingGroup();
+
+                this.uiEvents.emit("ui:notify", {
+                    type: "",
+                    text: "Sem energia suficiente"
+                });
+
+                return;
+            }
+
+            if (maxEnergyTiles < sprites.length) {
+
+                sprites =
+                    sprites.slice(0, maxEnergyTiles);
+            }
+        }
 
         sprites.forEach(sprite => {
 
@@ -341,6 +356,11 @@ export default class HarvestController {
 
                 const first = sprites[0];
 
+                if (!first) {
+                    done();
+                    return;
+                }
+
                 bar =
                     this.controllers.bar.criarBarraProgresso(
                         first.x,
@@ -359,8 +379,11 @@ export default class HarvestController {
                                     return;
 
                                 if (sprite.regrow) {
+
                                     this.harvestRenewable(sprite);
+
                                 } else {
+
                                     this.harvestPlant(sprite);
                                 }
                             });
