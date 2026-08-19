@@ -443,6 +443,7 @@ export default class SoloController {
 
         sprite.setAlpha(1);
         sprite.isReserved = false;
+
         const tool = this.scene.gameVariables.toolSprite;
 
         const { gridX, gridY, blockSize } = sprite;
@@ -478,7 +479,7 @@ export default class SoloController {
         this.uiEvents.emit("action:reward", {
             xp: 1,
             gold: -this.scene.gameVariables.plowingCost ?? 0,
-            energy : this.scene.gameVariables.vehicleSelected ? {action : "plow", amount : -this.scene.gameVariables.energyPlowCost} : null,
+            energy: this.scene.gameVariables.vehicleSelected ? { action: "plow", amount: -this.scene.gameVariables.energyPlowCost } : null,
             x: sprite.x,
             y: sprite.y
         })
@@ -627,11 +628,14 @@ export default class SoloController {
         sprite.nome = "solo_preparado";
         sprite.tipo = "solo_preparado";
 
+        const tool = this.scene.gameVariables.toolSprite;
+
+        console.log(tool)
+
         sprite.setTexture("solo2");
 
         sprite.setAlpha(1);
 
-        // Libera o sprite da reserva da ação em área
         sprite.isReserved = false;
         sprite.isQueued = false;
         sprite.cancelled = false;
@@ -639,25 +643,16 @@ export default class SoloController {
 
         sprite.clearTint();
 
-        sprite.setInteractive({
-            pixelPerfect: true,
-            alphaTolerance: 1,
-            useHandCursor: true
-        });
+        if (!tool || !tool.action == "plow")
+            sprite.setInteractive({ pixelPerfect: true, alphaTolerance: 1, useHandCursor: true });
 
         this.uiEvents.emit("action:reward", {
             xp: 1,
             gold: -this.scene.gameVariables.prepareSoilCost ?? 0,
+            energy: this.scene.gameVariables.vehicleSelected ? { action: "renew", amount: -this.scene.gameVariables.energyRenewSoilCost } : null,
             x: sprite.x,
             y: sprite.y
         });
-
-        if (this.scene.gameVariables.vehicleSelected) {
-
-            this.controllers.energy.useEnergy({
-                action: "renew"
-            });
-        }
 
         this.uiEvents.emit("renewSoil", {
             target: "solo_preparado",
@@ -689,6 +684,8 @@ export default class SoloController {
 
         if (!sprite) return;
 
+        const tool = this.scene.gameVariables.toolSprite;
+
         this.controllers.growth.cancelGrowth(sprite)
         sprite.nome = "solo_seco";
         sprite.tipo = "solo_seco";
@@ -704,7 +701,9 @@ export default class SoloController {
         sprite.setOrigin(0.52, 0.4);
         sprite.setTexture("solo_seco");
         sprite.setAlpha(1);
-        sprite.setInteractive({ pixelPerfect: true, alphaTolerance: 1, useHandCursor: true });
+
+        if (!tool || !tool.action == "harvest")
+            sprite.setInteractive({ pixelPerfect: true, alphaTolerance: 1, useHandCursor: true });
 
         return true;
     }

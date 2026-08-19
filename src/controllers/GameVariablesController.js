@@ -50,7 +50,7 @@ export default class GameVariablesController {
         this.fastHarvestMode = true;
         this.debugHaverstTime = 0.1;
         this.debugShowFps = false;
-        this.noEnergyConsumption = false;
+        this.noEnergyConsumption = true;
         this.noPopUps = false;
 
         this.selectedSprite = null;

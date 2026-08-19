@@ -197,6 +197,8 @@ export default class PresentsMenuUI {
 
         const container = this.scene.add.container(0, 0);
 
+        let conts = []
+
         const bg = this.scene.add.image(0, 0, 'item_bg')
             .setOrigin(0.5)
             .setDisplaySize(bgWidth, bgHeight);
@@ -229,10 +231,16 @@ export default class PresentsMenuUI {
         const button = this.createButton({ color: "green", text: "usar", action: "" });
         button.setPosition(0, 50);
 
-        const button_vender = this.createButton({ color: "red", text: "vender", action: "" });
-        button_vender.setPosition(0, 85);
+        conts.push(bg, title, circle, amount, image, button);
 
-        container.add([bg, title, circle, amount, image, button, button_vender]);
+        if (data.cantSell == false) {
+            console.log("xxxx")
+            const button_vender = this.createButton({ color: "red", text: "vender", action: "" });
+            button_vender.setPosition(0, 85);
+            conts.push(button_vender)
+        }
+
+        container.add(conts);
 
         return container;
     }

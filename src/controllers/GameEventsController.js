@@ -695,6 +695,12 @@ export default class GameEventsController {
 
         let count = 0;
 
+        if (this.noEnergyNeed) {
+            count = reserva.length + 1;
+            console.log(count)
+            return count;
+        }
+            
         for (const tile of reserva) {
 
             let cost = 0;

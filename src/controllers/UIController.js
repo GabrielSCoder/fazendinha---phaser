@@ -14,9 +14,10 @@ export default class UINotificationController {
         this.isShowing = false;
 
         this.priority = {
-            levelUp: 1,
-            advice: 2,
-            newMission: 3,
+            achiv : 1,
+            levelUp: 2,
+            advice: 3,
+            newMission: 4,
             default: 99
         };
 
@@ -204,7 +205,7 @@ export default class UINotificationController {
         const body = this.scene.add.text(
             0,
             -90,
-            "Subiu nível de conquista",
+            data.complete ? "Completou a conquista" : "Subiu nível de conquista",
             { fontSize: "28px", color: "#ffffff", fontFamily: 'LuckiestGuy-Regular', lineSpacing: 2 }
         ).setOrigin(0.5).setStroke('#000', 4);
 

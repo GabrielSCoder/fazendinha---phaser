@@ -65,8 +65,8 @@ export default class PresentsControler {
 
     init() {
 
-        // this.presentList = this.dataTest;
-        this.presentList = this.saveController.getGift() || [];
+        this.presentList = this.dataTest;
+        // this.presentList = this.saveController.getGift() || [];
 
         this.actualStorageAmount = this.presentList.reduce((acc, item) => acc + item.amount, 0);
 
@@ -110,6 +110,12 @@ export default class PresentsControler {
 
         this.actualStorageAmount += 1;
 
+        const dados = this.controllers.catalog.findItem({id : data.id, type : data.tipo});
+
+        console.log(dados)
+
+        this.uiEvents.emit("ui:notify", { type: "item", data: { nome : dados.nome, img: dados.img} })
+
         this.saveController.changeGift(list);
 
         return true;
@@ -142,8 +148,6 @@ export default class PresentsControler {
 
         const list = this.presentList.map(item => {
 
-            //console.log(item)
-
             const catalogItem = this.controllers.catalog.findItem({
                 id: item.id,
                 type: item.type
@@ -153,6 +157,7 @@ export default class PresentsControler {
                 ...item,
                 nome: catalogItem?.nome,
                 img: catalogItem?.img,
+                cantSell : catalogItem?.cannotSell ?? false,
                 preco_venda: catalogItem?.preco_venda
             };
 

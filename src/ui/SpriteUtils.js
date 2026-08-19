@@ -55,6 +55,12 @@ export default class SpriteUtils {
             this.scene.gameVariables.planting = true;
         }
 
+        if (data.cannotSell) {
+            sprite.cannotSell = true;
+        } else {
+            sprite.cannotSell = false;
+        }
+
         if (data.tipo == "veiculo") {
             sprite.base_action = data.base_action;
             sprite.vehicle_action = data.action;
@@ -276,8 +282,6 @@ export default class SpriteUtils {
 
         return sprites.find(sprite => {
 
-            console.log(sprite)
-
             if (!sprite) return false;
 
             if (sprite.isQueued)
@@ -425,6 +429,7 @@ export default class SpriteUtils {
         );
 
         sprite.nome = "tool";
+        sprite.action = data.action;
         sprite.isMoving = true;
         sprite.setDepth(9999);
         sprite.disableInteractive();

@@ -127,7 +127,7 @@ export const achievements = [
                 "objectives": [
                     {
                         action: "place",
-                        amount: 10,
+                        amount: 1,
                         target: "arvore",
                     }
                 ],
@@ -138,7 +138,7 @@ export const achievements = [
                 "objectives": [
                     {
                         action: "place",
-                        amount: 20,
+                        amount: 2,
                         target: "arvore",
                     }
                 ],
@@ -149,7 +149,7 @@ export const achievements = [
                 "objectives": [
                     {
                         action: "place",
-                        amount: 30,
+                        amount: 3,
                         target: "arvore",
                     }
                 ],
@@ -158,8 +158,9 @@ export const achievements = [
             }
         ],
         "final_reward": {
-            "xp": 400,
-            "gold": 1500
+            xp :  400,
+            gold : 1500,
+            item : [{id : "trofeu_arvore", tipo : "decoracao"}]
         }
     },
     {

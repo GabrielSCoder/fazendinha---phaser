@@ -146,6 +146,9 @@ export default class AchivController {
 
     completeState(achiv) {
 
+
+        console.log(achiv)
+
         const record = this.activeAchivs[achiv.id];
 
         const complete_rec = this.achivsById[achiv.id];
@@ -165,8 +168,10 @@ export default class AchivController {
 
         if (record.steps_done >= achiv.states.length) {
 
-            if (achiv.final_reward)
+            if (achiv.final_reward) {
+                this.uiEvents.emit("ui:notify", { type: "achiv", data: { title: complete_rec.title, img: complete_rec.img, reward: achiv.final_reward, complete: true } })
                 this.giveReward(achiv.final_reward);
+            }
 
         }
 
@@ -185,6 +190,11 @@ export default class AchivController {
 
         if (reward.xp)
             this.controllers.xp.addXP(reward.xp);
+
+        if (reward.item)
+            for (const gift of reward.item) {
+                this.uiEvents.emit("data:addItemStorage", (gift))
+            }
 
     }
 
