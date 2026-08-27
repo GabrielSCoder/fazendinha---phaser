@@ -58,8 +58,9 @@ export default class PlantaController {
         const pointer = this.scene.input.activePointer;
         const cam = this.scene.cameras.main;
         const pointerOffset = blocksWide > 1 ? 2.7 : 1.3;
+        const seedOffset = tool ? 40 : 20;
 
-        sprite.x = pointer.worldX + 20;
+        sprite.x = pointer.worldX + seedOffset;
         sprite.y = pointer.worldY;
         sprite.setDepth(9999);
 
@@ -260,6 +261,8 @@ export default class PlantaController {
 
         const itemData = solos.find(solo => solo.nome === tipo_plantacao);
 
+        const tool = this.scene.gameVariables.toolSprite;
+
         if (!itemData) return;
 
         sprite.setTexture(itemData.img)
@@ -289,6 +292,9 @@ export default class PlantaController {
         sprite.setAlpha(1)
         sprite.isQueued = false;
         sprite.setInteractive({ useHandCursor: true });
+
+        if (tool)
+            tool.setDepth(9999);
 
         this.uiEvents.emit("action:reward", {
             xp: 1,

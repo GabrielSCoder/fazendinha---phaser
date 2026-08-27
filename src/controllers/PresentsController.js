@@ -13,30 +13,6 @@ export default class PresentsControler {
 
         this.dataTest = [
             {
-                id: "gazebo",
-                type: "decoration",
-                preco_venda: 50,
-                nome: "gazebo",
-                img: "bangalo",
-                amount: 1
-            },
-            {
-                id: "trator",
-                type: "decoration",
-                preco_venda: 60,
-                nome: "trator",
-                img: "trator2",
-                amount: 1
-            },
-            {
-                id: "trator",
-                type: "decoration",
-                preco_venda: 60,
-                nome: "trator",
-                img: "trator2",
-                amount: 1
-            },
-            {
                 id: "animal_vaca",
                 type: "animal",
                 preco_venda: 60,
@@ -79,6 +55,12 @@ export default class PresentsControler {
 
             if (resp) this.uiEvents.emit("data:storageChange", this.getListData());
         });
+
+        this.uiEvents.on("data:removeItemStorage", (data) => {
+            console.log("XXXXXXXXXXXX")
+            const resp = this.removeItemStorage(data);
+            if (resp) this.uiEvents.emit("data:storageChange", this.getListData());
+        });
     }
 
     addItemStorage(data) {
@@ -110,11 +92,11 @@ export default class PresentsControler {
 
         this.actualStorageAmount += 1;
 
-        const dados = this.controllers.catalog.findItem({id : data.id, type : data.tipo});
+        const dados = this.controllers.catalog.findItem({ id: data.id, type: data.tipo });
 
         console.log(dados)
 
-        this.uiEvents.emit("ui:notify", { type: "item", data: { nome : dados.nome, img: dados.img} })
+        this.uiEvents.emit("ui:notify", { type: "item", data: { nome: dados.nome, img: dados.img } })
 
         this.saveController.changeGift(list);
 
@@ -127,7 +109,7 @@ export default class PresentsControler {
 
         const exists = list.find(item => item.id === data.id);
 
-        if (!exists) return;
+        if (!exists) return false;
 
         if (exists.amount > 1) {
 
@@ -142,6 +124,8 @@ export default class PresentsControler {
         this.actualStorageAmount -= 1;
 
         this.saveController.changeGift(this.presentList);
+
+        return true;
     }
 
     getListData() {
@@ -157,7 +141,7 @@ export default class PresentsControler {
                 ...item,
                 nome: catalogItem?.nome,
                 img: catalogItem?.img,
-                cantSell : catalogItem?.cannotSell ?? false,
+                cantSell: catalogItem?.cannotSell ?? false,
                 preco_venda: catalogItem?.preco_venda
             };
 
@@ -168,6 +152,32 @@ export default class PresentsControler {
             amount: this.actualStorageAmount,
             limit: this.limitStorageAmount
         };
+    }
+
+    usePresent(data) {
+        if (!data) return;
+        if (!data.type) return;
+        if (!data.id) return;
+
+        console.log(data)
+
+        switch (data.type) {
+            case "animal":
+                const item = this.controllers.catalog.findItem({ id: data.id, type: data.type })
+                if (!item) return;
+                item.gift = true;
+                this.controllers.acoesUtils.comprarItem(item)
+                break;
+            case "decoracao":
+                const itemd = this.controllers.catalog.findItem({ id: data.id, type: data.type })
+                if (!itemd) return;
+                itemd.gift = true;
+                this.controllers.acoesUtils.comprarItem(itemd)
+                break;
+            default:
+                break;
+        }
+
     }
 
 }

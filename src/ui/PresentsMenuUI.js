@@ -88,18 +88,29 @@ export default class PresentsMenuUI {
 
     createMenuUI(data) {
 
+        this.menuContainer.removeAll(true);
+
+        this.pagination = null;
+
         const list = data.list;
 
         const bg = this.scene.add.image(0, -20, "menu_bg")
             .setOrigin(0.5)
             .setDisplaySize(this.bgWidth, this.bgHeight);
 
-        const title = this.scene.add.text(0, -this.bgHeight / 2 + 20, "Presentes", {
-            fontSize: '30px',
-            fontStyle: 'bold',
-            color: '#fff',
-            fontFamily: 'LuckiestGuy-Regular'
-        }).setStroke('#000', 4).setOrigin(0.5);
+        const title = this.scene.add.text(
+            0,
+            -this.bgHeight / 2 + 20,
+            "Presentes",
+            {
+                fontSize: '30px',
+                fontStyle: 'bold',
+                color: '#fff',
+                fontFamily: 'LuckiestGuy-Regular'
+            }
+        )
+            .setStroke('#000', 4)
+            .setOrigin(0.5);
 
         const amount = this.scene.add.text(
             this.bgWidth / 2 - 80,
@@ -111,7 +122,9 @@ export default class PresentsMenuUI {
                 color: '#fff',
                 fontFamily: 'LuckiestGuy-Regular'
             }
-        ).setStroke('#000', 4).setOrigin(0.5);
+        )
+            .setStroke('#000', 4)
+            .setOrigin(0.5);
 
         const cardContainer = this.scene.add.container(
             -this.bgWidth / 2 + 300,
@@ -143,17 +156,22 @@ export default class PresentsMenuUI {
                 card.y = y;
 
                 container.add(card);
-
             }
-
         });
 
         this.pagination.displayCurrentPage();
 
-
         this.pagination.createNavigation(
-            { key: 'anterior_button', x: -this.bgWidth / 2, y: this.bgHeight / 2 - 300 },
-            { key: 'proximo_button', x: this.bgWidth / 2, y: this.bgHeight / 2 - 300 }
+            {
+                key: 'anterior_button',
+                x: -this.bgWidth / 2,
+                y: this.bgHeight / 2 - 300
+            },
+            {
+                key: 'proximo_button',
+                x: this.bgWidth / 2,
+                y: this.bgHeight / 2 - 300
+            }
         );
 
         const closeBtn = this.scene.add.image(
@@ -166,10 +184,11 @@ export default class PresentsMenuUI {
             .setInteractive({ useHandCursor: true });
 
         const baseScale = closeBtn.scale;
-        const debouncedClose = debounce(() => this.hide(), 150);
+
+        const debouncedClose =
+            debounce(() => this.hide(), 150);
 
         closeBtn.on("pointerdown", debouncedClose);
-
 
         closeBtn.on("pointerover", () => {
             closeBtn.setScale(baseScale * 1.2);
@@ -228,7 +247,7 @@ export default class PresentsMenuUI {
             .setOrigin(0.5)
             .setDisplaySize(80, 80);
 
-        const button = this.createButton({ color: "green", text: "usar", action: "" });
+        const button = this.createButton({ color: "green", text: "usar", action: "use", data: data });
         button.setPosition(0, 50);
 
         conts.push(bg, title, circle, amount, image, button);
@@ -257,10 +276,12 @@ export default class PresentsMenuUI {
             .setOrigin(0.5)
             .setInteractive({ useHandCursor: true });
 
+        const debounceUsar = this.debounce(() => {
+            this.controllers.presents.usePresent(data.data)
+            this.hide();
+        }, 150)
 
-        text.on("pointerup", () => {
-            console.log("apertando")
-        })
+        text.on("pointerup", debounceUsar)
 
         text.on("pointerover", () => {
             text.setScale(1.2)
@@ -275,5 +296,22 @@ export default class PresentsMenuUI {
 
     isOpen() {
         return this.menuContainer.visible;
+    }
+
+    debounce(func, delay) {
+
+        let timeout;
+
+        return function (...args) {
+
+            const context = this;
+
+            clearTimeout(timeout);
+
+            timeout = setTimeout(() => {
+                func.apply(context, args);
+            }, delay);
+
+        };
     }
 }

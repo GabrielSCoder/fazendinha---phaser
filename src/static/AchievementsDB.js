@@ -158,9 +158,9 @@ export const achievements = [
             }
         ],
         "final_reward": {
-            xp :  400,
-            gold : 1500,
-            item : [{id : "trofeu_arvore", tipo : "decoracao"}]
+            xp: 400,
+            gold: 1500,
+            item: [{ id: "trofeu_arvore", tipo: "decoracao" }]
         }
     },
     {
@@ -205,8 +205,9 @@ export const achievements = [
             }
         ],
         "final_reward": {
-            "xp": 30,
-            "gold": 150
+            xp: 30,
+            gold: 150,
+            item: [{ id: "trofeu_gastador", tipo: "decoracao" }]
         }
     },
     {

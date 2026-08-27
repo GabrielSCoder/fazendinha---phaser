@@ -38,6 +38,8 @@ export default class SpriteUtils {
 
         rebuild ? sprite.uuid = data.uuid : false
 
+        console.log(sprite)
+
         if (isRotated) {
             const [w, h] = data.area;
             sprite.footprint = [h, w]

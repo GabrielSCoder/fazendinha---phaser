@@ -181,7 +181,6 @@ export default class GameEventsController {
                     this.uiEvents.emit("place", { target: sprite.tipo, nome: sprite.nome.toLowerCase() });
                     sprite.xpYeld = true;
                 } else if (isConsumible) {
-                    console.log("chegando aqui")
                     if (sprite.subtipo && sprite.subtipo == "energia") {
                         this.uiEvents.emit("energy:changeEnergy", { amount: sprite.energy_yeld })
                     }
@@ -245,6 +244,8 @@ export default class GameEventsController {
 
     fixObject(data) {
 
+        console.log("fixando.....")
+
         const { sprite, iso, w, h, startX, startY } = data
 
         sprite.gridX = Math.round(iso.x);
@@ -293,6 +294,17 @@ export default class GameEventsController {
 
         if (this.scene.gameVariables.buyItemTmp) {
             this.scene.events.emit("itemPurchased", this.scene.gameVariables.buyItemTmp);
+        }
+
+        if (sprite.gift) {
+
+            console.log("Aqui")
+
+            if (!sprite.alreadyDisc) {
+                console.log("Aqui tambem")
+                this.uiEvents.emit("data:removeItemStorage", { id: sprite.id });
+                sprite.alreadyDisc = true
+            }
         }
     }
 
@@ -700,7 +712,7 @@ export default class GameEventsController {
             console.log(count)
             return count;
         }
-            
+
         for (const tile of reserva) {
 
             let cost = 0;

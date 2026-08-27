@@ -215,8 +215,10 @@ export default class AcoesUtils {
 
         const sprite = this.controllers.spriteUtils.addGameSprite(itemData, this.scale / 2, this.scale / 2, scale, originX, originY);
 
-        if (itemData.gift)
+        if (itemData.gift) {
             sprite.gift = true;
+            sprite.alreadyDisc = false;
+        }
 
         if (itemData.tipo !== "semente" && !sprite.gift)
             this.scene.gameVariables.buyItemTmp = itemData;
@@ -233,6 +235,8 @@ export default class AcoesUtils {
         }
         else
             this.scene.gameVariables.scene.gameVariables.selectedSprite = sprite;
+
+        console.log(this.scene.gameVariables.selectedSprite)
 
         const { w, h } = this.gridUtils.getSpriteFootprint(sprite);
 

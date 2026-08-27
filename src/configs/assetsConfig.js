@@ -159,7 +159,8 @@ export const assetsConfig = {
             "cesta_piquenique",
             "tocha",
             "trailer",
-            "trofeu_arvore_conquista"
+            "trofeu_arvore_conquista",
+            "trofeu_gastador_conquista"
         ]
     },
 
