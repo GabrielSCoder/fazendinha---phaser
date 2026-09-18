@@ -179,16 +179,14 @@ export default class GameEventsController {
                 this.uiEvents.emit("action:reward", dados);
 
                 if (!isExpansion && !isConsumible) {
-                    // console.log("normal")
                     this.uiEvents.emit("place", { target: sprite.tipo, nome: sprite.nome.toLowerCase() });
                     sprite.xpYeld = true;
                 } else if (isConsumible) {
-                    // console.log("consumivel")
+
                     if (sprite.subtipo && sprite.subtipo == "energia") {
                         this.uiEvents.emit("energy:changeEnergy", { amount: sprite.energy_yeld })
                     }
                 } else {
-                    // console.log("heheheheh")
                     this.uiEvents.emit("expand", sprite);
                 }
                 res = true
@@ -200,7 +198,8 @@ export default class GameEventsController {
                 this.scene.gameVariables.freeClick = true;
                 const sprite = this.scene.gameVariables.selectedSprite;
 
-                this.controllers.spriteUtils.destroySprite(sprite);
+                if (!isExpansion && !isConsumible)
+                    this.controllers.spriteUtils.destroySprite(sprite);
 
                 return false;
             }
