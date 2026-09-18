@@ -103,15 +103,15 @@ export class Menu extends Phaser.Scene {
         const baseY = height / 2;
 
         this.formInputs.push(
-            this.createNameInput(baseX - 40, baseY - 70, { placeholder: "Nome" })
+            this.createNameInput(baseX - 100, baseY - 100, { placeholder: "Nome" })
         );
 
         this.formInputs.push(
-            this.createNameInput(baseX - 40, baseY + 15, { placeholder: "Idade" }, "number")
+            this.createNameInput(baseX - 100, baseY - 20, { placeholder: "Idade" }, "number")
         );
 
         this.formInputs.push(
-            this.createNameInput(baseX - 40, baseY + 100 , { placeholder: "Fruta favorita" })
+            this.createNameInput(baseX - 100, baseY + 70 , { placeholder: "Fruta favorita" })
         );
 
         const btnVoltar = this.createButton("Voltar", 0, 190, () => {

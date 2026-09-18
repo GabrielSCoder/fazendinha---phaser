@@ -4,6 +4,10 @@ export const messages = [
         "mensagem": "Bem-vindo ao Free Farm!\nO jogo esta em alpha, reporte bugs que você encontrar, é muito importante. Divirta-se"
     },
     {
+        "id" : 2,
+        "mensagem" : "Botão esquerdo do mouse para interagir com objetos. \n Segurar botão do meio para arrastar a câmera"
+    },
+    {
         "id": 4,
         "mensagem": "Atenção!\n Sempre salve seu jogo!"
     },
