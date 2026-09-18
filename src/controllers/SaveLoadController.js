@@ -93,7 +93,7 @@ export default class SaveLoadController {
     }
 
     getServerMessages() {
-        return messages.filter(msg => !this.messages.includes(msg.id));
+        return messages.filter(msg => !this.messages.includes(msg.id) && msg.id != 6);
     }
 
     getUser() {
@@ -282,7 +282,8 @@ export default class SaveLoadController {
 
         worldData.objects.forEach(obj => {
 
-            const key = `${obj.position.x}_${obj.position.y}`;
+            // const key = `${obj.position.x}_${obj.position.y}`;
+            const key = obj.uuid;
 
             this.world.objects[key] = obj;
 

@@ -172,8 +172,6 @@ export default class WorldController {
             return;
         }
 
-        //console.log(sprite)
-
         let save = {
             uuid: key,
             id: sprite.id,
@@ -195,7 +193,6 @@ export default class WorldController {
             }
         }
 
-        //console.log(save)
         this.saveController.getWorld().objects[key] = save;
 
         this.save();

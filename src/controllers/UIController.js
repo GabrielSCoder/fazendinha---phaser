@@ -508,7 +508,6 @@ export default class UINotificationController {
 
     }
 
-
     createObjectiveRow(objective, width, isLast) {
 
         const row = this.scene.add.container(0, 0);
@@ -706,6 +705,8 @@ export default class UINotificationController {
     }
 
     notifyWarnings(data) {
+
+        console.log(data)
 
         if (!data.length) return;
 

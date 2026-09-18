@@ -44,12 +44,12 @@ export class Start extends Phaser.Scene {
     preload() {
 
         this.gameVariables = new GameVariablesController(this);
-        this.load.json('saveData', 'src/static/player_save.json');
+        // this.load.json('saveData', 'src/static/player_save.json');
     }
 
     create() {
 
-        const saveData = this.cache.json.get('saveData');
+        // const saveData = this.cache.json.get('saveData');
 
         let sizeX = this.gameVariables.gridWidth, sizeY = this.gameVariables.gridHeight
 
@@ -64,13 +64,13 @@ export class Start extends Phaser.Scene {
 
         this.controllers = {}
 
-        // const saveData = SaveLoadController.loadFromStorage();
+        const saveData = SaveLoadController.loadFromStorage();
 
-        // if (!saveData) {
-        //     console.error("Nenhum save encontrado!");
-        //     this.scene.start("Menu");
-        //     return;
-        // }
+        if (!saveData) {
+            console.error("Nenhum save encontrado!");
+            this.scene.start("Menu");
+            return;
+        }
 
         saveData.world.sizeX > 0 ? (sizeX = saveData.world.sizeX, sizeY = saveData.world.sizeY) : null;
 

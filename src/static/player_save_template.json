@@ -8,7 +8,7 @@
     "money": 6,
     "level": 1,
     "xp": 0,
-    "energy": 0,
+    "energy": 10,
     "energyMax": 50,
     "createdAt": 0,
     "lastEnergyUpdate": 0,
@@ -22,9 +22,7 @@
     "activeMissions": {},
     "completedMissions": []
   },
-  "messages": [
-    6
-  ],
+  "messages": [],
   "world": {
     "id": 1,
     "sizeX": 12,
@@ -57,7 +55,7 @@
     "bought_26x26": false,
     "bought_28x28": false,
     "bought_30x30": false,
-    "bought_32x12": false
+    "bought_32x32": false
   },
   "achievements": {
     "1": {
