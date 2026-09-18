@@ -35,7 +35,7 @@ export default class GameVariablesController {
         this.creativeMode = false;
         this.staticMode = false;
         this.noExperienceMode = false;
-        this.allUnlockedMode = false;
+        this.allUnlockedMode = true;
         this.noFootprints = true;
         this.actionTileX = 1;
         this.actionTileY = 1;
