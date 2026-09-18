@@ -50,7 +50,7 @@ export default class GameVariablesController {
         this.fastHarvestMode = true;
         this.debugHaverstTime = 0.1;
         this.debugShowFps = false;
-        this.noEnergyConsumption = true;
+        this.noEnergyConsumption = false;
         this.noPopUps = false;
 
         this.selectedSprite = null;
@@ -86,14 +86,14 @@ export default class GameVariablesController {
         this.gridHeight = valueX;
         this.gridWidth = valueY;
 
-        this.offsetY = -this.gridHeight * (this.gridSize / 4);
+        this.gridMap = Array.from(
+            { length: this.gridWidth * this.logicFactor },
+            () => Array(this.gridHeight * this.logicFactor).fill(null)
+        );
 
-        console.log(this.offsetY, this.gridHeight, this.gridWidth, this.gridSize )
-
-        this.gridMap = Array.from({ length: this.gridWidth * this.logicFactor },
-            () => Array(this.gridHeight * this.logicFactor).fill(null));
-
-        this.gridReserved = Array.from({ length: this.gridWidth * this.logicFactor },
-            () => Array(this.gridHeight * this.logicFactor).fill(null));
+        this.gridReserved = Array.from(
+            { length: this.gridWidth * this.logicFactor },
+            () => Array(this.gridHeight * this.logicFactor).fill(null)
+        );
     }
 }

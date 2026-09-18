@@ -28,7 +28,7 @@ export default class BonecoController {
             tipo: "boneco"
         };
 
-        console.log(this.gridHeight, this.gridWidth)
+        // console.log(this.gridHeight, this.gridWidth)
 
         const centerX = Math.floor(this.gridWidth);
         const centerY = Math.floor(this.gridHeight);
@@ -39,7 +39,7 @@ export default class BonecoController {
             .setOrigin(...bonecoData.origem)
             .setInteractive({ pixelPerfect: true, alphaTolerance: 1 });
 
-        console.log(sprite)
+        // console.log(sprite)
 
         sprite.isMoving = false;
         sprite.path = [];
@@ -83,7 +83,7 @@ export default class BonecoController {
     }
 
     handlePointer(pointer) {
-        console.log("clicando.......")
+        // console.log("clicando.......")
 
         const scene = this.scene;
         const boneco = this.boneco;

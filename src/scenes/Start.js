@@ -74,7 +74,6 @@ export class Start extends Phaser.Scene {
 
         saveData.world.sizeX > 0 ? (sizeX = saveData.world.sizeX, sizeY = saveData.world.sizeY) : null;
 
-
         this.gameVariables.reorganizeGrid(sizeX, sizeY);
 
         this.sementes = this.cache.json.get('sementes_data');

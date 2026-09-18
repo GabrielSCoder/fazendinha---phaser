@@ -38,7 +38,7 @@ export default class SpriteUtils {
 
         rebuild ? sprite.uuid = data.uuid : false
 
-        console.log(sprite)
+        // console.log(sprite)
 
         if (isRotated) {
             const [w, h] = data.area;
@@ -468,7 +468,7 @@ export default class SpriteUtils {
 
         this.scene.gameVariables.toolSprite = null;
 
-        console.log(this.scene.gameVariables.vehicleSelected)
+        // console.log(this.scene.gameVariables.vehicleSelected)
 
         if (this.scene.gameVariables.vehicleSelected) {
             this.scene.gameVariables.vehicleSelected.setAlpha(1);

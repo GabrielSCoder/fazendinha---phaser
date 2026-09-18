@@ -3,8 +3,8 @@
     "id": 90,
     "uuid": "1786390687120273945125666",
     "name": "Melksedek",
-    "gold": 9999999,
-    "money": 9999979,
+    "gold": 1000,
+    "money": 6,
     "level": 1,
     "xp": 1,
     "energy": 10,
@@ -242,7 +242,7 @@
   },
   "records": {
     "gold_spent": 0,
-    "money_spent": -20,
+    "money_spent": 0,
     "gold_gained": 0,
     "money_gained": 0,
     "trees_bought": 0,
@@ -265,7 +265,7 @@
     "bought_26x26": false,
     "bought_28x28": false,
     "bought_30x30": false,
-    "bought_32x12": false
+    "bought_32x32": false
   },
   "achievements": {
     "1": {
@@ -278,7 +278,7 @@
     },
     "3": {
       "steps_done": 0,
-      "amount": 20
+      "amount": 0
     },
     "4": {
       "steps_done": 0,

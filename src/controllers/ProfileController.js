@@ -109,9 +109,21 @@ export default class ProfileController {
 
         if ((this.getMoney() + money) < 0) return;
 
-        this.uiEvents.emit("transaction:gold", money);
+        if (money < 0)
+            this.uiEvents.emit("transaction:money", -money);
 
         this.saveController.addUser("money", money);
+
+        if (data.x !== undefined) {
+
+            this.uiEvents.emit("ui:floatingText", {
+                text: `${data.amount}`,
+                x: data.x,
+                y: data.y,
+                color: "#ffff66",
+                icon: "money_icon"
+            });
+        }
     }
 
     buyItem(data, callback) {

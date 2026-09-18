@@ -49,7 +49,6 @@ export default class GameEventsController {
         });
 
         this.uiEvents.on("action:expand", (data) => {
-            //console.log("-----")
             this.checkMonetaryItem(data);
         })
 
@@ -87,6 +86,8 @@ export default class GameEventsController {
             this.uiEvents.emit("action:StopSelling");
         } else if (this.controllers.shopMenu.isOpen() && this.scene.gameVariables.plowing) {
             this.uiEvents.emit("action:StopPlowing")
+        } else if (this.controllers.shopMenu.isOpen() && this.scene.gameVariables.harvesting) {
+            this.uiEvents.emit("action:StopHarvesting");
         }
 
         if (
@@ -178,13 +179,16 @@ export default class GameEventsController {
                 this.uiEvents.emit("action:reward", dados);
 
                 if (!isExpansion && !isConsumible) {
+                    // console.log("normal")
                     this.uiEvents.emit("place", { target: sprite.tipo, nome: sprite.nome.toLowerCase() });
                     sprite.xpYeld = true;
                 } else if (isConsumible) {
+                    // console.log("consumivel")
                     if (sprite.subtipo && sprite.subtipo == "energia") {
                         this.uiEvents.emit("energy:changeEnergy", { amount: sprite.energy_yeld })
                     }
                 } else {
+                    // console.log("heheheheh")
                     this.uiEvents.emit("expand", sprite);
                 }
                 res = true
@@ -244,7 +248,7 @@ export default class GameEventsController {
 
     fixObject(data) {
 
-        console.log("fixando.....")
+        // console.log("fixando.....")
 
         const { sprite, iso, w, h, startX, startY } = data
 
@@ -298,10 +302,8 @@ export default class GameEventsController {
 
         if (sprite.gift) {
 
-            console.log("Aqui")
-
             if (!sprite.alreadyDisc) {
-                console.log("Aqui tambem")
+
                 this.uiEvents.emit("data:removeItemStorage", { id: sprite.id });
                 sprite.alreadyDisc = true
             }

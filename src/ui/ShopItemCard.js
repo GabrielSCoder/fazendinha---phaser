@@ -189,6 +189,7 @@ export default class ShopItemCard {
                 if (comprarText == "adquirido") return;
 
                 if (isExpansion) {
+                    console.log("tentando expandir")
                     this.uiEvents.emit('action:expand', this.data);
                 } else if (isConsume) {
                     this.uiEvents.emit('action:buyConsumible', this.data);

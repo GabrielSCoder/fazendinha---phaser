@@ -147,7 +147,7 @@ export default class AchivController {
     completeState(achiv) {
 
 
-        console.log(achiv)
+        // console.log(achiv)
 
         const record = this.activeAchivs[achiv.id];
 
@@ -219,6 +219,8 @@ export default class AchivController {
             img: achiv.img,
 
             stars: record.steps_done,
+
+            gradutations : achiv.states.length,
 
             completed: record.steps_done >= achiv.states.length,
 

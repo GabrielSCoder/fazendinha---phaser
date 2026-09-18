@@ -15,11 +15,11 @@ export default class AchivCardUI {
 
         const container = s.add.container(0, 0);
 
-        // Dimensões do card
+        const value = this.data.graduations != this.data.stars && this.data.amount < this.data.target ? this.data.amount : this.data.target;
+
         const cardWidth = 320;
         const cardHeight = 160;
 
-        // Área reservada para a imagem
         const leftWidth = 90;
         const padding = 12;
 
@@ -34,9 +34,6 @@ export default class AchivCardUI {
             .setOrigin(0.5)
             .setStrokeStyle(2, 0x000000);
 
-        //------------------------------------
-        // COLUNA ESQUERDA
-        //------------------------------------
 
         const img = s.add.image(
             -cardWidth / 2 + leftWidth / 2 + padding,
@@ -45,9 +42,6 @@ export default class AchivCardUI {
         )
             .setDisplaySize(75, 75);
 
-        //------------------------------------
-        // COLUNA DIREITA
-        //------------------------------------
 
         const startX = -cardWidth / 2 + leftWidth + 20;
         const textWidth = cardWidth - leftWidth;
@@ -89,7 +83,7 @@ export default class AchivCardUI {
         const progress = s.add.text(
             startX,
             subtitle.y + subtitle.height + 10,
-            `${this.data.amount} / ${this.data.target}`,
+            `${value} / ${this.data.target}`,
             // "90 / 200",
             {
                 fontSize: "18px",
@@ -106,8 +100,6 @@ export default class AchivCardUI {
             startX + 50,
             progress.y + progress.height + 18
         );
-
-        //------------------------------------
 
         container.add([
             bg,

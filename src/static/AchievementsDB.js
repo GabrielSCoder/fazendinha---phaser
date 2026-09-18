@@ -127,7 +127,7 @@ export const achievements = [
                 "objectives": [
                     {
                         action: "place",
-                        amount: 1,
+                        amount: 10,
                         target: "arvore",
                     }
                 ],
@@ -138,23 +138,23 @@ export const achievements = [
                 "objectives": [
                     {
                         action: "place",
-                        amount: 2,
+                        amount: 30,
                         target: "arvore",
                     }
                 ],
 
-                reward: { xp: 20 }
+                reward: { xp: 50 }
             },
             {
                 "objectives": [
                     {
                         action: "place",
-                        amount: 3,
+                        amount: 60,
                         target: "arvore",
                     }
                 ],
 
-                reward: { xp: 20 }
+                reward: { xp: 200 }
             }
         ],
         "final_reward": {
@@ -207,6 +207,53 @@ export const achievements = [
         "final_reward": {
             xp: 30,
             gold: 150,
+            item: [{ id: "trofeu_gastador", tipo: "decoracao" }]
+        }
+    },
+    {
+        "id": 4,
+        "title": "Gastador VIP",
+        "description": "Gaste sua grana",
+        "active": true,
+        "img": "trofeu_gastador",
+        "states": [
+            {
+                "objectives": [
+                    {
+                        action: "transaction",
+                        amount: 10,
+                        target: "money",
+                    }
+                ],
+
+                reward: { xp: 20 }
+            },
+            {
+                "objectives": [
+                    {
+                        action: "transaction",
+                        amount: 20,
+                        target: "money",
+                    }
+                ],
+
+                reward: { xp: 20 }
+            },
+            {
+                "objectives": [
+                    {
+                        action: "transaction",
+                        amount: 50,
+                        target: "money",
+                    }
+                ],
+
+                reward: { xp: 20 }
+            }
+        ],
+        "final_reward": {
+            xp: 1000,
+            gold: 15000,
             item: [{ id: "trofeu_gastador", tipo: "decoracao" }]
         }
     },
