@@ -1,4 +1,4 @@
-# Instrução para jogar localmente #
+# Instruções para jogar localmente #
 
 ### ⚠  Necessário Python instalado ###
 ### ⚠  Verifique se a porta 8000 do seu sistema operacional está livre ### 
