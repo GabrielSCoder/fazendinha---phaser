@@ -1,7 +1,7 @@
 # Instrução para jogar localmente #
 
-## Necessário Python instalado ##
-## Verifique se a porta 8000 do seu sistema operacional está livre ##
+⚠  Necessário Python instalado ##
+⚠  Verifique se a porta 8000 do seu sistema operacional está livre ##
 
 - Baixe o projeto compactado 
 - Extraia todos os arquivos em um diretório
